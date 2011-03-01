@@ -1,0 +1,6 @@
+# emacs and vim swap files
+*~
+*.swp
+data
+library/Zend
+nbproject
