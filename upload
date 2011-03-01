@@ -1,0 +1,238 @@
+#!/bin/bash
+echo -n "Deploy LIVE (l) or BETA (b) :"
+read -e DEPLOY
+
+echo -n "Include DB Schema (Y) or (N) :"
+read -e INC_SCHEMA
+
+echo -n "Include images (Y) or (N) :"
+read -e INC_IMAGES
+
+echo -n "Include Zend Framework (Y) or (N) :"
+read -e INC_ZEND
+
+echo -n "Include YUI2 (Y) or (N) :"
+read -e INC_YUI2
+
+if [ "$DEPLOY" = "l" ]; then
+	DEPLOY_SCRIPT=golive
+	DEPLOY_DIR=/var/www/live.villasforrent.net
+elif [ "$DEPLOY" = "b" ]; then
+	echo "BETA Selected"
+	DEPLOY_SCRIPT=gobeta
+	DEPLOY_DIR=/var/www/beta.villasforrent.net
+else
+	echo "You must specify LIVE or BETA mode"
+	exit;
+fi
+
+echo -e "\E[32mCleaning up temp files\E[37m"
+rm -f zend_vfr.tar
+rm -f zend_vfr.tar.gz
+
+echo -e "\E[32mCreating code archive\E[37m"
+tar cf zend_vfr.tar \
+public/.htaccess \
+public/css/admin/controlpanel.css \
+public/css/villastorent.css \
+public/index.php \
+public/robots.txt \
+application/Bootstrap.php \
+application/configs/application.ini \
+application/configs/navigation.xml \
+application/modules/admin/Bootstrap.php \
+application/modules/admin/controllers/AdvertiserController.php \
+application/modules/admin/controllers/ErrorController.php \
+application/modules/admin/controllers/FastLookupController.php \
+application/modules/admin/controllers/IndexController.php \
+application/modules/admin/layouts/scripts/layout.phtml \
+application/modules/admin/views/scripts/advertiser/index.phtml \
+application/modules/admin/views/scripts/fast-lookup/purge-table.phtml \
+application/modules/admin/views/scripts/fast-lookup/create-table.phtml \
+application/modules/admin/views/scripts/index/index.phtml \
+application/modules/common/models/Administrator.php \
+application/modules/common/models/Advertiser.php \
+application/modules/common/models/Availability.php \
+application/modules/common/models/Calendars.php \
+application/modules/common/models/CountryList.php \
+application/modules/common/models/Currency.php \
+application/modules/common/models/DisapprovalStandardComments.php \
+application/modules/common/models/FastLookup.php \
+application/modules/common/models/IsoLanguageCodes.php \
+application/modules/common/models/Location.php \
+application/modules/common/models/Messages.php \
+application/modules/common/models/Property.php \
+application/modules/common/models/resources/Administrator/Interface.php \
+application/modules/common/models/resources/Administrator/Row.php \
+application/modules/common/models/resources/Administrator/Rowset.php \
+application/modules/common/models/resources/Administrator.php \
+application/modules/common/models/resources/Advertiser/Interface.php \
+application/modules/common/models/resources/Advertiser/Row.php \
+application/modules/common/models/resources/Advertiser/Rowset.php \
+application/modules/common/models/resources/Advertiser.php \
+application/modules/common/models/resources/Availability/Interface.php \
+application/modules/common/models/resources/Availability/Row.php \
+application/modules/common/models/resources/Availability/Rowset.php \
+application/modules/common/models/resources/Availability.php \
+application/modules/common/models/resources/Calendar/Interface.php \
+application/modules/common/models/resources/Calendar/Row.php \
+application/modules/common/models/resources/Calendar/Rowset.php \
+application/modules/common/models/resources/Calendar.php \
+application/modules/common/models/resources/Country/Interface.php \
+application/modules/common/models/resources/Country/Row.php \
+application/modules/common/models/resources/Country/Rowset.php \
+application/modules/common/models/resources/Country.php \
+application/modules/common/models/resources/Destination/Interface.php \
+application/modules/common/models/resources/Destination/Row.php \
+application/modules/common/models/resources/Destination/Rowset.php \
+application/modules/common/models/resources/Destination.php \
+application/modules/common/models/resources/Facility/Interface.php \
+application/modules/common/models/resources/Facility/Row.php \
+application/modules/common/models/resources/Facility/Rowset.php \
+application/modules/common/models/resources/Facility.php \
+application/modules/common/models/resources/FastLookup/Interface.php \
+application/modules/common/models/resources/FastLookup/Row.php \
+application/modules/common/models/resources/FastLookup/Rowset.php \
+application/modules/common/models/resources/FastLookup.php \
+application/modules/common/models/resources/Photo/Interface.php \
+application/modules/common/models/resources/Photo/Row.php \
+application/modules/common/models/resources/Photo/Rowset.php \
+application/modules/common/models/resources/Photo.php \
+application/modules/common/models/resources/Property/Interface.php \
+application/modules/common/models/resources/Property/Row.php \
+application/modules/common/models/resources/Property/Rowset.php \
+application/modules/common/models/resources/Property.php \
+application/modules/common/models/resources/PropertyContent/Interface.php \
+application/modules/common/models/resources/PropertyContent/Row.php \
+application/modules/common/models/resources/PropertyContent/Rowset.php \
+application/modules/common/models/resources/PropertyContent.php \
+application/modules/common/models/resources/PropertyType/Interface.php \
+application/modules/common/models/resources/PropertyType/Row.php \
+application/modules/common/models/resources/PropertyType/Rowset.php \
+application/modules/common/models/resources/PropertyType.php \
+application/modules/common/models/resources/Rate/Interface.php \
+application/modules/common/models/resources/Rate/Row.php \
+application/modules/common/models/resources/Rate/Rowset.php \
+application/modules/common/models/resources/Rate.php \
+application/modules/common/models/resources/Region/Interface.php \
+application/modules/common/models/resources/Region/Row.php \
+application/modules/common/models/resources/Region/Rowset.php \
+application/modules/common/models/resources/Region.php \
+application/modules/common/plugins/Layout.php \
+application/modules/frontend/Bootstrap.php \
+application/modules/frontend/controllers/AdvertiserAccountController.php \
+application/modules/frontend/controllers/AdvertiserAuthenticationController.php \
+application/modules/frontend/controllers/AdvertiserPasswordReminderController.php \
+application/modules/frontend/controllers/AdvertiserRegistrationController.php \
+application/modules/frontend/controllers/DisplayFullPropertyController.php \
+application/modules/frontend/controllers/ErrorController.php \
+application/modules/frontend/controllers/IndexController.php \
+application/modules/frontend/controllers/LevelController.php \
+application/modules/frontend/forms/AdvertiserLoginForm.php \
+application/modules/frontend/forms/AdvertiserRegistrationForm.php \
+application/modules/frontend/layouts/scripts/fullscreen.phtml \
+application/modules/frontend/layouts/scripts/layout.phtml \
+application/modules/frontend/models/AdvertiserAcl.php \
+application/modules/frontend/plugins/AdvertiserAccessCheck.php \
+application/modules/frontend/views/scripts/advertiser-account/home.phtml \
+application/modules/frontend/views/scripts/advertiser-authentication/login.phtml \
+application/modules/frontend/views/scripts/advertiser-authentication/logout.phtml \
+application/modules/frontend/views/scripts/advertiser-password-reminder/index.phtml \
+application/modules/frontend/views/scripts/display-full-property/index.phtml \
+application/modules/frontend/views/scripts/error/error.phtml \
+application/modules/frontend/views/scripts/index/index.phtml \
+library/Vfr/Model/Abstract.php \
+library/Vfr/Model/Interface.php \
+library/Vfr/Model/Resource/Db/Table/Abstract.php \
+library/Vfr/Model/Resource/Db/Table/Row/Abstract.php \
+library/Vfr/Model/Resource/Db/Table/Rowset/Abstract.php
+
+if [ "$INC_SCHEMA" = "y" ]; then
+	echo -e "\E[32mAppending Schema to archive\E[37m"
+	tar rf zend_vfr.tar \
+	schema/Administrators.sql \
+	schema/Advertisers.sql \
+	schema/Availability.sql \
+	schema/Calendars.sql \
+	schema/CountriesQuickCount.sql \
+	schema/Countries.sql \
+	schema/CountryList.sql \
+	schema/Currencies.sql \
+	schema/CurrencyConversions.sql \
+	schema/DestinationsQuickCount.sql \
+	schema/Destinations.sql \
+	schema/DisapprovalStandardComments.sql \
+	schema/Enquiries.sql \
+	schema/Facilities.sql \
+	schema/FastLookups.sql \
+	schema/IsoLanguageCodes.sql \
+	schema/MembersFavoriteProperties.sql \
+	schema/Members.sql \
+	schema/Messages.sql \
+	schema/MessageThreads.sql \
+	schema/OrdersServices.sql \
+	schema/Orders.sql \
+	schema/Payments.sql \
+	schema/PhotoApprovals.sql \
+	schema/Photos.sql \
+	schema/PropertiesContentFields.sql \
+	schema/PropertiesContent.sql \
+	schema/PropertiesFacilities.sql \
+	schema/Properties.sql \
+	schema/PropertiesStatistics.sql \
+	schema/PropertyTypes.sql \
+	schema/Rates.sql \
+	schema/RegionsQuickCount.sql \
+	schema/Regions.sql \
+	schema/RemoteAccess.sql \
+	schema/RemoteServices.sql \
+	schema/Services.sql \
+	schema/setup_db.sql \
+	schema/TaxCodes.sql \
+	setup/purge_all_db.sh \
+	setup/setup_mysql_db.sh
+fi
+
+if [ "$INC_IMAGES" = "y" ]; then
+	echo -e "\E[32mAppending Images to archive\E[37m"
+	tar rf zend_vfr.tar \
+	public/images/admin/gradient1.png \
+	public/images/cards.gif \
+	public/images/villarental.png \
+	public/images/zend_framework.png
+fi
+
+if [ "$INC_ZEND" = "y" ]; then
+	echo -e "\E[32mAppending Zend Framework to archive\E[37m"
+	tar rfh zend_vfr.tar library/Zend
+fi
+
+if [ "$INC_YUI2" = "y" ]; then
+	echo -e "\E[32mAppending YUI2 to archive\E[37m"
+	tar rfh zend_vfr.tar public/yui2
+fi
+
+echo -e "\E[32mCompressing archive\E[37m"
+gzip -9 -f zend_vfr.tar
+
+echo -e "\E[32mSending to server...\E[37m"
+#
+# upload the archive to the beta server
+#
+scp -P22002 -p -C zend_vfr.tar.gz andy@mrgrey.villasforrent.net:$DEPLOY_DIR
+
+echo -e "\E[32mRunning remote process to unbundle the package\E[37m"
+scp -P22002 -p -C $DEPLOY_SCRIPT andy@villasforrent.net:$DEPLOY_DIR
+
+ssh -p22002 andy@mrgrey.villasforrent.net $DEPLOY_DIR/$DEPLOY_SCRIPT
+
+
+CMD="ssh -p22002 andy@mrgrey.villasforrent.net 'rm /var/www/beta.villasforrent.net/gobeta'"
+ssh -p22002 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/gobeta'
+ssh -p22002 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/golive'
+ssh -p22002 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/zend_vfr.tar.gz'
+
+echo -e "\E[32mCleaning up local files\E[37m"
+rm -f zend_vfr.tar.gz
+
+echo -e "\E[35mCompleted\E[37m"

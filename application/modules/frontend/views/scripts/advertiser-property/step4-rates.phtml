@@ -1,0 +1,68 @@
+<div class="form">
+<h1>Step 4 - Set the property rates</h1>
+<ul id="property_progress_header">
+	<li id="location_orange"></li>
+	<li id="content_orange"></li>
+	<li id="pictures_orange"></li>
+	<li id="rates_grey"></li>
+	<li id="availability_grey"></li>
+</ul>
+<p class="clearfix" />
+<fieldset>
+	<dl>
+		<dt><label for="rental_basis">Rental Basis</label></dt>
+		<dd><input readonly="Y" name="rentalBasis" value="<?php echo $this->rentalBasis ?>" /> <?php echo $this->rentalBasisLink ?></dd>
+	</dl>
+		
+	<dl>
+		<dt><label for="base_currency">Base Currency</label></dt>
+		<dd><input readonly="Y" name="base_currency" value="<?php echo $this->baseCurrency ?>" />  <?php echo $this->baseCurrencyLink ?></dd>
+	</dl>
+</fieldset>
+
+<p style="padding-bottom:1em"><a href="<?php echo $this->url(array('module' => 'frontend',
+																   'controller' => 'advertiser-rates',
+																   'action' => 'add',
+																   'params' => array('idProperty' => $this->idProperty))) ?>">[add a new rate]</a></p>
+
+<table style="width:100%;" cellpadding="0" cellspacing="0" border="1">
+<tr>
+	<td><strong>Name of Period</strong></td>
+	<td><strong>Start Date</strong></td>
+	<td><strong>End Date</strong></td>
+	<td><strong>Weekly<br />Rate</strong></td>
+	<td><strong>Weekend<br />Nightly<br />Rate</strong></td>
+	<td><strong>Midweek<br />Nightly<br />Rate</strong></td>
+	<td><strong>Minimum<br />Stay</strong></td>
+	<td><strong>Edit</strong></td>
+	<td><strong>Del</strong></td>
+</tr><?php
+if ($this->ratesRowSet) {
+	$i = 0;
+	foreach ($this->ratesRowSet as $row) {
+		$line_style = "tbd" . strval($i % 2);
+  		$startDate 	= $row->startDate;
+		$endDate	= $row->endDate;
+		
+        $delete_url = $this->url(array('module' => 'frontend',
+                                       'controller' => 'advertiser-rates',
+                                       'action' => 'delete',
+                                       'idProperty' => $this->idProperty,
+                                       'startDate=' => $row->startDate,
+                                       'endDate=' => $row->endDate), null, true);
+		?><tr>
+			<td class="<?php echo $line_style ?>"><?php echo $row->name ?></td>
+			<td class="<?php echo $line_style ?>"><?php echo $this->prettyDate($row->startDate) ?></td>
+			<td class="<?php echo $line_style ?>"><?php echo $this->prettyDate($row->endDate) ?></td>
+			<td class="<?php echo $line_style ?>"><?php echo $this->rateCurrency($row->weeklyRate, $this->baseCurrency) ?></td>
+			<td class="<?php echo $line_style ?>"><?php echo $this->rateCurrency($row->weekendNightlyRate, $this->baseCurrency) ?></td>
+			<td class="<?php echo $line_style ?>"><?php echo $row->midweekNightlyRate ?></td>
+			<td class="<?php echo $line_style ?>"><?php echo $this->minStayDuration($row->minStayDays) ?></td>
+			<td class="<?php echo $line_style ?>">[edit]</td>
+			<td class="<?php echo $line_style ?>" align="middle"><a href="<?php echo $delete_url ?>">[del]</a></td>
+		</tr><?php
+		$i++;
+	}
+}
+?></table>
+</div>

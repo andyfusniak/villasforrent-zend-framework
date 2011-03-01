@@ -1,0 +1,21 @@
+<div class="form_advertiser_login">
+<h1>Advertiser Forgotten Details</h1>
+<p>Use the form below if you have an existing advertiser account with us and have forgotten some or all of your details.</p>
+
+<p>Simply enter your email address or the username (not both) into the appropriate field. Make sure the
+email address you provide matches the email address used to setup your account.</p>
+
+<form method="post" action="/advertiser-password-reminder/send">
+<input type="hidden" name="action" value="forgotten_email" />
+<table cellspacing="4" cellpadding="5">
+<tr>
+	<td width="140" valign="top">Account email address</td>
+	<td valign="top"><input type="text" name="emailAddress" maxlength="255" size="48" value="" /></td>
+</tr>
+<tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><input type="submit" value="Send me my details" /></td>
+</tr>
+</table>
+</form>
+</div>

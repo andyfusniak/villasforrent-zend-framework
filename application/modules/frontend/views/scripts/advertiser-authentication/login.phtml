@@ -1,0 +1,10 @@
+<?php
+//$this->view->errorMsg;
+?><h1>Advertiser Login</h1>
+<p>Existing advertisers enter your username and password below to access your control panel. New advertisers
+can <a href="/aregister">register now</a> for an account.</p>
+<?php echo $this->errorMessage ?>
+<?php echo $this->form ?>
+<p>If you have <a href="<?php echo $this->url(array('module' => 'frontend',
+											  'controller' => 'advertiser-password-controller',
+											  'action' => 'index')) ?>">forgotten your details</a> we can send you a reminder email.</p>

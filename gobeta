@@ -1,0 +1,17 @@
+#!/bin/bash
+cd /var/www/beta.villasforrent.net/
+tar zxf zend_vfr.tar.gz
+
+directory="./data"
+if [ ! -d $directory ]; then
+	mkdir data
+	mkdir data/logs
+	touch data/logs/application.log
+	chmod g+rw data/logs/application.log
+else
+	if [ ! -d "./data/logs" ]; then
+		mkdir data/logs
+		touch data/logs/application.log
+		chmod g+rw data/logs/application.log
+	fi
+fi

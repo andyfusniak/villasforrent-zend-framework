@@ -1,0 +1,9 @@
+<div class="featured_property">
+<h1 class="featured_property">Featured <?php echo $propertyTypes[$property['idPropertyTypes']]?> in<br />
+<?php echo $this->P('lf')->countryRegionDestinationAsString($property['idCountries'], $property['idRegions'], $property['idDestinations']) ?></h1>
+    <div class="padded"><p><a href="/in/<?php echo $property['locationURL'] ?>/<?php echo $property['urlName'] ?>"><img alt="<?php echo $propertyTypes[$property['idPropertyTypes']] ?> <?php echo $property['numBeds'] ?> Bedrooms (Sleeps <?php echo $property['numSleeps'] ?>)" src="/properties/dynamic/<?php echo PropertyMultiplexor::getDirectoryID($id)?>/<?php echo $id ?>/<?php echo $idPhotos . "_150x113.jpg" ?>" /></a></p>
+    <p><?php echo nl2br(htmlentities($property['content_list'][PropertiesContentDAO::DB_FIELD_HEADLINE_1])) ?></p>
+    <p><?php echo nl2br(htmlentities($property['content_list'][PropertiesContentDAO::DB_FIELD_HEADLINE_2])) ?></p>
+    <p><a href="/in/<?php echo $property['locationURL'] ?>/<?php echo $property['urlName'] ?>">more&gt;</a></p>
+    </div>
+</div>

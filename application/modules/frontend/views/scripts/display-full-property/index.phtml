@@ -1,0 +1,97 @@
+<?php //var_dump($this->propertyContent); exit; ?>
+
+<h1 class="full"><?php echo $this->p->idPropertyType ?> to rent in <?php echo $this->p->locationUrl ?>&nbsp;&nbsp;&nbsp;<?php echo $this->p->numBeds ?> bedrooms (Sleeps <?php echo $this->p->numSleeps ?>)</h1>
+<p class="headline1"><?php echo $this->pc['headline1'] ?></p>
+<p class="headline2"><?php echo $this->pc['headline2'] ?></p>
+<ul>
+	<?php foreach ($this->photos as $photorow): ?>
+	<?php //var_dump($photorow) ?>
+	<li>Photo Id: <?php echo $photorow->idPhoto ?></li>
+	<li>Caption: <?php echo $photorow->caption ?></li>
+	<?php endforeach; ?>
+</ul>
+
+<h3>Summary</h3>
+<p><?php echo $this->pc['summary'] ?></p>
+<h3>Introduction</h3>
+<p><?php echo $this->pc['description'] ?></p>
+<h3>Accommodation</h3>
+<table cellpadding="0" cellspacing="0">
+	<tr><td valign="top"><strong>Bedrooms:</strong></td><td><p><?php echo $this->pc['bedroom_desc'] ?></p></td></tr>
+	<tr><td valign="top"><strong>Bathrooms:</strong></td><td><p><?php echo $this->pc['bathroom_desc'] ?></p></td></tr>
+	<tr><td valign="top"><strong>Kitchen:</strong></td><td><p><?php echo $this->pc['kitchen_desc'] ?></p></td></tr>
+	<tr><td valign="top"><strong>Utility Room:</strong></td><td><p><?php echo $this->pc['utility_desc'] ?></p></td></tr>
+	<tr><td valign="top"><strong>Living Rooms:</strong></td><td><p><?php echo $this->pc['bedroom_desc'] ?></p></td></tr>
+	<tr><td valign="top"><strong>Other:</strong></td><td><p><?php echo $this->pc['other_desc'] ?></td></tr>
+	<tr><td valign="top"><strong>Cleaning<br />Towels/linen/room service:</strong></td><td><p><?php echo $this->pc['service_desc'] ?></p></td></tr>
+</table>
+
+<h3>Notes on accommodation</h3>
+<?php echo $this->pc['notes_desc'] ?>
+
+<h3>Accessibility</h3>
+<?php echo $this->pc['living_desc'] ?>
+
+<h3>Outside</h3>
+<?php echo $this->pc['outside_desc'] ?>
+
+<h3>Golf</h3>
+<?php echo $this->pc['golf_desc'] ?>
+
+<h3>Skiing</h3>
+<?php echo $this->pc['skiing_desc'] ?>
+
+<h3>Special Interests</h3>
+<?php echo $this->pc['special_desc'] ?>
+
+<h3>Coast/Beach</h3>
+<?php echo $this->pc['beach_desc'] ?>
+
+<h3>Travel Details</h3>
+<?php echo $this->pc['travel_desc'] ?>
+
+<h3>Booking details</h3>
+<?php echo $this->pc['booking_desc'] ?>
+
+<h3>Changeover Day</h3>
+<?php echo $this->pc['changeover_desc'] ?>
+
+<h3>Contact Details</h3>
+<?php echo $this->pc['contact_desc'] ?>
+
+<h3>Owners Website</h3>
+<?php echo $this->pc['website'] ?>
+
+<h3>Testimonials from previous renters</h3>
+<?php echo $this->pc['testimonials_desc'] ?>
+
+<h3>Rental Rates</h3>
+<?php //var_dump($this->rates) ?>
+<table cellpadding="0" cellspacing="0"  border="1">
+<tr>
+	<td><strong>Period name</strong></td>
+	<td><strong>From</strong></td>
+	<td><strong>To</strong></td>
+	<td><strong>per<br />weekend night</strong></td>
+	<td><strong>per<br />mid-week night</strong></td>
+	<td><strong>Weekly rate</strong></td>
+	<td><strong>Min stay</strong></td>
+</tr>
+<?php foreach($this->rates as $row): ?>
+<tr><td><?php echo $row->name ?></td>
+	<td><?php echo $row->startDate ?></td>
+	<td><?php echo $row->endDate ?></td>
+	<td><?php echo $row->weekendNightlyRate ?></td>
+	<td><?php echo $row->midweekNightlyRate ?></td>
+	<td><?php echo $row->weeklyRate ?></td>
+	<td><?php echo $row->minStayDays ?></td>
+</tr>
+<?php endforeach; ?>
+</table>
+
+<h3>Availability Calendar</h3>
+<p><img class="imgright" alt="Availability Calendar" title="<?php echo $this->shortName ?>" src="/ic.php?idProperties=<?php echo $this->idProperty ?>&amp;du=18&amp;cc=6" /></p>
+
+<h3>Reference</h3>
+<p>The reference code for this property is <?php echo $this->idProperty ?>.</p>
+<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a></p>

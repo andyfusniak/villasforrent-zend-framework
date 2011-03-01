@@ -1,0 +1,40 @@
+<?xml version="1.0" endcoding="utf-8" ?>
+<config>
+	<frontendnav>
+		<newadvertisers>
+			<label>New Advertisers</label>
+		</newadvertisers>
+		<aregister>
+			<label>register now</label>
+			<module>frontend</module>
+			<controller>AdvertiserRegistrationController</controller>
+			<action>register</action>
+		</aregister>
+		
+		<existingadvertisers>
+			<label>Existing Advertisers</label>
+		</existingadvertisers>
+		<accounthome>
+			<label>account home</label>
+			<module>frontend</module>
+			<controller>AdvertiserAccountController</controller>
+			<action>home</action>
+		</accounthome>
+		<alogin>
+			<label>login</label>
+			<module>frontend</module>
+			<controller>AdvertiserAuthenticationController</controller>
+			<action>login</action>
+		</alogin>
+
+		<alogout>
+			<label>logout</label>
+			<module>frontend</module>
+			<controller>AdvertiserAuthenticationController</controller>
+			<action>logout</action>
+		<alogout>
+	</frontendnav>
+
+	<adminnav>
+	</adminnav>
+</config>

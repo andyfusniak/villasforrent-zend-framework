@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<link href="/yui2/reset-fonts-grids/reset-fonts-grids.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/css/villastorent.css" media="screen" rel="stylesheet" type="text/css" />	<title></title>	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta http-equiv="Content-Language" content="en-GB" />
+<meta http-equiv="author" content="Andy Fusniak" />
+<meta http-equiv="description" content="Villas to rent across the world direct from the owner." />
+<meta http-equiv="robots" content="ALL" />	<link href="/yui2/reset-fonts-grids/reset-fonts-grids.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/css/villastorent.css" media="screen" rel="stylesheet" type="text/css" />		</head>
+<body>
+<div id="doc4" class="yui-t2">
+	<div id="hd"><h1>Villas to rent in Greece, Portugal, Spain, France,<br />Florida and many other holiday destinations<br />around the world including skiing holidays</h1><p><a href="/">Villas to rent</a></p></div>
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b"><form enctype="application/x-www-form-urlencoded" method="post" action=""><dl class="zend_form">
+</dl></form></div>
+		</div>
+		
+		<div class="yui-b">
+						<h1>New Advertisers</h1>
+			<ul>
+				<li id="nav-register"><a tabindex="1" accesskey="R" href="/advertiser-registration/register/">register now</a></li>
+			</ul>
+		
+			<h1>Existing Advertisers</h1>
+			<ul>
+				<li id="nav-advertiser-login"><a tabindex="3" accesskey="L" href="/advertiser-authentication/login/">login</a></li>
+				<li id="nav-advertiser-home"><a tabindex="4" accesskey="H" href="/advertiser-account/home/">account home</a></li>
+				<li id="nav-advertiser-logout"><a tabindex="5" accesskey="O" href="/advertiser-authentication/logout/">logout</a></li>
+			</ul>
+		</div>
+	</div>
+		
+	<div id="ft">
+		<span class="left">VillasForRent.NET &copy; 2010</span><span class="right"><a href="#">About</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#">Terms</a
+		<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a><img alt="All cards accepted" src="/images/cards.gif" /><a href="http://framework.zend.com/about/casestudies"><img alt="Powered by Zend Framework" src="/images/zend_framework.png" /></a></p>
+	</div>
+</div>
+</body>
+</html>
