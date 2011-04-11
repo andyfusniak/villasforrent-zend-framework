@@ -3,3 +3,13 @@
 <p><a href="<?php echo $this->url(array('module' => 'frontend',
 								   'controller' => 'advertiser-registration',
 								   'action' => 'register')) ?>"><img src="/images/special_offer.gif" alt="Special Offer - 6 month trial" title="Special Offer - 6 month trial" /></a></p>
+
+
+<div id="browse_country">
+    <h1>Browse By Country</h1>
+    <ul>
+        <?php foreach ($this->countryRowset as $row): ?>
+        <li><a href="/in/"><?php echo $this->escape($row->name) ?></a></li>
+        <?php endforeach ?>
+    </ul>
+</div>

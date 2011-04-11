@@ -1,0 +1,14 @@
+<?php
+echo "current=" . $this->current . '<br />';
+
+?>
+Showing <?php echo $this->current ?> of <?php echo $this->pageCount ?>
+
+<?php
+foreach($this->pagesInRange as $page) {
+    if ($this->current != $page) {
+        ?><a href="<?php echo $this->url(array('page' => $page)) ?>"><?php echo $page ?></a> | <?php 
+    } else {
+        ?><?php echo $page ?> | <?php
+    }
+}

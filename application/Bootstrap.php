@@ -31,6 +31,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		//$loader->setFallbackAutoloader(true);
         return $autoLoader;
 	}
+    
+    //protected function __initSessionHandling()
+    //{
+    //    
+    //}
 
 	protected function _initLogging()
 	{
@@ -117,20 +122,38 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
 		
 		// main property route
-		$this->_logger->log(__METHOD__ . ' setting up route for /in/country/region/dest/propertyurl', Zend_Log::DEBUG);
+		//$this->_logger->log(__METHOD__ . ' setting up route for /in/country/region/dest/propertyurl', Zend_Log::DEBUG);
 		$router = Zend_Controller_Front::getInstance()->getRouter();
         
-		$route = new Zend_Controller_Router_Route('/in/:country/:region/:destination/:propertyurl',
-												  array('module' => 'frontend',
-														'controller' => 'display-full-property',
-														'action'     => 'index'));
-		$router->addRoute('frontend', $route);
-
-		$route = new Zend_Controller_Router_Route('/ic.php',
-												  array('module' => 'frontend',
+		$fullPropertyRoute = new Zend_Controller_Router_Route('/in/:country/:region/:destination/:propertyurl',
+															  array('module'     => 'frontend',
+														            'controller' => 'display-full-property',
+														            'action'     => 'index'));
+		$icRoute = new Zend_Controller_Router_Route('/ic.php',
+					    							  array('module' => 'frontend',
 														'controller' => 'availability-image',
 														'action' => 'render'));
-		$router->addRoute('frontend', $route);
+		//$router->addRoute('icRoute', $icRoute);
+		
+		// image cache router
+		$routeImageCache = new Zend_Controller_Router_Route_Regex('photos/(.+)/(.+)/(.+)_(.+)x(.+)\.(.+)',
+												  array (
+													'module'		=> 'frontend',
+													'controller'	=> 'image-cache',
+													'action'		=> 'generate'
+												  ),
+												  array (
+													1	=> 'topLevel',
+													2	=> 'idProperty',
+													3	=> 'idPhoto',
+													4	=> 'width',
+													5	=> 'height',
+													6	=> 'ext'
+												  )
+		);
+		$router->addroute('imageCache', $routeImageCache);
+		
+		
         // setup a route for /in/<country>/<region>/<destination>
         //$this->logger->log("Bootstrap_Bootstrap _initRouting() setting up route for in/country/region/destination", Zend_Log::DEBUG);
         //$route = new Zend_Controller_Router_Route('/in/:country/:region/:destination',

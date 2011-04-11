@@ -41,6 +41,13 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 
 	const DEFAULT_PROPERTY_ID = 10000;
 
+    const STEP_1_LOCATION    = 1;
+    const STEP_2_CONTENT     = 2;
+    const STEP_3_PICTURES    = 3;
+    const STEP_4_RATES       = 4;
+    const STEP_5_AVAILABLITY = 5;
+    const COMPLETE           = 6;
+
 	private function _initDefaults()
 	{
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
@@ -173,18 +180,81 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 		return $result;	
 	}
 
-	public function addProperty()
+    public function getPropertiesByAdvertiserId($idAdvertiser)
+    {
+        $query = $this->select()
+                      ->where('idAdvertiser = ?', $idAdvertiser);
+        try {
+            $propertyRowset = $this->fetchAll($query);
+        } catch (Exception $e) {
+            die("Failed to execute sql " . $query);
+        }
+
+        return $propertyRowset;
+    }
+	
+	public function getStatusByPropertyId($idProperty)
+	{
+		$query = $this->select()
+					  ->from($this->_name, 'status')
+					  ->where('idProperty=?', $idProperty)
+					  ->limit(1);
+		try {
+			$row = $this->fetchRow($query);
+			$status = $row->status;
+		} catch (Exception $e) {
+			throw $e;
+		}
+		
+		return $status;
+	}
+
+	public function createProperty($options)
 	{
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
 		
+		$bootstrapOptions =  Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
+		$vfrConfig = $bootstrapOptions['vfr'];
+		
+		$nullExpr = new Zend_Db_Expr('NULL');
+		$nowExpr  = new Zend_Db_Expr('NOW()');
 		$data = array(
-			'idProperty' => new Zend_Db_Expr('NULL'),
-			'added'   =>  new Zend_Db_Expr('NOW()'),
-			'updated' =>  new Zend_Db_Expr('NOW()') 
+			'idProperty'    	=> $nullExpr,
+			'idPropertyType'	=> $options['params']['idPropertyType'],
+			'idAdvertiser'		=> $options['params']['idAdvertiser'],
+            'idCountry'     	=> 1, // default dummy coutnry
+            'idRegion'      	=> 1, // default dummy region
+            'idDestination' 	=> 1, // default dummy destination
+			'urlName'			=> md5(microtime(true).mt_rand(10000,90000)),
+			'shortName'			=> $options['params']['shortName'],
+			'locationUrl'		=> 'default/default/default',
+			'numBeds'			=> $nullExpr,
+			'numSleeps'			=> $nullExpr,
+			'approved'			=> 0,
+			'visible'			=> 0,
+			'expiry'			=> $nullExpr,
+			'featureMask'		=> 0,
+			'featureExpiry'		=> $nullExpr,
+			'golfHoliday'		=> 0,
+			'skiingHoliday'		=> 0,
+			'accessHoliday'		=> 0,
+			'emailAddress'		=> $options['params']['emailAddress'],
+			'photoLimit'		=> $vfrConfig['property']['photo_limit_per_property'],
+			'added'         	=> $nowExpr,
+			'updated'       	=> $nowExpr,
+			'awaitingApproval'	=> 0,
+			'status'			=> self::STEP_2_CONTENT,
+			'lastModifiedBy'	=> 'system'
 		);
 
+        //var_dump($options);
+        //$params = array_merge($options['params'], $data);
+        
+        //var_dump($params);
+        //die();
 		try {
 			$this->insert($data);
+			$idProperty = $this->_db->lastInsertId();
 		} catch (Exception $e) {
 			$dbAdapter = Zend_Db_Table::getDefaultAdapter();
 			$profiler = $dbAdapter->getProfiler();
@@ -196,15 +266,38 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 		}
 
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
+		return $idProperty;
 	}
-    
-    public function createProperty($params)
-    {
-        $this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-        
-        
-        
-        $this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
-    }
+	
+	public function updatePropertyStatus($idProperty, $status)
+	{
+		$params = array (
+			'status'	=> $status
+		);
+		
+		$where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
+		try {
+			$query = $this->update($params, $where);
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
+	public function updatePropertyContent($idProperty, $params)
+	{
+		// filter any redundant values passed in
+		$data = array (
+			'numBeds'	=> $params['numBeds'],
+			'numSleeps'	=> $params['numSleeps'],
+			
+		);
+		
+		$where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
+		try {
+			$query = $this->update($params, $where);	
+		} catch (Exception $e) {
+			throw $e;	
+		}
+	}
 }
 

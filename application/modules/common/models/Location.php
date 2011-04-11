@@ -8,7 +8,7 @@ class Common_Model_Location extends Vfr_Model_Abstract
 		return $this->getResource('Country')->getCountryById($idCountry);
 	}
 
-	public function getCountries($visible=true)
+	public function getCountries($visible=true, $orderBy='displayPriority')
 	{
 		return $this->getResource('Country')->getCountries($visible);
 	}

@@ -1,6 +1,11 @@
 <?php
 class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
 {
+	public function getAll($page=null)
+	{
+		return $this->getResource('Advertiser')->getAll($page);
+	}
+	
 	public function getAdvertiserById($idAdvertiser)
 	{
 		$idAdvertiser = (int) $idAdvertiser;

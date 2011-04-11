@@ -13,6 +13,54 @@ class Common_Resource_Calendar extends Vfr_Model_Resource_Db_Table_Abstract
 		)
 	);
 
+    public function createCalendar($idProperty)
+    {
+		$nowExpr = new Zend_Db_Expr('NOW()');
+        $data = array(
+            'idCalendar'    		=> null,
+            'idProperty'   			=> $idProperty,
+            'calendarName'  		=> '',
+            'visible'       		=> 1,
+            'vLanguage'     		=> 'en_EN',
+            'vDuration'     		=> 18,
+            'vStartYear'    		=> 99,
+            'vStartMonth'   		=> 99,
+            'vColumns'      		=> 4,
+            'vSlope'        		=> 1,
+            'vBoundary'     		=> 0,
+            'vBookedColour' 		=> 'FF6666',
+            'vProvBookedColour'     => 'FF6600',
+            'vAvailableColour'      => '99CC99',
+            'vUnavailableColour'    => 'CCCCCC',
+            'vTitleHeightPixels'    => 15,
+            'vDayCellWidthPixels'   => 14,
+            'vDayCellHeightPixels'  => 13,
+            'vDayNameColour'        => 'CC0000',
+            'vTableBorderColour'    => '336699',
+            'vKeyOn'                => 1,
+            'vNumKeys'              => 2,
+            'vHorizontalGapPixels'  => 4,
+            'vVerticalGapPixels'    => 2,
+            'vWeekStartDay'         => 0, // default saturday
+            'rentalBasis'           => 'PR',
+            'currencyCode'          => 'GBP',
+            'added'   				=> $nowExpr,
+            'updated' 				=> $nowExpr
+        );
+        
+        try {
+            $query = $this->insert($data);
+        } catch (Exception $e) {
+            $dbAdapter = Zend_Db_Table::getDefaultAdapter();
+			$profiler = $dbAdapter->getProfiler();
+			$lastDbProfilerQuery = $profiler->getLastQueryProfile();
+
+			var_dump($lastDbProfilerQuery->getQuery());
+
+			throw $e;
+        }
+    }
+
 	public function getCalendarIdByPropertyId($idProperty)
 	{
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);

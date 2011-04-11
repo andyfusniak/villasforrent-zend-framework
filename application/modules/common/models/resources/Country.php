@@ -22,12 +22,12 @@ class Common_Resource_Country extends Vfr_Model_Resource_Db_Table_Abstract imple
 		return $result;
 	}
 	
-	public function getCountries($visible=true)
+	public function getCountries($visible=true,$orderBy='displayPriority')
 	{
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
 		$query = $this->select()
 		              ->where('visible = ?', (($visible) ? '1' : '0'))
-					  ->order('idCountry');
+					  ->order($orderBy);
 		
 		$result = $this->fetchAll($query);
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);

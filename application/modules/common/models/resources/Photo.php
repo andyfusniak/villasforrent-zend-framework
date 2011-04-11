@@ -5,7 +5,14 @@ class Common_Resource_Photo extends Vfr_Model_Resource_Db_Table_Abstract impleme
 	protected $_primary = 'idPhoto';
 	protected $_rowClass = 'Common_Resource_Photo_Row';
 	protected $_rowsetClass = 'Common_Resource_Photo_Rowset';
-
+	protected $_referenceMap = array (
+		'idProperty' => array (
+			'columns' => array('idProperty'),
+			'refTableClass' => 'Common_Resource_Property'
+		)
+    );
+	
+	
 	public function getCountries($visible=true)
 	{
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
@@ -44,5 +51,54 @@ class Common_Resource_Photo extends Vfr_Model_Resource_Db_Table_Abstract impleme
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 		return $resultSet;
 	}
+	
+	public function addPhotoByPropertyId($idProperty, $params)
+	{
+		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
+		
+		$nowExpr = new Zend_Db_Expr('NOW()');
+		$data = array (
+			'idPhoto'			=> new Zend_Db_Expr('NULL'),
+			'approved'			=> $params['approved'],
+			'idProperty'		=> $idProperty,
+			'displayPriority'	=> $params['displayPriority'],
+			'originalFilename'	=> $params['originalFilename'],
+			'fileType'			=> $params['fileType'],
+			'widthPixels'		=> $params['widthPixels'],
+			'heightPixels'		=> $params['heightPixels'],
+			'sizeK'				=> $params['sizeK'],
+			'caption'			=> $params['caption'],
+			'visible'			=> $params['visible'],
+			'added'				=> $nowExpr,
+			'updated'			=> $nowExpr,
+			'lastModifiedBy'	=> $params['lastModifiedBy']
+		);
+		
+		try {
+			$this->insert($data);
+			$idPhoto = $this->_db->lastInsertId();
+		} catch (Exception $e) {
+			throw $e;
+		}
+		
+		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
+		return $idPhoto;
+	}
+	
+	public function getPhotoByPhotoId($idPhoto)
+	{
+		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
+		
+		$query = $this->select()
+					  ->where('idPhoto = ?', $idPhoto)
+					  ->limit(1); 
+		try {
+			$row = $this->fetchRow($query);
+		} catch (Exception $e) {
+			throw $e;
+		}
+				
+		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
+		return $row;  
+	}
 }
-

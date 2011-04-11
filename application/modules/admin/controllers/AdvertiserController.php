@@ -10,8 +10,18 @@ class Admin_AdvertiserController extends Zend_Controller_Action
 
 	public function indexAction()
 	{
-		 $advertiser = $this->_advertiserModel->getAdvertiserById(3);
-
-		 var_dump($advertiser);
+		//$advertiser = $this->_advertiserModel->getAdvertiserById(3);
+	
+		// we expect a Zend_Paginator to be returned because we have
+		// specifed a page number.  If we set page=null we will get
+		// the entire result set as a Common_Resource_Advertiser_Rowset
+		$page = $this->getRequest()->getParam('page');
+		$advertiserPaginator = $this->_advertiserModel->getAll($page);
+		
+		$this->view->advertiserPaginator = $advertiserPaginator;
+		
+		
+		//var_dump($advertiserPaginator);
+		
 	}
 }

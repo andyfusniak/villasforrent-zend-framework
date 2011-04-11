@@ -63,6 +63,30 @@ dd textarea { font-size:1.2em; border: solid 1px #7F9DB9; width:90%; padding:2px
 */
 
 
+ul#property_progress_header { margin:0; padding:0; list-style:none; float:left; min-width:760px }
+ul#property_progress_header li { float:left; width:158px; height:54px; background-repeat:no-repeat }
+ul#property_progress_header li#location_grey { position:relative; width:158px; z-index:5; background-image:url('/images/progressheader/location_grey.png') }
+ul#property_progress_header li#content_grey { position:relative; width:158px; margin-left:-8px; z-index:4; background-image:url('/images/progressheader/content_grey.png') }
+ul#property_progress_header li#pictures_grey { position:relative; width:158px; margin-left:-9px; z-index:3; background-image:url('/images/progressheader/pictures_grey.png') }
+ul#property_progress_header li#rates_grey { position:relative; width:158px; margin-left:-9px; z-index:2; background-image:url('/images/progressheader/rates_grey.png') }
+ul#property_progress_header li#availability_grey { position:relative; width:128px; margin-left:-8px; z-index:1; height:54px; background-image:url('/images/progressheader/availability_grey.png') }
+
+
+
+ul#property_progress_header li#location_orange { position:relative; width:158px; z-index:5; background-image:url("/images/progressheader/location_orange.png") }
+ul#property_progress_header li#content_orange { position:relative; width:158px; margin-left:-8px; z-index:4; background-image:url("/images/progressheader/content_orange.png") }
+ul#property_progress_header li#pictures_orange { position:relative; width:158px; margin-left:-9px; z-index:3; background-image:url("/images/progressheader/pictures_orange.png") }
+ul#property_progress_header li#rates_orange { position:relative; width:158px; margin-left:-9px; z-index:2; background-image:url("/images/progressheader/rates_orange.png") }
+ul#property_progress_header li#availability_orange { position:relative; width:128px; margin-left:-8px; z-index:1; height:54px; background-image:url("/images/progressheader/availability_orange.png") }
+
+
+ul#property_progress_header li#location_green { background-image:url("/images/progressheader/location_green.png") }
+ul#property_progress_header li#content_green { background-image:url("/images/progressheader/content_green.png") }
+ul#property_progress_header li#pictures_green { background-image:url("/images/progressheader/pictures_green.png") }
+ul#property_progress_header li#rates_green { background-image:url("/images/progressheader/rates_green.png") }
+ul#property_progress_header li#availability_green { width:128px; background-image:url("/images/progressheader/availability_green.png") }
+
+
 /* dialog boxes */
 div.box { font-family:Verdana, Helvetica, Arial, sans-serif; font-size:11px; margin:0 0 20px 0; border:2px solid; background-repeat: no-repeat; background-position:10px 50%; padding:10px 0 10px 40px; font-weight:bold }
 div.success{  border-color:#060; background-color:#cfc; background-image:url("/templates/images/icons/green_tick_trans.png"); color:#090 }

@@ -1,10 +1,19 @@
 <?php
 class AdvertiserPropertyController extends Zend_Controller_Action
 {
+	protected $identity;
+	
     public function init()
     {
         $this->_logger = Zend_Registry::get('logger');
 		$this->_logger->log(__METHOD__ . ' started method function init()', Zend_Log::DEBUG);
+		
+		// ensure the advertiser is logged in
+		if (!Zend_Auth::getInstance()->hasIdentity()) {
+            $this->_helper->redirector->gotoSimple('login', 'advertiser-account', 'frontend');
+		}
+		
+		$this->identity = Zend_Auth::getInstance()->getIdentity();
     }
 	
 	public function step1LocationAction()
@@ -16,18 +25,15 @@ class AdvertiserPropertyController extends Zend_Controller_Action
             $formData = $this->getRequest()->getPost();
             
 			if ($form->isValid($formData)) {
-                echo 'success';
-				var_dump(Zend_Auth::getIdentity());
-				exit;
-				if (Zend_Auth::getInstance()->hasIdentity()) {
-					var_dump(Zend_Auth::getInstance()->getIdentity());
-					exit;
-				}
-				$propertyModel = new Common_Property_Model();
+				$propertyModel = new Common_Model_Property();
+                
 				$options = array();
 				$options['params'] = $form->getValues();
-				$propertyModel->createProperty($options);
-                exit;
+                $options['params']['idAdvertiser'] = $this->identity->idAdvertiser;
+				$options['params']['emailAddress'] = $this->identity->emailAddress;
+				$idProperty = $propertyModel->createProperty($options);
+				
+                $this->_helper->redirector->gotoSimple('step2-content', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
             } else {
                 $form->populate($formData);
             }
@@ -37,16 +43,26 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 	}
 	
 	
-	public function step2PropertyAction()
+	public function step2ContentAction()
 	{
-		$form = new Frontend_Form_Step2PropertyForm();
+		$idProperty = $this->getRequest()->getParam('idProperty');
+
+		// create the form and set the hidden form element		
+		$form = new Frontend_Form_Step2ContentForm($idProperty);
+		$form->setAction(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-property/step2-content');
+		$form->setFormIdProperty($idProperty);
 		
 		if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
             
 			if ($form->isValid($formData)) {
-                echo 'success';
-                exit;
+				$propertyModel = new Common_Model_Property();
+				
+				$params = $form->getValues();
+				$propertyModel->updateContent($idProperty, $params)
+							  ->updatePropertyStatus($idProperty, Common_Resource_Property::STEP_3_PICTURES);
+				
+                $this->_helper->redirector->gotoSimple('step3-pictures', 'advertiser-property', 'frontend');
             } else {
                 $form->populate($formData);
             }
@@ -57,53 +73,82 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 	
 	public function step3PicturesAction()
 	{
-		$form = new Frontend_Form_Step3PicturesForm();
+		$idProperty = $this->getRequest()->getParam('idProperty');
+		
+		// get the destination from the configuration
+		$bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
+		$vfrConfig = $bootstrap['vfr'];
+				
+		$form = new Frontend_Form_Step3PicturesForm($idProperty);
+		$form->setAction(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-property/step3-pictures');
+		$form->setFormIdProperty($idProperty);
+		
+		// get the file information, we need this to write the photo DB entry if the
+		// file is valid, or if it's not a valid we'll use to to log the type for
+		// future support
+		$fileElement 		= $form->getElement('filename');
+		$transferAdapter 	= $fileElement->getTransferAdapter();
+		$fileInfo 			= $transferAdapter->getFileInfo();
+		//var_dump($fileInfo);
 		
 		if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
             
 			if ($form->isValid($formData)) {
-				// Uploading Document File on Server
-				$upload = new Zend_File_Transfer_Adapter_Http();
-				$upload->setDestination("/var/www/zendvfr/trunk/data/uploads");
+				// create a new photo entry in the DB
+				// 1 = GIF, 2 = JPG, 3 = PNG, 4 = SWF, 5 = PSD, 6 = BMP
+				// 7 = TIFF(orden de bytes intel), 8 = TIFF(orden de bytes motorola)
+				// 9 = JPC, 10 = JP2, 11 = JPX, 12 = JB2, 13 = SWC, 14 = IFF, 15 = WBMP, 16 = XBM. 
+				list($width, $height, $type, $attr) = getimagesize($fileInfo['filename']['tmp_name']);
+				$type = (int) $type;
+				switch ($type) {
+					case 2:
+						$typeString = 'JPG';
+						break;
+					case 3:
+						$typeString = 'PNG';
+						break;
+					default:
+						$this->_logger->log(__METHOD__ . ' getimagesize returned strange file type: ' . $type, Zend_Log::DEBUG);
+				}
+				
+				$params = array (
+					'approved'			=> 0,
+					'displayPriority'	=> 1,
+					'originalFilename'	=> $fileInfo['filename']['name'],
+					'fileType'			=> $typeString, //'fileType'			=> $fileInfo['filename']['type'],
+					'widthPixels'		=> $width,
+					'heightPixels'		=> $height,
+					'sizeK'				=> $fileInfo['filename']['size'],
+					'caption'			=> $this->getRequest()->getParam('caption'),
+					'visible'			=> 1,
+					'lastModifiedBy'	=> 'system'
+				);
+				
+				$modelPhoto = new Common_Model_Photo();
+				$idPhoto 	= $modelPhoto->addPhotoByPropertyId($idProperty, $params);
+				try {
+					$destinationDirectory = $modelPhoto->generateDirectoryStructure($idProperty, $idPhoto, $vfrConfig['photo']['images_original_dir']);
+				} catch (Vfr_Exception $e) {
+					throw $e;
+				}
+				
 				try {
 					// upload received file(s)
-					$upload->receive();
+					$this->_logger->log(__METHOD__ . ' Upload dir = ' . $destinationDirectory, Zend_Log::DEBUG);
+					$transferAdapter->setDestination($destinationDirectory);
+					
+					// Rename Uploaded File
+					$renameFile 		= $idPhoto . '.' . strtolower($typeString);
+					$fullFilePath 		= $destinationDirectory . DIRECTORY_SEPARATOR . $renameFile;			
+					$filterFileRename 	= new Zend_Filter_File_Rename(array('target' => $fullFilePath, 'overwrite' => false));
+					$transferAdapter->addfilter($filterFileRename);
+					$transferAdapter->receive();
 				} catch (Zend_File_Transfer_Exception $e) {
 					$e->getMessage();
 				}
-
-				// so, Finally lets See the Data that we received on Form Submit
-				$uploadedData = $form->getValues();
-				Zend_Debug::dump($uploadedData, 'Form Data:');
-				
-				// you MUST use following functions for knowing about uploaded file
-				// Returns the file name for 'doc_path' named file element
-				$name = $upload->getFileName('filename');
-				
-				// Returns the size for 'doc_path' named file element
-				// Switches of the SI notation to return plain numbers
-				$upload->setOption(array('useByteString' => false));
-				$size = $upload->getFileSize('filename');
-				
-				// Returns the mimetype for the 'doc_path' form element
-				$mimeType = $upload->getMimeType('fllename');
-				
-				// following lines are just for being sure that we got data
-				print "Name of uploaded file: $name";
-				print "File Size: $size";
-				print "File's Mime Type: $mimeType";
-				
-				// New Code For Zend Framework :: Rename Uploaded File
-				$renameFile = 'newName.jpg';
-				$fullFilePath = '/images/'.$renameFile;
-				
-				// Rename uploaded file using Zend Framework
-				$filterFileRename = new Zend_Filter_File_Rename(array(
-														'target' => $fullFilePath,
-														'overwrite' => true));
-				$filterFileRename -> filter($name);
             } else {
+				$this->_logger->log(__METHOD__ . ' photo upload form rejected type: ' . $fileInfo['filename']['type'], Zend_Log::DEBUG);
                 $form->populate($formData);
             }
         }
@@ -148,4 +193,8 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 	public function step5AvailabilityAction()
 	{	
 	}
+
+    public function addAction()
+    {
+    }
 }

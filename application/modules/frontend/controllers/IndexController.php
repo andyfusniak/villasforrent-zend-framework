@@ -8,7 +8,8 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-		$propertyModel = new Common_Model_Property();
+		$locationModel	= new Common_Model_Location();
+		$propertyModel 	= new Common_Model_Property();
 		
 		$searchOptions = array (
 			'approved'		=> true,
@@ -18,9 +19,14 @@ class IndexController extends Zend_Controller_Action
 			'idDestination' => null
 		);
 		
+		$countryRowset = $locationModel->getCountries($visible=true,$orderBy='displayPriority');
+		
 		$results = $propertyModel->doSearch();
 		
-		var_dump($results);
+		//var_dump($results);
+		//var_dump($countryRowset);
+		
+		$this->view->countryRowset = $countryRowset;
     }
 
 	public function testAction()

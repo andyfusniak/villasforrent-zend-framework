@@ -1,2 +1,10 @@
 <p>AdvertisersController - indexAction</p>
 
+<h1>Results</h1>
+<?php
+foreach ($this->advertiserPaginator as $item) {
+	echo $item['idAdvertiser'], $item['iso2char'], $item['username'];
+}
+
+echo $this->paginationControl($this->advertiserPaginator, 'Sliding', 'pagination.phtml');
+?>

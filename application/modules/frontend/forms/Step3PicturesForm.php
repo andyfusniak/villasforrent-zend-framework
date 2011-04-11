@@ -1,6 +1,12 @@
 <?php
 class Frontend_Form_Step3PicturesForm extends Zend_Form
 {
+	public function setFormIdProperty($idProperty)
+    {
+		if ($this->idProperty !== null)
+			$this->idProperty->setValue($idProperty);
+    }
+	
     public function __construct($options = null)
     {
         parent::__construct($options);
@@ -9,26 +15,54 @@ class Frontend_Form_Step3PicturesForm extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAction(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-property/step3-pictures');
         $this->setName('step3');
 		$this->setAttrib('id', 'step3');
 		$this->setAttrib('enctype', 'multipart/form-data');
+		//$this->setAttrib('onsubmit', 'alert(1)');
 		
-		$file = new Zend_Form_Element_File('filename');
-		$file->setLabel('Browse for another photo:')
-			 ->setRequired(true);
+		$this->addDecorators(array(
+			'FormElements',
+			array('Fieldset', array('legend' => 'Pictures',
+									'id' 	 => 'step3pictures_legend')),
+			'Form'
+		));
 		
-		$caption = new Zend_Form_Element_Text('caption');
-		$caption->setLabel('Photo Caption Text')
-			    ->setRequired(true);
-				
+		$this->addElement('file', 'filename', array (
+			'required'		=> true,
+			'label' 		=> 'Browse for a photo',
+			'validators'	=> array (
+				//array ('Count', true, array	('min' => 1, 'max' => 1)),
+				array ('IsImage', true, array('image/jpeg', 'image/png'))
+			)
+		));
 		
-		$this->addElements(array($file, $caption));
+		$this->addElement('text', 'caption', array (
+			'label'		=> 'Photo Caption Text',
+			
+		));
 		
-		$this->addElement('submit', 'submit', array('required' => false,
-                                                    'ignore' => true,
-                                                    'decorators' => array('ViewHelper',array('HtmlTag',
-                                                        array('tag' => 'dd', 'id' => 'form-submit')))
-                                                    ));
+		$group = $this->addDisplayGroup(array('filename', 'caption'),
+							   'main',
+							   array('disableLoadDefaultDecorators' => true));
+		
+		$this->getDisplayGroup('main')
+			 ->addDecorators(array(
+				'FormElements',
+				array('HtmlTag', array('tag' => 'dl'))
+			 ));
+		
+		$this->addElement('hidden', 'idProperty', array(
+			'decorators' => array(
+				'ViewHelper'
+			)
+		));
+			 
+		$this->addElement('submit', 'submit', array(
+			'label' => 'Send',
+			'ignore' => true,
+			'decorators' => array(
+				'ViewHelper'
+			)
+		));	
 	}
 }

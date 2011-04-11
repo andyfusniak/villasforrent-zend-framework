@@ -1,3 +1,38 @@
-<?php
+<h1>Advertiser Account Management</h1>
+<p><?php echo $this->name ?>, welcome to the account management control panel. Within the control panel you can add, edit property details including uploading photographs</p>
+<p>If this is your first visit, we suggest you begin by clicking "Add a new property" from the form below.</p>
 
-echo "advertiser account home";
+<p>Use the link below if you wish to add a new property to your account.</p>
+<a href="<?php echo $this->url(array('controller' => 'advertiser-property', 'action' => 'step1-location', 'module' => 'frontend')) ?>">[add a new property]</a>
+
+<table>
+<tr>
+    <th>Ref</th>
+    <th>Property name</th>
+    <th>Location</th>
+    <th>Renewal date</th>
+    <th>Display<br />Status</th>
+    <th>Advert Status</th>
+    <th>Continue</th>
+    <th>Details</th>
+    <th>Photos</th>
+    <th>Avail</th>
+    <th>Rates</th>
+</tr>
+<?php foreach ($this->propertyRowset as $property) : ?>
+<?php //var_dump($property) ?>
+<tr>
+    <td><?php echo $property->idProperty ?></td>
+    <td><?php echo $property->shortName ?></td>
+    <td><?php echo $property->locationUrl ?></td>
+    <td><?php echo $property->expiry ?></td>
+    <td><?php echo $property->visible ?></td>
+    <td><?php echo $property->status ?></td>
+    <td><a href="<?php echo $this->url(array('action' => 'index', 'controller' => 'advertiser-continue', 'module' => 'frontend', 'idProperty' => $property->idProperty)) ?>">[continue]</a></td>
+    <td><?php echo "[edit]" ?></td>
+    <td><?php echo "[edit]" ?></td>
+    <td><?php echo "[edit]" ?></td>
+    <td><?php echo "[edit]" ?></td>
+</tr>
+<?php endforeach ?>
+</table>
