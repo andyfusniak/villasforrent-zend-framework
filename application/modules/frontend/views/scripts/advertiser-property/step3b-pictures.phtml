@@ -1,0 +1,51 @@
+<div class="form">
+<h1>Step 3 - Upload your photos</h1>
+<ul id="property_progress_header">
+	<li id="location_orange"></li>
+	<li id="content_orange"></li>
+	<li id="pictures_grey"></li>
+	<li id="rates_grey"></li>
+	<li id="availability_grey"></li>
+</ul>
+<p class="clearfix" />
+<?php echo $this->imageUploadNotifier($this->idProperty, $this->photoCount) ?>
+<p>Use the form below to upload digital photos of your property. Ensure your photos are of good quality, in focus, and do not contain people, pets or distracting objects not relating to the property.</p>
+<p>As an example you might want to include photos of your pool, master bedroom, garden and view from outside. Type an appropriate short caption to describe your photograph.</p>
+<?php echo $this->form ?>
+
+<?php //var_dump($this->photoRowset) ?>
+
+<p>You have uploaded <?php echo $this->photoCount ?> of a possible <?php echo $this->maxLimitPerProperty ?> maximum.</p>
+
+<table border="1" cellpadding="20" cellspacing="20">
+<tr>
+	<th>Photo</th>
+	<td>Aspect</th>
+	<th>Pri</th>
+	<th>Filename</th>
+	<th>Size</th>
+	<th>File type</th>
+	<th>Width</th>
+	<th>Height</th>
+	<th>Caption</th>
+	<th>Delete</th>
+	<td>Move</th>
+</tr>
+<?php for ($i=0; $i < $this->photoCount; $i++) { ?>
+<?php $row = $this->photoRowset[$i] ?>
+<tr>	
+	<td><?php echo $this->tinyThumb($this->idProperty, $row->idPhoto, $row->widthPixels, $row->heightPixels, $row->caption) ?></td>
+	<td><?php echo $this->aspectRatio($row->widthPixels, $row->heightPixels) ?></td>
+	<td><?php echo $row->displayPriority ?></td>
+	<td><?php echo $row->originalFilename ?></td>
+	<td><?php echo $this->bytes($row->sizeK) ?></td>
+	<td><?php echo $row->fileType ?></td>
+	<td><?php echo $row->widthPixels ?></td>
+	<td><?php echo $row->heightPixels ?></td>
+	<td><?php echo $row->caption ?></td>
+	<td><?php echo $this->imageConfirmDeleteButton($this->idProperty, $row->idPhoto) ?></td>
+	<td><?php echo $this->imageMoveButtons($this->idProperty, $row->idPhoto, $i, $this->photoCount) ?></td>
+</tr>
+<?php } ?>
+</table>
+</div>
