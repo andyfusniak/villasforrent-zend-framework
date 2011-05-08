@@ -1,0 +1,8 @@
+<div id="browse_country">
+    <h1>Regions in <?php echo $this->countryName ?></h1>
+    <ul>
+        <?php foreach ($this->fastLookupsRowset as $row): ?>
+        <li><a href="/in/<?php echo $row->url ?>"><?php echo $this->escape($row->regionName) ?> (<?php echo $row->totalVisible ?>)</a></li>
+        <?php endforeach ?>
+    </ul>
+</div>

@@ -8,8 +8,8 @@
 <div id="browse_country">
     <h1>Browse By Country</h1>
     <ul>
-        <?php foreach ($this->countryRowset as $row): ?>
-        <li><a href="/in/"><?php echo $this->escape($row->name) ?></a></li>
+        <?php foreach ($this->fastLookupRowset as $row): ?>
+        <li><a href="/in/<?php echo $row->url ?>"><?php echo $this->escape($row->countryName) ?> (<?php echo $row->totalVisible ?>)</a></li>
         <?php endforeach ?>
     </ul>
 </div>

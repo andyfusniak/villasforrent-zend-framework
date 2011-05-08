@@ -8,22 +8,31 @@
 	<li id="availability_grey"></li>
 </ul>
 <p class="clearfix" />
+<?php echo $this->baseCurrency('GBP') ?>
 <fieldset>
 	<dl>
 		<dt><label for="rental_basis">Rental Basis</label></dt>
-		<dd><input readonly="Y" name="rentalBasis" value="<?php echo $this->rentalBasis ?>" /> <?php echo $this->rentalBasisLink ?></dd>
+		<dd><input readonly="Y" name="rentalBasis" value="<?php echo $this->rentalBasis($this->rentalBasis) ?>" /> <?php echo $this->rentalBasisLink ?>
+		<a href="<?php echo $this->url(array('module'       => 'frontend',
+											 'controller'   => 'advertiser-rates',
+											 'action'       => 'rental-basis',
+											 'idProperty' => $this->idProperty)) ?>">[edit]</a></dd>
 	</dl>
 		
 	<dl>
 		<dt><label for="base_currency">Base Currency</label></dt>
-		<dd><input readonly="Y" name="base_currency" value="<?php echo $this->baseCurrency ?>" />  <?php echo $this->baseCurrencyLink ?></dd>
+		<dd><input readonly="Y" name="base_currency" value="<?php echo $this->baseCurrency($this->baseCurrency) ?>" />  <?php echo $this->baseCurrencyLink ?>
+		<a href="<?php echo $this->url(array('module'       => 'frontend',
+											 'controller'   => 'advertiser-rates',
+											 'action'       => 'base-currency',
+											 'params'       => array('idProperty' => $this->idProperty))) ?>">[edit]</a></dd>
 	</dl>
 </fieldset>
 
-<p style="padding-bottom:1em"><a href="<?php echo $this->url(array('module' => 'frontend',
+<p style="padding-bottom:1em"><a href="<?php echo $this->url(array('module'     => 'frontend',
 																   'controller' => 'advertiser-rates',
-																   'action' => 'add',
-																   'params' => array('idProperty' => $this->idProperty))) ?>">[add a new rate]</a></p>
+																   'action'     => 'add',
+																   'params'     => array('idProperty' => $this->idProperty))) ?>">[add a new rate]</a></p>
 
 <table style="width:100%;" cellpadding="0" cellspacing="0" border="1">
 <tr>
@@ -34,9 +43,9 @@
 	<td><strong>Weekend<br />Nightly<br />Rate</strong></td>
 	<td><strong>Midweek<br />Nightly<br />Rate</strong></td>
 	<td><strong>Minimum<br />Stay</strong></td>
-	<td><strong>Edit</strong></td>
 	<td><strong>Del</strong></td>
-</tr><?php
+</tr>
+<?php
 if ($this->ratesRowSet) {
 	$i = 0;
 	foreach ($this->ratesRowSet as $row) {
@@ -44,12 +53,12 @@ if ($this->ratesRowSet) {
   		$startDate 	= $row->startDate;
 		$endDate	= $row->endDate;
 		
-        $delete_url = $this->url(array('module' => 'frontend',
+        $delete_url = $this->url(array('module'     => 'frontend',
                                        'controller' => 'advertiser-rates',
-                                       'action' => 'delete',
+                                       'action'     => 'delete',
                                        'idProperty' => $this->idProperty,
                                        'startDate=' => $row->startDate,
-                                       'endDate=' => $row->endDate), null, true);
+                                       'endDate='   => $row->endDate), null, true);
 		?><tr>
 			<td class="<?php echo $line_style ?>"><?php echo $row->name ?></td>
 			<td class="<?php echo $line_style ?>"><?php echo $this->prettyDate($row->startDate) ?></td>
@@ -58,11 +67,13 @@ if ($this->ratesRowSet) {
 			<td class="<?php echo $line_style ?>"><?php echo $this->rateCurrency($row->weekendNightlyRate, $this->baseCurrency) ?></td>
 			<td class="<?php echo $line_style ?>"><?php echo $row->midweekNightlyRate ?></td>
 			<td class="<?php echo $line_style ?>"><?php echo $this->minStayDuration($row->minStayDays) ?></td>
-			<td class="<?php echo $line_style ?>">[edit]</td>
-			<td class="<?php echo $line_style ?>" align="middle"><a href="<?php echo $delete_url ?>">[del]</a></td>
+			<td class="<?php echo $line_style ?>"><a href="<?php echo $delete_url ?>">[del]</a></td>
 		</tr><?php
 		$i++;
 	}
 }
-?></table>
+?>
+
+<?php echo $this->form ?>
+</table>
 </div>

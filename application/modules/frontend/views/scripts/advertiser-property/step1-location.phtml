@@ -1,3 +1,5 @@
+
+
 <h1>Step 1 - Set the location and name your property</h1>
 <ul id="property_progress_header">
 	<li id="location_grey"></li>
@@ -7,4 +9,45 @@
 	<li id="availability_grey"></li>
 </ul>
 <p class="clearfix" />
-<?php echo $this->form ?>
+<?php //var_dump($this->messages) ?>
+<?php //var_dump($this->unfiltered) ?>
+<?php //var_dump($this->validValues) ?>
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+    <fieldset>
+        <legend>Location</legend>
+        
+        <dl>
+            <dt><label for="idPropertyType">Type of property:</label></dt>
+            <dd>
+                <?php echo $this->formSelect('idPropertyType', $this->form->getValue('idPropertyType'), null, $this->form->getElement('idPropertyType')->getMultiOptions()) ?>
+                <?php echo $this->formErrors($this->form->getMessages('idPropertyType')) ?>
+            </dd>
+            
+            <dt><label for="shortName">Name of your property</label></dt>
+            <dd>
+                <input type="text" name="shortName" value="<?php echo $this->form->getValue('shortName') ?>" />
+                <?php echo $this->formErrors($this->form->getMessages('shortName')) ?>
+            </dd>
+    
+            <dt><label for="country" class="required">Country:</label></dt>
+            <dd>
+                <input type="text" name="country" value="<?php echo $this->form->getValue('country') ?>" />
+                <?php echo $this->formErrors($this->form->getMessages('country')) ?>
+            </dd>
+            
+            <dt><label for="region" class="required">Region:</label></dt>
+            <dd>
+                <input type="text" name="region" value="<?php echo $this->escape($this->form->getValue('region')) ?>" />
+                <?php echo $this->formErrors($this->form->getMessages('region')) ?>
+            </dd>
+            
+            <dt><label for="destination">Destination:</label></dt>
+            <dd>
+                <input type="text" name="destination" value="<?php echo $this->form->getValue('destination') ?>" />
+                <?php echo $this->formErrors($this->form->getMessages('destination')) ?>
+            </dd>
+        </dl>
+    
+        <input type="submit" name="submit" id="submit" value="Send" />
+    </fieldset>
+</form>
