@@ -7,21 +7,17 @@ class Frontend_Form_Step4RatesForm extends Zend_Form
 	}
 	
 	public function init()
-	{
+	{ 
 		$this->setMethod('post');
 		$this->setAction(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-property/step4-rates');
         $this->setName('step4');
 		$this->setAttrib('id', 'step4');
+        
+        $this->datePicker = new ZendX_JQuery_Form_Element_DatePicker(
+                        'from', array('jQueryParams' => array('defaultDate' => '2007/10/10'))
+                      );
 		
-		$rentalBasis = new Zend_Form_Element_Text('rentalBasis');
-		$rentalBasis->setLabel('Rental Basis:')
-					->setOptions(array('readOnly' => true));
-					
-		$baseCurrency = new Zend_Form_Element_Text('baseCurrency');
-		$baseCurrency->setLabel('Base Currency:')
-					 ->setOptions(array('readOnly' => true));
-		
-		$this->addElements(array($rentalBasis, $baseCurrency));
+		//$this->addElements(array($datePicker));
 		
 		$this->addElement('submit', 'submit', array('required' => false,
                                                     'ignore' => true,
