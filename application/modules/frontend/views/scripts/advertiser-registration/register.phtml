@@ -1,7 +1,49 @@
 <h1>New Advertisers</h1>
 <p>To advertise your rental properties you will need to first setup an online account. Account registration is quick, easy. Just simply complete the single page form below and press send. If you already an existing member you can
-<a href="<?php echo $this->url(array('module' => 'frontend',
-                                     'controller' => 'advertiser-',
-                                     'action' => 'login')); ?>">login here.</a></p>
-<?php echo $this->form ?>
+<a href="<?php echo $this->url(array('module'     => 'frontend',
+                                     'controller' => 'advertiser-authentication',
+                                     'action'     => 'login')); ?>">login here.</a></p>
+
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+    <fieldset>
+        <dl>
+            <dt>
+                <label for="firstname">Firstname:</label>
+            </dt>
+            <dd>
+                <input type="text" name="firstname" value="<?php echo $this->escape($this->form->getValue('firstname')) ?>" />
+            </dd>
+            
+            <dt>
+                <label for="lastname">Lastname:</label>
+            </dt>
+            <dd>
+                <input type="text" name="lastname" value="<?php echo $this->escape($this->form->getValue('lastname')) ?>" />
+            </dd>
+            
+            <dt>
+                <label for="emailAddress">Email address:</label>
+            </dt>
+            <dd>
+                <input type="text" name="emailAddress" value="<?php echo $this->escape($this->form->getValue('emailAddress')) ?>" />
+            </dd>
+            
+            <dt>
+                <label for="passwd">Choose a password</label>
+            </dt>
+            <dd>
+                <input type="password" name="passwd" value="<?php echo $this->escape($this->form->getValue('passwd')) ?>" />
+            </dd>
+            
+            <dt>
+                <label for="passwdVerify">Repeat your password:</label>
+            </dt>
+            <dd>
+                <input type="password" name="passwdVerify" value="<?php echo $this->escape($this->form->getValue('passwdVerify')) ?>" />
+            </dd>
+        </dl>
+        <input type="submit" name="submit" id="submit" value="Send" />
+    </fieldset>
+</form>
+
 <p>Privacy policy: All information which you provide will be treated as strictly confidential. We guarantee that none of your personal information will be passed on to any other company, organisation or individual.</p>
