@@ -1,0 +1,13 @@
+AuthType Basic
+AuthName "BETA Villas For Rent Project"
+AuthUserFile /var/www/beta.villasforrent.net/application/configs/passwd.txt
+<Limit GET POST>
+    require valid-user
+</limit>
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+RewriteRule ^.*$ index.php [NC,L]
