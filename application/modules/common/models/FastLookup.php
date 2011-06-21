@@ -74,6 +74,10 @@ class Common_Model_FastLookup extends Vfr_Model_Abstract
 		return $this->getResource('FastLookup')->purgeFastLookupTable();
 	}
 
+	//
+	// CREATE
+	//
+
 	public function createFastLookupTable($visible=true)
 	{
 		$this->purgeFastLookupTable();
@@ -99,17 +103,25 @@ class Common_Model_FastLookup extends Vfr_Model_Abstract
 			
 			// find all properties in this location
 			$options = array(
-				'visible' => true,
-				'count' => true,
+				'approved' 	=> true,
+				'visible'	=> true,
+				'count' 	=> true,
 				'idCountry' => $idCountry,
 			);
 			$totalVisible = $propertyModel->doSearch($options);
+			if ($totalVisible == null)
+				$totalVisible = 0;
 
 			$options['visible'] = false;
 			$total = $propertyModel->doSearch($options);
+			if ($total == null)
+				$total = 0;
 			
 			// add an entry for this country
-			$this->_fastLookupResource->addNewLookup($cItem, null, null, $totalVisible, $total, $url);
+			$this->_fastLookupResource->addNewLookup($idCountry, $cItem->name,
+													 null, null,
+													 null, null,
+													 $totalVisible, $total, $url);
 			
 			// for each region in the current country
 			$regions = $locationsModel->getRegionsByCountryId($idCountry, $visible);
@@ -119,16 +131,25 @@ class Common_Model_FastLookup extends Vfr_Model_Abstract
 					
 				// find all properties in this location
 				$options = array(
-					'visible' => true,
-					'count' => true,
+					'approved' 	=> true,
+					'visible'	=> true,
+					'count' 	=> true,
 					'idCountry' => $idCountry,
 					'idRegion'  => $idRegion,
 				);
 				$totalVisible = $propertyModel->doSearch($options);
+				if ($totalVisible == null)
+					$totalVisible = 0;
+				
 				$options['visible'] = false;
 				$total = $propertyModel->doSearch($options);
+				if ($total == null)
+					$total = 0;
 				
-				$this->_fastLookupResource->addNewLookup($cItem, $rItem, null, $totalVisible, $total, $url);
+				$this->_fastLookupResource->addNewLookup($idCountry, $cItem->name,
+														 $idRegion, $rItem->name,
+														 null, null,
+														 $totalVisible, $total, $url);
 	
 				// for each destination in the current region
 				$destinations = $locationsModel->getDestinationsByRegionId($idRegion, $visible);
@@ -138,29 +159,40 @@ class Common_Model_FastLookup extends Vfr_Model_Abstract
 
 					// find all properties in this location
 					$options = array(
-						'visible' => true,
-						'count' => true,
+						'approved' 	=> true,
+						'visible'	=> true,
+						'count' 	=> true,
 						'idCountry' => $idCountry,
 						'idRegion'  => $idRegion,
 						'idDestination' => $idDestination
 					);
 					$totalVisible = $propertyModel->doSearch($options);
+					if ($totalVisible == null)
+						$totalVisible = 0;
+						
 					$options['visible'] = false;
 					$total = $propertyModel->doSearch($options);
-
+					if ($total == null)
+						$total = 0;
+					
 					// create a new fast lookup entry
-					$this->_fastLookupResource->addNewLookup($cItem, $rItem, $dItem, $totalVisible, $total, $url, Common_Resource_Property::DEFAULT_PROPERTY_ID);
+					$this->_fastLookupResource->addNewLookup($idCountry, $cItem->name,
+															 $idRegion, $rItem->name,
+															 $idDestination, $dItem->name, $totalVisible, $total, $url, Common_Resource_Property::DEFAULT_PROPERTY_ID);
 
 					$options = array(
-						'visible' => false,
-						'idCountry' => $idCountry,
-						'idRegion' => $idRegion,
+						'approved' 		=> true,
+						'idCountry' 	=> $idCountry,
+						'idRegion' 		=> $idRegion,
 						'idDestination' => $idDestination
 					);
 					$properties = $propertyModel->doSearch($options);
 					foreach ($properties as $p) {
 						$url = $this->_generateUrl($cItem->name, $rItem->name, $dItem->name, $p->urlName);
-						$this->_fastLookupResource->addNewLookup($cItem, $rItem, $dItem, null, null, $url, $p->idProperty);
+						$this->_fastLookupResource->addNewLookup($idCountry, $cItem->name,
+																 $idRegion, $rItem->name,
+																 $idDestination, $dItem->name,
+																 null, null, $url, $p->idProperty);
 					}
 				}
 			}
@@ -168,4 +200,75 @@ class Common_Model_FastLookup extends Vfr_Model_Abstract
 
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 	}
+	
+	//
+	// READ
+	//
+	
+	public function getFastLookupByCountryRegionDestinationId($idCountry, $idRegion, $idDestination)
+	{
+		$idCountry		= (int) $idCountry;
+		$idRegion  		= (int) $idRegion;
+		$idDestination	= (int) $idDestination;
+		
+		$fastLookupResource = $this->getResource('FastLookup');
+		return $fastLookupResource->getFastLookupByCountryRegionDestinationId($idCountry, $idRegion, $idDestination);
+	}
+	
+	public function getEntirePropertyHierarchy()
+	{
+		$fastLookupResource = $this->getResource('FastLookup');
+		//$countryRowset 		= $fastLookupResource->getAllCountries();
+		//$regionRowset		= $fastLookupResource->getAllRegions();
+		//$destinationRowset = $fastLookupResource->getAllDestinations(); 
+		
+		$fastLookupRowset = $fastLookupResource->getEntirePropertyHierarchy();
+		
+		
+		$hierarchy = array ();
+		
+		$firstCountry		= true;
+		$firstRegion  		= true;
+		foreach ($fastLookupRowset as $row) {
+			if (($row->idRegion == Common_Resource_FastLookup::DUMMY_REGION_ID) &&
+				($row->idDestination == Common_Resource_FastLookup::DUMMY_DESTINATION_ID)) {
+				
+				// this is a top-level country item
+				if ($firstCountry) {
+					$regions = array ();
+					$firstCountry = false;
+				}
+				$hierarchy[$row->idCountry] = array ('name'			=> $row->countryName,
+													 'idCountry'	=> $row->idCountry,
+													 'idFastLookup' => $row->idFastLookup,
+													 'children'		=> $regions);
+			} else if (($row->idDestination == Common_Resource_FastLookup::DUMMY_DESTINATION_ID) &&
+					   ($row->idRegion != Common_Resource_FastLookup::DUMMY_REGION_ID)) {
+				// this is a region level item, so attach it to the country
+				if ($firstRegion) {
+					$firstRegion = false;
+					$destinations = array ();
+				}
+				$hierarchy[$row->idCountry]['children'][$row->idRegion] = array ('name'			=> $row->regionName,
+																				 'idRegion'		=> $row->idRegion,
+																				 'idFastLookup' => $row->idFastLookup,
+																				 'children' => $destinations);
+			} else if (($row->idDestination != Common_Resource_FastLookup::DUMMY_DESTINATION_ID) &&
+					   ($row->idRegion != Common_Resource_FastLookup::DUMMY_REGION_ID)) {
+				// this is a destination level item, so attach it to the region
+				$hierarchy[$row->idCountry]['children'][$row->idRegion]['children'][$row->idDestination] = array ('name' => $row->destinationName,
+																												  'idFastLookup' => $row->idFastLookup);
+			}
+		}
+		
+		return $hierarchy;
+	}
+	
+	//
+	// UPDATE
+	//
+	
+	//
+	// DELETE
+	//
 }

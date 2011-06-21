@@ -7,6 +7,8 @@ class Common_Resource_Destination extends Vfr_Model_Resource_Db_Table_Abstract i
 	protected $_rowsetClass = 'Common_Resource_Destination_Rowset';
 	protected $_dependantTables = array('Properties');
 
+	const DEFAULT_DESTINATION_ID = 1;
+
 	public function getDestinationById($idDestination)
 	{
 		$query = $this->select()

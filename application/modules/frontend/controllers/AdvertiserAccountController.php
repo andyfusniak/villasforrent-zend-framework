@@ -30,7 +30,5 @@ class AdvertiserAccountController extends Zend_Controller_Action
         if (!$this->_advertiserModel->checkAcl('listAccount')) {
             throw new Vfr_Exception('Access Denied');
         }
-
-        var_dump("index action");
     }
 }

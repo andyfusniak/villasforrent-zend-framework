@@ -5,17 +5,18 @@
 <p>Simply enter your email address or the username (not both) into the appropriate field. Make sure the
 email address you provide matches the email address used to setup your account.</p>
 
-<form method="post" action="/advertiser-password-reminder/send">
-<input type="hidden" name="action" value="forgotten_email" />
-<table cellspacing="4" cellpadding="5">
-<tr>
-	<td width="140" valign="top">Account email address</td>
-	<td valign="top"><input type="text" name="emailAddress" maxlength="255" size="48" value="" /></td>
-</tr>
-<tr>
-	<td valign="top">&nbsp;</td>
-	<td valign="top"><input type="submit" value="Send me my details" /></td>
-</tr>
-</table>
+<form method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<fieldset>
+    <dl>
+        <dt>
+            <label for="emailAddress">Email Account email address:</label>
+        </dt>
+		<dd>
+			<input type="text" name="emailAddress" maxlength="255" value="<?php echo $this->escape($this->form->getValue('emailAddress')) ?>" />
+			<?php echo $this->displayErrors($this->form->getMessages('emailAddress')) ?>
+		</dd>
+		
+		<input type="submit" name="submit" value="Login" />
+</fieldset>
 </form>
 </div>

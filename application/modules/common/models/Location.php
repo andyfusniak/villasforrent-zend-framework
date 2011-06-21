@@ -1,6 +1,33 @@
 <?php
 class Common_Model_Location extends Vfr_Model_Abstract
 {
+	//
+	// CREATE
+	//
+	
+	public function fillTable()
+	{
+		return $this->getResource('Location')->fillTable();
+	}
+	
+	//
+	// READ
+	//
+	
+	public function lookup()
+	{
+		return $this->getResource('Location')->lookup();
+	}
+	
+    public function getFastAllLocations()
+    {
+        $fastLookupRowset = $this->getResource('FastLookup')->getAllLocations();
+
+        foreach ($fastLookupRowset as $fastLookupRow) {
+            
+        }
+    }
+
 	public function getCountryById($idCountry)
 	{
 		$idCountry = (int) $idCountry;
@@ -11,6 +38,16 @@ class Common_Model_Location extends Vfr_Model_Abstract
 	public function getCountries($visible=true, $orderBy='displayPriority')
 	{
 		return $this->getResource('Country')->getCountries($visible);
+	}
+	
+	public function getCountriesWithTotalVisible()
+	{
+		return $this->getResource('Country')->getCountriesWithTotalVisible();
+	}
+	
+	public function getFastAllCountries()
+	{
+		return $this->getResource('FastLookup')->getAllCountries();
 	}
 
 	public function addCountry($name, $priority=1, $prefix='', $postfix='', $visible=true)
@@ -39,6 +76,25 @@ class Common_Model_Location extends Vfr_Model_Abstract
 	{
 		return $this->getResource('Region')->getRegionsByCountryId($idCountry, $visible);
 	}
+	
+	public function getRegionsWithTotalVisible($idCountry)
+	{
+		return $this->getResource('Region')->getRegionsWithTotalVisible($idCountry);
+	}
+	
+	public function getFastAllRegions($idCountry)
+	{
+		$idCountry = (int) $idCountry;
+		
+		return $this->getResource('FastLookup')->getAllRegions($idCountry);
+	}
+
+	public function getFastAllDestinations($idRegion)
+	{
+		$idRegion = (int) $idRegion;
+		
+		return $this->getResource('FastLookup')->getAllDestinations($idRegion);
+	}
 
 	public function getDestinationById($idDestination)
 	{
@@ -55,5 +111,14 @@ class Common_Model_Location extends Vfr_Model_Abstract
 	{
 		$idRegion = (int) $idRegion;
 		return $this->getResource('Destination')->getDestinationsByRegionId($idRegion, $visible);
+	}
+	
+	//
+	// DELETE
+	//
+	
+	public function purgeLocationTable()
+	{
+		return $this->getResource('Location')->purgeLocationTable();
 	}
 }

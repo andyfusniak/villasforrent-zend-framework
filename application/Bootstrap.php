@@ -26,6 +26,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 				'namespace' => 'Frontend',
 				'basePath' => APPLICATION_PATH . '/modules/frontend'));
 
+		$autoLoader = new Zend_Application_Module_Autoloader(
+			array(
+				'namespace' => 'Api',
+				'basePath' => APPLICATION_PATH . '/modules/api'));
+		
 		//$loader = Zend_Loader_Autoloader::getInstance();
 		//$loader->registerNamespace('Vfr_');
 		//$loader->setFallbackAutoloader(true);
@@ -123,17 +128,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		
 		// main property route
 		//$this->_logger->log(__METHOD__ . ' setting up route for /in/country/region/dest/propertyurl', Zend_Log::DEBUG);
-		$router = Zend_Controller_Front::getInstance()->getRouter();
+		$front  = Zend_Controller_Front::getInstance();
+		$router = $front->getRouter();
         
-		$fullPropertyRoute = new Zend_Controller_Router_Route('/in/:country/:region/:destination/:propertyurl',
-															  array('module'     => 'frontend',
-														            'controller' => 'display-full-property',
-														            'action'     => 'index'));
-		$icRoute = new Zend_Controller_Router_Route('/ic.php',
-					    							  array('module' => 'frontend',
-														'controller' => 'availability-image',
-														'action' => 'render'));
-		//$router->addRoute('icRoute', $icRoute);
+		$routeAvailbilityImage = new Zend_Controller_Router_Route('/ic.php',
+																  array('module' => 'frontend',
+																		'controller' => 'availability-image',
+																		'action' => 'render'));
 		
 		// image cache router
 		$routeImageCache = new Zend_Controller_Router_Route_Regex('photos/(.+)/(.+)/(.+)_(.+)x(.+)\.(.+)',
@@ -151,31 +152,50 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 													6	=> 'ext'
 												  )
 		);
-		$router->addroute('imageCache', $routeImageCache);
 		
+		
+		
+		$fullPropertyRoute = new Zend_Controller_Router_Route(
+				'/in/:country/:region/:destination/:propertyurl',
+				 array( 'module'     => 'frontend',
+						'controller' => 'display-full-property',
+						'action'     => 'index')
+		);
 		
         // setup a route for /in/<country>/<region>/<destination>
-        //$this->logger->log("Bootstrap_Bootstrap _initRouting() setting up route for in/country/region/destination", Zend_Log::DEBUG);
-        //$route = new Zend_Controller_Router_Route('/in/:country/:region/:destination',
-		//										  array('module' => 'frontend',
-	//													'controller' => 'Level',
-	//													'action'     => 'list-destinations'));
+        $routeDestination = new Zend_Controller_Router_Route(
+				'/in/:country/:region/:destination',
+				array('module'     => 'frontend',
+				      'controller' => 'level',
+					  'action'     => 'destination')
+		);
+		
 	//	Zend_Controller_Front::getInstance()->getRouter()->addRoute('frontend',$route);
 		
 //		$this->logger->log("Bootstrap_Bootstrap _initRouting() setting up route for in/country/region", Zend_Log::DEBUG);
-//        $route = new Zend_Controller_Router_Route('/in/:country/:region',
-//												  array('module' => 'frontend',
-//														'controller' => 'LevelSummary',
-//														'action'     => 'index'));
+        $routeRegion = new Zend_Controller_Router_Route('/in/:country/:region',
+													  array('module' 		=> 'frontend',
+															'controller' 	=> 'level',
+															'action'     	=> 'region'));
 //		Zend_Controller_Front::getInstance()->getRouter()->addRoute('frontend',$route);
-//		
+
 //		$this->logger->log("Bootstrap_Bootstrap _initRouting() setting up route for in/country", Zend_Log::DEBUG);
-//        $route = new Zend_Controller_Router_Route('/in/:country',
-//												  array('module' => 'frontend',
-//														'controller' => 'LevelSummary',
-//														'action'     => 'index'));
+        $routeCountry = new Zend_Controller_Router_Route('/in/:country',
+													  array('module' 		=> 'frontend',
+															'controller' 	=> 'level',
+															'action'     	=> 'country')
+		);
 		
-		
+        $routeRestApi = new Zend_Rest_Route($front, array (), array ('api'));
+        
+		$router->addroute('imageCache', $routeImageCache)
+			   ->addroute('property', $fullPropertyRoute)
+			   ->addroute('destination', $routeDestination)
+			   ->addRoute('region', $routeRegion)
+			   ->addRoute('country', $routeCountry)
+			   ->addRoute('availabilityImage', $routeAvailbilityImage)
+			   ->addRoute('rest', $routeRestApi);
+			   
         $this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
     }
 
@@ -189,15 +209,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$frontController = Zend_Controller_Front::getInstance();
 		
 		$layoutModulePlugin = new Common_Plugin_Layout();
-		$layoutModulePlugin->registerModuleLayout('frontend',
-									APPLICATION_PATH . '/modules/frontend/layouts/scripts');
-		$layoutModulePlugin->registerModuleLayout('admin',
-									APPLICATION_PATH . '/modules/admin/layouts/scripts');
+		$layoutModulePlugin->registerModuleLayout('frontend', APPLICATION_PATH . '/modules/frontend/layouts/scripts');
+		$layoutModulePlugin->registerModuleLayout('admin', APPLICATION_PATH . '/modules/admin/layouts/scripts');
 		
 		//$acl = new Frontend_Model_AdvertiserAcl();
 
 		//$frontController->registerPlugin(new Frontend_Plugin_AdvertiserAccessCheck());
 		$frontController->registerPlugin($layoutModulePlugin);
+		
+		//$frontController->registerPlugin(new Api_Plugin_RestAuth());
 
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 	}
@@ -206,6 +226,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	{
 		$this->bootstrap('logging');
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
+
+		//Zend_Controller_Action_HelperBroker::addPrefix('Frontend_Helper');
+		Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/modules/frontend/helpers','Frontend_Helper');
 
 		Zend_Controller_Action_HelperBroker::addHelper(new Vfr_Controller_Helper_Acl());
 
@@ -224,8 +247,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$this->bootstrap('layout');
 		$layout = $this->getResource('layout');
 		$view = $layout->getView();
-		
-		$view->doctype('XHTML1_STRICT');
+		ZendX_JQuery::enableView($view);
+        
+		//$view->doctype('XHTML1_STRICT');
+		$view->doctype('XHTML1_TRANSITIONAL');
 		$view->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
 		$view->headMeta()->appendHttpEquiv('Content-Language', 'en-GB');
 		$view->headMeta()->appendHttpEquiv('author', 'Andy Fusniak');

@@ -1,0 +1,16 @@
+<h1>Update Approval for property <?php echo $this->idProperty ?></h1>
+
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
+<?php foreach ($this->changed as $name=>$value) : ?>
+<h2><?php echo $name ?></h2>
+<div style="float:left">
+    <?php echo $this->escape($value['master']) ?>
+</div>
+
+<div style="float:right">
+    <?php echo $this->escape($value['update']) ?>
+</div>
+<?php endforeach ?>
+<input type="submit" value="Approval Updates" />
+</form>

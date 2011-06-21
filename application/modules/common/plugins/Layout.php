@@ -26,33 +26,32 @@ class Common_Plugin_Layout extends Zend_Controller_Plugin_Abstract
     public function registerModuleLayout($module, $layoutPath, $layout=null)
 	{
 		$this->_moduleLayouts[$module] = array('layoutPath' => $layoutPath,
-											   'layout' => $layout);
+											   'layout' 	=> $layout);
     }
 
 	public function routeStartup(Zend_Controller_Request_Abstract $request)
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
+		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
+		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
 	}
 	
 	public function routeShutdown(Zend_Controller_Request_Abstract $request)
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
+		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
+		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
 	}
 	
 	public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
+		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
+		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
 	}
 	
 	public function preDispatch(Zend_Controller_Request_Abstract $request)
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
-		
+		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
 		$moduleName = $request->getModuleName();
-			
+		
 		$this->_logger->log(__METHOD__ . ' getModuleName()=' . $moduleName, Zend_Log::DEBUG);	
 		if (isset($this->_moduleLayouts[$moduleName])) {
 			$config = $this->_moduleLayouts[$moduleName];
@@ -67,37 +66,44 @@ class Common_Plugin_Layout extends Zend_Controller_Plugin_Abstract
             }
 		}
 		
-		$front = Zend_Controller_Front::getInstance();
-		$view = $layout->getView();
+		
 
 		switch($moduleName) {
 			case 'admin':
-				$this->_logger->log(__METHOD__ . ' Setting view helpers for admin module', Zend_Log::DEBUG);
-				$view->headLink()->prependStylesheet('/yui2/reset-fonts-grids/reset-fonts-grids.css');
+				//$this->_logger->log(__METHOD__ . ' Setting view helpers for admin module', Zend_Log::DEBUG);
+				//$view->headLink()->prependStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
 			break;
 
 			case 'frontend':
-				$this->_logger->log(__METHOD__ . ' Setting view helpers for frontend module', Zend_Log::DEBUG);
+				$front = Zend_Controller_Front::getInstance();
+				$view = $layout->getView();
+                
+                $locationModel	= new Common_Model_Location();
+                $countryFastLookupRowset = $locationModel->getFastAllCountries();
+		
+                $view->countryFastLookupRowset = $countryFastLookupRowset;
+                
+				//$this->_logger->log(__METHOD__ . ' Setting view helpers for frontend module', Zend_Log::DEBUG);
 				$view->headMeta()->appendHttpEquiv('description', 'Villas to rent across the world direct from the owner.');
 				$view->headMeta()->appendHttpEquiv('robots', 'ALL');
 				$view->headLink()->prependStylesheet('/css/villastorent.css');
-				$view->headLink()->prependStylesheet('/yui2/reset-fonts-grids/reset-fonts-grids.css');
+				$view->headLink()->prependStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
                 //$view->addHelperPath('/Vfr/View/Helper', 'Vfr_View_Helper');
 			break;
 		}
 
 
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
+		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
 	}
 	
 	public function postDispatch(Zend_Controller_Request_Abstract $request)
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
+		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
 	}
 	
 	public function dispatchLoopShutdown()
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
+		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
+		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
 	}
 }

@@ -16,58 +16,68 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$this->identity = Zend_Auth::getInstance()->getIdentity();
     }
 	
-	public function step1LocationAction()
-	{
-		$form = new Frontend_Form_Step1LocationForm();
-		$form->setAction(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-property/step1-location');
-		
-		if ($this->getRequest()->isPost()) {
-            $formData = $this->getRequest()->getPost();
-            
-			if ($form->isValid($formData)) {
-				$propertyModel = new Common_Model_Property();
-                
+    public function step1LocationAction()
+    {
+        $form = new Frontend_Form_Step1LocationForm();
+        
+        if ($this->getRequest()->isPost()) {
+            if ($form->isValid($this->getRequest()->getPost())) {
+                $propertyModel = new Common_Model_Property();
+				
 				$options = array();
 				$options['params'] = $form->getValues();
-                $options['params']['idAdvertiser'] = $this->identity->idAdvertiser;
-				$options['params']['emailAddress'] = $this->identity->emailAddress;
+                $options['params']['idAdvertiser']  = $this->identity->idAdvertiser;
+				$options['params']['emailAddress']  = $this->identity->emailAddress;
 				$idProperty = $propertyModel->createProperty($options);
 				
-                $this->_helper->redirector->gotoSimple('step2-content', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
-            } else {
-                $form->populate($formData);
+				$this->_helper->redirector->gotoSimple('step2-content', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
             }
         }
 		
 		$this->view->form = $form;
-	}
-	
+    }
 	
 	public function step2ContentAction()
 	{
 		$idProperty = $this->getRequest()->getParam('idProperty');
-
-		// create the form and set the hidden form element		
-		$form = new Frontend_Form_Step2ContentForm($idProperty);
-		$form->setAction(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-property/step2-content');
-		$form->setFormIdProperty($idProperty);
+		$mode		= $this->getRequest()->getParam('mode', 'add');
+		
+		//var_dump('mode ' . $mode);
+		
+		// get the holiday type. we need this to decide what form elements to render
+		// for example, a golf holiday doesn't require a skiing box and so on
+		$propertyModel = new Common_Model_Property();
+		$idHolidayType = $propertyModel->getHolidayTypeByPropertyId($idProperty);
+		
+		// create the form and set the hidden form element	
+		$form = new Frontend_Form_Step2ContentForm(array ('idProperty' 		=> $idProperty,
+														  'idHolidayType'	=> $idHolidayType,
+														  'mode'			=> $mode));
+		if ($mode == 'update')
+		{
+			$propertyContentHash = $propertyModel->getPropertyContentArrayById($idProperty, Common_Resource_PropertyContent::VERSION_UPDATE);
+			
+			$form->populate($propertyContentHash);
+		}
 		
 		if ($this->getRequest()->isPost()) {
-            $formData = $this->getRequest()->getPost();
-            
-			if ($form->isValid($formData)) {
+			if ($form->isValid($this->getRequest()->getPost())) {
 				$propertyModel = new Common_Model_Property();
 				
-				$params = $form->getValues();
-				$propertyModel->updateContent($idProperty, $params)
-							  ->updatePropertyStatus($idProperty, Common_Resource_Property::STEP_3_PICTURES);
+				if ($mode == 'add')
+				{
+					$propertyModel->updateContent($idProperty, 'both', $form->getValues())
+								  ->updatePropertyStatus($idProperty, Common_Resource_Property::STEP_3_PICTURES);
+					$this->_helper->redirector->gotoSimple('step3-pictures', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+				} else {
+					// update mode
+					$propertyModel->updateContent($idProperty, 'update', $form->getValues());
+					$this->_helper->redirector->gotoSimple('home', 'advertiser-account', 'frontend');
+				}
 				
-                $this->_helper->redirector->gotoSimple('step3-pictures', 'advertiser-property', 'frontend');
-            } else {
-                $form->populate($formData);
             }
         }
-		
+	
 		$this->view->form = $form;
 	}
 	
@@ -79,22 +89,19 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
 		$vfrConfig = $bootstrap['vfr'];
 				
-		$form = new Frontend_Form_Step3PicturesForm($idProperty);
-		$form->setAction(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-property/step3-pictures');
-		$form->setFormIdProperty($idProperty);
+		$form = new Frontend_Form_Step3PicturesForm(array ('idProperty' => $idProperty));
+		
+		//var_dump($form);
 		
 		// get the file information, we need this to write the photo DB entry if the
-		// file is valid, or if it's not a valid we'll use to to log the type for
-		// future support
+		// file is valid, or if it's not a valid we'll use to to log the type for future support
 		$fileElement 		= $form->getElement('filename');
 		$transferAdapter 	= $fileElement->getTransferAdapter();
 		$fileInfo 			= $transferAdapter->getFileInfo();
 		//var_dump($fileInfo);
-		
-		if ($this->getRequest()->isPost()) {
-            $formData = $this->getRequest()->getPost();
-            
-			if ($form->isValid($formData)) {
+				
+		if ($this->getRequest()->isPost()) {         
+			if ($form->isValid($this->getRequest()->getPost())) {
 				// create a new photo entry in the DB
 				// 1 = GIF, 2 = JPG, 3 = PNG, 4 = SWF, 5 = PSD, 6 = BMP
 				// 7 = TIFF(orden de bytes intel), 8 = TIFF(orden de bytes motorola)
@@ -147,54 +154,164 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 				} catch (Zend_File_Transfer_Exception $e) {
 					$e->getMessage();
 				}
-            } else {
-				$this->_logger->log(__METHOD__ . ' photo upload form rejected type: ' . $fileInfo['filename']['type'], Zend_Log::DEBUG);
-                $form->populate($formData);
             }
         }
 		
-		$this->view->form = $form;
+		// get a list of the photos belonging to this property
+		$propertyModel = new Common_Model_Property();
+		$propertyRow = $propertyModel->getPropertyById($idProperty);
+		$photoRowset = $propertyModel->getAllPhotosByPropertyId($idProperty);
+		
+		$this->view->assign(array (
+			'photoRowset'			=> $photoRowset,
+			'photoCount'			=> sizeof($photoRowset),
+			'propertyRow'			=> $propertyRow,
+			'imagesOriginalDir'		=> $vfrConfig['photo']['images_original_dir'],
+			'maxLimitPerProperty'	=> $vfrConfig['photo']['max_limit_per_property']
+		));
+		
+		if ($this->view->photoCount < $this->view->maxLimitPerProperty)
+			$this->view->form = $form;
 	}
 	
 	public function step4RatesAction()
 	{
 		$propertyModel = new Common_Model_Property();
+        $calendarModel = new Common_Model_Calendar();
+				
+        $idProperty  = $this->getRequest()->getParam('idProperty');
+		$propertyRow = $propertyModel->getPropertyById($idProperty);
+        $idCalendar  = $propertyModel->getCalendarIdByPropertyId($idProperty);
         
-        $idProperty = $this->getRequest()->getParam('idProperty');
-        $idCalendar = $propertyModel->getCalendarIdByPropertyId($idProperty);
 		
-		$ratesRowSet = $propertyModel->getRatesByCalendarId($idCalendar);
 		
-        // find out the rental basis and base currency for this calendar
+		//var_dump($this->_getAllParams());
+        $form = new Frontend_Form_Step4RatesForm();
+		// Enable jQuery to pickup the headers etc
+		ZendX_JQuery::enableForm($form);
+		$jquery = $this->view->jQuery();
+		$jquery->enable()
+			   ->uiEnable();
+				   
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			//var_dump($request->getParam('rates'));
+        	if ($form->isValid($request->getPost())) {
+				$calendarModel->addNewRate($idCalendar, $form->getValues());
+				$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+			} else {
+					//var_dump($request->getParam('rates'));
+					//die();
+					//$form = new Frontend_Form_Step4RatesForm(array(
+					//	'rates'		=> $request->getParam('rates')
+					//));
+			}
+		} else {
+			
+		}
+		
+		$ratesRowset = $calendarModel->getRatesByCalendarId($idCalendar);
+		
+		// find out the rental basis and base currency for this calendar
         $calendarRow = $propertyModel->getCalendarById($idCalendar);
-        
-		//$form = new Frontend_Form_Step4RatesForm();
-		
-		//if ($this->getRequest()->isPost()) {
-        //    $formData = $this->getRequest()->getPost();
-        //    
-		//	if ($form->isValid($formData)) {
-         //       echo 'success';
-        //        exit;
-        //    } else {
-        //        $form->populate($formData);
-        //    }
-        //}
-		
-		//$this->view->form = $form;
-        //var_dump($this->view->min(14));
-        //exit;
-        $this->view->idProperty   = $idProperty;
-        $this->view->rentalBasis  = $calendarRow->rentalBasis;
-        $this->view->baseCurrency = $calendarRow->currencyCode;
-		$this->view->ratesRowSet  = $ratesRowSet;
+
+		$this->view->headScript()->appendFile('/js/vfr/step4-rates.js');
+
+		$this->view->assign(array(
+			'form'		    => $form,
+			'propertyRow'	=> $propertyRow,
+			'rentalBasis'	=> $calendarRow->rentalBasis,
+			'baseCurrency'	=> $calendarRow->currencyCode,
+			'ratesRowset'	=> $ratesRowset
+		));
 	}
 	
 	public function step5AvailabilityAction()
-	{	
+	{
+		$idProperty = $this->getRequest()->getParam('idProperty');
+		
+		$propertyModel = new Common_Model_Property();
+        $calendarModel = new Common_Model_Calendar();
+		
+		$propertyRow = $propertyModel->getPropertyById($idProperty);
+        $idCalendar  = $propertyModel->getCalendarIdByPropertyId($idProperty);
+        
+		$form = new Frontend_Form_Step5AvailablityForm();
+		
+		// Enable jQuery to pickup the headers etc
+		ZendX_JQuery::enableForm($form);
+        $jquery = $this->view->jQuery();
+		$jquery->enable()
+			   ->uiEnable();
+		
+		if ($this->getRequest()->isPost()) {
+			if ($form->isValid($this->getRequest()->getPost())) {
+				$calendarModel->addNewBooking($idCalendar, $form->getValues());
+				$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+			}
+		}
+		
+		$availbilityRowset = $calendarModel->getAvailabilityByCalendarId($idCalendar);
+											 
+		$this->view->headScript()->appendFile('/js/vfr/step5-availability.js');
+		
+		$this->view->assign(array (
+			'form'					=> $form,
+			'propertyRow'			=> $propertyRow,
+			'availabilityRowset'	=> $availbilityRowset
+		));
+	}
+	
+	public function completeConfirmationAction()
+	{
+	}
+
+	public function updateSendConfirmationAction()
+	{
 	}
 
     public function addAction()
     {
     }
+	
+	public function progressStep4Action()
+	{
+		$idProperty = $this->getRequest()->getParam('idProperty');
+		
+		$propertyModel = new Common_Model_Property();
+		$propertyModel->updatePropertyStatus($idProperty, Common_Resource_Property::STEP_4_RATES);
+		
+		$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+	}
+	
+	public function progressStep5Action()
+	{
+		$idProperty = $this->getRequest()->getParam('idProperty');
+		
+		$propertyModel = new Common_Model_Property();
+		$propertyModel->updatePropertyStatus($idProperty, Common_Resource_Property::STEP_5_AVAILABILITY);
+		
+		$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+	}
+	
+	public function sendForInitialApprovalAction()
+	{
+		$idProperty = $this->getRequest()->getParam('idProperty');
+		
+		$propertyModel = new Common_Model_Property();
+		$propertyModel->updatePropertyStatus($idProperty, Common_Resource_Property::COMPLETE)
+					  ->setAwaitingApproval($idProperty);
+	
+		$this->_helper->redirector->gotoSimple('complete-confirmation', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));	
+	}
+	
+	public function sendForUpdateApprovalAction()
+	{
+		$idProperty = $this->getRequest()->getParam('idProperty');
+		
+		$propertyModel = new Common_Model_Property();
+		$propertyModel->advertiserSendForUpdateApproval($idProperty);
+		
+		$this->_helper->redirector->gotoSimple('update-send-confirmation', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));	
+	}
 }

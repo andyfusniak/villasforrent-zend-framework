@@ -1,35 +1,25 @@
 <?php
 class Frontend_Form_Step3PicturesForm extends Zend_Form
 {
-	public function setFormIdProperty($idProperty)
-    {
-		if ($this->idProperty !== null)
-			$this->idProperty->setValue($idProperty);
-    }
+	protected $_idProperty;
 	
     public function __construct($options = null)
     {
         parent::__construct($options);
 	}
 	
+	public function setIdProperty($idProperty)
+    {
+		$this->_idProperty = $idProperty;
+    }
+	
 	public function init()
 	{
 		$this->setMethod('post');
-        $this->setName('step3');
-		$this->setAttrib('id', 'step3');
-		$this->setAttrib('enctype', 'multipart/form-data');
-		//$this->setAttrib('onsubmit', 'alert(1)');
-		
-		$this->addDecorators(array(
-			'FormElements',
-			array('Fieldset', array('legend' => 'Pictures',
-									'id' 	 => 'step3pictures_legend')),
-			'Form'
-		));
+		$this->setAction('/advertiser-property/step3-pictures');
 		
 		$this->addElement('file', 'filename', array (
 			'required'		=> true,
-			'label' 		=> 'Browse for a photo',
 			'validators'	=> array (
 				//array ('Count', true, array	('min' => 1, 'max' => 1)),
 				array ('IsImage', true, array('image/jpeg', 'image/png'))
@@ -37,32 +27,20 @@ class Frontend_Form_Step3PicturesForm extends Zend_Form
 		));
 		
 		$this->addElement('text', 'caption', array (
+			'required'	=> false,
 			'label'		=> 'Photo Caption Text',
+		));
 			
-		));
-		
-		$group = $this->addDisplayGroup(array('filename', 'caption'),
-							   'main',
-							   array('disableLoadDefaultDecorators' => true));
-		
-		$this->getDisplayGroup('main')
-			 ->addDecorators(array(
-				'FormElements',
-				array('HtmlTag', array('tag' => 'dl'))
-			 ));
-		
 		$this->addElement('hidden', 'idProperty', array(
-			'decorators' => array(
-				'ViewHelper'
-			)
+			'value' => $this->_idProperty,
 		));
-			 
-		$this->addElement('submit', 'submit', array(
-			'label' => 'Send',
-			'ignore' => true,
-			'decorators' => array(
-				'ViewHelper'
-			)
-		));	
+		
+		$this->addElement('hidden', 'MAX_FILE_SIZE', array (
+			'value'		=> $this->getElement('filename')->getMaxFileSize()
+		));
+		
+		$this->addElement('hidden', ini_get('apc.rfc1867_name'), array (
+			'value'		=> uniqid()
+		));
 	}
 }

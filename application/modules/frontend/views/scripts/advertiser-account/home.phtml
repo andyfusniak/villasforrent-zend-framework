@@ -6,44 +6,17 @@
 <a href="<?php echo $this->url(array('controller' => 'advertiser-property', 'action' => 'step1-location', 'module' => 'frontend')) ?>">[add a new property]</a>
 
 <table cellpadding="0" cellspacing="0" border="1">
-<!--
-<tr>
-    <th>Ref</th>
-    <th>Photo</th>
-    <th>Property name</th>
-    <th>Location</th>
-    <th>Renewal date</th>
-    <th>Display<br />Status</th>
-    <th>Advert Status</th>
-    <th>Continue</th>
-    <th>Details</th>
-    <th>Photos</th>
-    <th>Avail</th>
-    <th>Rates</th>
-</tr>-->
 <?php foreach ($this->propertyRowset as $row) : ?>
 <?php //var_dump($property) ?>
 <tr>
     <td><?php echo $this->propertyTinyThumb($row->idProperty) ?></td>
-    <td><p>Ref: <?php echo $row->idProperty ?> <?php echo $row->shortName ?> (Expires: <?php echo $this->prettyDate($row->expiry) ?>)</p><?php echo $this->summaryBar($row->idProperty, $row->status) ?></td>
-    <td><a href="<?php echo $this->url(array('action' => 'index', 'controller' => 'advertiser-continue', 'module' => 'frontend', 'idProperty' => $row->idProperty)) ?>">[continue]</a></td>
+    <td>
+		<p>Ref: <?php echo $row->idProperty ?> <?php echo $this->propertyType($row->idPropertyType) ?>  <?php echo $this->escape($row->shortName) ?>
+		<?php echo $row->numBeds ?> beds. sleeps <?php echo $row->numSleeps ?>
+		<?php echo $this->holidayType($row->idHolidayType) ?>
+		(Expires: <?php echo $this->prettyDate($row->expiry) ?>)</p><?php echo $this->summaryBar($row) ?>
+	</td>
+    <td><?php echo $this->advertiserControlPanelStatus($row->idProperty, $row->urlName, $row->locationUrl, $row->status, $row->approved) ?></td>
 </tr>
-
-
-<!--
-<tr>
-    <td><?php echo $row->idProperty ?></td>
-    <td><?php echo $this->propertyTinyThumb($row->idProperty) ?></td>
-    <td><?php echo $row->shortName ?></td>
-    <td><?php echo $row->locationUrl ?></td>
-    <td><?php echo $row->expiry ?></td>
-    <td><?php echo $row->visible ?></td>
-    <td>x</td>
-    <td><a href="<?php echo $this->url(array('action' => 'index', 'controller' => 'advertiser-continue', 'module' => 'frontend', 'idProperty' => $row->idProperty)) ?>">[continue]</a></td>
-    <td><?php echo "[edit]" ?></td>
-    <td><?php echo "[edit]" ?></td>
-    <td><?php echo "[edit]" ?></td>
-    <td><?php echo "[edit]" ?></td>
-</tr> -->
 <?php endforeach ?>
 </table>

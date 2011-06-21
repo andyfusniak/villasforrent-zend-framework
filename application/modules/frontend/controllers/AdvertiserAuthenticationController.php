@@ -9,8 +9,6 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
 
     public function loginAction()
     {
-		$this->_logger->log("Frontend_Form_AdvertiserAuthenticationController loginAction() start", Zend_Log::DEBUG);
-        
 		// check to see if the administrator is already logged in
 		if (Zend_Auth::getInstance()->hasIdentity()) {
 			//var_dump(Zend_Auth::getInstance()->getIdentity());
@@ -25,21 +23,17 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
 		$form->setMethod('post');
 		$form->setAction(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-authentication/login');
 		$this->view->form = $form;
-
-
-		$request = $this->getRequest();
 		
-		if ($request->isPost()) {
-			$this->_logger->log("Frontend_Form_AdvertiserAuthenticationController request is of type POST", Zend_Log::DEBUG);
-			if ($form->isValid($this->_request->getPost())) {
-				
+		//var_dump($this->_getAllParams());
+		
+		if ($this->getRequest()->isPost()) {
+			
+			if ($form->isValid($this->getRequest()->getPost())) {
 				$authAdapter = $this->getAuthAdapter();
 				
 				$emailAddress = $form->getValue('emailAddress');
-				$passwd = $form->getValue('passwd');
+				$passwd 	  = $form->getValue('passwd');
 				
-				//var_dump($emailAddress, $passwd);
-				//exit;
 				$authAdapter->setIdentity($emailAddress)
 							->setCredential($passwd);
 							
@@ -47,13 +41,13 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
 				$result = $auth->authenticate($authAdapter);
 				
 				if ($result->isValid()) {
-					$this->_logger->log("Frontend_Form_AdvertiserAuthenticationController Yes \$result->isValid() is true ", Zend_Log::DEBUG);
-					//$identity = $authAdapter->getResultRowObject();
-
+					//$this->_logger->log("Frontend_Form_AdvertiserAuthenticationController Yes \$result->isValid() is true ", Zend_Log::DEBUG);
+					//$identity = $authAdapter->getResultRowObject(); // return an object(stdClass)
+                    
                     $model = new Common_Model_Advertiser();
-                    $identity = $model->getAdvertiserByEmail($emailAddress);
-
-					$this->_logger->log("Frontend_Form_AdvertiserAuthenticationController storing " . $identity->idAdministrator . " on authStorage", Zend_Log::DEBUG);
+                    $identity = $model->getAdvertiserByEmail($emailAddress); // type Common_Resource_Advertiser_Row
+					
+					//$this->_logger->log("Frontend_Form_AdvertiserAuthenticationController storing " . $identity->idAdministrator . " on authStorage", Zend_Log::DEBUG);
 					$auth->getStorage()->write($identity);
 					
 					$this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-account/home');
@@ -63,7 +57,7 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
 				}
 			}
 		}
-		$this->_logger->log("Frontend_Form_AdvertiserAuthenticationController loginAction() end", Zend_Log::DEBUG);
+		//$this->_logger->log("Frontend_Form_AdvertiserAuthenticationController loginAction() end", Zend_Log::DEBUG);
     }
     
     public function logoutAction()
@@ -83,7 +77,7 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
     private function getAuthAdapter()
     {
         $authAdapter = new Zend_Auth_Adapter_DbTable(Zend_Db_Table::getDefaultAdapter());
-        $authAdapter->setTableName('Administrators')
+        $authAdapter->setTableName('Advertisers')
                     ->setIdentityColumn('emailAddress')
 					->setCredentialColumn('passwd');
 		return $authAdapter;

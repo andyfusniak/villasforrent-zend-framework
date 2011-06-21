@@ -1,0 +1,31 @@
+<div class="form">
+<h1>Step 4 - Base Currency</h1>
+<ul id="property_progress_header">
+	<li id="location_orange"></li>
+	<li id="content_orange"></li>
+	<li id="pictures_orange"></li>
+	<li id="rates_grey"></li>
+	<li id="availability_grey"></li>
+</ul>
+<p class="clearfix" />
+
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<input type="hidden" name="idProperty" value="<?php echo $this->idProperty ?>" />
+	<fieldset>
+		<legend>Base Currency</legend>
+		
+		<dt>
+			<label for="rentalBasis">Base Currency:</label>
+		</dt>
+		
+		<dd>
+			<?php echo $this->formSelect('currencyCode', $this->form->getValue('currencyCode'), null, $this->form->getElement('currencyCode')->getMultiOptions()) ?>
+		</dd>
+		
+		<dd>
+			<input type="submit" name="submit" value="submit" />
+		</dd>
+	</fieldset>
+</form>
+
+</div>

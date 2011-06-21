@@ -2,13 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<?php echo $this->headLink() ?>
-	<!--
 	<?php echo $this->headTitle() ?>
 	<?php echo $this->headMeta() ?>
 	<?php echo $this->headLink() ?>
 	<?php echo $this->headStyle() ?>
+	<?php
+    if ($this->jQuery()->isEnabled()) {
+        $this->jQuery()->setLocalPath('/js/jquery/jquery-1.6.min.js')
+                       ->setUiLocalPath('/js/jquery-ui-1.8.12/ui/jquery-ui.js')
+                       ->addStylesheet('/js/jquery-ui-themes-1.8.12/themes/sunny/jquery-ui.css');
+        echo $this->jQuery();
+    }
+    ?>
 	<?php echo $this->headScript() ?>
-	-->
+	<?php echo $this->headLink()->prependStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css') ?>
 	<link href="/css/admin/controlpanel.css" media="screen" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -31,7 +38,17 @@
 			
 		<div id="sections" class="clearfix">
 			<ul class="clearfix">
-				<li><a href="/forum/unanswered.php">Unanswered Posts</a></li>
+				<li><a href="<?php echo $this->url(array(
+					'module' 		=> 'admin',
+					'controller'	=> 'property',
+					'action'		=> 'list'
+				)) ?>">List</a></li>
+				<li><a href="<?php echo $this->url(array('module' => 'admin',
+														 'controller' => 'index',
+														 'action' => 'list-awaiting-initial-approval')) ?>">Awaiting Initial Approval</a></li>
+				<li><a href="<?php echo $this->url(array('module' => 'admin',
+														 'controller' => 'property',
+														 'action' => 'list-awaiting-update-approval')) ?>">Awaiting Update Approval</a></li>
 				<li><a href="/forum/recent.php">Recent Posts</a></li>
 			    <li><a href="./search.php?sid=06f251f9f1c4c7123f1f3ffdcc322fdb">Search</a></li>
 				<li><a href="#">Register</a></li>

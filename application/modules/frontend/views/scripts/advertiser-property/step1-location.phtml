@@ -1,5 +1,3 @@
-
-
 <h1>Step 1 - Set the location and name your property</h1>
 <ul id="property_progress_header">
 	<li id="location_grey"></li>
@@ -20,31 +18,49 @@
             <dt><label for="idPropertyType">Type of property:</label></dt>
             <dd>
                 <?php echo $this->formSelect('idPropertyType', $this->form->getValue('idPropertyType'), null, $this->form->getElement('idPropertyType')->getMultiOptions()) ?>
-                <?php echo $this->formErrors($this->form->getMessages('idPropertyType')) ?>
+                <?php echo $this->displayErrors($this->form->getMessages('idPropertyType')) ?>
             </dd>
             
             <dt><label for="shortName">Name of your property</label></dt>
             <dd>
-                <input type="text" name="shortName" value="<?php echo $this->form->getValue('shortName') ?>" />
-                <?php echo $this->formErrors($this->form->getMessages('shortName')) ?>
+                <input type="text" name="shortName" value="<?php echo $this->escape($this->form->getValue('shortName')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('shortName')) ?>
             </dd>
-    
+			
+			<dt><label for="idHolidayType">Type of holiday</label></dt>
+			<dd>
+				<?php echo $this->formSelect('idHolidayType', $this->form->getValue('idHolidayType'), null, $this->form->getElement('idHolidayType')->getMultiOptions()) ?>
+				<?php echo $this->displayErrors($this->form->getMessages('idHolidayType')) ?>
+			</dd>
+			
+			<dt><label for="numBeds">Number of bedrooms:</label></dt>
+			<dd>
+				<?php echo $this->formSelect('numBeds', $this->form->getValue('numBeds'), null, $this->form->getElement('numBeds')->getMultiOptions()) ?>
+				<?php echo $this->displayErrors($this->form->getMessages('numBeds')) ?>
+			</dd>
+			
+			<dt><label for="numSleeps">Sleeping capacity:</label></dt>
+			<dd>
+				<?php echo $this->formSelect('numSleeps', $this->form->getValue('numSleeps'), null, $this->form->getElement('numSleeps')->getMultiOptions()) ?>
+				<?php echo $this->displayErrors($this->form->getMessages('numSleeps')) ?>
+			</dd>
+			
             <dt><label for="country" class="required">Country:</label></dt>
             <dd>
-                <input type="text" name="country" value="<?php echo $this->form->getValue('country') ?>" />
-                <?php echo $this->formErrors($this->form->getMessages('country')) ?>
+                <input type="text" name="country" value="<?php echo $this->escape($this->form->getValue('country')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('country')) ?>
             </dd>
             
             <dt><label for="region" class="required">Region:</label></dt>
             <dd>
                 <input type="text" name="region" value="<?php echo $this->escape($this->form->getValue('region')) ?>" />
-                <?php echo $this->formErrors($this->form->getMessages('region')) ?>
+                <?php echo $this->displayErrors($this->form->getMessages('region')) ?>
             </dd>
             
             <dt><label for="destination">Destination:</label></dt>
             <dd>
-                <input type="text" name="destination" value="<?php echo $this->form->getValue('destination') ?>" />
-                <?php echo $this->formErrors($this->form->getMessages('destination')) ?>
+                <input type="text" name="destination" value="<?php echo $this->escape($this->form->getValue('destination')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('destination')) ?>
             </dd>
         </dl>
     

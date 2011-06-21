@@ -1,14 +1,39 @@
-<?php
-echo "current=" . $this->current . '<br />';
-
-?>
-Showing <?php echo $this->current ?> of <?php echo $this->pageCount ?>
-
-<?php
-foreach($this->pagesInRange as $page) {
-    if ($this->current != $page) {
-        ?><a href="<?php echo $this->url(array('page' => $page)) ?>"><?php echo $page ?></a> | <?php 
-    } else {
-        ?><?php echo $page ?> | <?php
-    }
-}
+<div id="navcontainer">
+    <ul class="tablenav">
+        <li class="rightgap">Showing items <?php echo $this->firstItemNumber ?>-<?php echo $this->lastItemNumber ?> of <?php echo $this->totalItemCount ?></li>
+        
+        <?php foreach ($this->pagesInRange as $p) : ?>
+        <li class="box">
+            <?php if ($this->current == $p) : ?>
+            <span class="box"><?php echo $p ?></span>
+            <?php else : ?>
+            <a class="box" href="<?php echo $this->url(array('page' => $p)) ?>"><?php echo $p ?></a>
+            <?php endif ?>
+        </li>
+        <?php endforeach ?>
+        
+        
+        <?php if ($this->current == $this->first) : ?>
+            <li class="leftgap"><img alt="First Page" src="/images/admin/tablenav/n_skip_first_inactive.gif" /></li>
+            <li class="rightgap"><img alt="Previous Page" src="/images/admin/tablenav/n_skip_previous_inactive.gif" /></li>
+        <?php else : ?>
+            <li class="leftgap"><a href="<?php echo $this->url(array('page' => $this->first)) ?>"><img alt="First Page" src="/images/admin/tablenav/n_skip_first.gif" /></a></li>
+            <li class="rightgap"><a href="<?php echo $this->url(array('page' => $this->previous)) ?>"><img alt="Previous Page" src="/images/admin/tablenav/n_skip_previous.gif" /></a></li>
+        <?php endif ?>
+        
+        <?php
+        $intervalList = array (10, 20, 30, 50, 100);
+        foreach ($intervalList as $i): ?>
+            <li><a href="<?php echo $this->url(array('page' => $this->current, 'interval' => $i)) ?>"><img alt="<?php echo $i ?> per page" src="/images/admin/tablenav/n_b_interval_<?php echo $i . (($i == $this->itemCountPerPage) ? '_inv' : '') ?>.gif" /></a></li>
+        <?php endforeach ?>
+        
+        <?php if ($this->current == $this->last) : ?>
+            <li class="leftgap"><img alt="Next Page" src="/images/admin/tablenav/n_skip_next_inactive.gif" /></li>
+            <li><img alt="Last Page" src="/images/admin/tablenav/n_skip_last_inactive.gif" /></li>
+        <?php else : ?>
+            <li class="leftgap"><a href="<?php echo $this->url(array('page' => $this->next)) ?>"><img alt="Next Page" src="/images/admin/tablenav/n_skip_next.gif" /></a></li>
+            <li><a href="<?php echo $this->url(array('page' => $this->last)) ?>"><img alt="Last Page" src="/images/admin/tablenav/n_skip_last.gif" /></a></li>
+        <?php endif ?>
+    </ul>
+    <p>Page <?php echo $this->current ?> of <?php echo $this->pageCount ?></p>
+</div>

@@ -5,6 +5,7 @@
                                      'action'     => 'login')); ?>">login here.</a></p>
 
 <form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<input type="hidden" name="idAdministrator" value="<?php echo $this->form->getValue('idAdministrator') ?>" />
     <fieldset>
         <dl>
             <dt>
@@ -12,6 +13,7 @@
             </dt>
             <dd>
                 <input type="text" name="firstname" value="<?php echo $this->escape($this->form->getValue('firstname')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('firstname')) ?>
             </dd>
             
             <dt>
@@ -19,6 +21,7 @@
             </dt>
             <dd>
                 <input type="text" name="lastname" value="<?php echo $this->escape($this->form->getValue('lastname')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('lastname')) ?>
             </dd>
             
             <dt>
@@ -26,6 +29,7 @@
             </dt>
             <dd>
                 <input type="text" name="emailAddress" value="<?php echo $this->escape($this->form->getValue('emailAddress')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('emailAddress')) ?>
             </dd>
             
             <dt>
@@ -33,6 +37,7 @@
             </dt>
             <dd>
                 <input type="password" name="passwd" value="<?php echo $this->escape($this->form->getValue('passwd')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('passwd')) ?>
             </dd>
             
             <dt>
@@ -40,6 +45,7 @@
             </dt>
             <dd>
                 <input type="password" name="passwdVerify" value="<?php echo $this->escape($this->form->getValue('passwdVerify')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('passwdVerify')) ?>
             </dd>
         </dl>
         <input type="submit" name="submit" id="submit" value="Send" />

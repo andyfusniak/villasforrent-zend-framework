@@ -13,6 +13,10 @@ class Common_Resource_Calendar extends Vfr_Model_Resource_Db_Table_Abstract
 		)
 	);
 
+	//
+	// CREATE
+	//
+	
     public function createCalendar($idProperty)
     {
 		$nowExpr = new Zend_Db_Expr('NOW()');
@@ -61,6 +65,10 @@ class Common_Resource_Calendar extends Vfr_Model_Resource_Db_Table_Abstract
         }
     }
 
+	//
+	// READ
+	//
+	
 	public function getCalendarIdByPropertyId($idProperty)
 	{
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
@@ -87,4 +95,63 @@ class Common_Resource_Calendar extends Vfr_Model_Resource_Db_Table_Abstract
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 		return $result;
 	}
+	
+	public function getRentalBasis($idCalendar)
+	{
+		$query = $this->select('rentalBasis')
+					  ->where('idCalendar = ?', $idCalendar);
+		try {
+			$calendarRow = $this->fetchRow($query);
+			return $calendarRow->rentalBasis;
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
+	public function getBaseCurrency($idCalendar)
+	{
+		$query = $this->select('currencyCode')
+					  ->where('idCalendar = ?', $idCalendar);
+		try {
+			$calendarRow = $this->fetchRow($query);
+			return $calendarRow->currencyCode;
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
+	
+	//
+	// UPDATE
+	//
+	
+	public function updateRentalBasis($idCalendar, $rentalBasis)
+	{
+		try {
+			$data = array (
+				'rentalBasis' => $rentalBasis
+			);
+			$where = $this->getAdapter()->quoteInto('idCalendar = ?', $idCalendar);
+			$query = $this->update($data, $where);
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
+	public function updateBaseCurrency($idCalendar, $currencyCode)
+	{
+		try {
+			$data = array (
+				'currencyCode' => $currencyCode
+			);
+			$where = $this->getAdapter()->quoteInto('idCalendar = ?', $idCalendar);
+			$query = $this->update($data, $where);
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
+	//
+	// DELETE
+	//
 }

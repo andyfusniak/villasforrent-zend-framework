@@ -1,0 +1,18 @@
+<h1>List Properties</h1>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml') ?>
+<p class="clearfix" />
+<table>
+    <tr>
+       <th><a href="<?php echo $this->url(array('order'=>'idProperty', 'direction'=>$this->toggleDirection($this->direction))) ?>">Property Id</a></th>
+       <th><a href="<?php echo $this->url(array('order'=>'idPropertyType', 'direction'=>$this->toggleDirection($this->direction))) ?>">Type</a></th>
+       <th><a href="<?php echo $this->url(array('order'=>'shortName', 'direction'=>$this->toggleDirection($this->direction))) ?>">Name</a></th>
+    </tr>
+    
+    <?php foreach ($this->paginator as $property) : ?>
+    <tr>
+        <td><?php echo $property->idProperty ?></td>
+        <td><?php echo $this->bytes($property->idPropertyType) ?></td>
+        <td><?php echo $this->escape($property->shortName) ?></td>
+    </tr>
+    <?php endforeach ?>
+</table>

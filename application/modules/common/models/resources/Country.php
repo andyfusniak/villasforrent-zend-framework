@@ -5,10 +5,42 @@ class Common_Resource_Country extends Vfr_Model_Resource_Db_Table_Abstract imple
 	protected $_primary = 'idCountry';
 	protected $_rowClass = 'Common_Resource_Country_Row';
 	protected $_rowsetClass = 'Common_Resource_Country_Rowset';
-	protected $_dependantTables = array('Properties');
+	protected $_dependantTables = array('Properties', 'FastLookups');
 
 	const DEFAULT_COUNTRY_ID = 1;
 
+	//
+	// CREATE
+	//
+	
+	public function addCountry($name,$priority,$prefix,$postfix,$visible)
+	{
+		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
+
+		$data = array(
+			'idCountry' => new Zend_Db_Expr(500),
+			'name' => $name
+		);
+		try {
+			$query = $this->insert($data);
+		} catch (Exception $e) {
+			$profilerQuery = $this->_profiler->getLastQueryProfile();
+			$lastQuery = $profilerQuery->getQuery();
+			$params = $profilerQuery->getQueryParams();
+			$this->_logger->log(__METHOD__ . ' Exception thrown  ' . $e, Zend_Log::ERR);
+			$this->_logger->log(__METHOD__ . ' lastQuery  ' . $lastQuery, Zend_Log::ERR);
+			$this->_logger->log(__METHOD__ . ' params  ' . implode(',', $params), Zend_Log::ERR);
+			$this->_logger->table($table);
+			throw $e;
+		}
+
+		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
+	}
+	
+	//
+	// READ
+	//
+	
 	public function getCountryById($idCountry)
 	{
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
@@ -45,29 +77,28 @@ class Common_Resource_Country extends Vfr_Model_Resource_Db_Table_Abstract imple
 
 		return $result;
 	}
-
-	public function addCountry($name,$priority,$prefix,$postfix,$visible)
+	
+	public function getCountriesWithTotalVisible()
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-
-		$data = array(
-			'idCountry' => new Zend_Db_Expr(500),
-			'name' => $name
-		);
-		try {
-			$query = $this->insert($data);
-		} catch (Exception $e) {
-			$profilerQuery = $this->_profiler->getLastQueryProfile();
-			$lastQuery = $profilerQuery->getQuery();
-			$params = $profilerQuery->getQueryParams();
-			$this->_logger->log(__METHOD__ . ' Exception thrown  ' . $e, Zend_Log::ERR);
-			$this->_logger->log(__METHOD__ . ' lastQuery  ' . $lastQuery, Zend_Log::ERR);
-			$this->_logger->log(__METHOD__ . ' params  ' . implode(',', $params), Zend_Log::ERR);
-			$this->_logger->table($table);
-			throw $e;
-		}
-
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
+		$query = $this->select()
+					  ->setIntegrityCheck(false)
+					  ->from(array('c' => 'Countries'), array('c.idCountry', 'c.name'))
+					  ->join(array('f' => 'FastLookups'), 'c.idCountry = f.idCountry', array('f.url', 'f.totalVisible'))
+					  ->where('f.idRegion = ?', 1)
+					  ->where('f.idDestination = ?', 1)
+					  ->order('displayPriority');
+		$result = $this->fetchAll($query);
+		
+		return $result;
 	}
+	
+	//
+	// UPDATE
+	//
+	
+	//
+	// DELETE
+	//
+
 }
 

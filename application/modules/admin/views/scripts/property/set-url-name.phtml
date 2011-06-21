@@ -1,0 +1,19 @@
+<h1>Set the url for property <?php echo $this->form->getValue('idProperty') ?></h1>
+<p>The advertiser has named this property:</p>
+<strong><?php echo $this->shortName ?></strong>
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
+<fieldset>
+    <dl>
+        <dt><label for="urlName">Url Name:</label></dt>
+        <dd>
+            <input type="text" name="urlName" value="<?php echo $this->escape($this->form->getValue('urlName')) ?>" />
+            <?php echo $this->displayErrors($this->form->getMessages('urlName')) ?>
+        </dd>
+        
+        <dd>
+            <input type="submit" value="Set URL" />
+        </dd>
+    </dl>
+</fieldset>
+</form>

@@ -7,14 +7,26 @@ class Common_Resource_PropertyType extends Vfr_Model_Resource_Db_Table_Abstract 
 	protected $_rowsetClass = 'Common_Resource_PropertyType_Rowset';
 	protected $_dependantTables = array('Properties');
 
+
+	//
+	// CREATE
+	//
+	
+	//
+	// READ
+	//
+	
 	public function getAllPropertyTypes($inUse=true)
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-		$query = $this->select()
-		              ->where('inUse = ?', ((true === $inUse) ? '1' : '0'))
-					  ->from('PropertyTypes');
+		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
+		$query = $this->select();
+		if ($inUse == true)
+		    $query->where('inUse = ?', (int) 1);
+			
 		try {
-			$rowSet = $this->fetchAll($query);
+			$propertyTypeRowset = $this->fetchAll($query);
+			
+			return $propertyTypeRowset;
 		} catch (Exception $e) {
 			$profilerQuery = $this->_profiler->getLastQueryProfile();
 			$lastQuery = $profilerQuery->getQuery();
@@ -25,9 +37,29 @@ class Common_Resource_PropertyType extends Vfr_Model_Resource_Db_Table_Abstract 
 			throw $e;
 		}
 
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
-
-		return $rowSet;
+		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 	}
+	
+	public function getPropertyTypeById($idPropertyType)
+	{
+		$query = $this->select('name')
+					  ->where('idPropertyType = ?', $idPropertyType)
+					  ->limit(1);
+		try {
+			$row = $this->fetchRow($query);
+			
+			return $row;
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
+	//
+	// UPDATE
+	//
+	
+	//
+	// DELETE
+	//
 }
 

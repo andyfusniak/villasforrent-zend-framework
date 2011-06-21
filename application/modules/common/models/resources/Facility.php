@@ -9,7 +9,6 @@ class Common_Resource_Facility extends Vfr_Model_Resource_Db_Table_Abstract impl
 	
 	public function getAllFacilities($inUse=true)
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
 		$query = $this->select()
 		              ->where('inUse = ?', ((true === $inUse) ? '1' : '0'))
 					  ->order('displayPriority');

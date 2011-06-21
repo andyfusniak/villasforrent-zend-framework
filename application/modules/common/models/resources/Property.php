@@ -41,12 +41,17 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 
 	const DEFAULT_PROPERTY_ID = 10000;
 
-    const STEP_1_LOCATION    = 1;
-    const STEP_2_CONTENT     = 2;
-    const STEP_3_PICTURES    = 3;
-    const STEP_4_RATES       = 4;
-    const STEP_5_AVAILABLITY = 5;
-    const COMPLETE           = 6;
+    const STEP_1_LOCATION    	= 1;
+    const STEP_2_CONTENT     	= 2;
+    const STEP_3_PICTURES    	= 3;
+    const STEP_4_RATES       	= 4;
+    const STEP_5_AVAILABILITY	= 5;
+    const COMPLETE				= 6;
+
+    const FEATURE_MASK_HOMEPAGE     = 0;
+    const FEATURE_MASK_COUNTRY      = 1;
+    const FEATURE_MASK_REGION       = 2;
+    const FEATURE_MASK_DESTINATION  = 3;
 
 	private function _initDefaults()
 	{
@@ -145,11 +150,135 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 
 		$this->_logger->log(__METHOD__ . ' SQL Query=' . $query->__toString(), Zend_Log::INFO);
 		
-		$properties = $this->fetchAll($query);
+		$propertyRowset = $this->fetchAll($query);
 		
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
-		return $properties;
+		return $propertyRowset;
 	}
+
+    //
+    // CREATE
+    //
+    
+    public function createProperty($options)
+	{
+		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
+		
+		$bootstrapOptions =  Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
+		$vfrConfig = $bootstrapOptions['vfr'];
+		
+		$nullExpr = new Zend_Db_Expr('NULL');
+		$nowExpr  = new Zend_Db_Expr('NOW()');
+		$data = array (
+			'idProperty'        => $nullExpr,
+			'idPropertyType'	=> $options['params']['idPropertyType'],
+			'idAdvertiser'		=> $options['params']['idAdvertiser'],
+            'idCountry'     	=> 1, // default dummy coutnry
+			'idHolidayType'		=> $options['params']['idHolidayType'],
+            'idRegion'          => 1, // default dummy region
+            'idDestination' 	=> 1, // default dummy destination
+			'urlName'			=> '_' . md5(microtime(true).mt_rand(10000,90000)), // underscore denotes temporary url
+			'shortName'			=> $options['params']['shortName'],
+			'locationUrl'		=> 'default/default/default',
+			'numBeds'			=> $options['params']['numBeds'],
+			'numSleeps'			=> $options['params']['numSleeps'],
+			'approved'			=> 0,
+			'visible'			=> 0,
+			'expiry'			=> $nullExpr,
+			'featureMask'		=> 0,
+			'featureExpiry'		=> $nullExpr,
+			'emailAddress'		=> $options['params']['emailAddress'],
+			'photoLimit'		=> $vfrConfig['photo']['max_limit_per_property'],
+			'added'         	=> $nowExpr,
+			'updated'       	=> $nowExpr,
+			'awaitingApproval'	=> 0,
+			'status'			=> self::STEP_2_CONTENT,
+			'lastModifiedBy'	=> 'system'
+		);
+
+		try {
+			$this->insert($data);
+			$idProperty = $this->_db->lastInsertId();
+		} catch (Exception $e) {
+			//$dbAdapter = Zend_Db_Table::getDefaultAdapter();
+			//$profiler = $dbAdapter->getProfiler();
+			//$lastDbProfilerQuery = $profiler->getLastQueryProfile();
+            //var_dump($lastDbProfilerQuery->getQuery());
+			throw $e;
+		}
+
+		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
+		return $idProperty;
+	}
+    
+    //
+    // READ
+    //
+    
+    /**
+	 * Get all properties
+	 *
+	 * @param boolean $page	Use Zend_Paginator?
+	 * @return Common_Resource_Property_Rowset|Zend_Paginator
+	 */
+    public function getProperties($page, $itemCountPerPage, $order, $direction)
+    {
+        $query = $this->select();
+        
+        if ($order)
+            $query->order($order . ' ' . $direction);
+        
+        if ($page) {
+            $adapter = new Zend_Paginator_Adapter_DbTableSelect($query);
+            $paginator = new Zend_Paginator($adapter);
+            $paginator->setItemCountPerPage($itemCountPerPage)
+                      ->setCurrentPageNumber((int) $page);
+            
+            return $paginator;    
+        }
+        
+        try {
+            $propertyRowset = $this->fetchAll($query);
+            
+            return $propertyRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function getPropertiesByCountryRegionDestination($idCountry, $idRegion, $idDestination, $page, $itemCountPerPage, $order, $direction)
+    {
+        $query = $this->select();
+        
+        if ($idCountry)
+            $query->where('idCountry = ?', $idCountry);
+            
+        if ($idRegion)
+            $query->where('idRegion = ?', $idRegion);
+            
+        if ($idDestination)
+            $query->where('idDestination = ?', $idDestination);
+        
+        if ($order)
+            $query->order($order . ' ' . $direction);
+        
+        if ($page) {
+            $adapter = new Zend_Paginator_Adapter_DbTableSelect($query);
+            $paginator = new Zend_Paginator($adapter);
+            $paginator->setItemCountPerPage($itemCountPerPage)
+                      ->setCurrentPageNumber((int) $page);
+            
+            return $paginator;    
+        }
+        
+        try {
+            $propertyRowset = $this->fetchAll($query);
+            
+            return $propertyRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 
 	public function getPropertyById($idProperty)
 	{
@@ -176,21 +305,53 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 		}
 		
 		
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
+		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 		return $result;	
 	}
 
     public function getPropertiesByAdvertiserId($idAdvertiser)
     {
         $query = $this->select()
-                      ->where('idAdvertiser = ?', $idAdvertiser);
+                      ->where('idAdvertiser = ?', $idAdvertiser)
+					  ->order('added DESC');
         try {
             $propertyRowset = $this->fetchAll($query);
+            
+            return $propertyRowset;
         } catch (Exception $e) {
             die("Failed to execute sql " . $query);
         }
-
-        return $propertyRowset;
+    }
+    
+    public function getAllPropertiesAwaitingInitialApproval()
+    {
+        $query = $this->select()
+                      ->where('awaitingApproval = ?', (int) 1)
+                      ->order('updated DESC');
+                      
+        try {
+            $propertyRowset = $this->fetchAll($query);
+            
+            return $propertyRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
+	}
+    
+    public function getAllPropertiesAwaitingUpdateApproval()
+    {
+        $query = $this->select()
+                      ->where('approved = ?', 1)
+                      ->where('checksumMaster != checksumUpdate')
+                      ->where('awaitingApproval = ?', 1)
+                      ->order('updated DESC');
+        try {
+            $propertyRowset = $this->fetchAll($query);
+            
+            return $propertyRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 	
 	public function getStatusByPropertyId($idProperty)
@@ -201,73 +362,74 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 					  ->limit(1);
 		try {
 			$row = $this->fetchRow($query);
-			$status = $row->status;
+			return $row->status;
 		} catch (Exception $e) {
 			throw $e;
 		}
-		
-		return $status;
 	}
-
-	public function createProperty($options)
+	
+	public function getHolidayTypeByPropertyId($idProperty)
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-		
-		$bootstrapOptions =  Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
-		$vfrConfig = $bootstrapOptions['vfr'];
-		
-		$nullExpr = new Zend_Db_Expr('NULL');
-		$nowExpr  = new Zend_Db_Expr('NOW()');
-		$data = array(
-			'idProperty'    	=> $nullExpr,
-			'idPropertyType'	=> $options['params']['idPropertyType'],
-			'idAdvertiser'		=> $options['params']['idAdvertiser'],
-            'idCountry'     	=> 1, // default dummy coutnry
-            'idRegion'      	=> 1, // default dummy region
-            'idDestination' 	=> 1, // default dummy destination
-			'urlName'			=> md5(microtime(true).mt_rand(10000,90000)),
-			'shortName'			=> $options['params']['shortName'],
-			'locationUrl'		=> 'default/default/default',
-			'numBeds'			=> $nullExpr,
-			'numSleeps'			=> $nullExpr,
-			'approved'			=> 0,
-			'visible'			=> 0,
-			'expiry'			=> $nullExpr,
-			'featureMask'		=> 0,
-			'featureExpiry'		=> $nullExpr,
-			'golfHoliday'		=> 0,
-			'skiingHoliday'		=> 0,
-			'accessHoliday'		=> 0,
-			'emailAddress'		=> $options['params']['emailAddress'],
-			'photoLimit'		=> $vfrConfig['property']['photo_limit_per_property'],
-			'added'         	=> $nowExpr,
-			'updated'       	=> $nowExpr,
-			'awaitingApproval'	=> 0,
-			'status'			=> self::STEP_2_CONTENT,
-			'lastModifiedBy'	=> 'system'
-		);
-
-        //var_dump($options);
-        //$params = array_merge($options['params'], $data);
-        
-        //var_dump($params);
-        //die();
+		$query = $this->select('idHolidayType')
+					  ->where('idProperty = ?', $idProperty)
+					  ->limit(1);
 		try {
-			$this->insert($data);
-			$idProperty = $this->_db->lastInsertId();
+			$row = $this->fetchRow($query);
+            
+			return $row->idHolidayType;
 		} catch (Exception $e) {
-			$dbAdapter = Zend_Db_Table::getDefaultAdapter();
-			$profiler = $dbAdapter->getProfiler();
-			$lastDbProfilerQuery = $profiler->getLastQueryProfile();
-
-			var_dump($lastDbProfilerQuery->getQuery());
-
 			throw $e;
 		}
-
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
-		return $idProperty;
 	}
+    
+    public function isUrlNameTaken($idProperty, $urlName)
+    {
+        $query = $this->select()
+                      ->from($this->_name, 'COUNT(1) AS cnt')
+                      ->where('urlName = ?', $urlName)
+                      ->where('idProperty != ?', $idProperty);
+                      
+        try {
+            $row = $this->fetchRow($query);
+            
+            if ($row->cnt > 0)
+                return true;
+            
+            return false;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
+    public function getFeaturedProperties($mask, $limit, $idCountry, $idRegion, $idDestination)
+    {
+        $query = $this->select()
+                      ->where('featureMask >> ? & 0x01', $mask)
+                      ->order('featurePriority')
+                      ->limit($limit);
+                      
+        if ($idCountry)
+            $query->where('idCountry = ?', $idCountry);
+            
+        if ($idRegion)
+            $query->where('idRegion = ?', $idRegion);
+            
+        if ($idDestination)
+            $query->where('idDestination = ?', $idDestination);
+        
+        //die($query);
+        try {
+            $propertyRowset = $this->fetchAll($query);
+            
+            return $propertyRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
+	//
+    // UPDATE
+    //
 	
 	public function updatePropertyStatus($idProperty, $status)
 	{
@@ -282,22 +444,125 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 			throw $e;
 		}
 	}
+    
+    public function setPropertyUrlName($idProperty, $urlName)
+    {
+        $params = array (
+            'urlName'   => $urlName
+        );
+        
+        $where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
+        try {
+            $query = $this->update($params, $where);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
+    public function setPropertyExpiryDate($idProperty, $expiry)
+    {
+        $params = array (
+            'expiry'    => $expiry
+        );
+        
+        $where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
+        try {
+            $query = $this->update($params, $where);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
+    public function setAwaitingApproval($idProperty)
+    {
+        $params = array (
+            'awaitingApproval'  => 1  
+        );
+        
+        $where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
+        try {
+            $query = $this->update($params, $where);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
+    public function initialApproveProperty($idProperty)
+    {
+        $params = array (
+            'awaitingApproval'  => 0,
+            'approved'          => 1,
+            'visible'           => 1
+        );
+        
+        $where = $this->getAdapter()->quoteInto('approved=0 AND awaitingApproval=1 AND idProperty=?', $idProperty);
+        try {
+            $query = $this->update($params, $where);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
+    public function updateApproveProperty($idProperty)
+    {
+        $params = array (
+            'awaitingApproval'  => 0  
+        );
+        
+        $where = $this->getAdapter()->quoteInto('approved=1 AND awaitingApproval=1 AND idProperty=?', $idProperty);
+        try {
+            $query = $this->update($params, $where);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 	
-	public function updatePropertyContent($idProperty, $params)
-	{
-		// filter any redundant values passed in
-		$data = array (
-			'numBeds'	=> $params['numBeds'],
-			'numSleeps'	=> $params['numSleeps'],
-			
-		);
-		
-		$where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
-		try {
-			$query = $this->update($params, $where);	
-		} catch (Exception $e) {
-			throw $e;	
-		}
-	}
+    public function updatePropertyLocation($idProperty, $idCountry, $idRegion, $idDestination, $locationUrl)
+    {
+        $params = array (
+            'idCountry'     => $idCountry,
+            'idRegion'      => $idRegion,
+            'idDestination' => $idDestination,
+            'locationUrl'   => $locationUrl
+        );
+        
+        $where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
+        try {
+            $query = $this->update($params, $where);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
+    public function setPropertyContentChecksum($idProperty, $checksum, $version=Common_Resource_PropertyContent::VERSION_MAIN)
+    {
+        if ($version == Common_Resource_PropertyContent::VERSION_MAIN) {
+            $params = array (
+                'checksumMaster' => $checksum
+            );    
+        } elseif ($version == Common_Resource_PropertyContent::VERSION_UPDATE) {
+            $params = array (
+                'checksumUpdate' => $checksum
+            );
+        } elseif ($version == Common_Resource_PropertyContent::VERSION_BOTH) {
+            $params = array (
+                'checksumMaster' => $checksum,
+                'checksumUpdate' => $checksum
+            ); 
+        } else {
+            throw new Exception("Version invalid");
+        }
+        
+        $where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
+        try {
+            $query = $this->update($params, $where);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+   
+    //
+    // DELETE
+    //
 }
 

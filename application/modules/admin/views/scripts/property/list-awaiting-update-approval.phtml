@@ -1,0 +1,23 @@
+<h1>List Awaiting Initial Approval</h1>
+
+
+<?php if ($this->propertyRowset == null) : ?>
+<p>There are no properties awaiting update approval.</p>
+<?php endif ?>
+
+<?php if ($this->propertyRowset) : ?>
+<table style="width:100%">
+    <tr>
+        <th>Property Id</th>
+        <th>Type</th>
+        <th>Action</th>
+    </tr>
+    <?php foreach ($this->propertyRowset as $row) : ?>
+    <tr>
+        <td><?php echo $row->idProperty ?></td>
+        <td><?php echo $this->propertyType($row->idPropertyType) ?></td>
+        <td><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'property', 'action' => 'view-update-approval', 'idProperty' => $row->idProperty)) ?>">[view]</a></td>
+    </tr>
+    <?php endforeach ?>
+</table>
+<?php endif ?>

@@ -1,0 +1,18 @@
+A new advertiser (#[[idAdvertisers]]) has joined the website.
+
+There details are as follows:
+Advertiser ID: [[idAdvertisers]]
+Username [[username]]
+Firstname: [[firstname]]
+Lastname: [[lastname]]
+Address: [[address]]
+Postocode/ZIP: [[postcode]]
+Country code: [[countrycode]]
+Email address: [[emailaddress]]
+Telephone: [[telephone]]
+Fax: [[fax]]
+Mobile: [[mobile]]
+
+
+VillasForRent.NET Automated Mailer
+

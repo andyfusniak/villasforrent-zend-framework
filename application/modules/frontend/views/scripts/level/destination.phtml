@@ -1,8 +1,25 @@
-<div id="browse_country">
-    <h1>Destinations in <?php echo $this->countryName ?></h1>
+<h1>Properties in <?php echo $this->escape($this->fastLookupRow->countryName) ?> -&gt; <?php echo $this->escape($this->fastLookupRow->regionName) ?> -&gt; <?php echo $this->escape($this->fastLookupRow->destinationName) ?> (<?php echo $this->fastLookupRow->totalVisible ?>)</h1>
+
+<?php if ($this->showFeatured) : ?>
+<div class="yui-gb">
+    <div class="yui-u first"><?php echo $this->featuredPartials[0] ?></div>
+    <div class="yui-u"><?php echo $this->featuredPartials[1] ?></div>
+    <div class="yui-u"><?php echo $this->featuredPartials[2] ?></div>
+</div>
+<?php endif ?>
+
+<?php if ($this->showProperties) : ?>
+<div>
+    
     <ul>
-        <?php foreach ($this->fastLookupsRowset as $row): ?>
-        <li><a href="/in/<?php echo $row->url ?>"><?php echo $this->escape($row->regionName) ?> (<?php echo $row->totalVisible ?>)</a></li>
+        <?php foreach ($this->partials as $partial): ?>
+        <li><?php echo $partial ?></li>
         <?php endforeach ?>
     </ul>
 </div>
+<?php else : ?>
+<div>
+<p>There are currently no properties in this destination.</p>
+</div>
+<?php endif ?>
+

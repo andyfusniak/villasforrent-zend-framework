@@ -38,11 +38,12 @@ class AvailabilityImageController extends Zend_Controller_Action
 		$settings->setAvailableColour($this->_getParam('ac', $calendar->vAvailableColour));
 		$settings->setDayNameColour($this->_getParam('dc', $calendar->vDayNameColour));
 		$settings->setMonthTableBorderColour($this->_getParam('tb', $calendar->vTableBorderColour));
-		$settings->setColumns($this->_getParam('cc', (($calendar->vColumns === 0) ? 4 : $calendar->vColumns)));
-		$settings->setDayCellWidth($this->_getParam('cw', $calendar->vDayCellWidthPixels));
-		$settings->setDayCellHeight($this->_getParam('ch', $calendar->vDayCellHeightPixels));
+		$settings->setColumns($this->_getParam('cc', (($calendar->vColumns === 0) ? 3 : $calendar->vColumns)));
+		$settings->setDayCellWidth($this->_getParam('cw', 19));
+		$settings->setDayCellHeight($this->_getParam('ch', 19));
 		$settings->setHorizontalGap   = $this->_getParam('hg', $calendar->vHorizontalGapPixels);
 		$settings->verticalGap     = $this->_getPAram('vg', $calendar->vVerticalGapPixels);
+		
 		
 		// Calculate the number of years this calendar spans
 		// Example: if we start in December and span 3 months then we'll have spanned
@@ -69,13 +70,21 @@ class AvailabilityImageController extends Zend_Controller_Action
 		//exit;
 
 		$mysettings = new Vfr_Availability_Calendar_Object();
-		$mysettings->setCalendarDuration(6)
-				   ->setStartYear(2010)
-				   ->setStartMonth(1)
-				   ->setColumns(3)
-		           ->setColourAvailable('cccccc');
+		$mysettings->setFontCode($this->_getParam('fc', 2))
+				   ->setCalendarDuration($this->_getParam('du', $calendar->vDuration))
+				   ->setStartYear($this->_getParam('yr', $calendar->vStartYear))
+				   ->setStartMonth($this->_getParam('mo', $calendar->vStartMonth))
+				   ->setColumns($this->_getParam('cc', ($calendar->vColumns === 0) ? 5 : $calendar->vColumns))
+				   ->setDayCellWidth($this->_getParam('cw', 19))
+				   ->setDayCellHeight($this->_getParam('ch', 19))
+				   ->setMarginTop($this->_getParam('mt', 4))
+				   ->setMarginRight($this->_getParam('mr', 4))
+				   ->setMarginBottom($this->_getParam('mb', 4))
+				   ->setMarginLeft($this->_getParam('ml', 4))
+		           ->setColourAvailable('99CCFF')
+				   ->setBookedColour($this->_getParam('bc', 'FF6666'));
 		
-		$img = new Vfr_Availability_Calendar_ImagePng($settings, $starttime, $endtime, $availabilityRowset);
+		$img = new Vfr_Availability_Calendar_ImagePng($mysettings, $starttime, $endtime, $availabilityRowset);
 		$img->setStartTimestamp($starttime)
 		    ->setEndTimestamp($endtime)
 			->setup()

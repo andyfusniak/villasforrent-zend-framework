@@ -1,5 +1,5 @@
 <div class="form">
-<h1>Step 3 - Upload your photos</h1>
+<h1>Step 3 - Upload your photos for property <?php echo $this->propertyType($this->propertyRow->idPropertyType) ?> <?php echo $this->escape($this->propertyRow->shortName) ?> - Ref <?php echo $this->propertyRow->idProperty ?></h1>
 <ul id="property_progress_header">
 	<li id="location_orange"></li>
 	<li id="content_orange"></li>
@@ -8,13 +8,33 @@
 	<li id="availability_grey"></li>
 </ul>
 <p class="clearfix" />
-<?php echo $this->imageUploadNotifier($this->idProperty, $this->photoCount) ?>
+<?php echo $this->imageUploadNotifier($this->propertyRow->idProperty, $this->photoCount) ?>
 <p>Use the form below to upload digital photos of your property. Ensure your photos are of good quality, in focus, and do not contain people, pets or distracting objects not relating to the property.</p>
 <p>As an example you might want to include photos of your pool, master bedroom, garden and view from outside. Type an appropriate short caption to describe your photograph.</p>
-<?php echo $this->form ?>
+
+<?php if ($this->form) : ?>
+<form enctype="multipart/form-data" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+	<input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
+	<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $this->form->getValue('MAX_FILE_SIZE') ?>" />
+	<input type="hidden" name="<?php echo ini_get('apc.rfc1867_name') ?>" value="<?php echo $this->form->getValue(ini_get('apc.rfc1867_name')) ?>" id="progress_key" />
+				
+	<fieldset>
+		<legend>Pictures</legend>
+		
+		<dl>
+			<dt><label for="filename">Browse for a photo</label></dt>
+			<dd><input type="file" name="filename" /></dd>
+			
+			<dt><label for="caption">Photo Caption Text</label></dt>
+			<dd><input type="text" name="caption" value="<?php echo $this->escape($this->form->getValue('headline1')) ?>" /></dd>
+		</dl>
+
+		<input type="submit" name="submit" id="submit" value="Send" />
+	</fieldset>
+</form>
+<?php endif ?>
 
 <?php //var_dump($this->photoRowset) ?>
-
 <p>You have uploaded <?php echo $this->photoCount ?> of a possible <?php echo $this->maxLimitPerProperty ?> maximum.</p>
 
 <table border="1" cellpadding="20" cellspacing="20">
@@ -34,7 +54,7 @@
 <?php for ($i=0; $i < $this->photoCount; $i++) { ?>
 <?php $row = $this->photoRowset[$i] ?>
 <tr>	
-	<td><?php echo $this->tinyThumb($this->idProperty, $row->idPhoto, $row->widthPixels, $row->heightPixels, $row->caption) ?></td>
+	<td><?php echo $this->tinyThumb($this->propertyRow->idProperty, $row->idPhoto, $row->widthPixels, $row->heightPixels, $row->caption) ?></td>
 	<td><?php echo $this->aspectRatio($row->widthPixels, $row->heightPixels) ?></td>
 	<td><?php echo $row->displayPriority ?></td>
 	<td><?php echo $row->originalFilename ?></td>
@@ -43,8 +63,8 @@
 	<td><?php echo $row->widthPixels ?></td>
 	<td><?php echo $row->heightPixels ?></td>
 	<td><?php echo $row->caption ?></td>
-	<td><?php echo $this->imageConfirmDeleteButton($this->idProperty, $row->idPhoto) ?></td>
-	<td><?php echo $this->imageMoveButtons($this->idProperty, $row->idPhoto, $i, $this->photoCount) ?></td>
+	<td><?php echo $this->imageConfirmDeleteButton($this->propertyRow->idProperty, $row->idPhoto) ?></td>
+	<td><?php echo $this->imageMoveButtons($this->propertyRow->idProperty, $row->idPhoto, $i, $this->photoCount) ?></td>
 </tr>
 <?php } ?>
 </table>

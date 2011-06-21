@@ -1,0 +1,24 @@
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>" />
+<input type="hidden" name="do" value="delete" />
+<input type="hidden" name="idProperty" value="<?php echo $this->idProperty ?>" />
+<input type="hidden" name="startDate" value="<?php echo $this->startDate ?>" />
+<input type="hidden" name="endDate" value="<?php echo $this->endDate ?>" />
+<fieldset>
+    <dl>
+        <dt>Start date</dt>
+        <dd><?php echo $this->prettyDate($this->startDate) ?></dd>
+        
+        <dt>End date</dt>
+        <dd><?php echo $this->prettyDate($this->endDate) ?></dd>
+        
+        <dt>Confirm</dt>
+        <dd><input type="submit" value="Delete" /></dd> 
+    </dl>
+</fieldset>
+</form>
+
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>" />
+<input type="hidden" name="idProperty" value="<?php echo $this->idProperty ?>" />
+<input type="hidden" name="do" value="cancel" />
+<input type="submit" value="Cancel" />
+</form>

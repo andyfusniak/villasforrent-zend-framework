@@ -6,34 +6,76 @@
 	<?php echo $this->headMeta() ?>
 	<?php echo $this->headLink() ?>
 	<?php echo $this->headStyle() ?>
-	<?php echo $this->headScript() ?>
+    <?php
+    if ($this->jQuery()->isEnabled()) {
+        $this->jQuery()->setLocalPath('/js/jquery/jquery-1.6.min.js')
+                       ->setUiLocalPath('/js/jquery-ui-1.8.12/ui/jquery-ui.js')
+                       ->addStylesheet('/js/jquery-ui-themes-1.8.12/themes/sunny/jquery-ui.css');
+        echo $this->jQuery();
+    }
+    ?>
+    <?php echo $this->headScript() ?>
+	
+	<?php if ('live' == APPLICATION_ENV): ?>
+	<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-23961822-1']);
+	_gaq.push(['_trackPageview']);
+  
+	(function() {
+	  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+	</script>
+	<?php endif ?>
+	
 </head>
 <body>
 <div id="doc4" class="yui-t2">
-	<div id="hd"><h1>Villas to rent in Greece, Portugal, Spain, France,<br />Florida and many other holiday destinations<br />around the world including skiing holidays</h1><p><a href="/">Villas to rent</a></p></div>
+	<div id="hd">
+		<h1>Villas to rent in Greece, Portugal, Spain, France, Florida and many other holiday destinations around the world including skiing holidays</h1>
+		<p id="strapline">Dedicated to bringing you the best rental properties from around the world. Book from the owner direct, or advertiser YOUR property</p>
+		<p id="topnav"><a href="/">HOME</a></p>
+	</div>
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b"><?php echo $this->layout()->content ?></div>
 		</div>
 		
 		<div class="yui-b">
-			<?php //die($this->navigation) ?>
+			<?php if (!Zend_Auth::getInstance()->hasIdentity()) : ?>
 			<h1>New Advertisers</h1>
-			<ul>
+			<ul class="menu">
 				<li id="nav-register"><a tabindex="1" accesskey="R" href="/advertiser-registration/register/">register now</a></li>
 			</ul>
-		
+			<?php endif ?>
+			
 			<h1>Existing Advertisers</h1>
-			<ul>
-				<li id="nav-advertiser-login"><a tabindex="3" accesskey="L" href="/advertiser-authentication/login/">login</a></li>
-				<li id="nav-advertiser-home"><a tabindex="4" accesskey="H" href="/advertiser-account/home/">account home</a></li>
-				<li id="nav-advertiser-logout"><a tabindex="5" accesskey="O" href="/advertiser-authentication/logout/">logout</a></li>
+			<ul class="menu">
+				<?php if (!Zend_Auth::getInstance()->hasIdentity()) : ?>
+				<li id="nav-advertiser-login"><a tabindex="2" accesskey="L" href="/advertiser-authentication/login/">login</a></li>
+				<?php endif ?>
+				
+				<?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
+				<li id="nav-advertiser-home"><a tabindex="3" accesskey="H" href="/advertiser-account/home/">account home</a></li>
+				<li id="nav-advertiser-logout"><a tabindex="4" accesskey="O" href="/advertiser-authentication/logout/">logout</a></li>
+				<?php endif ?>
 			</ul>
+            
+            <div id="browse_country">
+                <h1>Browse By Country</h1>
+                <ul>
+                    <?php foreach ($this->countryFastLookupRowset as $row): ?>
+                    <li><a href="/in/<?php echo $row->url ?>"><?php echo $this->escape($row->countryName) ?> (<?php echo $row->totalVisible ?>)</a></li>
+                    <?php endforeach ?>
+                </ul>
+            </div>
 		</div>
 	</div>
 		
 	<div id="ft">
-		<span class="left">VillasForRent.NET &copy; 2010</span><span class="right"><a href="#">About</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#">Terms</a
+		<span class="left">holidaypropertyworldwide.com &copy; 2011</span><span class="right"><a href="#">About</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#">Terms</a
 		<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a><img alt="All cards accepted" src="/images/cards.gif" /><a href="http://framework.zend.com/about/casestudies"><img alt="Powered by Zend Framework" src="/images/zend_framework.png" /></a></p>
 	</div>
 </div>

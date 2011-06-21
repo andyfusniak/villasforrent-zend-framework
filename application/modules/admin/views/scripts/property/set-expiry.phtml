@@ -1,0 +1,19 @@
+<h1>Set the expiry date for property <?php echo $this->form->getValue('idProperty') ?></h1>
+
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
+<fieldset>
+    <dl>
+        <dt><label for="expiry">Property Expiry Date:</label></dt>
+        <dd>
+            <input id="expiry" type="text" name="expiry" value="<?php echo $this->escape($this->form->getValue('expiry')) ?>" />
+            <?php echo $this->displayErrors($this->form->getMessages('expiry')) ?>
+        </dd>
+        
+        <dd>
+            <input type="submit" value="Set Expiry" />
+        </dd>
+    </dl>
+</fieldset>
+
+</form>

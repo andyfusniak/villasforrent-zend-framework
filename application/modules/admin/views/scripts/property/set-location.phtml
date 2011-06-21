@@ -1,0 +1,49 @@
+<h1>Set the location of property <?php echo $this->form->getValue('idProperty') ?></h1>
+
+<p>The advertiser has request the following suggested location:</p>
+<fieldset>
+    <dt>Country</dt>
+    <dd><?php echo $this->escape($this->propertyContentRowset['country']) ?></dd>
+    
+    <dt>Region</dt>
+    <dd><?php echo $this->escape($this->propertyContentRowset['region']) ?></dd>
+    
+    <dt>Location</dt>
+    <dd><?php echo $this->escape($this->propertyContentRowset['location']) ?></dd>
+</fieldset>
+
+<p>You should allocate the property to the nearest location available, or create a new location for this property</p>
+
+<?php // var_dump($this->form) ?>
+<?php //var_dump($this->hierarchy[19]['children']) ?>
+
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<input type="hidden" id="idFastLookup" name="idFastLookup" value="<?php echo $this->form->getValue('idFastLookup') ?>" />
+<input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
+<div id="demo1">
+<ul id="browser" class="filetree treeview">
+    <?php foreach ($this->hierarchy as $country) : ?>
+    <?php //var_dump($country['idCountry']) ?>
+    <li class="country <?php echo ($this->form->getValue('idCountry') == $country['idCountry']) ? 'jstree-open' : '' ?>">
+        <a href="#"><?php echo $this->escape($country['name']) ?></a>
+        <ul> 
+            <?php foreach ($country['children'] as $region) : ?>
+            <?php //var_dump($this->form->getValue('idRegion')); ?>
+            <li class="region <?php echo ($this->form->getValue('idRegion') == $region['idRegion']) ? 'jstree-open' : '' ?>">
+                <a href="#"><?php echo $this->escape($region['name']) ?></a>
+                <ul>
+                    <?php foreach ($region['children'] as $destination) : ?>
+                    <li class="destination <?php //echo ($this->form->getValue('idFastLookup') == $destination['idFastLookup']) ? 'jstree-open' : '' ?>" id="<?php echo $destination['idFastLookup'] ?>"><a href="#"><?php echo $this->escape($destination['name']) ?></a></li>
+                    <?php endforeach ?>
+                </ul>
+            </li>
+            <?php endforeach ?>
+        </ul>
+    </li>
+    <?php endforeach ?>
+</ul>
+</div>
+<?php echo $this->displayErrors($this->form->getMessages('idFastLookup')) ?>
+<?php echo $this->displayErrors($this->form->getMessages('idProperty')) ?>
+<input type="submit" value="Set Location" />
+</form>

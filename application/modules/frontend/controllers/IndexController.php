@@ -1,15 +1,11 @@
 <?php
 class IndexController extends Zend_Controller_Action
 {
-    public function init()
-    {
-        /* Initialize action controller here */
-    }
+    public function init() {}
 
     public function indexAction()
     {
 		$locationModel	= new Common_Model_Location();
-		$propertyModel 	= new Common_Model_Property();
 		
 		$searchOptions = array (
 			'approved'		=> true,
@@ -19,14 +15,21 @@ class IndexController extends Zend_Controller_Action
 			'idDestination' => null
 		);
 		
-		$countryRowset = $locationModel->getCountries($visible=true,$orderBy='displayPriority');
+		// removed to use a more efficent Way
+		//$countryRowset = $locationModel->getCountriesWithTotalVisible();
+		$fastLookupRowset = $locationModel->getFastAllCountries();
 		
-		$results = $propertyModel->doSearch();
+		//var_dump($fastLookupRowset);
+		
+		//$results = $propertyModel->doSearch();
 		
 		//var_dump($results);
 		//var_dump($countryRowset);
 		
-		$this->view->countryRowset = $countryRowset;
+		
+		$this->_helper->featuredProperty(Common_Resource_Property::FEATURE_MASK_HOMEPAGE);
+		
+		$this->view->fastLookupRowset = $fastLookupRowset;
     }
 
 	public function testAction()

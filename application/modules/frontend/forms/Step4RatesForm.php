@@ -9,20 +9,41 @@ class Frontend_Form_Step4RatesForm extends Zend_Form
 	public function init()
 	{ 
 		$this->setMethod('post');
-		$this->setAction(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-property/step4-rates');
-        $this->setName('step4');
-		$this->setAttrib('id', 'step4');
+		$this->setAction('/advertiser-property/step4-rates');
         
-        $this->datePicker = new ZendX_JQuery_Form_Element_DatePicker(
-                        'from', array('jQueryParams' => array('defaultDate' => '2007/10/10'))
-                      );
+        $this->addPrefixPath('Vfr_Form', 'Vfr/Form');
+        $this->addElementPrefixPath('Vfr_Validate', 'Vfr/Validate', 'validate');
 		
-		//$this->addElements(array($datePicker));
+		$this->addElement('text', 'name', array (
+			'required'	=> false
+		));
+        
+        $this->addElement('ratesRangePicker', 'rates', array (
+            'validators' => array (
+				array('RatesRange', true, array() )
+            )
+        ));
 		
-		$this->addElement('submit', 'submit', array('required' => false,
-                                                    'ignore' => true,
-                                                    'decorators' => array('ViewHelper',array('HtmlTag',
-                                                        array('tag' => 'dd', 'id' => 'form-submit')))
-                                                    ));
+		$items = array (
+			'0' => 'n/a',
+            '1' => '1 night',
+            '2' => '2 nights',
+            '3' => '3 nights',
+            '4' => '4 nights',
+            '5' => '5 nights',
+            '7' => '1 week',
+            '14' => '2 weeks',
+            '21' => '3 weeks',
+            '30' => '1 month',
+            '60' => '2 months',
+			'90' => '3 months'
+		);
+		$this->addElement('select', 'minStayDays', array (
+			//'required'		=> true,
+			'multiOptions'	=> $items,
+			//'validators'	=> array (
+			//	array('NotEmpty', true, array ('messages' => array ('isEmpty' => 'Required')))
+			//)
+		));
 	}
 }

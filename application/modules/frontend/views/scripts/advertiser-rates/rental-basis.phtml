@@ -8,5 +8,24 @@
 	<li id="availability_grey"></li>
 </ul>
 <p class="clearfix" />
-<?php echo $this->form ?>
+
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<input type="hidden" name="idProperty" value="<?php echo $this->idProperty ?>" />
+	<fieldset>
+		<legend>Rental Basis</legend>
+		
+		<dt>
+			<label for="rentalBasis">Type of property:</label>
+		</dt>
+		
+		<dd>
+			<?php echo $this->formSelect('rentalBasis', $this->form->getValue('rentalBasis'), null, $this->form->getElement('rentalBasis')->getMultiOptions()) ?>
+		</dd>
+		
+		<dd>
+			<input type="submit" name="submit" value="submit" />
+		</dd>
+	</fieldset>
+</form>
+
 </div>
