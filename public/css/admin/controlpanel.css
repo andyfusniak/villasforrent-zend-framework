@@ -7,6 +7,57 @@ body {
 	padding-top:2px;
 	color:#000
 }
+
+
+#navcontainer {
+	float: right;
+	margin:0;
+	padding:0
+}
+#navcontainer ul {
+	
+	margin: 0;
+	padding: 0;
+	list-style: none outside none;
+}
+#navcontainer ul li {
+	float: left;
+	margin:0;
+	padding:0;
+	display: inline;
+}
+#navcontainer ul li.leftgap {
+	padding-left: 15px
+}
+#navcontainer ul li.rightgap {
+	padding-right: 15px;
+}
+
+#navcontainer ul li img { border-style: none }
+#navcontainer ul li a {
+	margin:0;
+	padding:0;
+	border-style: none
+	text-decoration: none
+}
+#navcontainer ul li.box {
+	text-align: center
+}
+#navcontainer ul li a.box, #navcontainer ul li span.box {
+	margin:0;
+	border: 1px solid #999;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+#navcontainer ul li span.box {
+	color: #ccc;
+}
+#navcontainer p {
+	margin-top: 4px;
+	float: right
+}
+
+
 #projects {
 	padding-left:20px;
 	border-bottom:1px solid #33102f;

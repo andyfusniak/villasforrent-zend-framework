@@ -23,18 +23,13 @@ cat Administrators.sql          | $CMD
 echo "Create DB Table Advertisers"
 cat Advertisers.sql             | $CMD
 
-echo "Create DB Table Countries"
-cat Countries.sql               | $CMD
-echo "Create DB Table CountriesQuickCount"
-cat CountriesQuickCount.sql     | $CMD
-echo "Create DB Table Regions"
-cat Regions.sql                 | $CMD
-echo "Create DB Table RegionsQuickCount"
-cat RegionsQuickCount.sql       | $CMD
-echo "Create DB Table Destinations"
-cat Destinations.sql            | $CMD
-echo "Create DB Table DestinationsQuickCount"
-cat DestinationsQuickCount.sql | $CMD
+echo "Create DB Table ApiAccounts"
+cat ApiAccounts.sql             | $CMD
+echo "Create DB Table AdvertiserApiAccounts"
+cat AdvertiserApiAccounts.sql   | $CMD
+
+echo "Create DB Table Locations"
+cat Locations.sql               | $CMD
 
 echo "Create DB Table PropertyTypes"
 cat PropertyTypes.sql | $CMD
@@ -45,8 +40,6 @@ cat Properties.sql	| $CMD
 echo "Create DB Table PropertiesFacilities"
 cat PropertiesFacilities.sql | $CMD
 
-echo "Create DB Table PropertiesContentFields"
-cat PropertiesContentFields.sql | $CMD
 echo "Create DB Table PropertiesContent"
 cat PropertiesContent.sql | $CMD
 
@@ -54,9 +47,6 @@ echo "Create DB Table Calendars"
 cat Calendars.sql	| $CMD
 echo "Create DB Table Availability"
 cat Availability.sql| $CMD
-
-echo "Create DB Table FastLookups"
-cat FastLookups.sql | $CMD
 
 echo "Create DB Table DisapprovalStandardComments"
 cat DisapprovalStandardComments.sql | $CMD
@@ -89,11 +79,6 @@ echo "Create DB Table PropertiesStatistics"
 cat PropertiesStatistics.sql | $CMD
 echo "Create DB Table Rates"
 cat Rates.sql | $CMD
-
-echo "Create DB Table RemoteServices"
-cat RemoteServices.sql | $CMD
-echo "Create DB Table RemoteAccess"
-cat RemoteAccess.sql | $CMD
 
 echo "Create DB Table MembersFavoriteProperties"
 cat MembersFavoriteProperties.sql | $CMD

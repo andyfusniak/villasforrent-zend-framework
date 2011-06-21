@@ -2,17 +2,20 @@
 echo -n "Deploy LIVE (l) or BETA (b) :"
 read -e DEPLOY
 
-echo -n "Include DB Schema (Y) or (N) :"
+echo -n "Include DB Schema (y) or (n) :"
 read -e INC_SCHEMA
 
-echo -n "Include images (Y) or (N) :"
+echo -n "Include images (y) or (n) :"
 read -e INC_IMAGES
 
-echo -n "Include Zend Framework (Y) or (N) :"
+echo -n "Include Zend Framework (y) or (n) :"
 read -e INC_ZEND
 
-echo -n "Include YUI2 (Y) or (N) :"
+echo -n "Include YUI2 (y) or (n) :"
 read -e INC_YUI2
+
+echo -n "Include jQuery, jQuery UI/Plugins/Themess (y) or (n) :"
+read -e INC_JQUERY
 
 if [ "$DEPLOY" = "l" ]; then
 	DEPLOY_SCRIPT=golive
@@ -31,29 +34,64 @@ rm -f zend_vfr.tar
 rm -f zend_vfr.tar.gz
 
 echo -e "\E[32mCreating code archive\E[37m"
-tar cf zend_vfr.tar \
+tar cfp zend_vfr.tar \
 public/.htaccess \
+public/.htaccess-beta \
 public/css/admin/controlpanel.css \
 public/css/villastorent.css \
 public/index.php \
 public/robots.txt \
+public/js/admin/set-property-expiry.js \
+public/js/admin/set-location.js \
+public/js/vfr/admin/seturl.js \
+public/js/vfr/step4-rates.js \
+public/js/vfr/step5-availability.js \
 application/Bootstrap.php \
+application/Command.php \
 application/configs/application.ini \
 application/configs/navigation.xml \
+application/configs/passwd.txt \
 application/modules/admin/Bootstrap.php \
 application/modules/admin/controllers/AdvertiserController.php \
 application/modules/admin/controllers/ErrorController.php \
 application/modules/admin/controllers/FastLookupController.php \
 application/modules/admin/controllers/IndexController.php \
+application/modules/admin/controllers/MigratePhotosController.php \
+application/modules/admin/controllers/PropertyController.php \
 application/modules/admin/layouts/scripts/layout.phtml \
+application/modules/admin/forms/LocationSelectForm.php \
+application/modules/admin/forms/PropertyApprovalForm.php \
+application/modules/admin/forms/PropertyExpiryForm.php \
+application/modules/admin/forms/PropertyUpdateApprovalForm.php \
+application/modules/admin/forms/UrlNameForm.php \
+application/modules/admin/views/helpers/ApprovalLocation.php \
+application/modules/admin/views/helpers/ApproveProperty.php \
+application/modules/admin/views/helpers/LocationUrl.php \
+application/modules/admin/views/helpers/PropertyExpiry.php \
+application/modules/admin/views/helpers/ToggleDirection.php \
 application/modules/admin/views/scripts/advertiser/index.phtml \
 application/modules/admin/views/scripts/fast-lookup/purge-table.phtml \
 application/modules/admin/views/scripts/fast-lookup/create-table.phtml \
 application/modules/admin/views/scripts/index/index.phtml \
+application/modules/admin/views/scripts/index/list-awaiting-initial-approval.phtml \
+application/modules/admin/views/scripts/pagination.phtml \
+application/modules/admin/views/scripts/property/approve-property.phtml \
+application/modules/admin/views/scripts/property/list-awaiting-update-approval.phtml \
+application/modules/admin/views/scripts/property/list.phtml \
+application/modules/admin/views/scripts/property/set-expiry.phtml \
+application/modules/admin/views/scripts/property/set-location.phtml \
+application/modules/admin/views/scripts/property/set-url-name.phtml \
+application/modules/admin/views/scripts/property/view-update-approval.phtml \
+application/modules/api/controllers/PropertyController.php \
+application/modules/api/views/scripts/property/get.xml.phtml \
+application/modules/common/models/Acl/Role/Admin.php \
+application/modules/common/models/Acl/Role/Advertiser.php \
+application/modules/common/models/Acl/Role/Guest.php \
+application/modules/common/models/Acl/Role/Member.php \
 application/modules/common/models/Administrator.php \
 application/modules/common/models/Advertiser.php \
-application/modules/common/models/Availability.php \
-application/modules/common/models/Calendars.php \
+application/modules/common/models/Api.php \
+application/modules/common/models/Calendar.php \
 application/modules/common/models/CountryList.php \
 application/modules/common/models/Currency.php \
 application/modules/common/models/DisapprovalStandardComments.php \
@@ -61,6 +99,7 @@ application/modules/common/models/FastLookup.php \
 application/modules/common/models/IsoLanguageCodes.php \
 application/modules/common/models/Location.php \
 application/modules/common/models/Messages.php \
+application/modules/common/models/Photo.php \
 application/modules/common/models/Property.php \
 application/modules/common/models/resources/Administrator/Interface.php \
 application/modules/common/models/resources/Administrator/Row.php \
@@ -70,6 +109,14 @@ application/modules/common/models/resources/Advertiser/Interface.php \
 application/modules/common/models/resources/Advertiser/Row.php \
 application/modules/common/models/resources/Advertiser/Rowset.php \
 application/modules/common/models/resources/Advertiser.php \
+application/modules/common/models/resources/AdvertiserApiAccount/Row.php \
+application/modules/common/models/resources/AdvertiserApiAccount/Rowset.php \
+application/modules/common/models/resources/AdvertiserApiAccount/Interface.php \
+application/modules/common/models/resources/AdvertiserApiAccount.php \
+application/modules/common/models/resources/ApiAccount/Row.php \
+application/modules/common/models/resources/ApiAccount/Rowset.php \
+application/modules/common/models/resources/ApiAccount/Interface.php \
+application/modules/common/models/resources/ApiAccount.php \
 application/modules/common/models/resources/Availability/Interface.php \
 application/modules/common/models/resources/Availability/Row.php \
 application/modules/common/models/resources/Availability/Rowset.php \
@@ -82,6 +129,10 @@ application/modules/common/models/resources/Country/Interface.php \
 application/modules/common/models/resources/Country/Row.php \
 application/modules/common/models/resources/Country/Rowset.php \
 application/modules/common/models/resources/Country.php \
+application/modules/common/models/resources/Currency/Interface.php \
+application/modules/common/models/resources/Currency/Row.php \
+application/modules/common/models/resources/Currency/Rowset.php \
+application/modules/common/models/resources/Currency.php \
 application/modules/common/models/resources/Destination/Interface.php \
 application/modules/common/models/resources/Destination/Row.php \
 application/modules/common/models/resources/Destination/Rowset.php \
@@ -94,6 +145,8 @@ application/modules/common/models/resources/FastLookup/Interface.php \
 application/modules/common/models/resources/FastLookup/Row.php \
 application/modules/common/models/resources/FastLookup/Rowset.php \
 application/modules/common/models/resources/FastLookup.php \
+application/modules/common/models/resources/HolidayType/Interface.php \
+application/modules/common/models/resources/HolidayType.php \
 application/modules/common/models/resources/Photo/Interface.php \
 application/modules/common/models/resources/Photo/Row.php \
 application/modules/common/models/resources/Photo/Rowset.php \
@@ -106,6 +159,8 @@ application/modules/common/models/resources/PropertyContent/Interface.php \
 application/modules/common/models/resources/PropertyContent/Row.php \
 application/modules/common/models/resources/PropertyContent/Rowset.php \
 application/modules/common/models/resources/PropertyContent.php \
+application/modules/common/models/resources/PropertyContentField/Interface.php \
+application/modules/common/models/resources/PropertyContentField.php \
 application/modules/common/models/resources/PropertyType/Interface.php \
 application/modules/common/models/resources/PropertyType/Row.php \
 application/modules/common/models/resources/PropertyType/Rowset.php \
@@ -122,50 +177,141 @@ application/modules/common/plugins/Layout.php \
 application/modules/frontend/Bootstrap.php \
 application/modules/frontend/controllers/AdvertiserAccountController.php \
 application/modules/frontend/controllers/AdvertiserAuthenticationController.php \
+application/modules/frontend/controllers/AdvertiserAvailabilityController.php \
+application/modules/frontend/controllers/AdvertiserContinueController.php \
+application/modules/frontend/controllers/AdvertiserImageManagerController.php \
 application/modules/frontend/controllers/AdvertiserPasswordReminderController.php \
+application/modules/frontend/controllers/AdvertiserPropertyController.php \
+application/modules/frontend/controllers/AdvertiserRatesController.php \
 application/modules/frontend/controllers/AdvertiserRegistrationController.php \
+application/modules/frontend/controllers/AvailabilityImageController.php \
 application/modules/frontend/controllers/DisplayFullPropertyController.php \
 application/modules/frontend/controllers/ErrorController.php \
+application/modules/frontend/controllers/ImageCacheController.php \
 application/modules/frontend/controllers/IndexController.php \
 application/modules/frontend/controllers/LevelController.php \
-application/modules/frontend/forms/AdvertiserLoginForm.php \
-application/modules/frontend/forms/AdvertiserRegistrationForm.php \
+application/modules/frontend/forms/Advertiser/LoginForm.php \
+application/modules/frontend/forms/Advertiser/PasswordReminderForm.php \
+application/modules/frontend/forms/Advertiser/RegistrationForm.php \
+application/modules/frontend/forms/Step1LocationForm.php \
+application/modules/frontend/forms/Step2ContentForm.php \
+application/modules/frontend/forms/Step3PicturesForm.php \
+application/modules/frontend/forms/Step4BaseCurrency.php \
+application/modules/frontend/forms/Step4RateDeleteConfirmForm.php \
+application/modules/frontend/forms/Step4RateEditForm.php \
+application/modules/frontend/forms/Step4RatesForm.php \
+application/modules/frontend/forms/Step4RentalBasis.php \
+application/modules/frontend/forms/Step5AvailabilityDeleteConfirmForm.php \
+application/modules/frontend/forms/Step5AvailabilityEditForm.php \
+application/modules/frontend/forms/Step5AvailablityForm.php \
+application/modules/frontend/helpers/LevelSummary.php \
+application/modules/frontend/helpers/FeaturedProperty.php \
 application/modules/frontend/layouts/scripts/fullscreen.phtml \
 application/modules/frontend/layouts/scripts/layout.phtml \
-application/modules/frontend/models/AdvertiserAcl.php \
+application/modules/frontend/models/Acl/Frontend.php \
 application/modules/frontend/plugins/AdvertiserAccessCheck.php \
+application/modules/frontend/views/emails/admin-new-advertiser-join.txt \
+application/modules/frontend/views/emails/advertiser-password-reminder.html \
+application/modules/frontend/views/emails/advertiser-password-reminder.txt \
+application/modules/frontend/views/helpers/PhotoGrid.php \
 application/modules/frontend/views/scripts/advertiser-account/home.phtml \
 application/modules/frontend/views/scripts/advertiser-authentication/login.phtml \
 application/modules/frontend/views/scripts/advertiser-authentication/logout.phtml \
+application/modules/frontend/views/scripts/advertiser-availability/delete-confirm.phtml \
+application/modules/frontend/views/scripts/advertiser-availability/edit.phtml \
+application/modules/frontend/views/scripts/advertiser-image-manager/confirm.phtml \
 application/modules/frontend/views/scripts/advertiser-password-reminder/index.phtml \
+application/modules/frontend/views/scripts/advertiser-password-reminder/sent-confirm.phtml \
+application/modules/frontend/views/scripts/advertiser-property/complete-confirmation.phtml \
+application/modules/frontend/views/scripts/advertiser-property/step1-location.phtml \
+application/modules/frontend/views/scripts/advertiser-property/step2-content.phtml \
+application/modules/frontend/views/scripts/advertiser-property/step3-pictures.phtml \
+application/modules/frontend/views/scripts/advertiser-property/step4-rates.phtml \
+application/modules/frontend/views/scripts/advertiser-property/step5-availability.phtml \
+application/modules/frontend/views/scripts/advertiser-property/update-send-confirmation.phtml \
+application/modules/frontend/views/scripts/advertiser-rates/base-currency.phtml \
+application/modules/frontend/views/scripts/advertiser-rates/delete-confirm.phtml \
+application/modules/frontend/views/scripts/advertiser-rates/edit.phtml \
+application/modules/frontend/views/scripts/advertiser-rates/rental-basis.phtml \
+application/modules/frontend/views/scripts/advertiser-registration/register.phtml \
 application/modules/frontend/views/scripts/display-full-property/index.phtml \
 application/modules/frontend/views/scripts/error/error.phtml \
 application/modules/frontend/views/scripts/index/index.phtml \
+application/modules/frontend/views/scripts/level/country.phtml \
+application/modules/frontend/views/scripts/level/region.phtml \
+application/modules/frontend/views/scripts/level/destination.phtml \
+application/modules/frontend/views/scripts/partials/featured-property.phtml \
+application/modules/frontend/views/scripts/partials/property-summary.phtml \
+crons/sendmailqueue.php \
+library/Vfr/Acl/Interface.php \
+library/Vfr/Availability/Calendar/Exception.php \
+library/Vfr/Availability/Calendar/ImagePng.php \
+library/Vfr/Availability/Calendar/Object.php \
+library/Vfr/Controller/Helper/Acl.php \
+library/Vfr/Form/Element/AvailabilityRangePicker.php \
+library/Vfr/Form/Element/RatesRangePicker.php \
+library/Vfr/Image/Processor.php \
 library/Vfr/Model/Abstract.php \
+library/Vfr/Model/Acl/Abstract.php \
+library/Vfr/Model/Acl/Interface.php \
+library/Vfr/Model/Exception.php \
 library/Vfr/Model/Interface.php \
 library/Vfr/Model/Resource/Db/Table/Abstract.php \
 library/Vfr/Model/Resource/Db/Table/Row/Abstract.php \
-library/Vfr/Model/Resource/Db/Table/Rowset/Abstract.php
+library/Vfr/Model/Resource/Db/Table/Rowset/Abstract.php \
+library/Vfr/Model/Exception.php \
+library/Vfr/Property/Converter.php \
+library/Vfr/Validate/AvailabilityRange.php \
+library/Vfr/Validate/RatesRange.php \
+library/Vfr/Validate/EmailCheck.php \
+library/Vfr/Validate/PasswordConfirmation.php \
+library/Vfr/Validate/PropertyUrl.php \
+library/Vfr/Validate/UniqueAdvertiserEmail.php \
+library/Vfr/View/Helper/AdvertiserControlPanelStatus.php \
+library/Vfr/View/Helper/AspectRatio.php \
+library/Vfr/View/Helper/AvailabilityNotifier.php \
+library/Vfr/View/Helper/AvailabilityPicker.php \
+library/Vfr/View/Helper/BaseCurrency.php \
+library/Vfr/View/Helper/Bytes.php \
+library/Vfr/View/Helper/DateRangeRates.php \
+library/Vfr/View/Helper/DisplayErrors.php \
+library/Vfr/View/Helper/HolidayType.php \
+library/Vfr/View/Helper/ImageConfirmDeleteButton.php \
+library/Vfr/View/Helper/ImageMoveButtons.php \
+library/Vfr/View/Helper/ImageUploadNotifier.php \
+library/Vfr/View/Helper/LocationBreadcrumb.php \
+library/Vfr/View/Helper/MinStayDuration.php \
+library/Vfr/View/Helper/Photo.php \
+library/Vfr/View/Helper/PrettyDate.php \
+library/Vfr/View/Helper/PropertyTinyThumb.php \
+library/Vfr/View/Helper/PropertyType.php \
+library/Vfr/View/Helper/RateCurrency.php \
+library/Vfr/View/Helper/RatesNotifier.php \
+library/Vfr/View/Helper/RatesPicker.php \
+library/Vfr/View/Helper/RentalBasis.php \
+library/Vfr/View/Helper/SummaryBar.php \
+library/Vfr/View/Helper/TinyThumb.php
 
 if [ "$INC_SCHEMA" = "y" ]; then
 	echo -e "\E[32mAppending Schema to archive\E[37m"
-	tar rf zend_vfr.tar \
+	tar rfp zend_vfr.tar \
 	schema/Administrators.sql \
+    schema/AdvertiserApiAccounts.sql \
 	schema/Advertisers.sql \
+    schema/ApiAccounts.sql \
 	schema/Availability.sql \
 	schema/Calendars.sql \
-	schema/CountriesQuickCount.sql \
 	schema/Countries.sql \
 	schema/CountryList.sql \
 	schema/Currencies.sql \
 	schema/CurrencyConversions.sql \
-	schema/DestinationsQuickCount.sql \
 	schema/Destinations.sql \
 	schema/DisapprovalStandardComments.sql \
 	schema/Enquiries.sql \
 	schema/Facilities.sql \
 	schema/FastLookups.sql \
 	schema/IsoLanguageCodes.sql \
+    schema/Loctions.sql \
 	schema/MembersFavoriteProperties.sql \
 	schema/Members.sql \
 	schema/Messages.sql \
@@ -175,17 +321,13 @@ if [ "$INC_SCHEMA" = "y" ]; then
 	schema/Payments.sql \
 	schema/PhotoApprovals.sql \
 	schema/Photos.sql \
-	schema/PropertiesContentFields.sql \
 	schema/PropertiesContent.sql \
 	schema/PropertiesFacilities.sql \
 	schema/Properties.sql \
 	schema/PropertiesStatistics.sql \
 	schema/PropertyTypes.sql \
 	schema/Rates.sql \
-	schema/RegionsQuickCount.sql \
 	schema/Regions.sql \
-	schema/RemoteAccess.sql \
-	schema/RemoteServices.sql \
 	schema/Services.sql \
 	schema/setup_db.sql \
 	schema/TaxCodes.sql \
@@ -195,22 +337,91 @@ fi
 
 if [ "$INC_IMAGES" = "y" ]; then
 	echo -e "\E[32mAppending Images to archive\E[37m"
-	tar rf zend_vfr.tar \
+	tar rfp zend_vfr.tar \
+    public/images/accountsummary/availability_green.png \
+    public/images/accountsummary/availability_grey.png \
+    public/images/accountsummary/availability_orange.png \
+    public/images/accountsummary/content_green.png \
+    public/images/accountsummary/content_grey.png \
+    public/images/accountsummary/content_orange.png \
+    public/images/accountsummary/location_green.png \
+    public/images/accountsummary/location_grey.png \
+    public/images/accountsummary/location_orange.png \
+    public/images/accountsummary/pictures_green.png \
+    public/images/accountsummary/pictures_grey.png \
+    public/images/accountsummary/pictures_orange.png \
+    public/images/accountsummary/rates_green.png \
+    public/images/accountsummary/rates_grey.png \
+    public/images/accountsummary/rates_orange.png \
+    public/images/admin/bluecross.png \
 	public/images/admin/gradient1.png \
+    public/images/admin/move_down.gif \
+    public/images/admin/move_down_inactive.gif \
+    public/images/admin/move_up.gif \
+    public/images/admin/move_up_inactive.gif \
+    public/images/admin/tablenav/ascend.gif \
+    public/images/admin/tablenav/n_b_interval_100.gif  \
+    public/images/admin/tablenav/n_b_interval_10_inv.gif \
+    public/images/admin/tablenav/n_b_interval_30.gif  \
+    public/images/admin/tablenav/n_b_interval_50_inv.gif \
+    public/images/admin/tablenav/n_skip_last.gif \
+    public/images/admin/tablenav/n_skip_next_inactive.gif \
+    public/images/admin/tablenav/descend.gif \
+    public/images/admin/tablenav/n_b_interval_100_inv.gif \
+    public/images/admin/tablenav/n_b_interval_20.gif \
+    public/images/admin/tablenav/n_b_interval_30_inv.gif \
+    public/images/admin/tablenav/n_skip_first.gif \
+    public/images/admin/tablenav/n_skip_last_inactive.gif \
+    public/images/admin/tablenav/n_skip_previous.gif \
+    public/images/admin/tablenav/down_arrow.gif \
+    public/images/admin/tablenav/n_b_interval_10.gif \
+    public/images/admin/tablenav/n_b_interval_20_inv.gif \
+    public/images/admin/tablenav/n_b_interval_50.gif \
+    public/images/admin/tablenav/n_skip_first_inactive.gif \
+    public/images/admin/tablenav/n_skip_next.gif \
+    public/images/admin/tablenav/n_skip_previous_inactive.gif \
 	public/images/cards.gif \
-	public/images/villarental.png \
+	public/images/header.jpg \
+    public/images/progressheader/availability_green.png \
+    public/images/progressheader/availability_grey.png \
+    public/images/progressheader/availability_orange.png \
+    public/images/progressheader/content_green.png \
+    public/images/progressheader/content_grey.png \
+    public/images/progressheader/content_orange.png \
+    public/images/progressheader/location_green.png \
+    public/images/progressheader/location_grey.png \
+    public/images/progressheader/location_orange.png \
+    public/images/progressheader/pictures_green.png \
+    public/images/progressheader/pictures_grey.png \
+    public/images/progressheader/pictures_orange.png \
+    public/images/progressheader/rates_green.png \
+    public/images/progressheader/rates_grey.png \
+    public/images/progressheader/rates_orange.png \
+	public/images/tile.gif \
 	public/images/zend_framework.png
 fi
 
 if [ "$INC_ZEND" = "y" ]; then
 	echo -e "\E[32mAppending Zend Framework to archive\E[37m"
-	tar rfh zend_vfr.tar library/Zend
+	tar rfhp zend_vfr.tar library/Zend \
+    library/ZendX
 fi
 
 if [ "$INC_YUI2" = "y" ]; then
 	echo -e "\E[32mAppending YUI2 to archive\E[37m"
-	tar rfh zend_vfr.tar public/yui2
+	tar rfhp zend_vfr.tar public/js/yui2
 fi
+
+if [ "$INC_JQUERY" = "y" ]; then
+	echo -e "\E[32mAppending jQuery/UI/Theme to archive\E[37m"
+    tar rfhp zend_vfr.tar \
+    public/js/jquery/jquery-1.6.js \
+    public/js/jquery/jquery-1.6.min.js \
+    public/js/jquery-ui-1.8.12 \
+    public/js/jquery-ui-themes-1.8.12 \
+    public/js/jquery-plugins/jstree-1.0
+fi
+
 
 echo -e "\E[32mCompressing archive\E[37m"
 gzip -9 -f zend_vfr.tar
@@ -219,18 +430,18 @@ echo -e "\E[32mSending to server...\E[37m"
 #
 # upload the archive to the beta server
 #
-scp -P22002 -p -C zend_vfr.tar.gz andy@mrgrey.villasforrent.net:$DEPLOY_DIR
+scp -P22 -p -C zend_vfr.tar.gz andy@mrgrey.villasforrent.net:$DEPLOY_DIR
 
 echo -e "\E[32mRunning remote process to unbundle the package\E[37m"
-scp -P22002 -p -C $DEPLOY_SCRIPT andy@villasforrent.net:$DEPLOY_DIR
+scp -P22 -p -C $DEPLOY_SCRIPT andy@villasforrent.net:$DEPLOY_DIR
 
-ssh -p22002 andy@mrgrey.villasforrent.net $DEPLOY_DIR/$DEPLOY_SCRIPT
+ssh -p22 andy@mrgrey.villasforrent.net $DEPLOY_DIR/$DEPLOY_SCRIPT
 
 
-CMD="ssh -p22002 andy@mrgrey.villasforrent.net 'rm /var/www/beta.villasforrent.net/gobeta'"
-ssh -p22002 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/gobeta'
-ssh -p22002 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/golive'
-ssh -p22002 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/zend_vfr.tar.gz'
+CMD="ssh -p22 andy@mrgrey.villasforrent.net 'rm /var/www/beta.villasforrent.net/gobeta'"
+ssh -p22 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/gobeta'
+ssh -p22 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/golive'
+ssh -p22 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/zend_vfr.tar.gz'
 
 echo -e "\E[32mCleaning up local files\E[37m"
 rm -f zend_vfr.tar.gz

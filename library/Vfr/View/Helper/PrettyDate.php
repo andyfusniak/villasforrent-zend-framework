@@ -1,11 +1,26 @@
 <?php
 class Vfr_View_Helper_PrettyDate extends Zend_View_Helper_Abstract
 {
-    public function prettyDate($mysqlDate)
+	const STYLE_DEFAULT		= 1;
+	const STYLE_DD_MMM_YY	= 2;
+	
+    public function prettyDate($mysqlDate, $style=self::STYLE_DEFAULT)
     {
+		if ($mysqlDate == null)
+			return 'not set';
+		
         $timestamp = strtotime($mysqlDate);
         
-        return $this->_datePostFixString(strftime("%d", $timestamp)) . ' ' . strftime("%b %Y", $timestamp);
+		switch ($style) {
+			case self::STYLE_DD_MMM_YY:
+				return strtoupper(strftime("%d-%b-%y", $timestamp));
+			break;
+		
+			case self::STYLE_DEFAULT:
+			default:
+				return $this->_datePostFixString(strftime("%d", $timestamp)) . ' ' . strftime("%b %Y", $timestamp);
+			break;
+		}
     }
     
     private function _datePostFixString($day) {

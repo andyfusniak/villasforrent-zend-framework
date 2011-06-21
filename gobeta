@@ -1,6 +1,6 @@
 #!/bin/bash
 cd /var/www/beta.villasforrent.net/
-tar zxf zend_vfr.tar.gz
+tar zxfp zend_vfr.tar.gz
 
 directory="./data"
 if [ ! -d $directory ]; then
@@ -15,3 +15,6 @@ else
 		chmod g+rw data/logs/application.log
 	fi
 fi
+
+mv /var/www/beta.villasforrent.net/public/.htaccess-beta /var/www/beta.villasforrent.net/public/.htaccess
+chgrp devteam -fR *

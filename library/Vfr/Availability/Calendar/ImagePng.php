@@ -6,9 +6,7 @@ require_once 'Vfr/Availability/Calendar/Exception.php';
 require_once 'Vfr/Availability/Calendar/Object.php';
 
 class Vfr_Availability_Calendar_ImagePng
-{
-    const FONT_CODE = 4;
-    
+{   
 	const RENDER_NORMAL = 1;
 	const RENDER_MIDDLE = 2;
 	const RENDER_END = 3;
@@ -56,11 +54,11 @@ class Vfr_Availability_Calendar_ImagePng
 		if (!($availability instanceof Common_Resource_Availability_Rowset))
 			throw new Vfr_Availability_Calendar_Exception('Wrong parameter type for availability');
 		
-		$this->_settings = $settings;
+		$this->_settings 	 = $settings;
 		$this->_availability = $availability;
 		
 		$this->_startTimestamp = $starttime;
-		$this->_endTimestamp = $endtime;
+		$this->_endTimestamp   = $endtime;
 
 		//exit;
 		//$this->_setup(); // now a public function
@@ -175,31 +173,37 @@ class Vfr_Availability_Calendar_ImagePng
 			//$this->_stateData[] = $row->endDate . ' 14:00:00';
 			//var_dump($this->_stateData
 			$last = $row->endDate;
-		}
-
-        for ($i=1; $i < $size; $i++) {
-            $row = $this->_availability[$i];
-
-			if ($row->startDate !== $last) {
-				$this->_stateData[] = array(strtotime($last . ' 14:00:00'), self::RENDER_NORMAL);
-				//$this->_stateData[] = $last . ' 14:00:00';
-            	$this->_stateData[] = array(strtotime($row->startDate . ' 14:00:00'), self::RENDER_MIDDLE);
-            	//$this->_stateData[] = $row->startDate . ' 14:00:00';
+		
+			for ($i=1; $i < $size; $i++) {
+				$row = $this->_availability[$i];
+	
+				if ($row->startDate !== $last) {
+					$this->_stateData[] = array(strtotime($last . ' 14:00:00'), self::RENDER_NORMAL);
+					//$this->_stateData[] = $last . ' 14:00:00';
+					$this->_stateData[] = array(strtotime($row->startDate . ' 14:00:00'), self::RENDER_MIDDLE);
+					//$this->_stateData[] = $row->startDate . ' 14:00:00';
+				}
+	
+				$last = $row->endDate;
 			}
-
-			$last = $row->endDate;
-        }
-
-		$this->_stateData[] = array(strtotime($last . ' 14:00:00'), self::RENDER_NORMAL);
-		//$this->_stateData[] = $last . ' 14:00:00';
-
-		if (($this->_stateData[0][1] == self::RENDER_NORMAL) && ($this->_stateData[0][0] === $this->_startTimestamp)) {
-			//var_dump("CHOP");
+	
+			$this->_stateData[] = array(strtotime($last . ' 14:00:00'), self::RENDER_NORMAL);
+			//$this->_stateData[] = $last . ' 14:00:00';
+	
+			if (($this->_stateData[0][1] == self::RENDER_NORMAL) && ($this->_stateData[0][0] === $this->_startTimestamp)) {
+				//var_dump("CHOP");
+				$this->_currentRenderState = self::RENDER_NORMAL;
+				$this->_idx++;
+			}
+			
+			$this->_idxLimit = sizeof($this->_stateData);
+		} else {
 			$this->_currentRenderState = self::RENDER_NORMAL;
-			$this->_idx++;
+			$this->_idxLimit = 0;
 		}
 		
-		$this->_idxLimit = sizeof($this->_stateData);
+		
+		//var_dump($this->_idxLimit);
 		//var_dump($this->_stateData);exit;
 
 		//$this->_dumpStateData();exit;
@@ -533,20 +537,20 @@ class Vfr_Availability_Calendar_ImagePng
 						intval(substr($dayNameColour, 4, 2), 16));
 
 
-		$this->_palette['boundaryColour'] = imageColorAllocate($this->_gdImg, 0, 0, 0);
-		$this->_palette['black'] = imageColorAllocate($this->_gdImg, 0, 0, 0);
-		$this->_palette['numbers'] = imageColorAllocate($this->_gdImg, 0x40, 0x44, 0x90);
-		$this->_palette['titlebackground'] = imageColorAllocate($this->_gdImg, 0xb3, 0xc3, 0xe3); 
-		$this->_palette['titleforeground'] = imageColorAllocate($this->_gdImg, 0x40, 0x44, 0x90);
+		$this->_palette['boundaryColour'] 	 = imageColorAllocate($this->_gdImg, 0, 0, 0);
+		$this->_palette['black']		 	 = imageColorAllocate($this->_gdImg, 0, 0, 0);
+		$this->_palette['numbers'] 			 = imageColorAllocate($this->_gdImg, 0x40, 0x44, 0x90);
+		$this->_palette['titlebackground']	 = imageColorAllocate($this->_gdImg, 0xb3, 0xc3, 0xe3); 
+		$this->_palette['titleforeground']	 = imageColorAllocate($this->_gdImg, 0x40, 0x44, 0x90);
 		$this->_palette['weekdaybackground'] = imageColorAllocate($this->_gdImg, 0x84, 0x96, 0xc5); 
 		$this->_palette['weekdayforeground'] = imageColorAllocate($this->_gdImg, 0xff, 0xff, 0xfc);
 		$this->_palette['weekendbackground'] = imageColorAllocate($this->_gdImg, 0xb3, 0xc3, 0xe3);
 		$this->_palette['weekendforeground'] = imageColorAllocate($this->_gdImg, 0xff, 0xff, 0xfc);
-		$this->_palette['calendaredge'] = imageColorAllocate($this->_gdImg, 0x84, 0x96, 0xc5);
-		$this->_palette['white'] = imageColorAllocate($this->_gdImg, 255, 255, 255);
-		$this->_palette['red']   = imageColorAllocate($this->_gdImg, 255, 0, 0);
-		$this->_palette['green'] = imageColorAllocate($this->_gdImg, 0, 255, 0);
-		$this->_palette['blue']  = imageColorAllocate($this->_gdImg, 0, 0, 255);
+		$this->_palette['calendaredge']		 = imageColorAllocate($this->_gdImg, 0x84, 0x96, 0xc5);
+		$this->_palette['white']			 = imageColorAllocate($this->_gdImg, 255, 255, 255);
+		$this->_palette['red']				 = imageColorAllocate($this->_gdImg, 255, 0, 0);
+		$this->_palette['green']			 = imageColorAllocate($this->_gdImg, 0, 255, 0);
+		$this->_palette['blue']				 = imageColorAllocate($this->_gdImg, 0, 0, 255);
 		
 		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 	}
@@ -604,9 +608,9 @@ class Vfr_Availability_Calendar_ImagePng
 							 $this->_palette['titlebackground']);
 	    
         imagestring($this->_gdImg,
-                    self::FONT_CODE,
-                    $x + ($this->_tableWidth / 2) - (imagefontwidth(self::FONT_CODE) * 8 / 2), // 8 chars in 'Nov 2010'
-                    $y + ($this->_settings->getTitleHeight() / 2) - imagefontheight(self::FONT_CODE) / 2,
+                    $this->_settings->getFontCode(),
+                    $x + ($this->_tableWidth / 2) - (imagefontwidth($this->_settings->getFontCode()) * 8 / 2), // 8 chars in 'Nov 2010'
+                    $y + ($this->_settings->getTitleHeight() / 2) - imagefontheight($this->_settings->getFontCode()) / 2,
                     date('M Y', $this->_timestamp),
                     $this->_palette['titleforeground']);
         
@@ -621,7 +625,7 @@ class Vfr_Availability_Calendar_ImagePng
         
         $startDay = intval($this->_settings->getWeekStartDay() % 7);
 		
-		$liney = $y + ($this->_settings->getDayCellHeight() / 2) - imagefontheight(self::FONT_CODE) / 2;
+		$liney = $y + ($this->_settings->getDayCellHeight() / 2) - imagefontheight($this->_settings->getFontCode()) / 2;
         for ($i = $startDay; $i < (7 + $startDay); $i++) {
 			$weekday = ($i % 7);
 			if ((Vfr_Availability_Calendar_Object::DAY_SUNDAY === $weekday) ||
@@ -641,7 +645,7 @@ class Vfr_Availability_Calendar_ImagePng
 								 $this->_palette[$background]);
 
             imagestring($this->_gdImg,
-                        self::FONT_CODE,
+                        $this->_settings->getFontCode(),
                         $x + ($this->_settings->getDayCellWidth() / 2) - 3,
                         $liney,
                         $this->_dayNamesShort[$i%7],
@@ -734,14 +738,14 @@ class Vfr_Availability_Calendar_ImagePng
 	{
         $day = date('j', $this->_timestamp);
         if ($day < 10) {
-            $x+= 1 + intval($this->_settings->getDayCellWidth()  / 2) - imagefontwidth(self::FONT_CODE)  / 2;
-            $y+= 1 + intval($this->_settings->getDayCellHeight() / 2) - imagefontheight(self::FONT_CODE) / 2;
+            $x+= 1 + intval($this->_settings->getDayCellWidth()  / 2) - imagefontwidth($this->_settings->getFontCode())  / 2;
+            $y+= 1 + intval($this->_settings->getDayCellHeight() / 2) - imagefontheight($this->_settings->getFontCode()) / 2;
         } else {
-            $x+= 1 + intval($this->_settings->getDayCellWidth()  / 2) - imagefontwidth(self::FONT_CODE);
-            $y+= 1 + intval($this->_settings->getDayCellHeight() / 2) - (imagefontheight(self::FONT_CODE) / 2);
+            $x+= 1 + intval($this->_settings->getDayCellWidth()  / 2) - imagefontwidth($this->_settings->getFontCode());
+            $y+= 1 + intval($this->_settings->getDayCellHeight() / 2) - (imagefontheight($this->_settings->getFontCode()) / 2);
         }
         imageString($this->_gdImg,
-                    self::FONT_CODE,
+                    $this->_settings->getFontCode(),
                     $x,
                     $y,
                     $day,

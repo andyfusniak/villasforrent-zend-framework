@@ -2,5 +2,6 @@
 *~
 *.swp
 data
+public/properties
 library/Zend
 nbproject

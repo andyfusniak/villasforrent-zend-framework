@@ -58,6 +58,9 @@ class Vfr_Availability_Calendar_Object
 
 	public function __construct()
 	{
+		// font
+		$this->fontCode = 2;
+		
 		// styling
 		$this->weekStartDay = (int) self::DAY_MONDAY;
 		$this->durationMonths = 12;
@@ -99,8 +102,20 @@ class Vfr_Availability_Calendar_Object
 	
 		$this->marginTop    = 4;
 		$this->marginBottom = 4;
-		$this->marginLeft   = 4;
+		$this->marginLeft   = 3;
 		$this->marginRight  = 4;
+	}
+	
+	public function setFontCode($font)
+	{
+		$this->fontCode = $font;
+		
+		return $this;
+	}
+	
+	public function getFontCode()
+	{
+		return $this->fontCode;
 	}
 	
 	public function setCalendarDuration($d)
@@ -157,7 +172,7 @@ class Vfr_Availability_Calendar_Object
 	{
 		$value = (string) $value;
 		
-		$this->colourAvailable = $value;
+		$this->availableColour = $value;
 		
 		return $this;
 	}
@@ -183,7 +198,7 @@ class Vfr_Availability_Calendar_Object
 
 	public function setAvailableColour($value)
 	{
-		$this->availableColour = (string) $value;
+		$this->availableColour = $value;
 		
 		return $this;
 	}
@@ -255,9 +270,23 @@ class Vfr_Availability_Calendar_Object
 		return $this->titleHeight;
 	}
 
+	public function setMarginTop($top)
+	{
+		$this->marginTop = $top;
+		
+		return $this;
+	}
+	
 	public function getMarginTop()
 	{
 		return $this->marginTop;
+	}
+
+	public function setMarginBottom($bottom)
+	{
+		$this->marginBottom = $bottom;
+		
+		return $this;
 	}
 
 	public function getMarginBottom()
@@ -265,15 +294,30 @@ class Vfr_Availability_Calendar_Object
 		return $this->marginBottom;
 	}
 
+	public function setMarginLeft($left)
+	{
+		$this->marginLeft = $left;
+		
+		return $this;
+	}
+	
 	public function getMarginLeft()
 	{
 		return $this->marginLeft;
+	}
+
+	public function setMarginRight($right)
+	{
+		$this->marginRight = $right;
+		
+		return $this;
 	}
 
 	public function getMarginRight()
 	{
 		return $this->marginRight;
 	}
+	
 
 	public function getWeekStartDay()
 	{

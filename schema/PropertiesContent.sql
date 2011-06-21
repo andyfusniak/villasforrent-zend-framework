@@ -15,6 +15,5 @@ CREATE TABLE IF NOT EXISTS PropertiesContent (
     KEY added (added),
     KEY updated (updated),
     CONSTRAINT properties_content_ibfk_1 FOREIGN KEY (idProperty) REFERENCES Properties (idProperty) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT properties_content_ibfk_2 FOREIGN KEY (iso2char) REFERENCES IsoLanguageCodes (iso2char) ON DELETE NO ACTION ON UPDATE CASCADE,
-    CONSTRAINT properties_content_ibfk_3 FOREIGN KEY (idPropertyContentField) REFERENCES PropertiesContentFields (idPropertyContentField) ON DELETE NO ACTION ON UPDATE CASCADE
+    CONSTRAINT properties_content_ibfk_2 FOREIGN KEY (iso2char) REFERENCES IsoLanguageCodes (iso2char) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

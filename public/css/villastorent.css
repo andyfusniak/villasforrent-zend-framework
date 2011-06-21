@@ -1,18 +1,27 @@
-body { font-family:Verdana, Arial, Helvetica, sans-serif; text-align:center; padding:0; margin:0 }
+html {
+    background-image: url(/images/tile.gif);
+    background-repeat: repeat
+}
+body {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0
+}
+
+#doc4 {
+    background-image: none
+}
 h1 { font-size:116%; font-weight:bold; margin:10px 0 10px 0; padding:0; line-height:1.5 }
 h2 { font-size:100%; font-weight:bold; margin:10px 0 10px 0; padding:0; line-height:1.5 }
 h3 { font-size:93%; font-weight: bold; margin:10px 0 10px 0; line-height:1.5 }
-p { margin:10px 0 10px 0; padding:0; font-size:85% }
+/*p { margin:10px 0 10px 0; padding:0; font-size:85% } */
 fieldset { }
 
 dt { font-size:121% }
 input { font-size:121% }
 
-a { border:0; color:#3b5998; background-color:transparent; text-decoration:none }
-a:link { font-weight:normal }
-a:visited { }
-a:hover { text-decoration:underline }
-a:active { }
+
 table { margin:0 0 10px 0 }
 td { font-size:93%; padding:0 }
 td p { margin:0 10px 10px 0; line-height:1.5 }
@@ -20,17 +29,58 @@ td h3 { margin:0 10px 0 0 }
 img { padding:0; margin:0; border:0 }
 ul { line-height: 1.5 }
 span.indent { margin-left:20px }
-#doc4 { width:974px }
-#hd { height:116px; margin:0; padding:0; background:#edeff4; background-image:url(/images/villarental.png); background-repeat:no-repeat; background-position:top left }
-#hd h1 { font-size:77%; line-height:131%; background-color:transparent; color:#9cf; padding:37px 0 0 0; margin:0 0 0 436px }
-#hd p { font-size:85%; color:#039; padding:8px 0 0 15px; margin-bottom:0 }
+
+#hd {
+    margin:0;
+    padding:0;
+    height:201px;
+    background-image: url(/images/header.jpg);
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-color: #fff
+}
+#hd h1 {
+    margin:0;
+    padding:0;
+    padding-left: 10px;
+    padding-top: 3px;
+    font-size:93%; line-height:131%;
+    word-spacing: 0.1em;
+    background-color: transparent;
+    color:#fff  }
+#hd p#strapline {
+    font-size:100%;
+    margin:0;
+    padding:0;
+    margin-top: 115px;
+    padding-left: 28px;
+    color: #002f66
+}
+#hd p#topnav {
+    height: 22px;
+    font-size:100%;
+    /*padding: 132px 0 0 15px;*/
+    margin: 0;
+    margin-top: 13px;
+    padding-top: 3px;
+    padding-left: 31px;
+    background: #3B5998;
+    color: #039
+}
+#hd p a {
+    color:#b1def5
+}
+
+#bd {
+    background-color: #fff
+}
 
 #bd .yui-b { background:#fff; color:#039 }
 #bd .yui-b h1 { font-size:93%; margin:0; padding:4px 3px 4px 8px; background-color:#3b5998; color:#fff; border:1px solid #039 }
-#bd .yui-b ul { margin:0 0px 20px 0px; padding:0px 0px 0px 0px; list-style:none }
-#bd .yui-b ul li { margin:0; padding:0; border-bottom: 1px solid #d6d9de }
-#bd .yui-b ul li a { display:block; font-size:85%; padding:4px 0px 4px 8px; margin:0px 0px 0px 0px; list-style:none;  }
-#bd .yui-b ul li a:hover, #contentleft ul li a:active { text-decoration:none; background:#eceef4 }
+#bd .yui-b ul.menu { margin:0 0px 20px 0px; padding:0px 0px 0px 0px; list-style:none }
+#bd .yui-b ul.menu li { margin:0; padding:0; border-bottom: 1px solid #d6d9de }
+#bd .yui-b ul.menu li a { display:block; font-size:85%; padding:4px 0px 4px 8px; margin:0px 0px 0px 0px; list-style:none;  }
+#bd .yui-b ul.menu li a:hover, #contentleft ul li a:active { text-decoration:none; background:#eceef4 }
 
 
 #bd .yui-b div.form { background-color:#eceff5; color:#333; padding-bottom:20px }
@@ -40,6 +90,10 @@ span.indent { margin-left:20px }
 
 #bd .yui-b div.form fieldset { border:none }
 #bd .yui-b div.form fieldset p { margin:0; padding:0; padding-bottom:1.2em }
+
+#ft {
+    background-color: #fff
+}
 
 /* Definition list layout for forms */
 /*
@@ -61,6 +115,7 @@ dd input, td input { font-family:Verdana, Helvetica, Arial, sans-serif; font-siz
 dd select { font-family:Verdana, Helvetica, Arial, sans-serif; font-size:11px; width:auto; max-width:100%; border: solid 1px #7F9DB9; }
 dd textarea { font-size:1.2em; border: solid 1px #7F9DB9; width:90%; padding:2px }
 */
+
 
 
 ul#property_progress_header { margin:0; padding:0; list-style:none; float:left; min-width:760px }
@@ -87,6 +142,116 @@ ul#property_progress_header li#rates_green { background-image:url("/images/progr
 ul#property_progress_header li#availability_green { width:128px; background-image:url("/images/progressheader/availability_green.png") }
 
 
+ul.summary_bar {}
+ul.summary_bar .normal {
+    margin:0;
+    padding:0;
+    width: 109px;
+    height: 39px;
+    background-repeat: no-repeat;
+}
+ul.summary_bar .end {
+    margin:0;
+    padding:0;
+    width: 87px;
+    height: 39px;
+    background-repeat: no-repeat;
+}
+ul.summary_bar li.location_orange {
+    background-image: url('/images/accountsummary/location_orange.png');
+}
+ul.summary_bar li.location_green {
+    background-image: url('/images/accountsummary/location_green.png');
+}
+ul.summary_bar li.location_grey {
+    background-image: url('/images/accountsummary/location_grey.png');
+}
+
+ul.summary_bar li.content_orange {
+    background-image: url('/images/accountsummary/content_orange.png');
+}
+ul.summary_bar li.content_green {
+    background-image: url('/images/accountsummary/content_green.png');
+}
+ul.summary_bar li.content_grey {
+    background-image: url('/images/accountsummary/content_grey.png');
+}
+
+ul.summary_bar li.pictures_orange {
+    background-image: url('/images/accountsummary/pictures_orange.png');
+}
+ul.summary_bar li.pictures_green {
+    background-image: url('/images/accountsummary/pictures_green.png');
+}
+ul.summary_bar li.pictures_grey {
+    background-image: url('/images/accountsummary/pictures_grey.png');
+}
+
+ul.summary_bar li.rates_orange {
+    background-image: url('/images/accountsummary/rates_orange.png');
+}
+ul.summary_bar li.rates_green {
+    background-image: url('/images/accountsummary/rates_green.png');
+}
+ul.summary_bar li.rates_grey {
+    background-image: url('/images/accountsummary/rates_grey.png');
+}
+
+ul.summary_bar li.availability_orange {
+    background-image: url('/images/accountsummary/availability_orange.png');
+}
+ul.summary_bar li.availability_green {
+    background-image: url('/images/accountsummary/availability_green.png');
+}
+ul.summary_bar li.availability_grey {
+    background-image: url('/images/accountsummary/availability_grey.png');
+}
+
+a.summary_link {
+    font-family: Verdana;
+    font-size: 85%;
+    color: #000;
+    position: relative;
+    top: 18px;
+    left: 6px;
+}
+a.summary_link2 {
+    font-family: Verdana;
+    font-size: 85%;
+    color: #000;
+    position: relative;
+    top: 18px;
+    left: 12px;
+}
+
+ul.errors {
+    margin: 0;
+    padding-left: 20px;
+    background-color: #fcc;
+    border: 1px solid red;
+}
+ul.errors li {
+    padding-left: 30px;
+    font-weight: bold;
+    color: red
+}
+
+div.left  { float:left }
+div.right { float:right }
+
+ul.summary_bar { margin:0; padding:0; list-style:none; float:left }
+ul.summary_bar li { float:left }
+
+div.form div.complete { margin:0; padding:10px; border:1px solid #363; background-color:#cfc }
+div.form div.in_range { margin:0; padding:10px; border:1px solid #363; background-color:#cfc }
+div.form div.below_min { margin:0; padding:10px; border:1px solid #cc3; background-color:#ffc }
+
+#step4 #start, #step4 #end { width: 80px }
+
+#step4 #weeklyRate, #step4 #weekendNightlyRate, #step4 #midweekNightlyRate {
+    width: 60px
+}
+
 /* dialog boxes */
 div.box { font-family:Verdana, Helvetica, Arial, sans-serif; font-size:11px; margin:0 0 20px 0; border:2px solid; background-repeat: no-repeat; background-position:10px 50%; padding:10px 0 10px 40px; font-weight:bold }
 div.success{  border-color:#060; background-color:#cfc; background-image:url("/templates/images/icons/green_tick_trans.png"); color:#090 }
@@ -94,6 +259,17 @@ div.warning { border-color:#c60; background-color:#ff9; background-image:url("/t
 div.error { border-color:#c00; background-color:#f99; background-image:url("/templates/images/icons/red_cross_trans.png"); color:#c00 }
 
 
+p {
+    color: #555;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding:0;
+}
+a { border:0; color:#3b5998; background-color:transparent; font-weight:normal; text-decoration:none }
+a:link {  }
+a:visited { }
+a:hover { text-decoration:underline }
+a:active { }
 
 /*#footer1 { margin-top:16px; padding-top:6px; font-size:0.6em; width:980px;  border-top: 1px solid #d6d9de; color:#666 }
 #footer1 span.left { float:left }

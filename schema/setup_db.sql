@@ -1,7 +1,3 @@
-INSERT INTO Countries (idCountry, name, displayPriority, prefix, postfix, visible, added, updated, lastModifiedBy) VALUES (1, 'Default', 1, '', '', 0, now(), now(), 'system');
-INSERT INTO Regions (idRegion, idCountry, name, displayPriority, prefix, postfix, visible, added, updated, lastModifiedBy) VALUES (1, 1, 'Default', 1, '', '', 0, now(), now(), 'system');
-INSERT INTO Destinations (idDestination, idRegion, name, displayPriority, prefix, postfix, visible, added, updated, lastModifiedBy) VALUES (1, 1, 'Default', 1, '', '', 0, now(), now(), 'system');
-
 INSERT INTO Administrators (idAdministrator, username, passwd, emailAddress, firstname, lastname, added, updated) VALUES(1, 'admin', 'gr3yc4t', 'andy@greycatmedia.co.uk', 'Andy', 'Fusniak', now(), now());
 
 INSERT INTO CountryList (iso2char, name, displayName, iso3char, displayPriority, added, updated, lastModifiedBy, visible) VALUES('AD', 'ANDORRA', 'Andorra', 'AND', 1, '2006-06-21 16:31:02', '2006-06-21 16:31:02', 'system', 1);
@@ -283,39 +279,6 @@ INSERT INTO PhotoApprovals (idPhotoApproval, displayPriority, inUse, name, descr
 INSERT INTO PhotoApprovals (idPhotoApproval, displayPriority, inUse, name, description, added, updated, lastModifiedBy) VALUES(8, 9, 1, 'Unapproved - Too low quality', 'This photo was rejected by a moderator as it was consider too low quality. We recommend you begin with high resolution images and let our server process the images. Using images that have been reduced in size many times before make low quality images and results in few bookings.', now(), now(), 'system');
 INSERT INTO PhotoApprovals (idPhotoApproval, displayPriority, inUse, name, description, added, updated, lastModifiedBy) VALUES(9, 10, 1, 'Unapproved - Contains whitespace / padding', 'This photo was rejected as     it contains whitespace/padding and causing page skew problems in our search results', now(), now(), 'system');
 
-
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(1, 'location_url', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(2, 'meta_data', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(3, 'seo_data', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(4, 'website', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(5, 'headline1', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(6, 'headline2', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(7, 'summary', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(8, 'description', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(9, 'bedroom_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(10, 'bathroom_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(11, 'kitchen_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(12, 'utility_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(13, 'living_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(14, 'other_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(15, 'service_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(16, 'notes_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(17, 'access_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(18, 'outside_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(19, 'golf_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(20, 'skiing_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(21, 'special_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(22, 'beach_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(23, 'travel_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(24, 'booking_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(25, 'testimonials_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(26, 'changeover_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(27, 'contact_desc', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(28, 'country', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(29, 'region', NULL, now(), now());
-INSERT INTO PropertiesContentFields (idPropertyContentField, name, description, added, updated) VALUES(30, 'location', NULL, now(), now());
-
-
 INSERT INTO PropertyTypes (idPropertyType, name, displayPriority, inUse, added, updated, lastModifiedBy) VALUES(1, 'Villa', 1, 1, now(), now(), 'system');
 INSERT INTO PropertyTypes (idPropertyType, name, displayPriority, inUse, added, updated, lastModifiedBy) VALUES(2, 'Apartment', 2, 1, now(), now(), 'system');
 INSERT INTO PropertyTypes (idPropertyType, name, displayPriority, inUse, added, updated, lastModifiedBy) VALUES(3, 'Chalet', 3, 1, now(), now(), 'system');
@@ -327,6 +290,4 @@ INSERT INTO PropertyTypes (idPropertyType, name, displayPriority, inUse, added, 
 INSERT INTO PropertyTypes (idPropertyType, name, displayPriority, inUse, added, updated, lastModifiedBy) VALUES(9, 'Townhouse', 9, 1, now(), now(), 'system');
 INSERT INTO PropertyTypes (idPropertyType, name, displayPriority, inUse, added, updated, lastModifiedBy) VALUES(10, 'Mill House', 10, 1, now(), now(), 'system');
 
-
-INSERT INTO RemoteServices (idRemoteService, name, added) VALUES(1, 'AJAX - Get Property Details', now());
-
+ 

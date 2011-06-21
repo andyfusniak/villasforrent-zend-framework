@@ -8,11 +8,15 @@ CREATE TABLE IF NOT EXISTS Rates (
     weeklyRate decimal(8,2) DEFAULT '0.00',
     weekendNightlyRate decimal(8,2) DEFAULT '0.00',
     midweekNightlyRate decimal(8,2) DEFAULT '0.00',
+    added datetime NOT NULL,
+    updated datetime NOT NULL,
     PRIMARY KEY (idRate), 
 	UNIQUE KEY (idCalendar, startDate, endDate),
     KEY minStayDays (minStayDays),
     KEY weeklyRate (weeklyRate),
     KEY weekendNightlyRate (weekendNightlyRate),
     KEY midweekNightlyRate (midweekNightlyRate),
+    KEY added (added),
+    KEY updated (updated),
     CONSTRAINT rates_ibfk_1 FOREIGN KEY (idCalendar) REFERENCES Calendars (idCalendar) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
