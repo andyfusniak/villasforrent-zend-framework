@@ -17,19 +17,18 @@
     <?php echo $this->headScript() ?>
 	
 	<?php if ('live' == APPLICATION_ENV): ?>
-	<script type="text/javascript">
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-23961822-1']);
-	_gaq.push(['_trackPageview']);
-  
-	(function() {
-	  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-	</script>
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-24254189-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
 	<?php endif ?>
-	
 </head>
 <body>
 <div id="doc4" class="yui-t2">
@@ -63,11 +62,11 @@
 				<?php endif ?>
 			</ul>
             
-            <div id="browse_country">
-                <h1>Browse By Country</h1>
+            <div>
+                <h1>Browse World Locations</h1>
                 <ul>
-                    <?php foreach ($this->countryFastLookupRowset as $row): ?>
-                    <li><a href="/in/<?php echo $row->url ?>"><?php echo $this->escape($row->countryName) ?> (<?php echo $row->totalVisible ?>)</a></li>
+                    <?php foreach ($this->locationRowset as $row): ?>
+                    <li><a href="/in/<?php echo $row->url ?>"><?php echo $this->escape($row->name) ?> (<?php echo $row->totalVisible ?>)</a></li>
                     <?php endforeach ?>
                 </ul>
             </div>
