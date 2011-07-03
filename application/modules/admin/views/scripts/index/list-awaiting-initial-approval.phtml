@@ -32,11 +32,11 @@
 	<tr>
 		<td><?php echo $row->idProperty ?></td>
 		<td><?php echo $this->propertyType($row->idPropertyType) ?></td>
-		<td><?php echo $this->approvalLocation($row->idProperty, $row->idCountry, $row->idRegion, $row->idDestination) ?></td>
+		<td><?php echo $this->approvalLocation($row->idProperty, $row->idLocation) ?></td>
 		<td><?php echo $this->prettyDate($row->added) ?></td>
 		<td><?php echo $this->locationUrl($row->idProperty, $row->urlName) ?></td>
 		<td><?php echo $this->propertyExpiry($row->idProperty, $row->expiry) ?></td>
-		<td><?php echo $this->approveProperty($row->idProperty, $row->idCountry, $row->idRegion, $row->idDestination, $row->urlName, $row->expiry) ?></td>
+		<td><?php echo $this->approveProperty($row->idProperty, $row->idLocation, $row->urlName, $row->expiry) ?></td>
 	</tr>
     <?php endforeach ?>
 </table>

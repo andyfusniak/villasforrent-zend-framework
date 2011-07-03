@@ -8,7 +8,6 @@ class LevelController extends Zend_Controller_Action
     
     public function init()
     {
-        $this->_fastLookupModel = new Common_Model_FastLookup();
         $this->_locationModel   = new Common_Model_Location();
         
         // get the destination from the configuration
@@ -16,90 +15,105 @@ class LevelController extends Zend_Controller_Action
 		$this->_featuredConfig = $bootstrap['vfr']['featured'];
     }
     
+	public function locationAction()
+	{
+		$url = $this->getRequest()->getParam('1');
+		$locationRow = $this->_locationModel->lookup($url);
+		
+		if ($locationRow === null) {
+			$this->getResponse()->setHttpResponseCode(404);
+			die("missing page");
+			return;
+		}
+		
+		if ($locationRow->idProperty === null) {
+			
+		}
+		
+		$parts = explode('/', $url);
+		
+		var_dump($parts);
+		
+		var_dump($locationRow);
+		die();
+	}
+	
     public function countryAction()
     {
-        $lookupUrl = $this->getRequest()->getParam('country');
-        $fastLookupRow  = $this->_fastLookupModel->lookup($lookupUrl);
+        $uri = $this->getRequest()->getParam('uri');
+        $locationRow = $this->_locationModel->lookup($uri);
         
-        if (!$fastLookupRow) {
+        if (!$locationRow) {
             $this->getResponse()->setHttpResponseCode(404);
             return;
         }
         
         // get the list of regions within this country
-        $fastLookupRowset = $this->_locationModel->getFastAllRegions($fastLookupRow->idCountry);
-        
+		$idParent = $locationRow->idLocation;
+        $locationRowset = $this->_locationModel->getAllLocationsIn($idParent);
         
         // get the summary for this level
-        $this->_helper->levelSummary($fastLookupRow->idCountry, null, null);
+        $this->_helper->levelSummary($locationRow->url);
         
         // get the country level featured properties
-        $this->_helper->featuredProperty(Common_Resource_Property::FEATURE_MASK_COUNTRY, $this->_featuredConfig['limit_per_page'],
-                                         $fastLookupRow->idCountry);
-        
-        //var_dump($fastLookupRow);
-        
+        $this->_helper->featuredProperty(Common_Resource_Property::FEATURE_MASK_COUNTRY,
+										 $this->_featuredConfig['limit_per_page'],
+                                         $locationRow->url);
         // pass results to the view
         $this->view->assign( array (
-            'countryName'      => $fastLookupRow->countryName,
-            'fastLookupRow'    => $fastLookupRow,
-            'fastLookupRowset' => $fastLookupRowset
+			'locationRow'	  => $locationRow,
+            'locationRowset'  => $locationRowset
         ));
     }
     
     public function regionAction()
     {
-        $lookupUrl = $this->getRequest()->getParam('country') . '/' . $this->getRequest()->getParam('region');
-        $fastLookupRow  = $this->_fastLookupModel->lookup($lookupUrl);
+        $uri = $this->getRequest()->getParam('uri');
+        $locationRow = $this->_locationModel->lookup($uri);
         
-        if (!$fastLookupRow) {
+        if (!$locationRow) {
             $this->getResponse()->setHttpResponseCode(404);
             return;
         }
 
         // get the list of destinations within this region
-        $fastLookupRowset = $this->_locationModel->getFastAllDestinations($fastLookupRow->idRegion);
-
-        // get the level summary
-        $this->_helper->levelSummary($fastLookupRow->idCountry, $fastLookupRow->idRegion, null);
+		$idParent = $locationRow->idLocation;
+        $locationRowset = $this->_locationModel->getAllLocationsIn($idParent);
+		
+        // get the summary for this level
+        $this->_helper->levelSummary($locationRow->url);
 
         // get the region level featured properties
-        $this->_helper->featuredProperty(Common_Resource_Property::FEATURE_MASK_REGION, $this->_featuredConfig['limit_per_page'],
-                                         $fastLookupRow->idCountry,
-                                         $fastLookupRow->idRegion);
-
+        $this->_helper->featuredProperty(Common_Resource_Property::FEATURE_MASK_REGION,
+										 $this->_featuredConfig['limit_per_page'],
+                                         $locationRow->url);
         // pass results to the view
         $this->view->assign( array (
-            'fastLookupRow'     => $fastLookupRow,
-            'fastLookupRowset'  => $fastLookupRowset
+			'locationRow'	  => $locationRow,
+            'locationRowset'  => $locationRowset
         ));
     }
 
     public function destinationAction()
     {
-        $lookupUrl = $this->getRequest()->getParam('country') . '/' . $this->getRequest()->getParam('region') . '/' . $this->getRequest()->getParam('destination');
-        $fastLookupRow  = $this->_fastLookupModel->lookup($lookupUrl);
+        $uri = $this->getRequest()->getParam('uri');
+        $locationRow = $this->_locationModel->lookup($uri);
 
-        if (!$fastLookupRow) {
+        if (!$locationRow) {
             $this->getResponse()->setHttpResponseCode(404);
             return;
         }
 
-        $this->_helper->levelSummary($fastLookupRow->idCountry, $fastLookupRow->idRegion, $fastLookupRow->idDestination);
-         
-        //var_dump($propertyRowset);
-        //$fastLookupRowset = $this->_locationModel->getFastAllDestinations($fastLookupRow->idRegion);
-
+		// get the summary for this level
+        $this->_helper->levelSummary($locationRow->url);
+		
          // get the region level featured properties
-        $this->_helper->featuredProperty(Common_Resource_Property::FEATURE_MASK_DESTINATION, $this->_featuredConfig['limit_per_page'],
-                                         $fastLookupRow->idCountry,
-                                         $fastLookupRow->idRegion,
-                                         $fastLookupRow->idDestination);
-        
+        $this->_helper->featuredProperty(Common_Resource_Property::FEATURE_MASK_DESTINATION,
+										 $this->_featuredConfig['limit_per_page'],
+                                         $locationRow->url);
         // pass results to the view
         $this->view->assign( array (
-            'fastLookupRow'     => $fastLookupRow,
-            'destinationName'   => $fastLookupRow->destinationName
+            'locationRow'     => $locationRow
         )); 
     }
     
@@ -113,4 +127,11 @@ class LevelController extends Zend_Controller_Action
         $lookupEngine = new Vfr_Fastlookups();
         $lookupEngine->loadFastTable();    
     }
+	
+	public function testAction()
+	{
+		var_dump("HERE");
+		var_dump($this->getRequest()->getParams());
+		die();
+	}
 }

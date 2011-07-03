@@ -73,8 +73,8 @@ class Admin_PropertyController extends Zend_Controller_Action
     
     public function setLocationAction()
     {
-		$idProperty 	= $this->getRequest()->getParam('idProperty');
-		$idFastLookup	= $this->getRequest()->getParam('idFastLookup');
+		$idProperty = $this->getRequest()->getParam('idProperty');
+		$idLocation	= $this->getRequest()->getParam('idLocation');
 		
 		$propertyModel			= new Common_Model_Property();
 		$propertyContentRowset	= $propertyModel->getPropertyContentArrayById($idProperty,
@@ -84,14 +84,13 @@ class Admin_PropertyController extends Zend_Controller_Action
 																				Common_Resource_PropertyContent::FIELD_REGION,
 																				Common_Resource_PropertyContent::FIELD_LOCATION)
 																		);
-        $fastLookupModel 	= new Common_Model_FastLookup();
-        $hierarchy = $fastLookupModel->getEntirePropertyHierarchy();
+        $locationModel 	= new Common_Model_Location();
+        $hierarchy = $locationModel->getLocationHierarchy();
         
-        $form = new Admin_Form_LocationSelectForm(array ('idProperty' 	=> $idProperty,
-														 'idFastLookup'	=> $idFastLookup,
-														 'idCountry'	=> $this->getRequest()->getParam('idCountry'),
-														 'idRegion'		=> $this->getRequest()->getParam('idRegion'),
-														 'idDestination'=> $this->getRequest()->getParam('idDestination')));
+		var_dump($hierarchy);
+		die();
+        $form = new Admin_Form_LocationSelectForm(array ('idProperty' => $idProperty,
+														 'idLocation' => $idLocation));
         
         // Enable jQuery to pickup the headers etc
 		ZendX_JQuery::enableForm($form);
@@ -102,7 +101,7 @@ class Admin_PropertyController extends Zend_Controller_Action
 		if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
 				$propertyModel = new Common_Model_Property();
-				$propertyModel->setPropertyLocationByFastLookupId($idProperty, $form->getValue('idFastLookup'));
+				$propertyModel->updatePropertyLocation($idProperty, $form->getValue('idFastLookup'));
 				
 				$this->_helper->redirector->gotoSimple('list-awaiting-initial-approval', 'index', 'admin', array());
 			}

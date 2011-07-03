@@ -78,10 +78,10 @@ class Common_Plugin_Layout extends Zend_Controller_Plugin_Abstract
 				$front = Zend_Controller_Front::getInstance();
 				$view = $layout->getView();
                 
+				// inject the top level locations into the view
                 $locationModel	= new Common_Model_Location();
-                $countryFastLookupRowset = $locationModel->getFastAllCountries();
-		
-                $view->countryFastLookupRowset = $countryFastLookupRowset;
+                $view->locationRowset = $locationModel->getAllLocationsIn(null);
+				//var_dump($view->locationRowset);
                 
 				//$this->_logger->log(__METHOD__ . ' Setting view helpers for frontend module', Zend_Log::DEBUG);
 				$view->headMeta()->appendHttpEquiv('description', 'Villas to rent across the world direct from the owner.');

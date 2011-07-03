@@ -14,30 +14,12 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 		'Advertiser' => array (
 			'columns' => array('idAdvertise'),
 			'refTableClass' => 'Common_Resource_Advertiser'
-		),
-
-		'Country' => array (
-			'columns' => array('idCountry'),
-			'refTableClass' => 'Common_Resource_Country'
-		),
-
-		'Region' => array (
-			'columns' => array('idRegion'),
-			'refTableClass' => 'Common_Resource_Region'
-		),
-
-		'Destination' => array (
-			'columns' => array('idDestination'),
-			'refTableClass' => 'Common_Resource_Destination'
 		)
 	);
 	
 	private $_approved = null;
 	private $_visible = null;
 	private $_count = null;
-	private $_idCountry = null;
-	private $_idRegion = null;
-	private $_idDestination = null;
 
 	const DEFAULT_PROPERTY_ID = 10000;
 
@@ -48,7 +30,7 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
     const STEP_5_AVAILABILITY	= 5;
     const COMPLETE				= 6;
 
-    const FEATURE_MASK_HOMEPAGE     = 0;
+	const FEATURE_MASK_HOMEPAGE     = 0;
     const FEATURE_MASK_COUNTRY      = 1;
     const FEATURE_MASK_REGION       = 2;
     const FEATURE_MASK_DESTINATION  = 3;
@@ -61,9 +43,6 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 		$this->_approved = false;
 		$this->_visible  = false;
 		$this->_count = false;
-		$this->_idCountry 		= null;
-		$this->_idRegion		= null;
-		$this->_idDestination 	= null;
 		
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 	}
@@ -84,18 +63,6 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 		if (isset($options['count'])) {
 			// use Zend_Filter_Boolean here
 			$this->_count = $options['count'];
-		}
-		
-		if (isset($options['idCountry'])) {
-			$this->_idCountry = $options['idCountry'];
-		}
-		
-		if (isset($options['idRegion'])) {
-			$this->_idRegion = $options['idRegion'];
-		}
-		
-		if (isset($options['idDestination'])) {
-			$this->_idDestination = $options['idDestination'];
 		}
 
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
@@ -122,18 +89,6 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 		
 		if (true === $this->_visible) {
 			$query->where('P.visible = ?', (int) $this->_visible);
-		}
-		
-		if (null !== $this->_idCountry) {
-			$query->where('P.idCountry = ?', (int) $this->_idCountry);
-		}
-		
-		if (null !== $this->_idRegion) {
-			$query->where('P.idRegion = ?', (int) $this->_idRegion);
-		}
-		
-		if (null !== $this->_idDestination) {
-			$query->where('P.idDestination = ?', (int) $this->_idDestination);
 		}
 
 		if (true === $this->_count) {
@@ -173,10 +128,8 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 			'idProperty'        => $nullExpr,
 			'idPropertyType'	=> $options['params']['idPropertyType'],
 			'idAdvertiser'		=> $options['params']['idAdvertiser'],
-            'idCountry'     	=> 1, // default dummy coutnry
-			'idHolidayType'		=> $options['params']['idHolidayType'],
-            'idRegion'          => 1, // default dummy region
-            'idDestination' 	=> 1, // default dummy destination
+            'idHolidayType'		=> $options['params']['idHolidayType'],
+            'idLocation'     	=> $nullExpr, // default location not set
 			'urlName'			=> '_' . md5(microtime(true).mt_rand(10000,90000)), // underscore denotes temporary url
 			'shortName'			=> $options['params']['shortName'],
 			'locationUrl'		=> 'default/default/default',
@@ -246,19 +199,11 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
         }
     }
 
-    public function getPropertiesByCountryRegionDestination($idCountry, $idRegion, $idDestination, $page, $itemCountPerPage, $order, $direction)
+    public function getPropertiesByGeoUri($uri, $page, $itemCountPerPage, $order, $direction)
     {
-        $query = $this->select();
-        
-        if ($idCountry)
-            $query->where('idCountry = ?', $idCountry);
-            
-        if ($idRegion)
-            $query->where('idRegion = ?', $idRegion);
-            
-        if ($idDestination)
-            $query->where('idDestination = ?', $idDestination);
-        
+        $query = $this->select()
+					  ->where("locationUrl like ?", $uri . "%");
+					  
         if ($order)
             $query->order($order . ' ' . $direction);
         
@@ -401,23 +346,13 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
         }
     }
     
-    public function getFeaturedProperties($mask, $limit, $idCountry, $idRegion, $idDestination)
+    public function getFeaturedProperties($mask, $limit, $uri)
     {
         $query = $this->select()
                       ->where('featureMask >> ? & 0x01', $mask)
+				      ->where('locationUrl LIKE ?', $uri . "%")
                       ->order('featurePriority')
                       ->limit($limit);
-                      
-        if ($idCountry)
-            $query->where('idCountry = ?', $idCountry);
-            
-        if ($idRegion)
-            $query->where('idRegion = ?', $idRegion);
-            
-        if ($idDestination)
-            $query->where('idDestination = ?', $idDestination);
-        
-        //die($query);
         try {
             $propertyRowset = $this->fetchAll($query);
             
@@ -517,13 +452,11 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
         }
     }
 	
-    public function updatePropertyLocation($idProperty, $idCountry, $idRegion, $idDestination, $locationUrl)
+    public function updatePropertyLocation($idProperty, $idLocation, $locationUrl)
     {
         $params = array (
-            'idCountry'     => $idCountry,
-            'idRegion'      => $idRegion,
-            'idDestination' => $idDestination,
-            'locationUrl'   => $locationUrl
+            'idLocation'  => $idLocation,
+            'locationUrl' => $locationUrl
         );
         
         $where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
@@ -565,4 +498,3 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
     // DELETE
     //
 }
-

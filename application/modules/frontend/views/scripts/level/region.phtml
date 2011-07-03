@@ -1,9 +1,11 @@
 <div id="browse_country">
-    <h1>Destinations in <?php echo $this->escape($this->fastLookupRow->countryName) ?> -&gt; <?php echo $this->escape($this->fastLookupRow->regionName) ?></h1>
-    <?php if ($this->fastLookupRowset) : ?>
+    <h1>Destinations in <?php echo $this->escape($this->locationRow->name) ?></h1>
+    <?php if ($this->locationRowset) : ?>
     <ul>
-        <?php foreach ($this->fastLookupRowset as $row): ?>
-        <li><a href="/in/<?php echo $row->url ?>"><?php echo $this->escape($row->destinationName) ?> (<?php echo $row->totalVisible ?>)</a></li>
+        <?php foreach ($this->locationRowset as $row): ?>
+            <?php if ($row->totalVisible > 0) : ?>
+            <li><a href="/<?php echo $row->url ?>"><?php echo $this->escape($row->rowname) ?> (<?php echo $row->totalVisible ?>)</a></li>
+            <?php endif ?>
         <?php endforeach ?>
     </ul>
     <?php else : ?>
@@ -20,7 +22,7 @@
 <?php endif ?>
 
 <div>
-   <h1>Properties in <?php echo $this->fastLookupRow->regionName ?> (<?php echo $this->fastLookupRow->totalVisible ?>)</h1>
+   <h1>Properties in <?php echo $this->locationRow->name ?> (<?php echo $this->locationRow->totalVisible ?>)</h1>
     <?php if ($this->showProperties) : ?>
     <ul>
         <?php foreach ($this->partials as $partial): ?>

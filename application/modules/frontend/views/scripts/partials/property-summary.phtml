@@ -1,8 +1,8 @@
 <div>
-    <p style="float:right"><a href="/in/<?php echo $this->propertyRow->locationUrl . '/' . $this->propertyRow->urlName ?>">read more...</a></p>
+    <p style="float:right"><a href="/<?php echo $this->propertyRow->locationUrl . '/' . $this->propertyRow->urlName ?>">read more...</a></p>
     <h2><?php echo $this->propertyType($this->propertyRow->idPropertyType) ?> <?php echo $this->escape($this->propertyRow->shortName) ?> in <?php echo $this->locationBreadcrumb($this->fastLookupRow) ?></h2>
     <h3><?php echo $this->propertyRow->numBeds ?> bedrooms (Sleeps <?php echo $this->propertyRow->numSleeps ?>) : Property Reference <?php echo $this->propertyRow->idProperty ?></h3>
-    <a style="margin:0;padding:0" href="/in/<?php echo $this->propertyRow->locationUrl . '/' . $this->propertyRow->urlName ?>"><?php echo $this->photo($this->photoRow, 90, 60) ?></a>
+    <a style="margin:0;padding:0" href="/<?php echo $this->propertyRow->locationUrl . '/' . $this->propertyRow->urlName ?>"><?php echo $this->photo($this->photoRow, 90, 60) ?></a>
     <p><?php echo $this->propertyContent[Common_Resource_PropertyContent::FIELD_SUMMARY] ?></p>
     
 </div>

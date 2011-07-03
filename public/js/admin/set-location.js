@@ -4,7 +4,7 @@ $(function () {
 			'ui' : {
 				'select_limit' : 1,
 				'selected_parent_close' : 'select_parent',
-				'initially_select' : $('#idFastLookup').attr('value')
+				'initially_select' : $('#idLocation').attr('value')
 			},
 	
 			'themes' : {
@@ -23,9 +23,9 @@ $(function () {
 		.bind("select_node.jstree", function (event, data) {
 			if (data.rslt.obj.hasClass('destination')) {
 				selectVal = data.rslt.obj.attr('id');
-				$('#idFastLookup').attr('value', selectVal);	
+				$('#idLocation').attr('value', selectVal);	
 			} else {
-				$('#idFastLookup').attr('value', '');
+				$('#idLocation').attr('value', '');
 			}
 		})
 		

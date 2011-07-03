@@ -1,9 +1,9 @@
 <?php
 class Vfr_View_Helper_LocationBreadcrumb extends Zend_View_Helper_Abstract
 {
-    public function locationBreadcrumb($fastLookupRow, $options=null)
+    public function locationBreadcrumb($locationRow, $options=null)
     {
-        if (!$fastLookupRow)
+        if (!$locationRow)
             return '';
         
         // default whitespace is on
@@ -19,8 +19,6 @@ class Vfr_View_Helper_LocationBreadcrumb extends Zend_View_Helper_Abstract
             }
         }
        
-        return $this->view->escape($fastLookupRow->countryName) . $whitespace . '-&gt;' . $whitespace
-             . $this->view->escape($fastLookupRow->regionName) . $whitespace . '-&gt;' . $whitespace
-             . $this->view->escape($fastLookupRow->destinationName);
+        return $this->view->escape($locationRow->name);
     }
 }

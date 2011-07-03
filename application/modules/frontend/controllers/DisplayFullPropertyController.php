@@ -5,47 +5,44 @@ class DisplayFullPropertyController extends Zend_Controller_Action
 
     public function indexAction()
     {
-		$fastLookupModel = new Common_Model_FastLookup();
-		$propertyModel 	 = new Common_Model_Property();
-		$calendarModel   = new Common_Model_Calendar();
+		$locationModel	= new Common_Model_Location();
+		$propertyModel 	= new Common_Model_Property();
+		$calendarModel  = new Common_Model_Calendar();
 	
-		$url = $this->getRequest()->getParam('country') . '/' .
-			   $this->getRequest()->getParam('region') . '/' .
-			   $this->getRequest()->getParam('destination') . '/' .
-			   $this->getRequest()->getParam('propertyurl');
+		$uri = $this->getRequest()->getParam('uri');
+		
 		//var_dump($url);
-		$fastLookupRow = $fastLookupModel->lookup($url);
-		if (null === $fastLookupRow) {
+		$locationRow = $locationModel->lookup($uri);
+		if (null === $locationRow) {
 			var_dump('not found');
 			exit;
 		}
 		
 		// get the main property details
-		$propertyRow = $propertyModel->getPropertyById($fastLookupRow->idProperty);
+		$propertyRow = $propertyModel->getPropertyById($locationRow->idProperty);
 
 		// get the content for this property
-		$propertyContent = $propertyModel->getPropertyContentArrayById($fastLookupRow->idProperty);
-		
-		
+		$propertyContent = $propertyModel->getPropertyContentArrayById($locationRow->idProperty);
 		
 		// fetch the rates and availability
-		$idCalendar = $propertyModel->getCalendarIdByPropertyId($fastLookupRow->idProperty);
+		$idCalendar = $propertyModel->getCalendarIdByPropertyId($locationRow->idProperty);
 		//$availabilityRowset = $calendarModel->getAvailabilityByCalendarId($idCalendar);
 		$rateRowset		= $calendarModel->getRatesByCalendarId($idCalendar);
 		//var_dump($availabilityRowset);
 		//var_dump($rateRowset);
 		
 		
+		
 		// fetch the photos for this property
-		$photoRowset = $propertyModel->getAllPhotosByPropertyId($fastLookupRow->idProperty);
+		$photoRowset = $propertyModel->getAllPhotosByPropertyId($locationRow->idProperty);
 		//var_dump($photoRowset);
 		
-		$allFacilities = $propertyModel->getAllFacilities();
-		$facilityRowset = $propertyModel->getAllFacilities($fastLookupRow->idProperty);
+		$allFacilities  = $propertyModel->getAllFacilities();
+		$facilityRowset = $propertyModel->getAllFacilities($locationRow->idProperty);
 		//var_dump($facilityRowset);
 		
 		$this->view->assign( array (
-			'fastLookupRow'		=> $fastLookupRow,
+			'locationRow'		=> $locationRow,
 			'propertyRow'		=> $propertyRow,
 			'propertyContent'	=> $propertyContent,
 			'photoRowset'		=> $photoRowset,

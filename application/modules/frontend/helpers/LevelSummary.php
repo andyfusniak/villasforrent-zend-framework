@@ -2,23 +2,23 @@
 class Frontend_Helper_LevelSummary extends Zend_Controller_Action_Helper_Abstract
 {
     protected $_propertyModel = null;
-    protected $_fastLookupModel = null;
+    protected $_locationModel = null;
     
     public function init()
     {
         if (!$this->_propertyModel)
             $this->_propertyModel = new Common_Model_Property();
             
-        if (!$this->_fastLookupModel)
-            $this->_fastLookupModel = new Common_Model_FastLookup();
+        if (!$this->_locationModel)
+            $this->_locationModel = new Common_Model_Location();
     }
+   
     
-    public function getPropertySummaries($idCountry, $idRegion, $idDestination)
+    public function getPropertySummaries($uri)
     {
-        $propertyRowset = $this->_propertyModel->getPropertiesByCountryRegionDestination($idCountry, $idRegion, $idDestination);
+        $propertyRowset = $this->_propertyModel->getPropertiesByGeoUri($uri);
      
-        if ($propertyRowset->count()) {
-            
+        if ($propertyRowset->count()) {            
             $propertyContent = $this->_propertyModel->getPropertyContentArrayByPropertyList($propertyRowset,
                                                                                      Common_Resource_PropertyContent::VERSION_MAIN,
                                                                                      'EN',
@@ -27,7 +27,7 @@ class Frontend_Helper_LevelSummary extends Zend_Controller_Action_Helper_Abstrac
                                                                                         Common_Resource_PropertyContent::FIELD_HEADLINE_1));
             foreach ($propertyRowset as $propertyRow) {
                 $partials[] = $this->getActionController()->view->partial('partials/property-summary.phtml', array(
-                                                            'fastLookupRow'	   => $this->_fastLookupModel->lookup($propertyRow->locationUrl . '/' . $propertyRow->urlName),
+                                                            'locationRow'	   => $this->_locationModel->lookup($propertyRow->locationUrl . '/' . $propertyRow->urlName),
                                                             'photoRow'		   => $this->_propertyModel->getPrimaryPhotoByPropertyId($propertyRow->idProperty),
                                                             'propertyRow'      => $propertyRow,
                                                             'propertyContent'  => $propertyContent[$propertyRow->idProperty]));
@@ -40,8 +40,8 @@ class Frontend_Helper_LevelSummary extends Zend_Controller_Action_Helper_Abstrac
         }
     }
     
-    public function direct($idCountry=null, $idRegion=null, $idDestination=null)
+    public function direct($uri)
     {
-        $this->getPropertySummaries($idCountry, $idRegion, $idDestination);
+        $this->getPropertySummaries($uri);
     }
 }

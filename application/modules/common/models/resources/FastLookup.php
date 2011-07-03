@@ -78,7 +78,8 @@ class Common_Resource_FastLookup extends Vfr_Model_Resource_Db_Table_Abstract im
 	//
 	// READ
 	//
-
+	
+	/*
 	public function lookup($url)
 	{
 		$url = (string) $url;
@@ -147,6 +148,7 @@ class Common_Resource_FastLookup extends Vfr_Model_Resource_Db_Table_Abstract im
         return $fastLookupRowset;
     }
 
+	
 	public function getAllCountries()
 	{
 		$query = $this->select()
@@ -192,7 +194,8 @@ class Common_Resource_FastLookup extends Vfr_Model_Resource_Db_Table_Abstract im
 			throw $e;
 		}
 	}
-
+	*/
+	
 	public function getEntirePropertyHierarchy()
 	{
 		$query = $this->select()

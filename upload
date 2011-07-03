@@ -18,8 +18,8 @@ echo -n "Include jQuery, jQuery UI/Plugins/Themess (y) or (n) :"
 read -e INC_JQUERY
 
 if [ "$DEPLOY" = "l" ]; then
-	DEPLOY_SCRIPT=golive
-	DEPLOY_DIR=/var/www/live.villasforrent.net
+	DEPLOY_SCRIPT=gohpwlive
+	DEPLOY_DIR=/var/www/www.holidaypropertyworldwide.com
 elif [ "$DEPLOY" = "b" ]; then
 	echo "BETA Selected"
 	DEPLOY_SCRIPT=gobeta
@@ -51,6 +51,7 @@ application/Command.php \
 application/configs/application.ini \
 application/configs/navigation.xml \
 application/configs/passwd.txt \
+application/Cron.php \
 application/modules/admin/Bootstrap.php \
 application/modules/admin/controllers/AdvertiserController.php \
 application/modules/admin/controllers/ErrorController.php \
@@ -141,12 +142,12 @@ application/modules/common/models/resources/Facility/Interface.php \
 application/modules/common/models/resources/Facility/Row.php \
 application/modules/common/models/resources/Facility/Rowset.php \
 application/modules/common/models/resources/Facility.php \
-application/modules/common/models/resources/FastLookup/Interface.php \
-application/modules/common/models/resources/FastLookup/Row.php \
-application/modules/common/models/resources/FastLookup/Rowset.php \
-application/modules/common/models/resources/FastLookup.php \
 application/modules/common/models/resources/HolidayType/Interface.php \
 application/modules/common/models/resources/HolidayType.php \
+application/modules/common/models/resources/Location/Interface.php \
+application/modules/common/models/resources/Location/Row.php \
+application/modules/common/models/resources/Location/Rowset.php \
+application/modules/common/models/resources/Location.php \
 application/modules/common/models/resources/Photo/Interface.php \
 application/modules/common/models/resources/Photo/Row.php \
 application/modules/common/models/resources/Photo/Rowset.php \
@@ -248,6 +249,8 @@ library/Vfr/Availability/Calendar/Exception.php \
 library/Vfr/Availability/Calendar/ImagePng.php \
 library/Vfr/Availability/Calendar/Object.php \
 library/Vfr/Controller/Helper/Acl.php \
+library/Vfr/Controller/Router/Route/Location.php \
+library/Vfr/Exception.php \
 library/Vfr/Form/Element/AvailabilityRangePicker.php \
 library/Vfr/Form/Element/RatesRangePicker.php \
 library/Vfr/Image/Processor.php \
@@ -311,7 +314,7 @@ if [ "$INC_SCHEMA" = "y" ]; then
 	schema/Facilities.sql \
 	schema/FastLookups.sql \
 	schema/IsoLanguageCodes.sql \
-    schema/Loctions.sql \
+    schema/Locations.sql \
 	schema/MembersFavoriteProperties.sql \
 	schema/Members.sql \
 	schema/Messages.sql \

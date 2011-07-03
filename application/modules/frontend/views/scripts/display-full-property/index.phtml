@@ -1,6 +1,6 @@
 <?php //var_dump($this->propertyContent); exit; ?>
 
-<h1 class="full"><?php echo $this->propertyType($this->propertyRow->idPropertyType) ?> to rent in <?php echo $this->locationBreadcrumb($this->fastLookupRow) ?><br /><?php echo $this->propertyRow->numBeds ?> bedrooms (Sleeps <?php echo $this->propertyRow->numSleeps ?>) : Property Reference <?php echo $this->propertyRow->idProperty ?></h1>
+<h1 class="full"><?php echo $this->propertyType($this->propertyRow->idPropertyType) ?> to rent in <?php echo $this->locationBreadcrumb($this->locationRow) ?><br /><?php echo $this->propertyRow->numBeds ?> bedrooms (Sleeps <?php echo $this->propertyRow->numSleeps ?>) : Property Reference <?php echo $this->propertyRow->idProperty ?></h1>
 
 <p class="headline1"><?php echo $this->escape($this->propertyContent['headline1']) ?></p>
 <p class="headline2"><?php echo $this->escape($this->propertyContent['headline2']) ?></p>

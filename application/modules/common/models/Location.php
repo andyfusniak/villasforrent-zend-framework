@@ -10,109 +10,87 @@ class Common_Model_Location extends Vfr_Model_Abstract
 		return $this->getResource('Location')->fillTable();
 	}
 	
+	public function rebuildTree($idParent=null, $lt=1)
+	{
+		return $this->getResource('Location')->rebuildTree($idParent, $lt);
+	}
+	
 	//
 	// READ
 	//
 	
-	public function lookup()
+	public function lookup($url)
 	{
-		return $this->getResource('Location')->lookup();
+		return $this->getResource('Location')->lookup($url);
 	}
 	
-    public function getFastAllLocations()
-    {
-        $fastLookupRowset = $this->getResource('FastLookup')->getAllLocations();
-
-        foreach ($fastLookupRowset as $fastLookupRow) {
-            
-        }
-    }
-
-	public function getCountryById($idCountry)
+	private function _findNode($dataset, $idParent, $depth)
 	{
-		$idCountry = (int) $idCountry;
-
-		return $this->getResource('Country')->getCountryById($idCountry);
-	}
-
-	public function getCountries($visible=true, $orderBy='displayPriority')
-	{
-		return $this->getResource('Country')->getCountries($visible);
-	}
-	
-	public function getCountriesWithTotalVisible()
-	{
-		return $this->getResource('Country')->getCountriesWithTotalVisible();
-	}
-	
-	public function getFastAllCountries()
-	{
-		return $this->getResource('FastLookup')->getAllCountries();
-	}
-
-	public function addCountry($name, $priority=1, $prefix='', $postfix='', $visible=true)
-	{
-		return $this->getResource('Country')->addCountry($name,$priority,$prefix,$postfix,$visible);
-	}
-
-	public function getCountriesCount($visible=true)
-	{
-		return $this->getResource('Country')->getCountriesCount($visible);
-	}
-
-	public function getRegionById($idRegion)
-	{
-		$idRegion = (int) $idRegion;
-
-		return $this->getResource('Region')->getRegionById($idRegion);
-	}
-
-	public function getRegions($visible=true)
-	{
-		return $this->getResource('Region')->getRegions($visible);
-	}
-
-	public function getRegionsByCountryId($idCountry, $visible=true)
-	{
-		return $this->getResource('Region')->getRegionsByCountryId($idCountry, $visible);
-	}
-	
-	public function getRegionsWithTotalVisible($idCountry)
-	{
-		return $this->getResource('Region')->getRegionsWithTotalVisible($idCountry);
-	}
-	
-	public function getFastAllRegions($idCountry)
-	{
-		$idCountry = (int) $idCountry;
+		$rowset = array();
 		
-		return $this->getResource('FastLookup')->getAllRegions($idCountry);
-	}
-
-	public function getFastAllDestinations($idRegion)
-	{
-		$idRegion = (int) $idRegion;
+		foreach($dataset as $row) {
+			if (($row->depth == $depth) && ($row->idParent == $idParent)) {
+				$rowset[] = $row;
+			}
+		}
 		
-		return $this->getResource('FastLookup')->getAllDestinations($idRegion);
-	}
-
-	public function getDestinationById($idDestination)
-	{
-		$idDestination = (int) $idDestination;
-		return $this->getResource('Destination')->getDestinationById($idDestination);
-	}
-
-	public function getDestinations($visible=true)
-	{
-		return $this->getResource('Destination')->getDestinations($visible);
-	}
-
-	public function getDestinationsByRegionId($idRegion, $visible)
-	{
-		$idRegion = (int) $idRegion;
-		return $this->getResource('Destination')->getDestinationsByRegionId($idRegion, $visible);
+		return $rowset;
 	}
 	
+	public function getLocationHierarchy()
+	{
+		$allRowset = $this->getResource('Location')->getAllLocations();
+				
+		$h = array ();
+		foreach ($allRowset as $row) {
+			if ($row->depth == 1) {
+				$idLocation = $row->idLocation;
+				
+				$h[$idLocation] = array (
+					'name'	=> $row->rowname,
+					'child'	=> null
+				);
+							
+				$itemrows = $this->_findNode($allRowset, $idLocation, 2);
+				if ($itemrows) {
+					foreach ($itemrows as $item) {
+						$h[$idLocation]['child'][$item->idLocation] = array (
+							'name'  => $item->rowname,
+							'child'	=> null
+						);	
+					}	
+				}
+				//var_dump($item);
+			}
+		}
+		
+		foreach ($allRowset as $row) {
+			if ($row->depth == 2)
+			{
+				
+			}
+		}
+		
+		return $h;
+	}
+	
+	public function getAllLocations()
+	{
+		return $this->getResource('Location')->getAllLocations();
+	}
+	
+	public function getLocationByPk($idLocation)
+	{
+		$idLocation = (int) $idLocation;
+		
+		return $this->getResource('Location')->getLocationByPk($idLocation);
+	}
+	
+	public function getAllLocationsIn($idParent=null)
+	{
+		return $this->getResource('Location')->getAllLocationsIn($idParent);
+	}
+		
 	//
 	// DELETE
 	//

@@ -186,16 +186,30 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 															'action'     	=> 'country')
 		);
 		
+		$routeLocation = new Zend_Controller_Router_Route_Regex('in/(\w+)(?:/(\w+))',
+																array ('module'		=> 'frontend',
+																	   'controller' => 'level',
+																	   'action'		=> 'test'));
+		
         $routeRestApi = new Zend_Rest_Route($front, array (), array ('api'));
         
-		$router->addroute('imageCache', $routeImageCache)
+		$sroute = new Vfr_Controller_Router_Route_Location('([a-z0-9-/]*)'
+			, array(
+				'module'     => 'frontend',
+			    'controller' => 'level',
+			    'action'     => 'location'
+		));
+
+		
+		$router->addroute('location', $sroute)
+		       ->addroute('imageCache', $routeImageCache)
 			   ->addroute('property', $fullPropertyRoute)
-			   ->addroute('destination', $routeDestination)
-			   ->addRoute('region', $routeRegion)
-			   ->addRoute('country', $routeCountry)
+			   //->addroute('destination', $routeDestination)
+			   //->addRoute('region', $routeRegion)
+			   //->addRoute('country', $routeCountry)
 			   ->addRoute('availabilityImage', $routeAvailbilityImage)
 			   ->addRoute('rest', $routeRestApi);
-			   
+		
         $this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
     }
 

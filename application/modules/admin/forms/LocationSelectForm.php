@@ -2,37 +2,18 @@
 class Admin_Form_LocationSelectForm extends Zend_Form
 {
     protected $idProperty = null;
-    protected $idFastLookup = null;
-	
-    protected $idCountry = null;
-	protected $idRegion = null;
-	protected $idDestination = null;
-	
+    protected $idLocation = null;
+		
     public function setIdProperty($idProperty)
     {
         $this->idProperty = $idProperty;
     }
     
-    public function setIdFastLookup($idFastLookup)
+    public function setIdLocation($idLocation)
     {
-		$this->idFastLookup = $idFastLookup;
+		$this->idLocation = $idLocation;
     }
-    
-	public function setIdCountry($idCountry)
-	{
-		$this->idCountry = $idCountry;
-	}
-	
-	public function setIdRegion($idRegion)
-	{
-		$this->idRegion = $idRegion;
-	}
-	
-	public function setIdDestination($idDestination)
-	{
-		$this->idDestination = $idDestination;
-	}
-	
+    	
     public function __construct($options = null)
     {
         parent::__construct($options);
@@ -51,27 +32,12 @@ class Admin_Form_LocationSelectForm extends Zend_Form
 			)
         ));
         
-        $this->addElement('hidden', 'idFastLookup', array (
+        $this->addElement('hidden', 'idLocation', array (
             'required'		=> true,
-			'value'	        => $this->idFastLookup,
+			'value'	        => $this->idLocation,
             'validators'	=> array (
 				array('NotEmpty', true, array('messages' => array ('isEmpty' => 'Select a location for this property')))
 			)
 		));
-		
-		$this->addElement('hidden', 'idCountry', array (
-            'required'      => false,
-            'value'         => $this->idCountry
-		));
-		
-		$this->addElement('hidden', 'idRegion', array (
-            'required'      => false,
-            'value'         => $this->idRegion
-		));
-		
-		$this->addElement('hidden', 'idDestination', array (
-            'required'      => false,
-            'value'         => $this->idDestination
-		));
-    }
+	}
 }

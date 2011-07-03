@@ -12,6 +12,11 @@ class Admin_BuildLocationsController extends Zend_Controller_Action
     {
     }
     
+    public function rebuildTreeAction()
+    {
+        $this->_locationModel->rebuildTree(null, 1);
+    }
+    
     public function purgeTableAction()
     {
         $this->_locationModel->purgeLocationTable();

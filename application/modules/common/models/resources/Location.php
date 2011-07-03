@@ -13,6 +13,9 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
     
     public function addLocation($idParent=null, $url, $totalVisible=null, $total=null, $idProperty=null)
     {
+		//
+		// needs modifying for nested set DB structure
+		//
         $nowExpr  = new Zend_Db_Expr('NOW()');
 		$nullExpr = new Zend_Db_Expr('NULL');
         
@@ -30,6 +33,29 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
             throw $e;
         }
     }
+	
+	public function rebuildTree($idParent, $lt)
+	{
+		// the right value of this node is the left value + 1
+		$rt = $lt + 1;
+		
+		// get all children of this node
+		$childrenRowset = $this->getAllLocationsIn($idParent);
+		
+		foreach ($childrenRowset as $row) {
+			// recursively execute this function for each child of this node
+			// $rt is the current right value, which is
+			// incremented by the rebuildTree function
+			$rt = $this->rebuildTree($row->idLocation, $rt);
+		}
+		
+		// we've got the left value, and now that we've processed
+		// the children of this node we also know the right value
+		$this->updateLeftRightOnNode($idParent, $lt, $rt);
+	
+		// return the right value of this node + 1
+		return $rt + 1;
+	}
     
     //
     // READ
@@ -63,10 +89,15 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
 		}
     }
     
-    public function getAllLocations()
+    public function getAllLocations($depth=null)
     {
         $query = $this->select()
+					  ->where('idProperty is null')
                       ->order('idLocation');
+					  
+		if ($depth)
+			$query->where('depth = ?', $depth);
+			
         try {
             $locationRowset = $this->fetchAll($query);
             
@@ -78,9 +109,13 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
     
     public function getAllLocationsIn($idParent=null)
     {
-        $query = $this->select()
-                      ->where('idParent = ?', $idParent)
-                      ->order('idLocation');
+        $query = $this->select();
+		if ($idParent == null)
+			$query->where('idParent IS NULL');
+        else
+			$query->where('idParent = ?', $idParent);
+        
+		$query->order('idLocation');
         try {
             $locationRowset = $this->fetchAll($query);
             
@@ -94,7 +129,22 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
     //
     // UPDATE
     //
-    
+	public function updateLeftRightOnNode($idLocation, $lt, $rt)
+	{
+		$params = array (
+			'lt' => (int) $lt,
+			'rt' => (int) $rt
+		);
+		
+		$where = $this->getAdapter()->quoteInto('idLocation = ?', $idLocation);
+		
+		try {
+            $query = $this->update($params, $where);
+        } catch (Exception $e) {
+            throw $e;
+        }
+	}
+	
     //
     // DELETE
     //

@@ -122,23 +122,14 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		return $propertyResource->getProperties($page, $interval, $order, $direction);
 	}
 	
-	public function getPropertiesByCountryRegionDestination($idCountry=null, $idRegion=null, $idDestination=null, $page=null, $itemCountPerPage=10, $order=null, $direction='ASC')
-	{
-		if ($idCountry)
-			$idCountry = (int) $idCountry;
-			
-		if ($idRegion)
-			$idRegion = (int) $idRegion;
-		
-		if ($idDestination)
-			$idDestination = (int) $idDestination;
-			
+	public function getPropertiesByGeoUri($uri, $page=null, $itemCountPerPage=10, $order=null, $direction='ASC')
+	{	
 		$page = (int) $page;
 		$itemCountPerPage	= (int) $itemCountPerPage;
 		
 		$propertyResource = $this->getResource('Property');
 		
-		return $propertyResource->getPropertiesByCountryRegionDestination($idCountry, $idRegion, $idDestination, $page, $itemCountPerPage, $order, $direction);
+		return $propertyResource->getPropertiesByGeoUri($uri, $page, $itemCountPerPage, $order, $direction);
 	}
 
 	public function getPropertyById($idProperty)
@@ -349,11 +340,11 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		return $propertyResource->isUrlNameTaken($idProperty, $urlName);
 	}
 	
-	public function getFeaturedProperties($mask=Common_Resource_Property::FEATURE_MASK_HOMEPAGE, $limit=3, $idCountry=null, $idRegion=null, $idDestination=null)
+	public function getFeaturedProperties($mask=Common_Resource_Property::FEATURE_MASK_HOMEPAGE, $limit=3, $uri)
 	{
 		$propertyResource = $this->getResource('Property');
 		
-		return $propertyResource->getFeaturedProperties($mask, $limit, $idCountry, $idRegion, $idDestination);
+		return $propertyResource->getFeaturedProperties($mask, $limit, $uri);
 	}
 	
 	//
@@ -505,21 +496,19 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		return $this;
 	}
 	
-	public function setPropertyLocationByFastLookupId($idProperty, $idFastLookup)
+	public function updatePropertyLocationId($idProperty, $idLocation)
 	{
-		$idProperty		= (int) $idProperty;
-		$idFastLookup	= (int) $idFastLookup;
+		$idProperty = (int) $idProperty;
+		$idLocation	= (int) $idLocation;
 		
-		$fastLookupResource = $this->getResource('FastLookup');
-		$fastLookupRow = $fastLookupResource->getFastLookupById($idFastLookup);
+		$locationResource = $this->getResource('Location');
+		$locationRow = $locationResource->getLocationByPk($idLocation);
 		
-		if ($fastLookupRow) {
+		if ($locationRow) {
 			$propertyResource = $this->getResource('Property');
-			$propertyResource->updatePropertyLocation($idProperty,
-													  $fastLookupRow->idCountry,
-													  $fastLookupRow->idRegion,
-													  $fastLookupRow->idDestination,
-													  $fastLookupRow->url);
+			$propertyResource->updatePropertyLocationId($idProperty,
+														$locationRow->idLocation,
+														$locationRow->url);
 		}
 	}
 	

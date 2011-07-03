@@ -1,17 +1,14 @@
 <?php
 class Admin_View_Helper_ApproveProperty extends Zend_View_Helper_Abstract
 {
-    public function approveProperty($idProperty, $idCountry, $idRegion, $idDestination, $urlName, $expiry)
+    public function approveProperty($idProperty, $idLocation, $urlName, $expiry)
     {
-        $idProperty     = (int) $idProperty;
-        $idCountry      = (int) $idCountry;
-        $idRegion       = (int) $idRegion;
-        $idDestination  = (int) $idDestination;
-      
+        $idProperty = (int) $idProperty;
+        $idLocation = (int) $idLocation;
+        
         // check the location is set  
-        if (($idCountry == 1) || ($idRegion == 1) || ($idDestination == 1)) {
+        if ($idLocation == null)
             return 'Set Location';
-        }
         
         // check the url is set
         if (substr($urlName, 0, 1) == '_') {
