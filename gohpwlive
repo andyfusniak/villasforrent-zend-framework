@@ -1,0 +1,25 @@
+#!/bin/bash
+cd /var/www/www.holidaypropertyworldwide.com/
+tar zxfp zend_vfr.tar.gz
+
+directory="./data"
+if [ ! -d $directory ]; then
+	mkdir data
+	mkdir data/logs
+	touch data/logs/application.log
+    mkdir data/session
+	chmod g+rw data/logs/application.log
+else
+	if [ ! -d "./data/logs" ]; then
+		mkdir data/logs
+		touch data/logs/application.log
+		chmod g+rw data/logs/application.log
+	fi
+    
+    if [ ! -d "./data/session" ]; then
+        mkdir data/session
+    fi
+fi
+
+mv /var/www/www.holidaypropertyworldwide.com/public/.htaccess-beta /var/www/www.holidaypropertyworldwide.com/public/.htaccess
+chgrp devteam -fR *
