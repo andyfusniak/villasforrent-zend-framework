@@ -205,6 +205,7 @@ application/modules/frontend/forms/Step4RentalBasis.php \
 application/modules/frontend/forms/Step5AvailabilityDeleteConfirmForm.php \
 application/modules/frontend/forms/Step5AvailabilityEditForm.php \
 application/modules/frontend/forms/Step5AvailablityForm.php \
+application/modules/frontend/helpers/DigestKey.php \
 application/modules/frontend/helpers/LevelSummary.php \
 application/modules/frontend/helpers/FeaturedProperty.php \
 application/modules/frontend/layouts/scripts/fullscreen.phtml \
@@ -215,6 +216,7 @@ application/modules/frontend/views/emails/admin-new-advertiser-join.txt \
 application/modules/frontend/views/emails/advertiser-password-reminder.html \
 application/modules/frontend/views/emails/advertiser-password-reminder.txt \
 application/modules/frontend/views/helpers/PhotoGrid.php \
+application/modules/frontend/views/scripts/advertiser-account/digest-key-fail.phtml \
 application/modules/frontend/views/scripts/advertiser-account/home.phtml \
 application/modules/frontend/views/scripts/advertiser-authentication/login.phtml \
 application/modules/frontend/views/scripts/advertiser-authentication/logout.phtml \
@@ -250,6 +252,7 @@ library/Vfr/Availability/Calendar/ImagePng.php \
 library/Vfr/Availability/Calendar/Object.php \
 library/Vfr/Controller/Helper/Acl.php \
 library/Vfr/Controller/Router/Route/Location.php \
+library/Vfr/DigestKey.php \
 library/Vfr/Exception.php \
 library/Vfr/Form/Element/AvailabilityRangePicker.php \
 library/Vfr/Form/Element/RatesRangePicker.php \
@@ -293,7 +296,8 @@ library/Vfr/View/Helper/RatesNotifier.php \
 library/Vfr/View/Helper/RatesPicker.php \
 library/Vfr/View/Helper/RentalBasis.php \
 library/Vfr/View/Helper/SummaryBar.php \
-library/Vfr/View/Helper/TinyThumb.php
+library/Vfr/View/Helper/TinyThumb.php \
+utils/updatechecksums
 
 if [ "$INC_SCHEMA" = "y" ]; then
 	echo -e "\E[32mAppending Schema to archive\E[37m"

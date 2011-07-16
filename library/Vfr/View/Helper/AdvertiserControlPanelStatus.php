@@ -1,25 +1,31 @@
 <?php
 class Vfr_View_Helper_AdvertiserControlPanelStatus extends Zend_View_Helper_Abstract
 {
-    public function advertiserControlPanelStatus($idProperty, $urlName, $locationUrl, $status, $approved)
+    public function advertiserControlPanelStatus($row)
     {
-        if ($status == 6) {
+        $idProperty  = $row->idProperty;
+        $urlName     = $row->urlName;
+        $locationUrl = $row->locationUrl;
+        $status      = $row->status;
+        $approved    = $row->approved;
+        
+        if ($status == Common_Resource_Property::COMPLETE) {
             if ($approved) {
-                $link = '/in/' . $locationUrl . '/' . $urlName;
+                $link = '/' . $locationUrl . '/' . $urlName;
                 return '<a href="' . $link .'">Live</a>';                
             } else {
                 return 'Awaiting Approval ' . $approved;
             }
         }
         
-        
         return '<a href="'
-               . $this->view->url ( array(
+               . $this->view->url( array(
                     'action'      => 'index',
                     'controller'  => 'advertiser-continue',
                     'module'      => 'frontend',
-                    'idProperty'  => $idProperty
-                ))
+                    'idProperty'  => $idProperty,
+                    'digestKey'   => Vfr_DigestKey::generate(array($idProperty))),
+                 null, true)
               . '">[continue]</a>';
     }
 }

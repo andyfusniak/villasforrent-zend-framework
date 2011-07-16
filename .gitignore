@@ -3,6 +3,7 @@
 *.swp
 data
 public/properties
+public/photos
 library/Zend
 nbproject
 vfr.komodoproject

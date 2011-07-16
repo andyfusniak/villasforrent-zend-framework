@@ -3,11 +3,12 @@
 <p>If this is your first visit, we suggest you begin by clicking "Add a new property" from the form below.</p>
 
 <p>Use the link below if you wish to add a new property to your account.</p>
-<a href="<?php echo $this->url(array('controller' => 'advertiser-property', 'action' => 'step1-location', 'module' => 'frontend')) ?>">[add a new property]</a>
+<a href="<?php echo $this->url(array('controller' => 'advertiser-property',
+                                     'action'     => 'step1-location',
+                                     'module'     => 'frontend')) ?>">[add a new property]</a>
 
 <table cellpadding="0" cellspacing="0" border="1">
 <?php foreach ($this->propertyRowset as $row) : ?>
-<?php //var_dump($property) ?>
 <tr>
     <td><?php echo $this->propertyTinyThumb($row->idProperty) ?></td>
     <td>
@@ -16,7 +17,7 @@
 		<?php echo $this->holidayType($row->idHolidayType) ?>
 		(Expires: <?php echo $this->prettyDate($row->expiry) ?>)</p><?php echo $this->summaryBar($row) ?>
 	</td>
-    <td><?php echo $this->advertiserControlPanelStatus($row->idProperty, $row->urlName, $row->locationUrl, $row->status, $row->approved) ?></td>
+    <td><?php echo $this->advertiserControlPanelStatus($row) ?></td>
 </tr>
 <?php endforeach ?>
 </table>

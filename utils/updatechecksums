@@ -1,0 +1,86 @@
+#!/usr/bin/python
+import sys
+import hashlib
+import MySQLdb
+import MySQLdb.cursors
+
+def update_checksum(cursor, idProperty, version):
+    propline = ''
+    cursor.execute("""
+        SELECT * FROM PropertiesContent
+        WHERE idProperty = %s
+        AND version = %s
+        ORDER BY idPropertyContentField
+    """, (idProperty, version))
+    
+    while (1):
+        row = cursor.fetchone()
+        if row == None:
+            break
+        propline = propline + row['content']
+    #print "%s, %s" % (row['name'], row['category'])
+    #print row
+
+    #print propline
+    #print "Number of rows returned: %d" % cursor.rowcount
+    # update the masterchecksum
+    checksum = hashlib.sha1(propline).hexdigest()
+    
+    if version == 1:
+        fieldName = 'checksumMaster'
+    else:
+        fieldName = 'checksumUpdate'
+
+    cursor.execute("UPDATE Properties SET " + fieldName + "=%s WHERE idProperty=%s", (checksum, idProperty))
+    #print "Number of rows updated: %d" % cursor.rowcount
+    #print (idProperty, checksum)
+     
+def main():
+    try:
+        # connect to the mysql db
+        conn = MySQLdb.connect (host   = "localhost",
+                                user   = "root",
+                                passwd = "mrgrey",
+                                db     = "villasforrent",
+                                cursorclass=MySQLdb.cursors.DictCursor)
+    except MySQLdb.Error, e:
+         print "Error %d: %s" % (e.args[0], e.args[1])
+         sys.exit (1)
+                    
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT idProperty FROM Properties")
+    rowall = cursor.fetchall()
+    
+    for proprow in rowall:
+        update_checksum(cursor, proprow['idProperty'], 1)
+        update_checksum(cursor, proprow['idProperty'], 2)
+         
+    cursor.close()
+    conn.commit()
+    conn.close()
+
+
+if __name__ == '__main__':
+    main()
+
+#There's also a way to do it without using a special cursor so that it's portable across DB API databases:
+#
+#>>> import MySQLdb
+#>>> db=MySQLdb.connect(read_default_file="~/.my.cnf", db="media")
+#>>> c=db.cursor()
+#>>> c.execute("SELECT * FROM track_list")
+#1L
+#>>> c.description
+#(('artist_uid', 8, 1, 20, 20, 0, 0), ('artist_name', 253, 6, 765, 765, 0, 0), ('album_uid', 8, 1, 20, 20, 0, 0), ('album_title', 253, 26, 765, 765, 0, 0), ('track_uid', 8, 1, 20, 20, 0, 0), ('track_title', 253, 22, 765, 765, 0, 1))
+#>>> def fetchoneDict(cursor):
+#... row = cursor.fetchone()
+#... if row is None: return None
+#... cols = [ d[0] for d in cursor.description ]
+#... return dict(zip(cols, row))
+#...
+#>>> d=fetchoneDict(c)
+#>>> d
+#{'track_title': 'Here Come the Bastards', 'artist_name': 'Primus', 'artist_uid': 5L, 'track_uid': 1L, 'album_title': 'Sailing the Seas of Cheese', 'album_uid': 1L}
+#>>>
+

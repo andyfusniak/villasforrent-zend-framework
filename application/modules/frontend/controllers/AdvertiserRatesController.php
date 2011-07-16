@@ -4,8 +4,17 @@ class AdvertiserRatesController extends Zend_Controller_Action
     public function rentalBasisAction()
     {
         $idProperty = $this->getRequest()->getParam('idProperty');
+		$digestKey  = $this->getRequest()->getParam('digestKey');
 		
-        $form = new Frontend_Form_Step4RentalBasis();
+		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty))) {
+			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+		}
+		
+		$newDigestKey = Vfr_DigestKey::generate(array($idProperty));
+        $form = new Frontend_Form_Step4RentalBasis(array(
+			'idProperty' => $idProperty,
+			'digestKey'	 => $newDigestKey
+		));
         
 		if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
@@ -15,7 +24,9 @@ class AdvertiserRatesController extends Zend_Controller_Action
 				$calendarModel = new Common_Model_Calendar();
 				$calendarModel->updateRentalBasis($idCalendar, $form->getValue('rentalBasis'));
 				
-				$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+				$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend',
+													   array('idProperty' => $idProperty,
+														     'digestKey'  => $digestKey));
 			}
 		} else {
 			$propertyModel = new Common_Model_Property();
@@ -36,8 +47,17 @@ class AdvertiserRatesController extends Zend_Controller_Action
     public function baseCurrencyAction()
     {
         $idProperty = $this->getRequest()->getParam('idProperty');
+		$digestKey  = $this->getRequest()->getParam('digestKey');
 		
-		$form = new Frontend_Form_Step4BaseCurrency();
+		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty))) {
+			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+		}
+		
+		$newDigestKey = Vfr_DigestKey::generate(array($idProperty));
+		$form = new Frontend_Form_Step4BaseCurrency(array(
+			'idProperty' => $idProperty,
+			'digestKey'  => $newDigestKey
+		));
 		
 		if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
@@ -47,7 +67,9 @@ class AdvertiserRatesController extends Zend_Controller_Action
 				$calendarModel = new Common_Model_Calendar();
 				$calendarModel->updateBaseCurrency($idCalendar, $form->getValue('currencyCode'));
 				
-				$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+				$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend',
+													   array('idProperty' => $idProperty,
+															 'digestKey'  => $newDigestKey));
 			}
 		} else {
 			$propertyModel = new Common_Model_Property();
@@ -68,36 +90,50 @@ class AdvertiserRatesController extends Zend_Controller_Action
 	public function deleteConfirmAction()
 	{
 		$idProperty = $this->getRequest()->getParam('idProperty');
-		$startDate	= $this->getRequest()->getParam('startDate');
-		$endDate	= $this->getRequest()->getParam('endDate');
+		$idRate		= $this->getRequest()->getParam('idRate');
+		$digestKey  = $this->getRequest()->getParam('digestKey');
 		
-		$form = new Frontend_Form_Step4RateDeleteConfirmForm();
+		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idRate))) {
+			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+		}
+		
+		$newDigestKey = Vfr_DigestKey::generate(array($idProperty, $idRate));
+		$form = new Frontend_Form_Step4RateDeleteConfirmForm(array(
+			'idProperty' => $idProperty,
+			'idRate'	 => $idRate,
+			'digestKey'  => $newDigestKey
+		));
+		
+		// lookup the rate row
+		$calendarModel = new Common_Model_Calendar();
+		$rateRow = $calendarModel->getRateByPk($idRate);
 		
 		if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
 				
 				if ($this->getRequest()->getParam('do') == 'cancel') {
-					$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+					$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend',
+														   array('idProperty' => $idProperty,
+																 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
 				}
 				
-				$propertyModel = new Common_Model_Property();
-				$idCalendar = $propertyModel->getCalendarIdByPropertyId($idProperty);
+				//$propertyModel = new Common_Model_Property();
+				//$idCalendar = $propertyModel->getCalendarIdByPropertyId($idProperty);
 				
-				$calendarModel = new Common_Model_Calendar();
-				$startDate 	= $this->getRequest()->getParam('startDate');
-				$endDate	= $this->getRequest()->getParam('endDate');
-				$rateRow 	= $calendarModel->getRateByStartAndEndDate($idCalendar, $startDate, $endDate);
-				
+				// and delete it
 				$rateRow->delete();
-				$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+				
+				// redirect back to the step4 page
+				$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend',
+													   array('idProperty' => $idProperty,
+															 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
 			}
 		}
 		
 		$this->view->assign(array(
 			'form'			=> $form,
 			'idProperty'	=> $idProperty,
-			'startDate'		=> $startDate,
-			'endDate'		=> $endDate
+			'rateRow'		=> $rateRow
 		));
 	}
 	
@@ -105,6 +141,13 @@ class AdvertiserRatesController extends Zend_Controller_Action
 	{
 		$idProperty = $this->getRequest()->getParam('idProperty');
 		$idRate	    = $this->getRequest()->getParam('idRate');
+		$digestKey  = $this->getRequest()->getParam('digestKey');
+		
+		//var_dump($idProperty, $idRate, $digestKey);
+		//die();
+		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idRate))) {
+			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+		}
 		
 		$propertyModel = new Common_Model_Property();
 		$calendarModel = new Common_Model_Calendar();
@@ -113,22 +156,25 @@ class AdvertiserRatesController extends Zend_Controller_Action
 		$idCalendar  = $propertyModel->getCalendarIdByPropertyId($idProperty);
 		$ratesRowset = $calendarModel->getRatesByCalendarId($idCalendar);
 		
-		
 		$rateRow = $calendarModel->getRateByPk($idRate);
 		
 		//die();
-		$request = $this->getRequest();
 		
+		$newDigestKey = Vfr_DigestKey::generate(array($idProperty, $idRate));
+		$request = $this->getRequest();
 		if ($request->isPost()) {
 			//var_dump($request->getParams());
 			$form = new Frontend_Form_Step4RateEditForm(array('idProperty'  => $idProperty,
 															  'idRate'		=> $rateRow->idRate,
 														      'name' 	    => $request->getParam('name'),
-														      'rates'	    => $request->getParam('rates')));
+														      'rates'	    => $request->getParam('rates'),
+															  'digestKey'   => $newDigestKey));
 			
 			if ($form->isValid($request->getPost())) {
                 $calendarModel->updateRateByPk($rateRow->idRate, $form->getValues());
-				$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend', array('idProperty' => $form->getValue('idProperty')));
+				$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend',
+													   array('idProperty' => $form->getValue('idProperty'),
+															 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
             }
 		} else {
 			$form = new Frontend_Form_Step4RateEditForm(array('idProperty'  => $idProperty,
@@ -139,10 +185,14 @@ class AdvertiserRatesController extends Zend_Controller_Action
 																					  'weeklyRate'			=> $rateRow->weeklyRate,
 																					  'weekendNightlyRate'	=> $rateRow->weekendNightlyRate,
 																					  'midweekNightlyRate'  => $rateRow->midweekNightlyRate,
-																					  'minStayDays'		    => $rateRow->minStayDays)));
+																					  'minStayDays'		    => $rateRow->minStayDays),
+															  'digestKey'  => $newDigestKey));
 		}
 		
 		//'2012-05-01#2012-05-08#300#340#400#7'
+		
+		// find out the rental basis and base currency for this calendar
+        $calendarRow = $propertyModel->getCalendarById($idCalendar);
 		
 		// Enable jQuery to pickup the headers etc
 		ZendX_JQuery::enableForm($form);
@@ -155,6 +205,8 @@ class AdvertiserRatesController extends Zend_Controller_Action
 		$this->view->assign(array (
 			'form'			=> $form,
 			'propertyRow'	=> $propertyRow,
+			'rentalBasis'	=> $calendarRow->rentalBasis,
+			'baseCurrency'	=> $calendarRow->currencyCode,
 			'ratesRowset'	=> $ratesRowset
 		));
 	}

@@ -5,6 +5,8 @@ class Frontend_Form_Step2ContentForm extends Zend_Form
 	protected $idHolidayType	= null;
 	protected $mode				= null;
 	
+	protected $_digestKey = null;
+	
 	public function setIdProperty($idProperty)
     {
 		$this->idProperty = $idProperty;
@@ -25,6 +27,11 @@ class Frontend_Form_Step2ContentForm extends Zend_Form
 		$this->mode = $mode;
 	}
 	
+	public function setDigestKey($digestKey)
+	{
+		$this->_digestKey = $digestKey;
+	}
+	
     public function __construct($options = null)
     {
         parent::__construct($options);
@@ -41,6 +48,10 @@ class Frontend_Form_Step2ContentForm extends Zend_Form
 		
 		$this->addElement('hidden', 'mode', array (
 			'value'	=> $this->mode	
+		));
+		
+		$this->addElement('hidden', 'digestKey', array (
+			'value'	=> $this->_digestKey	
 		));
 		
 		$this->addElement('textarea', 'summary', array (
@@ -93,6 +104,7 @@ class Frontend_Form_Step2ContentForm extends Zend_Form
 			'required'		=> false
 		));
 		
+		/*
 		$propertyModel = new Common_Model_Property();
 		$facilityRowSet = $propertyModel->getAllFacilities(true);
 		
@@ -102,7 +114,7 @@ class Frontend_Form_Step2ContentForm extends Zend_Form
 			$facilities->addMultiOption($row->facilityCode, $row->name);
 		}
 		$this->addElement($facilities);
-		
+		*/
 		
 		$this->addElement('textarea', 'notesDesc', array (
 			'required'		=> false
