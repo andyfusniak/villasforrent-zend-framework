@@ -14,9 +14,10 @@
 		<dt><label for="rental_basis">Rental Basis</label></dt>
 		<dd><input readonly="Y" name="rentalBasis" value="<?php echo $this->escape($this->rentalBasis($this->rentalBasis)) ?>" /> <?php echo $this->rentalBasisLink ?>
 		<a href="<?php echo $this->url(array('module'       => 'frontend',
-											 'controller'   => 'advertiser-rates',
-											 'action'       => 'rental-basis',
-											 'idProperty'   => $this->propertyRow->idProperty)) ?>">[edit]</a></dd>
+												'controller'   => 'advertiser-rates',
+												'action'       => 'rental-basis',
+												'idProperty'   => $this->propertyRow->idProperty,
+												'digestKey'	=> Vfr_DigestKey::generate(array($this->propertyRow->idProperty))), null, true) ?>">[edit]</a></dd>
 	</dl>
 		
 	<dl>
@@ -25,12 +26,14 @@
 		<a href="<?php echo $this->url(array('module'       => 'frontend',
 											 'controller'   => 'advertiser-rates',
 											 'action'       => 'base-currency',
-											 'idProperty'   => $this->propertyRow->idProperty)) ?>">[edit]</a></dd>
+											 'idProperty'   => $this->propertyRow->idProperty,
+											 'digestKey'	=> Vfr_DigestKey::generate(array($this->propertyRow->idProperty))), null, true) ?>">[edit]</a></dd>
 	</dl>
 </fieldset>
 
 <form id="step4" enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>" />
-<input type="hidden" name="idProperty" value="<?php echo $this->propertyRow->idProperty ?>" />
+<input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
+<input type="hidden" name="digestKey" value="<?php echo $this->form->getValue('digestKey') ?>" />
 <table style="width:100%;" cellpadding="0" cellspacing="0" border="1">
 <tr>
 	<td>Name of Period</td>
@@ -60,13 +63,20 @@ if ($this->ratesRowset) {
 																					   'controller' => 'advertiser-rates',
 																					   'action'     => 'edit',
 																					   'idProperty' => $this->propertyRow->idProperty,
-																					   'idRate'     => $row->idRate), null, true) ?>">[edit]</a></td>
+																					   'idRate'     => $row->idRate,
+																					   'digestKey'  => Vfr_DigestKey::generate(array(
+																							$this->propertyRow->idProperty,
+																							$row->idRate))
+																					   ), null, true) ?>">[edit]</a></td>
 			<td class="<?php echo $line_style ?>"><a href="<?php echo $this->url(array('module'     => 'frontend',
 																					   'controller' => 'advertiser-rates',
 																					   'action'     => 'delete-confirm',
 																					   'idProperty' => $this->propertyRow->idProperty,
-																					   'startDate'  => $row->startDate,
-																					   'endDate'    => $row->endDate), null, true) ?>">[del]</a></td>
+																					   'idRate'  	=> $row->idRate,
+																					   'digestKey'  => Vfr_DigestKey::generate(array(
+																							$this->propertyRow->idProperty,
+																							$row->idRate))
+																						), null, true) ?>">[del]</a></td>
 		</tr><?php
 		$i++;
 	}

@@ -14,31 +14,49 @@ class AdvertiserContinueController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $request = $this->getRequest()->getParams();
         $idProperty = $this->getRequest()->getParam('idProperty');
-        $propertyModel = new Common_Model_Property();
+        $digestKey  = $this->getRequest()->getParam('digestKey');
         
+        //var_dump($idProperty, $digestKey);
+        //die();
+		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty))) {
+			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+		}
+        
+        $propertyModel = new Common_Model_Property();
         $status = $propertyModel->getStatusByPropertyId($idProperty);
         
         switch ($status) {
             case Common_Resource_Property::STEP_1_LOCATION:
-                $this->_redirector->gotoSimple('step1-location', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+                $this->_redirector->gotoSimple('step1-location', 'advertiser-property', 'frontend',
+                                               array('idProperty' => $idProperty,
+                                                     'digestKey'  => $digestKey));
             break;
 
             case Common_Resource_Property::STEP_2_CONTENT:
-                $this->_redirector->gotoSimple('step2-content', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+                $mode = 'add';
+                $digestKey = Vfr_DigestKey::generate(array($idProperty, $mode));
+                $this->_redirector->gotoSimple('step2-content', 'advertiser-property', 'frontend',
+                                               array('idProperty' => $idProperty,
+                                                     'digestKey'  => $digestKey));
             break;
 
             case Common_Resource_Property::STEP_3_PICTURES:
-                $this->_redirector->gotoSimple('step3-pictures', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+                $this->_redirector->gotoSimple('step3-pictures', 'advertiser-property', 'frontend',
+                                               array('idProperty' => $idProperty,
+                                                     'digestKey'  => $digestKey));
             break;
 
             case Common_Resource_Property::STEP_4_RATES:
-                $this->_redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+                $this->_redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend',
+                                               array('idProperty' => $idProperty,
+                                                     'digestKey'  => $digestKey));
             break;
 
             case Common_Resource_Property::STEP_5_AVAILABILITY:
-                $this->_redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+                $this->_redirector->gotoSimple('step5-availability', 'advertiser-property',
+                                               'frontend', array('idProperty' => $idProperty,
+                                                                 'digestKey'  => $digestKey));
             break;
 
             case Common_Resource_Property::COMPLETE:

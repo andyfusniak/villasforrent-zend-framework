@@ -3,37 +3,53 @@ class AdvertiserAvailabilityController extends Zend_Controller_Action
 {
     public function deleteConfirmAction()
 	{
-		$idProperty = $this->getRequest()->getParam('idProperty');
-		$startDate	= $this->getRequest()->getParam('startDate');
-		$endDate	= $this->getRequest()->getParam('endDate');
+		$idProperty     = $this->getRequest()->getParam('idProperty');
+		$idAvailability	= $this->getRequest()->getParam('idAvailability');
+		$digestKey      = $this->getRequest()->getParam('digestKey');
+		
+		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idAvailability))) {
+			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+		}
+		
+        $form = new Frontend_Form_Step5AvailabilityDeleteConfirmForm(array(
+			'idProperty'     => $idProperty,
+			'idAvailability' => $idAvailability,
+			'digestKey'		 => $digestKey
+		));
         
-        $form = new Frontend_Form_Step5AvailabilityDeleteConfirmForm();
-        
+		$calendarModel = new Common_Model_Calendar();
+		$availabilityRow = $calendarModel->getAvailabilityByPk($idAvailability);
+		
         if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
                 
                 if ($this->getRequest()->getParam('do') == 'cancel') {
-					$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+					$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend',
+														   array('idProperty' => $idProperty,
+																 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
 				}
                 
                 $propertyModel = new Common_Model_Property();
 				$idCalendar = $propertyModel->getCalendarIdByPropertyId($idProperty);
 				
-				$calendarModel = new Common_Model_Calendar();
-				$startDate 	= $this->getRequest()->getParam('startDate');
-				$endDate	= $this->getRequest()->getParam('endDate');
-				$rateRow 	= $calendarModel->getAvailabilityByStartAndEndDate($idCalendar, $startDate, $endDate);
+				
                 
-				$rateRow->delete();
-				$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+				$availabilityRow->delete();
+				$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend',
+													   array('idProperty' => $idProperty,
+															 'digestKey'  => Vfr_DigestKey::generate(array(
+																$idProperty
+															))));
 			}
 		}
         
+		
+		
         $this->view->assign(array(
-           'form'       => $form,
-           'idProperty' => $idProperty,
-           'startDate'  => $startDate,
-           'endDate'    => $endDate
+           'form'            => $form,
+           'idProperty'      => $idProperty,
+           'idAvailability'  => $idAvailability,
+		   'availabilityRow' => $availabilityRow
         ));
     }
 	
@@ -41,6 +57,11 @@ class AdvertiserAvailabilityController extends Zend_Controller_Action
 	{
 		$idProperty 	= $this->getRequest()->getParam('idProperty');
 		$idAvailability = $this->getRequest()->getParam('idAvailability');
+		$digestKey  = $this->getRequest()->getParam('digestKey');
+		
+		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idAvailability))) {
+			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+		}
 		
 		$propertyModel = new Common_Model_Property();
 		$calendarModel = new Common_Model_Calendar();
@@ -56,18 +77,26 @@ class AdvertiserAvailabilityController extends Zend_Controller_Action
 			$form = new Frontend_Form_Step5AvailabilityEditForm(array(
 				'idProperty'  	 => $idProperty,
 				'idAvailability' => $availabilityRow->idAvailability,
-				'availability'	 => $request->getParam('availability')));
+				'availability'	 => $request->getParam('availability'),
+				'digestKey'		 => Vfr_DigestKey::generate(array($idProperty, $idAvailability))));
 			
 			if ($form->isValid($request->getPost())) {
                 $calendarModel->updateAvailabilityByPk($availabilityRow->idAvailability, $form->getValues());
-				$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend', array('idProperty' => $form->getValue('idProperty')));
+				$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend',
+													   array('idProperty' => $form->getValue('idProperty'),
+															 'digestKey'  => Vfr_DigestKey::generate(array(
+																$idProperty
+															))));
             }
 		} else {
 			$form = new Frontend_Form_Step5AvailabilityEditForm(array(
 				'idProperty'		=> $idProperty,
 				'idAvailability'	=> $availabilityRow->idAvailability,
 				'availability'		=> array ('start'	=> $availabilityRow->startDate,
-											  'end'		=> $availabilityRow->endDate)
+											  'end'		=> $availabilityRow->endDate),
+				'digestKey'			=> Vfr_DigestKey::generate(array(
+									      $idProperty, $idAvailability
+									   ))
 			));
 		}
 		
@@ -82,8 +111,7 @@ class AdvertiserAvailabilityController extends Zend_Controller_Action
 		$this->view->assign(array (
 			'form'					=> $form,
 			'propertyRow'			=> $propertyRow,
-			'availabilityRowset'	=> $availabilityRowset
-			
+			'availabilityRowset'	=> $availabilityRowset			
 		));
 	}
 }

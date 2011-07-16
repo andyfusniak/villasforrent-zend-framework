@@ -31,4 +31,9 @@ class AdvertiserAccountController extends Zend_Controller_Action
             throw new Vfr_Exception('Access Denied');
         }
     }
+	
+	public function digestKeyFailAction()
+	{
+	}
+	
 }

@@ -4,6 +4,8 @@ class Frontend_Form_Step5AvailabilityEditForm extends Zend_Form
     protected $_idProperty;
     protected $_idAvailability;
     protected $_availability;
+	
+	protected $_digestKey = null;
     
     public function __construct($options = null)
     {
@@ -24,6 +26,11 @@ class Frontend_Form_Step5AvailabilityEditForm extends Zend_Form
     {
         $this->_availability = $availability;
     }
+	
+	public function setDigestKey($digestKey)
+	{
+		$this->_digestKey = $digestKey;
+	}
     
     public function init()
     {
@@ -39,6 +46,10 @@ class Frontend_Form_Step5AvailabilityEditForm extends Zend_Form
         
 		$this->addElement('hidden', 'idAvailability', array (
 			'value'	=> $this->_idAvailability
+		));
+		
+		$this->addElement('hidden', 'digestKey', array (
+			'value'	=> $this->_digestKey	
 		));
         
         $this->addElement('availabilityRangePicker', 'availability', array (

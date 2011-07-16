@@ -5,6 +5,8 @@ class Frontend_Form_Step4RateEditForm extends Zend_Form
     protected $_idRate;
     protected $_name;
     protected $_rates;
+	
+	protected $_digestKey = null;
     
     public function __construct($options = null)
     {
@@ -30,6 +32,11 @@ class Frontend_Form_Step4RateEditForm extends Zend_Form
     {
         $this->_rates = $rates;
     }
+	
+	public function setDigestKey($digestKey)
+	{
+		$this->_digestKey = $digestKey;
+	}
     
     public function init()
     {
@@ -45,6 +52,10 @@ class Frontend_Form_Step4RateEditForm extends Zend_Form
         
 		$this->addElement('hidden', 'idRate', array (
 			'value'	=> $this->_idRate
+		));
+		
+		$this->addElement('hidden', 'digestKey', array (
+			'value'	=> $this->_digestKey	
 		));
 
         $this->addElement('text', 'name', array (

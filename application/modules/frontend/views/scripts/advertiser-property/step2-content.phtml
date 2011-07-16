@@ -12,6 +12,7 @@
 <form id="step2" enctype="application/x-www-form-urlencoded" method="post" action="/advertiser-property/step2-content">
 <input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
 <input type="hidden" name="mode" value="<?php echo $this->form->getValue('mode') ?>" />
+<input type="hidden" name="digestKey" value="<?php echo $this->form->getValue('digestKey') ?>" />
 	<fieldset>
     <legend>Content</legend>
 	<dl>
@@ -89,11 +90,11 @@
 			<?php echo $this->displayErrors($this->form->getMessages('serviceDesc')) ?>
 			<p>Please state whether towels and linen are included, how often the property is cleaned and how often towels and linen are changed etc</p>
 		</dd>
-	
-		<dt><label for="facilities">Type of Area:</label></dt>
+		
+		<!--<dt><label for="facilities">Type of Area:</label></dt>
 		<dd>
-			<?php echo $this->form->getElement('facilities') ?>
-		</dd>
+			<?php //echo $this->form->getElement('facilities') ?>
+		</dd>-->
 	
 		<dt><label for="notesDesc">Notes on accommodation:</label></dt>
 		<dd>

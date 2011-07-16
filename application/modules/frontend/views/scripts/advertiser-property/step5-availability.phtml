@@ -13,7 +13,7 @@
 
 <form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>" />
 <input type="hidden" name="idProperty" value="<?php echo $this->propertyRow->idProperty ?>" />
-
+<input type="hidden" name="digestKey" value="<?php echo $this->form->getValue('digestKey') ?>" />
 <table>
 <tr>
 	<th>Start Date</th>
@@ -30,13 +30,20 @@
 												'controller'	 => 'advertiser-availability',
 												'action'		 => 'edit',
 												'idProperty' 	 => $this->propertyRow->idProperty,
-												'idAvailability' => $row->idAvailability), null, true) ?>">[edit]</a></td>
-		<td><a href="<?php echo $this->url(array('module'     => 'frontend',
-												 'controller' => 'advertiser-availability',
-												 'action'     => 'delete-confirm',
-												 'idProperty' => $this->propertyRow->idProperty,
-												 'startDate'  => $row->startDate,
-												 'endDate'    => $row->endDate), null, true) ?>">[delete]</a></td>
+												'idAvailability' => $row->idAvailability,
+												'digestKey'		 => Vfr_DigestKey::generate(array(
+													$this->propertyRow->idProperty,
+													$row->idAvailability
+												))), null, true) ?>">[edit]</a></td>
+		<td><a href="<?php echo $this->url(array('module'         => 'frontend',
+												 'controller'     => 'advertiser-availability',
+												 'action'         => 'delete-confirm',
+												 'idProperty'     => $this->propertyRow->idProperty,
+												 'idAvailability' => $row->idAvailability,
+												 'digestKey'      => Vfr_DigestKey::generate(array(
+													$this->propertyRow->idProperty,
+													$row->idAvailability
+												 ))), null, true) ?>">[delete]</a></td>
 	</tr>
 	<?php endforeach ?>
 <?php endif ?>

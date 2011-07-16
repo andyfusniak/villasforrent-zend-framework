@@ -1,15 +1,15 @@
 <form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>" />
 <input type="hidden" name="do" value="delete" />
-<input type="hidden" name="idProperty" value="<?php echo $this->idProperty ?>" />
-<input type="hidden" name="startDate" value="<?php echo $this->startDate ?>" />
-<input type="hidden" name="endDate" value="<?php echo $this->endDate ?>" />
+<input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
+<input type="hidden" name="idRate" value="<?php echo $this->form->getValue('idRate') ?>" />
+<input type="hidden" name="digestKey" value="<?php echo $this->form->getValue('digestKey') ?>" />
 <fieldset>
     <dl>
         <dt>Start date</dt>
-        <dd><?php echo $this->prettyDate($this->startDate) ?></dd>
+        <dd><?php echo $this->prettyDate($this->rateRow->startDate) ?></dd>
         
         <dt>End date</dt>
-        <dd><?php echo $this->prettyDate($this->endDate) ?></dd>
+        <dd><?php echo $this->prettyDate($this->rateRow->endDate) ?></dd>
         
         <dt>Confirm</dt>
         <dd><input type="submit" value="Delete" /></dd> 
@@ -18,7 +18,9 @@
 </form>
 
 <form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>" />
-<input type="hidden" name="idProperty" value="<?php echo $this->idProperty ?>" />
+<input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
+<input type="hidden" name="idRate" value="<?php echo $this->form->getValue('idRate') ?>" />
+<input type="hidden" name="digestKey" value="<?php echo $this->form->getValue('digestKey') ?>" />
 <input type="hidden" name="do" value="cancel" />
 <input type="submit" value="Cancel" />
 </form>
