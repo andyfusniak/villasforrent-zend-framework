@@ -6,6 +6,8 @@ import MySQLdb
 import MySQLdb.cursors
 
 import config
+import holiday_types
+import status
 
 def display_advertiser(row):
     print 'Advertisers ID:        %s' % row['idAdvertiser']
@@ -14,7 +16,24 @@ def display_advertiser(row):
     print 'Lastname:              %s' % row['lastname']
     print 'Username (old system): %s' % row['username']
     print 'Password:              %s' % row['passwd']
-    
+
+def display_property(property_row, advertiser_row):
+    print 'Property ID: %s' % property_row['idProperty']
+    print 'Short name: %s' % property_row['shortName']
+    print 'Location URL: %s' % property_row['locationUrl']
+    print 'URL Name: %s' % property_row['urlName']
+    print 'Advertiser: %s' %  "(" + str(advertiser_row['idAdvertiser']) + ") " \
+                           + advertiser_row['firstname'] + " " \
+                           + advertiser_row['lastname']  + " " \
+                           + advertiser_row['emailAddress']
+    print 'Holiday Type: %s' % holiday_types.lookup[property_row['idHolidayType']]
+    print 'Approved: %s' % ('Yes' if property_row['approved'] == 1 else 'No')
+    print 'Visible: %s' % ('Yes' if property_row['visible'] == 1 else 'No') 
+    print 'Status: %s' % status.lookup[property_row['status']] + ' (' + str(property_row['status']) + ')'
+    print 'Changes made: %s' % ('Yes' if property_row['changesMade'] == 1 else 'No')
+    print 'Initial/Update checksums: %s' % ('Match' if property_row['checksumMaster'] == property_row['checksumUpdate'] else 'Differ')
+
+
 def advertiser(cursor, email_address):
     cursor.execute("""
     SELECT idAdvertiser, emailAddress, firstname, lastname, username, passwd
@@ -25,7 +44,30 @@ def advertiser(cursor, email_address):
     #print row
     #print type(row)
     display_advertiser(row)
-  
+
+def property_details(cursor, id_property):
+    cursor.execute("""
+    SELECT *
+    FROM Properties
+    WHERE idProperty=%s
+    """, (id_property))
+    property_row = cursor.fetchone()
+    
+    if property_row != None:
+        cursor.execute("""
+        SELECT *
+        FROM Advertisers
+        WHERE idAdvertiser=%s
+        """, (property_row['idAdvertiser'])
+        )
+        advertiser_row = cursor.fetchone()
+     
+        display_property(property_row, advertiser_row)
+    else:
+        print "Property id " + id_property + " was not found"
+
+   
+ 
 def main():
     try:
         # connect to the mysql db
@@ -42,9 +84,12 @@ def main():
                                                               
     cursor = conn.cursor()
 
-    if sys.argv[1] == 'adv':
+    context = sys.argv[1]
+    if context == 'adv':
         advertiser(cursor, sys.argv[2])
-         
+    elif context == 'prop':
+        property_details(cursor, sys.argv[2])
+    
     cursor.close()
     conn.commit()
     conn.close()
