@@ -1,0 +1,53 @@
+#!/usr/bin/python
+
+import os
+import sys
+import MySQLdb
+import MySQLdb.cursors
+
+import config
+
+def display_advertiser(row):
+    print 'Advertisers ID:        %s' % row['idAdvertiser']
+    print 'Email address:         %s' % row['emailAddress']
+    print 'Firstname:             %s' % row['firstname']
+    print 'Lastname:              %s' % row['lastname']
+    print 'Username (old system): %s' % row['username']
+    print 'Password:              %s' % row['passwd']
+    
+def advertiser(cursor, email_address):
+    cursor.execute("""
+    SELECT idAdvertiser, emailAddress, firstname, lastname, username, passwd
+    FROM Advertisers WHERE emailAddress=%s
+    """, (email_address))
+    row = cursor.fetchone()
+    
+    #print row
+    #print type(row)
+    display_advertiser(row)
+  
+def main():
+    try:
+        # connect to the mysql db
+        conn = MySQLdb.connect (
+            host   = config.dbhost,
+            user   = config.dbuser,
+            passwd = config.dbpass,
+            db     = config.dbname,
+            cursorclass = MySQLdb.cursors.DictCursor
+        )
+    except MySQLdb.Error, e:
+        print "Error %d: %s" % (e.args[0], e.args[1])
+        sys.exit(1)
+                                                              
+    cursor = conn.cursor()
+
+    if sys.argv[1] == 'adv':
+        advertiser(cursor, sys.argv[2])
+         
+    cursor.close()
+    conn.commit()
+    conn.close()
+
+if __name__ == '__main__':
+    main()
