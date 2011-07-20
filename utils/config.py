@@ -6,7 +6,7 @@ if os.getenv('APPLICATION_ENV') == 'production':
     dbpass = 'mrgrey'
     dbname = 'villasforrent'
 else:
-    dbname = 'localhost'
+    dbhost = 'localhost'
     dbuser = 'beta'
     dbpass = 'beta4046'
     dbname = 'hpw_live'
