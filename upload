@@ -54,6 +54,7 @@ application/configs/passwd.txt \
 application/Cron.php \
 application/modules/admin/Bootstrap.php \
 application/modules/admin/controllers/AdvertiserController.php \
+application/modules/admin/controllers/AuthFailController.php \
 application/modules/admin/controllers/ErrorController.php \
 application/modules/admin/controllers/FastLookupController.php \
 application/modules/admin/controllers/IndexController.php \
@@ -65,12 +66,14 @@ application/modules/admin/forms/PropertyApprovalForm.php \
 application/modules/admin/forms/PropertyExpiryForm.php \
 application/modules/admin/forms/PropertyUpdateApprovalForm.php \
 application/modules/admin/forms/UrlNameForm.php \
+application/modules/admin/plugins/Auth.php \
 application/modules/admin/views/helpers/ApprovalLocation.php \
 application/modules/admin/views/helpers/ApproveProperty.php \
 application/modules/admin/views/helpers/LocationUrl.php \
 application/modules/admin/views/helpers/PropertyExpiry.php \
 application/modules/admin/views/helpers/ToggleDirection.php \
 application/modules/admin/views/scripts/advertiser/index.phtml \
+application/modules/admin/views/scripts/auth-fail/auth-fail.phtml \
 application/modules/admin/views/scripts/fast-lookup/purge-table.phtml \
 application/modules/admin/views/scripts/fast-lookup/create-table.phtml \
 application/modules/admin/views/scripts/index/index.phtml \
