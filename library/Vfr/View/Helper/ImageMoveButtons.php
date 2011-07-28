@@ -13,18 +13,56 @@ class Vfr_View_Helper_ImageMoveButtons extends Zend_View_Helper_Abstract
         
         switch ($current) {
             case 0:
-                $moveDownUrl = '/advertiser-image-manager/move/idProperty/' . $idProperty . '/idPhoto/' . $idPhoto .'/moveDirection/down';
-                return '<div class="left"><img alt="" src="/images/admin/move_up_inactive.gif" /></div><div class="right"><a href="' . $moveDownUrl . '"><img alt="" src="/images/admin/move_down.gif" /></a></div>';
+                //$moveDownUrl = '/advertiser-image-manager/move/idProperty/' . $idProperty . '/idPhoto/' . $idPhoto .'/moveDirection/down';
+                $url = $this->view->url(array(
+                    'module'        => 'frontend',
+                    'controller'    => 'advertiser-image-manager',
+                    'action'        => 'move',
+                    'idProperty'    => $idProperty,
+                    'idPhoto'       => $idPhoto,
+                    'moveDirection' => 'down',
+					'digestKey'     => Vfr_DigestKey::generate(array($idProperty, $idPhoto, 'down'))
+                ), null, true);
+                
+                return '<div class="left"><img alt="" src="/images/admin/move_up_inactive.gif" /></div><div class="right"><a href="' . $url . '"><img alt="" src="/images/admin/move_down.gif" /></a></div>';
             break;
         
             case $last:
-                $moveUpUrl = '/advertiser-image-manager/move/idProperty/' . $idProperty . '/idPhoto/' . $idPhoto .'/moveDirection/up';
-                return '<div class="left"><a href="' . $moveUpUrl . '"><img alt="" src="/images/admin/move_up.gif" /></a></div><div class="right"><img alt="" src="/images/admin/move_down_inactive.gif" /></div>';
+                $url = $this->view->url(array(
+                    'module'        => 'frontend',
+                    'controller'    => 'advertiser-image-manager',
+                    'action'        => 'move',
+                    'idProperty'    => $idProperty,
+                    'idPhoto'       => $idPhoto,
+                    'moveDirection' => 'up',
+					'digestKey'     => Vfr_DigestKey::generate(array($idProperty, $idPhoto, 'up'))
+                ), null, true);
+                
+                return '<div class="left"><a href="' . $url . '"><img alt="" src="/images/admin/move_up.gif" /></a></div><div class="right"><img alt="" src="/images/admin/move_down_inactive.gif" /></div>';
             break;
         
             default:
-                $moveUpUrl   = '/advertiser-image-manager/move/idProperty/' . $idProperty . '/idPhoto/' . $idPhoto .'/moveDirection/up';
-                $moveDownUrl = '/advertiser-image-manager/move/idProperty/' . $idProperty . '/idPhoto/' . $idPhoto .'/moveDirection/down';
+            
+                $moveUpUrl = $this->view->url(array(
+                    'module'        => 'frontend',
+                    'controller'    => 'advertiser-image-manager',
+                    'action'        => 'move',
+                    'idProperty'    => $idProperty,
+                    'idPhoto'       => $idPhoto,
+                    'moveDirection' => 'up',
+					'digestKey'     => Vfr_DigestKey::generate(array($idProperty, $idPhoto, 'up'))
+                ), null, true);
+            
+                $moveDownUrl = $this->view->url(array(
+                    'module'        => 'frontend',
+                    'controller'    => 'advertiser-image-manager',
+                    'action'        => 'move',
+                    'idProperty'    => $idProperty,
+                    'idPhoto'       => $idPhoto,
+                    'moveDirection' => 'down',
+					'digestKey'     => Vfr_DigestKey::generate(array($idProperty, $idPhoto, 'down'))
+                ), null, true);
+                
                 return '<div class="left"><a href="' . $moveUpUrl . '"><img alt="" src="/images/admin/move_up.gif" /></a></div><div class="right"><a href="' . $moveDownUrl . '"><img alt="" src="/images/admin/move_down.gif" /></a></div>';
         }
     }

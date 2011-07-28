@@ -2,7 +2,7 @@
 class Admin_MigratePhotosController extends Zend_Controller_Action
 {
     protected $_photoConfig = null;
-    
+     
     public function init()
     {
         $this->_helper->viewRenderer->setNoRender(true);
@@ -10,7 +10,7 @@ class Admin_MigratePhotosController extends Zend_Controller_Action
         $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
 		$this->_photoConfig = $bootstrap['vfr']['photo'];
     }
-    
+	
     public function migratePhotosAction()
     {
         $photoModel = new Common_Model_Photo();

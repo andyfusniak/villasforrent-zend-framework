@@ -14,9 +14,15 @@ class AdvertiserImageManagerController extends Zend_Controller_Action
     public function confirmAction()
 	{
         // get the request params
-        $idProperty = $this->getRequest()->getParam('idProperty');
-        $idPhoto    = $this->getRequest()->getParam('idPhoto');
+		$request = $this->getRequest();
+        $idProperty = $request->getParam('idProperty');
+        $idPhoto    = $request->getParam('idPhoto');
+		$digestKey  = $request->getParam('digestKey');
         
+		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idPhoto))) {
+			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+		}
+		
         // decide what size to use based on original image aspect
         $photoModel = new Common_Model_Photo();
         $photoRow   = $photoModel->getPhotoByPhotoId($idPhoto);
@@ -62,39 +68,68 @@ class AdvertiserImageManagerController extends Zend_Controller_Action
                      . DIRECTORY_SEPARATOR . $photoRow->idProperty
                      . DIRECTORY_SEPARATOR . $idPhoto . '_' . $size . '.jpg';
         
-        $this->view->image      = $fullPath;
-        $this->view->idProperty = $idProperty;
-        $this->view->idPhoto    = $idPhoto;
+		$this->view->assign(array(
+			'image'	     => $fullPath,
+			'idProperty' => $idProperty,
+			'idPhoto'	 => $idPhoto,
+			'digestKey'  => $digestKey
+		));
     }
     
     public function deleteAction()
     {
         // get the request parameters
-        $idProperty = $this->getRequest()->getParam('idProperty');
-        $idPhoto    = $this->getRequest()->getParam('idPhoto');
+		$request = $this->getRequest();
+        $idProperty = $request->getParam('idProperty');
+        $idPhoto    = $request->getParam('idPhoto');
+		$digestKey  = $request->getParam('digestKey');
         
+		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idPhoto))) {
+			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+		}
+
         $photoModel = new Common_Model_Photo();
         $photoModel->deletePhotoByPhotoId($idProperty, $idPhoto);
                 
-        $this->_helper->redirector->gotoSimple('step3-pictures', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+        $this->_helper->redirector->gotoSimple('step3-pictures',
+											   'advertiser-property',
+											   'frontend',
+											   array('idProperty' => $idProperty,
+													 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
     }
     
     public function cancelAction()
     {
         // get the request parameters
-        $idProperty = $this->getRequest()->getParam('idProperty');
-        $idPhoto = $this->getRequest()->getParam('idPhoto');
+		$request = $this->getRequest();
+        $idProperty = $request->getParam('idProperty');
+        $idPhoto    = $request->getParam('idPhoto');
+		$digestKey  = $request->getParam('digestKey');
+		
+		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idPhoto))) {
+			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+		}
                
-        $this->_helper->redirector->gotoSimple('step3-pictures', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+        $this->_helper->redirector->gotoSimple('step3-pictures',
+											   'advertiser-property',
+											   'frontend',
+											   array('idProperty' => $idProperty,
+													 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
     }
 	
 	public function moveAction()
 	{
 		// get the request parameters
-        $idProperty 	= $this->getRequest()->getParam('idProperty');
-        $idPhoto 		= $this->getRequest()->getParam('idPhoto');
-		$moveDirection 	= $this->getRequest()->getParam('moveDirection');
+		$request = $this->getRequest();
+        $idProperty 	= $request->getParam('idProperty');
+        $idPhoto 		= $request->getParam('idPhoto');
+		$moveDirection 	= $request->getParam('moveDirection');
+		$digestKey      = $request->getParam('digestKey');
 		
+		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idPhoto, $moveDirection))) {
+			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+		}
+
 		if (($moveDirection !== 'up') && ($moveDirection !== 'down')) {
 			throw new Exception('Invalid move direction');
 		}
@@ -103,6 +138,10 @@ class AdvertiserImageManagerController extends Zend_Controller_Action
 		//$photoModel->fixBrokenDisplayPriorities($idProperty);
 		$photoModel->updateMovePosition($idProperty, $idPhoto, $moveDirection);
 		
-		$this->_helper->redirector->gotoSimple('step3-pictures', 'advertiser-property', 'frontend', array('idProperty' => $idProperty));
+		$this->_helper->redirector->gotoSimple('step3-pictures',
+											   'advertiser-property',
+											   'frontend',
+											   array('idProperty' => $idProperty,
+													 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
 	}
 }

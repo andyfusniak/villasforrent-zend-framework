@@ -1,10 +1,8 @@
 <?php
 class Admin_IndexController extends Zend_Controller_Action
 {
-
     public function init()
     {
-        /* Initialize action controller here */
     }
 
     public function indexAction()
@@ -18,6 +16,10 @@ class Admin_IndexController extends Zend_Controller_Action
 
 	public function listAwaitingInitialApprovalAction()
 	{
+		//$this->_forward('authfail');
+		//var_dump("in controller");
+		
+		/*
 		$modelProperty = new Common_Model_Property();
 		$propertyRowset = $modelProperty->getAllPropertiesAwaitingInitialApproval();
 		
@@ -30,7 +32,7 @@ class Admin_IndexController extends Zend_Controller_Action
 			   ->uiEnable();
 		
 		$this->view->headScript()->appendFile('/js/vfr/admin/seturl.js');
-		$this->view->propertyRowset = $propertyRowset;
+		$this->view->propertyRowset = $propertyRowset;*/
 	}
 }
 
