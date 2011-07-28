@@ -21,5 +21,4 @@ else
     fi
 fi
 
-mv /var/www/www.holidaypropertyworldwide.com/public/.htaccess-beta /var/www/www.holidaypropertyworldwide.com/public/.htaccess
 chgrp devteam -fR *

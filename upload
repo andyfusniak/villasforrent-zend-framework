@@ -162,6 +162,10 @@ application/modules/common/models/resources/PropertyContent/Rowset.php \
 application/modules/common/models/resources/PropertyContent.php \
 application/modules/common/models/resources/PropertyContentField/Interface.php \
 application/modules/common/models/resources/PropertyContentField.php \
+application/modules/common/models/resources/PropertyFacility.php \
+application/modules/common/models/resources/PropertyFacility/Interface.php \
+application/modules/common/models/resources/PropertyFacility/Row.php \
+application/modules/common/models/resources/PropertyFacility/Rowset.php \
 application/modules/common/models/resources/PropertyType/Interface.php \
 application/modules/common/models/resources/PropertyType/Row.php \
 application/modules/common/models/resources/PropertyType/Rowset.php \
@@ -443,12 +447,6 @@ echo -e "\E[32mRunning remote process to unbundle the package\E[37m"
 scp -P22 -p -C $DEPLOY_SCRIPT andy@villasforrent.net:$DEPLOY_DIR
 
 ssh -p22 andy@mrgrey.villasforrent.net $DEPLOY_DIR/$DEPLOY_SCRIPT
-
-
-CMD="ssh -p22 andy@mrgrey.villasforrent.net 'rm /var/www/beta.villasforrent.net/gobeta'"
-ssh -p22 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/gobeta'
-ssh -p22 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/golive'
-ssh -p22 andy@mrgrey.villasforrent.net 'rm -f /var/www/beta.villasforrent.net/zend_vfr.tar.gz'
 
 echo -e "\E[32mCleaning up local files\E[37m"
 rm -f zend_vfr.tar.gz
