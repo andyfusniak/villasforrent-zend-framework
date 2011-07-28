@@ -204,9 +204,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$router->addroute('location', $sroute)
 		       ->addroute('imageCache', $routeImageCache)
 			   ->addroute('property', $fullPropertyRoute)
-			   //->addroute('destination', $routeDestination)
-			   //->addRoute('region', $routeRegion)
-			   //->addRoute('country', $routeCountry)
 			   ->addRoute('availabilityImage', $routeAvailbilityImage)
 			   ->addRoute('rest', $routeRestApi);
 		
@@ -226,10 +223,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$layoutModulePlugin->registerModuleLayout('frontend', APPLICATION_PATH . '/modules/frontend/layouts/scripts');
 		$layoutModulePlugin->registerModuleLayout('admin', APPLICATION_PATH . '/modules/admin/layouts/scripts');
 		
+		$adminAuthPlugin = new Admin_Plugin_Auth();
+		
 		//$acl = new Frontend_Model_AdvertiserAcl();
 
 		//$frontController->registerPlugin(new Frontend_Plugin_AdvertiserAccessCheck());
 		$frontController->registerPlugin($layoutModulePlugin);
+		$frontController->registerPlugin($adminAuthPlugin);
 		
 		//$frontController->registerPlugin(new Api_Plugin_RestAuth());
 
@@ -243,8 +243,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 		//Zend_Controller_Action_HelperBroker::addPrefix('Frontend_Helper');
 		Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/modules/frontend/helpers','Frontend_Helper');
-
+		//Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/modules/admin/helpers', 'Admin_Helper');
+		//Zend_Controller_Action_HelperBroker::addPrefix('Admin_Helper');
+		
 		Zend_Controller_Action_HelperBroker::addHelper(new Vfr_Controller_Helper_Acl());
+		//Zend_Controller_Action_HelperBroker::addHelper(new Admin_Helper_Auth());
 
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
 	}
