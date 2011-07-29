@@ -19,7 +19,6 @@ class Admin_IndexController extends Zend_Controller_Action
 		//$this->_forward('authfail');
 		//var_dump("in controller");
 		
-		/*
 		$modelProperty = new Common_Model_Property();
 		$propertyRowset = $modelProperty->getAllPropertiesAwaitingInitialApproval();
 		
@@ -32,7 +31,7 @@ class Admin_IndexController extends Zend_Controller_Action
 			   ->uiEnable();
 		
 		$this->view->headScript()->appendFile('/js/vfr/admin/seturl.js');
-		$this->view->propertyRowset = $propertyRowset;*/
+		$this->view->propertyRowset = $propertyRowset;
 	}
 }
 
