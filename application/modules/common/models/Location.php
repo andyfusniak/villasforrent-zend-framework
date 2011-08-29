@@ -39,39 +39,9 @@ class Common_Model_Location extends Vfr_Model_Abstract
 	
 	public function getLocationHierarchy()
 	{
-		$allRowset = $this->getResource('Location')->getAllLocations();
-				
-		$h = array ();
-		foreach ($allRowset as $row) {
-			if ($row->depth == 1) {
-				$idLocation = $row->idLocation;
-				
-				$h[$idLocation] = array (
-					'name'	=> $row->rowname,
-					'child'	=> null
-				);
-							
-				$itemrows = $this->_findNode($allRowset, $idLocation, 2);
-				if ($itemrows) {
-					foreach ($itemrows as $item) {
-						$h[$idLocation]['child'][$item->idLocation] = array (
-							'name'  => $item->rowname,
-							'child'	=> null
-						);	
-					}	
-				}
-				//var_dump($item);
-			}
-		}
+		$locationRowset = $this->getResource('Location')->getAllLocations();
 		
-		foreach ($allRowset as $row) {
-			if ($row->depth == 2)
-			{
-				
-			}
-		}
-		
-		return $h;
+		return $locationRowset;
 	}
 	
 	public function getAllLocations()

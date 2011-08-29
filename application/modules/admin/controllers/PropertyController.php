@@ -1,9 +1,7 @@
 <?php
 class Admin_PropertyController extends Zend_Controller_Action
 {
-    public function init()
-    {
-    }
+    public function init() {}
     
 	public function listAwaitingUpdateApprovalAction()
 	{
@@ -70,10 +68,20 @@ class Admin_PropertyController extends Zend_Controller_Action
         ));
     }
     
+	private function indent($depth=1) {
+		$tabs = "";
+		for ($i=0; $i<$depth; $i++) {
+			$tabs .= "\t";
+		}
+		
+		return $tabs;
+	}
+	
     public function setLocationAction()
     {
-		$idProperty = $this->getRequest()->getParam('idProperty');
-		$idLocation	= $this->getRequest()->getParam('idLocation');
+		$request = $this->getRequest();
+		$idProperty = $request->getParam('idProperty');
+		$idLocation	= $request->getParam('idLocation');
 		
 		$propertyModel			= new Common_Model_Property();
 		$propertyContentRowset	= $propertyModel->getPropertyContentArrayById($idProperty,
@@ -86,8 +94,44 @@ class Admin_PropertyController extends Zend_Controller_Action
         $locationModel 	= new Common_Model_Location();
         $hierarchy = $locationModel->getLocationHierarchy();
         
-		var_dump($hierarchy);
-		die();
+		$xhtml = '<div id="demo1">' . "\n";
+		$xhtml .= '<ul id="browser" class="filetree treeview">' . "\n";
+		$currentDepth = $hierarchy[0]->depth;
+		$starting = true;
+		foreach ($hierarchy as $row) {
+			if ($row->depth > $currentDepth) {
+				$xhtml .= $this->indent($currentDepth) . "<ul>\n";
+				$currentDepth = $row->depth;
+			} elseif ($row->depth < $currentDepth) {
+				$num = $currentDepth - $row->depth;
+				//var_dump($num);
+				for ($i=0; $i<$num; $i++) {
+					$xhtml .= $this->indent($currentDepth-1) . "</ul>\n" . $this->indent($currentDepth-1) . "</li>\n\n";					
+				}
+				$currentDepth = $row->depth;
+			}// else if (($row->depth == $currentDepth) && (!$starting)) {
+			//	$xhtml .= "</li>\n";
+			//	$starting = false;
+			//}
+							
+			
+			if (($row->lt == ($row->rt - 1)) && ($row->idProperty)) {
+				$xhtml .= $this->indent($currentDepth) . '<li class="jstree-leaf jstree-locked" id="' . $row->idLocation . '"><a href="#">' . $row->rowname . "</a></li>\n";
+			} else {
+				$xhtml .= $this->indent($currentDepth) . '<li class="jstree-closed" id="' . $row->idLocation . '"><a href="#">' . $row->rowname . "</a>\n";
+			}
+			//var_dump($row);
+	
+			//var_dump($xhtml);
+			//echo "<hr />";
+		}
+		
+		
+		$xhtml .= "</ul></li>\n";
+		$xhtml .= "</div>\n";
+		
+		$this->view->hierarchy = $xhtml;
+		
         $form = new Admin_Form_LocationSelectForm(array ('idProperty' => $idProperty,
 														 'idLocation' => $idLocation));
         
@@ -112,7 +156,7 @@ class Admin_PropertyController extends Zend_Controller_Action
 								 ->appendFile('/js/jquery-plugins/jstree-1.0/jquery.cookie.js')
                                  ->appendFile('/js/admin/set-location.js');
         $this->view->headLink()->appendStylesheet('/js/jquery-plugins/jstree-1.0/themes/default/style.css');
-        $this->view->hierarchy = $hierarchy;
+        //$this->view->hierarchy = $hierarchy;
     }
 	
 	public function setUrlNameAction()

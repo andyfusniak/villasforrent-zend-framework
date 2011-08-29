@@ -6,6 +6,7 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
     protected $_rowClass = 'Common_Resource_Location_Row';
     protected $_rowsetClass = 'Common_Resource_Location_Rowset';
     
+	const ROOT_NODE_ID = 321;
     
     //
     // CREATE
@@ -92,8 +93,8 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
     public function getAllLocations($depth=null)
     {
         $query = $this->select()
-					  ->where('idProperty is null')
-                      ->order('idLocation');
+					  //->where('idProperty IS NULL')
+                      ->order('lt');
 					  
 		if ($depth)
 			$query->where('depth = ?', $depth);
@@ -110,6 +111,7 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
     public function getAllLocationsIn($idParent=null)
     {
         $query = $this->select();
+	                  //->where('idProperty IS NULL');
 		if ($idParent == null)
 			$query->where('idParent IS NULL');
         else

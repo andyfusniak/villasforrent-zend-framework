@@ -19,29 +19,9 @@
 <form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
 <input type="hidden" id="idLocation" name="idLocation" value="<?php echo $this->form->getValue('idLocation') ?>" />
 <input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
-<div id="demo1">
-<ul id="browser" class="filetree treeview">
-    <?php foreach ($this->hierarchy as $toplevel_item) : ?>
-    <?php //var_dump($country['idCountry']) ?>
-    <li class="country <?php echo ($this->form->getValue('idLocation') == $toplevel_item['idLocation']) ? 'jstree-open' : '' ?>">
-        <a href="#"><?php echo $this->escape($toplevel_item['name']) ?></a>
-        <ul> 
-            <?php foreach ($top['children'] as $region) : ?>
-            <?php //var_dump($this->form->getValue('idRegion')); ?>
-            <li class="region <?php echo ($this->form->getValue('idRegion') == $region['idRegion']) ? 'jstree-open' : '' ?>">
-                <a href="#"><?php echo $this->escape($region['name']) ?></a>
-                <ul>
-                    <?php foreach ($region['children'] as $destination) : ?>
-                    <li class="destination <?php //echo ($this->form->getValue('idFastLookup') == $destination['idFastLookup']) ? 'jstree-open' : '' ?>" id="<?php echo $destination['idFastLookup'] ?>"><a href="#"><?php echo $this->escape($destination['name']) ?></a></li>
-                    <?php endforeach ?>
-                </ul>
-            </li>
-            <?php endforeach ?>
-        </ul>
-    </li>
-    <?php endforeach ?>
-</ul>
-</div>
+
+<?php echo $this->hierarchy ?>
+
 <?php echo $this->displayErrors($this->form->getMessages('idLocation')) ?>
 <?php echo $this->displayErrors($this->form->getMessages('idProperty')) ?>
 <input type="submit" value="Set Location" />

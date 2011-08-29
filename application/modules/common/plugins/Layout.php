@@ -80,7 +80,7 @@ class Common_Plugin_Layout extends Zend_Controller_Plugin_Abstract
                 
 				// inject the top level locations into the view
                 $locationModel	= new Common_Model_Location();
-                $view->locationRowset = $locationModel->getAllLocationsIn(null);
+                $view->locationRowset = $locationModel->getAllLocationsIn(Common_Resource_Location::ROOT_NODE_ID);
 				//var_dump($view->locationRowset);
                 
 				//$this->_logger->log(__METHOD__ . ' Setting view helpers for frontend module', Zend_Log::DEBUG);

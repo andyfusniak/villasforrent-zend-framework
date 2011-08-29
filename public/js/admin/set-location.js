@@ -8,10 +8,21 @@ $(function () {
 			},
 	
 			'themes' : {
-				'theme' : 'classic',
+				'theme' : 'hpw',
 				'dots' : true,
 				'icons' : true
 			},
+			
+			/*
+			"types" : {
+				"default" : {
+					"valid_children" : "none",
+					"icon" : {
+						"image" : "file.png"
+					}
+				}
+			},
+			*/
 			
 			'cookies' : {
 				'save_selected' : false
