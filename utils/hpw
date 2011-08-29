@@ -1,9 +1,16 @@
 #!/usr/bin/python
-
+import argparse
 import os
 import sys
 import MySQLdb
 import MySQLdb.cursors
+
+
+#parser.add_argument('--sum', dest='accumulate', action='store_const',
+#                   const=sum, default=max,
+#                                                         help='sum the integers (default: find the max)')
+
+
 
 import config
 import holiday_types
@@ -78,9 +85,21 @@ def main():
             db     = config.dbname,
             cursorclass = MySQLdb.cursors.DictCursor
         )
+        parser = argparse.ArgumentParser(description='Holiday Property Worldwide Admin Cmd Line Tool')
+        parser.add_argument('--adv', metavar='email', type=str, nargs='+',
+                            help='Lookup an advertiser')
+        parser.add_argument('--prop', type=str, nargs=1, help='Lookup a property')
+         
+        args = parser.parse_args()
+        
+        print args
+
+
     except MySQLdb.Error, e:
         print "Error %d: %s" % (e.args[0], e.args[1])
         sys.exit(1)
+    
+    sys.exit()
                                                               
     cursor = conn.cursor()
 
