@@ -317,7 +317,13 @@ class Vfr_Availability_Calendar_Object
 	{
 		return $this->marginRight;
 	}
-	
+
+	public function setWeekStartDay($dayNum)
+	{
+		$this->weekStartDay = $dayNum;
+		
+		return $this;
+	}
 
 	public function getWeekStartDay()
 	{
@@ -361,6 +367,13 @@ class Vfr_Availability_Calendar_Object
 		return $this->dayCellMarginBottom;
 	}
 	
+	public function setDayCellMarginRight($pixels)
+	{
+		$this->dayCellMarginRight = $pixels;
+		
+		return $this;
+	}
+	
 	public function getDayCellMarginRight()
 	{
 		return $this->dayCellMarginRight;	
@@ -396,6 +409,13 @@ class Vfr_Availability_Calendar_Object
 		return $this->monthMarginTop;
 	}
 	
+	public function setMonthMarginRight($pixels)
+	{
+		$this->monthMarginRight = $pixels;
+		
+		return $this;
+	}
+	
 	public function getMonthMarginRight()
 	{
 		return $this->monthMarginRight;
@@ -406,8 +426,16 @@ class Vfr_Availability_Calendar_Object
 		return $this->monthMarginBottom;
 	}
 	
+	public function setMonthMarginLeft($pixels)
+	{
+		$this->monthMarginLeft = $pixels;
+		
+		return $this;
+	}
+	
 	public function getMonthMarginLeft()
 	{
 		return $this->monthMarginLeft;
 	}
 }
+

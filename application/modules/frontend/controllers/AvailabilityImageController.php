@@ -75,12 +75,16 @@ class AvailabilityImageController extends Zend_Controller_Action
 				   ->setStartYear($this->_getParam('yr', $calendar->vStartYear))
 				   ->setStartMonth($this->_getParam('mo', $calendar->vStartMonth))
 				   ->setColumns($this->_getParam('cc', ($calendar->vColumns === 0) ? 5 : $calendar->vColumns))
+				   ->setMonthMarginLeft($this->_getParam('mml', 4))
+				   ->setMonthMarginRight($this->_getParam('mmr', 4))
 				   ->setDayCellWidth($this->_getParam('cw', 19))
 				   ->setDayCellHeight($this->_getParam('ch', 19))
+				   ->setDayCellMarginRight($this->_getParam('dr', 2))
 				   ->setMarginTop($this->_getParam('mt', 4))
 				   ->setMarginRight($this->_getParam('mr', 4))
 				   ->setMarginBottom($this->_getParam('mb', 4))
 				   ->setMarginLeft($this->_getParam('ml', 4))
+				   ->setWeekStartDay($this->_getParam('wd', Vfr_Availability_Calendar_Object::DAY_MONDAY))
 		           ->setColourAvailable('99CCFF')
 				   ->setBookedColour($this->_getParam('bc', 'FF6666'));
 		

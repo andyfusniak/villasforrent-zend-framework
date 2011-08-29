@@ -309,7 +309,7 @@ class Vfr_Availability_Calendar_ImagePng
 		//var_dump($this->_settings);
 		
 		$width = ($this->_tableWidth * $this->_settings->getColumns())		
-			   + (($this->_settings->getMarginRight() + 1) * ($this->_settings->getColumns() - 1) );
+			   + (($this->_settings->getMarginRight()) * ($this->_settings->getColumns() - 1) );
 																		 // ;
 		//$width += (($this->_settings->monthColumns - 1) * ($this->_settings->horizontalGap));
 		//var_dump($width);
@@ -331,8 +331,8 @@ class Vfr_Availability_Calendar_ImagePng
 		//$this->_logger->log(__METHOD__ . ' Cursor changed to ' .  date('Y-m-d H:i:s', $this->_timestamp) . '(' . $this->_timestamp . ')', Zend_Log::DEBUG);
 	}
 	
-	private function _initCalendar()
-	{
+	//private function _initCalendar()
+	//{
 		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
 		//$this->_increaseCalendarCursor(-1);
 		//var_dump($this->_startCalendarDate->toString('YYYY-MM-dd'));
@@ -368,7 +368,7 @@ class Vfr_Availability_Calendar_ImagePng
 	*/	
 		//$this->_increaseCalendarCursor(1);
 		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
-	}
+	//}
 	
 	private function _updateState()
 	{
@@ -573,8 +573,8 @@ class Vfr_Availability_Calendar_ImagePng
         
         $this->_drawTitle($x, $y, $extrarow);
 		$y += $this->_settings->getMonthMarginTop()
-				+ $this->_settings->getTitleHeight()
-				+ $this->_settings->getNameCellMarginTop();
+			+ $this->_settings->getTitleHeight()
+			+ $this->_settings->getNameCellMarginTop();
 		
         $this->_drawDayNames($x, $y);
 		$y += $this->_settings->getDayCellHeight() + $this->_settings->getDayCellMarginRight();
@@ -668,7 +668,7 @@ class Vfr_Availability_Calendar_ImagePng
         //$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
         //$this->_logger->log(__METHOD__ . ' Indent parameter is ' . $indent, Zend_Log::DEBUG);
         
-        $x += $this->_settings->getMarginLeft()
+        $x += $this->_settings->getMonthMarginLeft()
 		   + $indent * ($this->_settings->getDayCellWidth() + $this->_settings->getDayCellMarginRight());
 		
         
@@ -702,7 +702,7 @@ class Vfr_Availability_Calendar_ImagePng
 			$day = date('j', $this->_timestamp);
             if ( ((($day + $indent) %7 == 0)) && ($day != $numDays)) {
                 // back to beginning of row
-				$x = $this->_x + $this->_settings->getMarginLeft();
+				$x = $this->_x + $this->_settings->getMonthMarginLeft();
                 
                 //$this->_logger->log(__METHOD__ . ' Dropping down a row', Zend_Log::INFO);
                 $y += $this->_settings->getDayCellHeight() + $this->_settings->getDayCellMarginTop();
@@ -815,13 +815,13 @@ class Vfr_Availability_Calendar_ImagePng
 		$this->_timestamp = strtotime($this->_settings->getStartYear() . '-' . $this->_settings->getStartMonth() . '-01 14:00:00');
 		//$this->_logger->log(__METHOD__ . ' Timestamp initialised to ' .  strftime ("%d-%m-%Y", $this->_timestamp), Zend_Log::DEBUG);
 
-		$this->_initCalendar();		
+		//$this->_initCalendar();		
         
-		$startDay = intval($this->_settings->getweekStartDay() % 7);
-		$year  = $this->_settings->getStartYear();
-		$month = $this->_settings->getStartMonth();
-		$current = $this->_timestamp;
-		$mn = 0;
+		$startDay  = intval($this->_settings->getweekStartDay() % 7);
+		$year      = $this->_settings->getStartYear();
+		$month     = $this->_settings->getStartMonth();
+		$current   = $this->_timestamp;
+		$mn        = 0;
 		$extrarows = 0;
 		$trimArray = array();
 		for ($i=0; $i < $this->_calendarRows; $i++) {
@@ -889,7 +889,7 @@ class Vfr_Availability_Calendar_ImagePng
 					
 				$month++;
 				if ($month === $this->_settings->getDurationMonths()) break;
-                $this->_x += $this->_tableWidth + $this->_settings->getMarginLeft() + 1;
+                $this->_x += $this->_tableWidth + $this->_settings->getMarginRight();
             }
 			
 			if ($month === $this->_settings->getDurationMonths()) break;
