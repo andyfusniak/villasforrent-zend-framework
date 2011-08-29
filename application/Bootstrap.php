@@ -153,7 +153,33 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 												  )
 		);
 		
+        // RESTful API Interface
+        $restPropertiesRatesA = new Zend_Controller_Router_Route(
+            '/api/properties/:idProperty/rates',
+            array (
+                'module'     => 'api',
+                'controller' => 'property-rates',
+                'action'     => 'test'
+            )
+        );
+        
+        $restPropertiesRatesB = new Zend_Controller_Router_Route(
+            '/api/properties/:idProperty/rates/:idRate',
+            array (
+                'module'     => 'api',
+                'controller' => 'property-rates',
+                'action'     => 'index'
+            )
+        );
 		
+		$restPropertyCalendar = new Zend_Controller_Router_Route (
+			'/api/property/:idProperty/calendar/:idCalendar',
+			array (
+				'module'	 => 'api',
+				'controller' => 'property-calendar',
+				'action'	 => 'index'
+			)
+		);
 		
 		$fullPropertyRoute = new Zend_Controller_Router_Route(
 				'/in/:country/:region/:destination/:propertyurl',
@@ -163,12 +189,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		);
 		
         // setup a route for /in/<country>/<region>/<destination>
-        $routeDestination = new Zend_Controller_Router_Route(
-				'/in/:country/:region/:destination',
-				array('module'     => 'frontend',
-				      'controller' => 'level',
-					  'action'     => 'destination')
-		);
+        //$routeDestination = new Zend_Controller_Router_Route(
+		//		'/in/:country/:region/:destination',
+		//		array('module'     => 'frontend',
+		//		      'controller' => 'level',
+		//			  'action'     => 'destination')
+		//);
 		
 	//	Zend_Controller_Front::getInstance()->getRouter()->addRoute('frontend',$route);
 		
@@ -205,7 +231,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		       ->addroute('imageCache', $routeImageCache)
 			   ->addroute('property', $fullPropertyRoute)
 			   ->addRoute('availabilityImage', $routeAvailbilityImage)
-			   ->addRoute('rest', $routeRestApi);
+			   ->addRoute('restPropertyCalendar', $restPropertyCalendar)
+               ->addRoute('ratePropertiesRatesB', $restPropertiesRatesB)
+               ->addRoute('restPropertiesRatesA', $restPropertiesRatesA);
+			   //->addRoute('rest', $routeRestApi);
 		
         $this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
     }
@@ -231,7 +260,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$frontController->registerPlugin($layoutModulePlugin);
 		$frontController->registerPlugin($adminAuthPlugin);
 		
-		//$frontController->registerPlugin(new Api_Plugin_RestAuth());
+		$frontController->registerPlugin(new Api_Plugin_RestAuth());
 
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 	}
@@ -243,6 +272,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 		//Zend_Controller_Action_HelperBroker::addPrefix('Frontend_Helper');
 		Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/modules/frontend/helpers','Frontend_Helper');
+        Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/modules/api/helpers','Api_Helper');
+        
 		//Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/modules/admin/helpers', 'Admin_Helper');
 		//Zend_Controller_Action_HelperBroker::addPrefix('Admin_Helper');
 		

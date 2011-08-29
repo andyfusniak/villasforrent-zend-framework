@@ -10,6 +10,7 @@ class Api_PropertyController extends Zend_Rest_Controller
     {
         $request = $this->getRequest();
 
+    
         $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
 		$this->_vfrConfig = $bootstrap['vfr'];
         
