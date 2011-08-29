@@ -37,6 +37,7 @@ echo -e "\E[32mCreating code archive\E[37m"
 tar cfp zend_vfr.tar \
 public/.htaccess \
 public/.htaccess-beta \
+public/googleae3066b83fcfab45.html \
 public/css/admin/controlpanel.css \
 public/css/villastorent.css \
 public/index.php \
@@ -86,8 +87,10 @@ application/modules/admin/views/scripts/property/set-expiry.phtml \
 application/modules/admin/views/scripts/property/set-location.phtml \
 application/modules/admin/views/scripts/property/set-url-name.phtml \
 application/modules/admin/views/scripts/property/view-update-approval.phtml \
-application/modules/api/controllers/PropertyController.php \
-application/modules/api/views/scripts/property/get.xml.phtml \
+application/modules/api/controllers/PropertyCalendarController.php \
+application/modules/api/helpers/RestfulApi.php \
+application/modules/api/plugins/RestAuth.php \
+application/modules/api/views/scripts/property-calendar/get.json.phtml \
 application/modules/common/models/Acl/Role/Admin.php \
 application/modules/common/models/Acl/Role/Advertiser.php \
 application/modules/common/models/Acl/Role/Guest.php \
