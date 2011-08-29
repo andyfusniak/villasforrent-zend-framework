@@ -20,6 +20,11 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
 		return $this->getResource('Advertiser')->getAdvertiserByEmail($emailAddress);
 	}
 	
+	public function addNewAdvertiser($params)
+	{
+		return $this->getResource('Advertiser')->addNewAdvertiser($params);
+	}
+	
 	public function registerAdvertiser($post)
 	{
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
@@ -31,9 +36,9 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
 
 		// get filtered values
 		$data = $form->getValues();
-        $data['iso2char'] = 'ZZ';
-        $data['added'] = new Zend_Db_Expr('now()');
-        $data['updated'] = new Zend_Db_Expr('now()');
+        $data['iso2char'] = new Zend_Db_Expr('now()');
+        $data['added']    = new Zend_Db_Expr('now()');
+        $data['updated']  = new Zend_Db_Expr('now()');
 		
 		return $this->getResource('Advertiser')->saveRow($data);
 		

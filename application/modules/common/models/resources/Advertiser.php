@@ -7,6 +7,43 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
 	protected $_rowsetClass = 'Common_Resource_Advertiser_Rowset';
 	protected $_dependentTables = array('Properties');
 
+	//
+	// CREATE
+	//
+	public function addNewAdvertiser($params)
+	{
+		$nullExpr = new Zend_Db_Expr('NULL');
+		$nowExpr  = new Zend_Db_Expr('NOW()');
+		
+		$data = array (
+			'idAdvertiser'    => $nullExpr,
+			'iso2char'	   	  => $nullExpr,
+			'idAdministrator' => 1,
+			'username'		  => $nullExpr,
+			'passwd'		  => $params['passwd'],
+			'emailAddress'	  => $params['emailAddress'],
+			'firstname'		  => $params['firstname'],
+			'lastname'		  => $params['lastname'],
+			'address'		  => $nullExpr,
+			'postcode'		  => $nullExpr,
+			'telephone'		  => $nullExpr,
+			'fax'			  => $nullExpr,
+			'mobile'		  => $nullExpr,
+			'added'			  => $nowExpr,
+			'updated'		  => $nowExpr,
+			'lastModifiedBy'  => 'system'
+		);
+		
+		try {
+			$this->insert($data);
+			$rowId = $this->_db->lastInsertId();
+			
+			return $rowId;
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+
 	/**
 	 * Get all advertisers
 	 *

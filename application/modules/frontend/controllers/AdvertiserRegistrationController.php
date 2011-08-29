@@ -17,7 +17,7 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
         
 		if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
-				$this->_advertiserModel->registerAdvertiser($form->getValues());
+				$this->_advertiserModel->addNewAdvertiser($form->getValues());
 				
 				// automatically login the advertiser
 				$model = new Common_Model_Advertiser();

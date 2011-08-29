@@ -13,7 +13,7 @@ class Frontend_Plugin_AdvertiserAccessCheck extends Zend_Controller_Plugin_Abstr
 
 	public function preDispatch(Zend_Controller_Request_Abstract $request)
 	{
-		echo "PreDispatch action";
+		//echo "PreDispatch action";
 	}
 }
 
