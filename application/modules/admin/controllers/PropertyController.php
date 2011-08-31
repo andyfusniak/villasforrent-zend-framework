@@ -182,8 +182,12 @@ class Admin_PropertyController extends Zend_Controller_Action
 		$propertyRow	= $propertyModel->getPropertyById($idProperty);
 		
 		
-		$form = new Admin_Form_UrlNameForm(array ('idProperty' 	=> $idProperty,
-												  'urlName'		=> $urlName));
+		$form = new Admin_Form_UrlNameForm (
+			array (
+				'idProperty' => $idProperty,
+				'urlName'    => $urlName
+			)
+		);
 
 		if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
@@ -194,8 +198,12 @@ class Admin_PropertyController extends Zend_Controller_Action
 			}
 		}
 		
-		$this->view->form 		= $form;
-		$this->view->shortName	= $propertyRow->shortName;
+		$this->view->assign(
+			array (
+				'form' => $form,
+				'shortName' => $propertyRow->shortName
+			)
+		);
 	}
 	
 	public function setExpiryAction()
