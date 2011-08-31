@@ -33,21 +33,48 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		
 		// setup the main version content
 		$params = $options['params'];
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_LOCATION_URL, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_META_DATA, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_SEO_DATA, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_WEBSITE, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_HEADLINE_1, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_HEADLINE_2, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_SUMMARY, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_DESCRIPTION, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_BEDROOM_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_BATHROOM_DESC, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_LOCATION_URL, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_META_DATA, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_SEO_DATA, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_WEBSITE, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_HEADLINE_1, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_HEADLINE_2, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_SUMMARY, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_DESCRIPTION, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_BEDROOM_DESC, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_BATHROOM_DESC, '');
 		
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_KITCHEN_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_UTILITY_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_LIVING_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_OTHER_DESC, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_KITCHEN_DESC, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_UTILITY_DESC, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
+														Common_Resource_PropertyContent::FIELD_LIVING_DESC, '');
+		$propertyContentResource->createPropertyContent($idProperty,
+														Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_OTHER_DESC, '');
 		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_SERVICE_DESC, '');
 		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_NOTES_DESC, '');
 		$propertyContentResource->createPropertyContent($idProperty, Common_Resource_PropertyContent::VERSION_MAIN, 'EN', Common_Resource_PropertyContent::FIELD_ACCESS_DESC, '');
@@ -501,14 +528,16 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		$idProperty = (int) $idProperty;
 		$idLocation	= (int) $idLocation;
 		
+		// check to see that this location exists
 		$locationResource = $this->getResource('Location');
 		$locationRow = $locationResource->getLocationByPk($idLocation);
 		
 		if ($locationRow) {
 			$propertyResource = $this->getResource('Property');
-			$propertyResource->updatePropertyLocationId($idProperty,
-														$locationRow->idLocation,
-														$locationRow->url);
+			$propertyResource->updatePropertyLocationId (
+				$idProperty,
+				$locationRow->idLocation
+			);
 		}
 	}
 	

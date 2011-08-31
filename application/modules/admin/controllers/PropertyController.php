@@ -83,6 +83,27 @@ class Admin_PropertyController extends Zend_Controller_Action
 		$idProperty = $request->getParam('idProperty');
 		$idLocation	= $request->getParam('idLocation');
 		
+		$form = new Admin_Form_LocationSelectForm (
+			array (
+				'idProperty' => $idProperty,
+				'idLocation' => $idLocation
+			)
+		);
+		
+		if ($this->getRequest()->isPost()) {
+			if ($form->isValid($this->getRequest()->getPost())) {
+				$propertyModel = new Common_Model_Property();
+				
+				$propertyModel->updatePropertyLocationId (
+					$idProperty,
+					$form->getValue('idLocation')
+				);
+				
+				$this->_helper->redirector->gotoSimple('list-awaiting-initial-approval', 'index', 'admin', array());
+			}
+		}
+
+		
 		$propertyModel			= new Common_Model_Property();
 		$propertyContentRowset	= $propertyModel->getPropertyContentArrayById($idProperty,
 																		 Common_Resource_PropertyContent::VERSION_MAIN,
@@ -94,7 +115,7 @@ class Admin_PropertyController extends Zend_Controller_Action
         $locationModel 	= new Common_Model_Location();
         $hierarchy = $locationModel->getLocationHierarchy();
         
-		$xhtml = '<div id="demo1">' . "\n";
+		$xhtml = '<div id="lhierarchy">' . "\n";
 		$xhtml .= '<ul id="browser" class="filetree treeview">' . "\n";
 		$currentDepth = $hierarchy[0]->depth;
 		$starting = true;
@@ -118,7 +139,7 @@ class Admin_PropertyController extends Zend_Controller_Action
 			if (($row->lt == ($row->rt - 1)) && ($row->idProperty)) {
 				$xhtml .= $this->indent($currentDepth) . '<li class="jstree-leaf jstree-locked" id="' . $row->idLocation . '"><a href="#">' . $row->rowname . "</a></li>\n";
 			} else {
-				$xhtml .= $this->indent($currentDepth) . '<li class="jstree-closed" id="' . $row->idLocation . '"><a href="#">' . $row->rowname . "</a>\n";
+				$xhtml .= $this->indent($currentDepth) . '<li class="jstree-closed location" id="' . $row->idLocation . '"><a href="#">' . $row->rowname . "</a>\n";
 			}
 			//var_dump($row);
 	
@@ -132,8 +153,7 @@ class Admin_PropertyController extends Zend_Controller_Action
 		
 		$this->view->hierarchy = $xhtml;
 		
-        $form = new Admin_Form_LocationSelectForm(array ('idProperty' => $idProperty,
-														 'idLocation' => $idLocation));
+        
         
         // Enable jQuery to pickup the headers etc
 		ZendX_JQuery::enableForm($form);
@@ -141,14 +161,8 @@ class Admin_PropertyController extends Zend_Controller_Action
 		$jquery->enable()
 			   ->uiEnable();
         
-		if ($this->getRequest()->isPost()) {
-			if ($form->isValid($this->getRequest()->getPost())) {
-				$propertyModel = new Common_Model_Property();
-				$propertyModel->updatePropertyLocation($idProperty, $form->getValue('idFastLookup'));
-				
-				$this->_helper->redirector->gotoSimple('list-awaiting-initial-approval', 'index', 'admin', array());
-			}
-		}
+		
+		
 		
 		$this->view->form = $form;
 		$this->view->propertyContentRowset = $propertyContentRowset;

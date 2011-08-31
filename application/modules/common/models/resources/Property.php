@@ -452,6 +452,20 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
         }
     }
 	
+	public function updatePropertyLocationId($idProperty, $idLocation)
+	{
+		$params = array (
+			'idLocation' => $idLocation
+		);
+		
+		$whereClause = $this->getAdapter()->quoteInto('idProperty=?', $idProperty);
+		try {
+			$query = $this->update($params, $whereClause);
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
     public function updatePropertyLocation($idProperty, $idLocation, $locationUrl)
     {
         $params = array (

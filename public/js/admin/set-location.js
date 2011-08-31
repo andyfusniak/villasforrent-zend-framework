@@ -1,5 +1,5 @@
 $(function () {
-	$("#demo1")
+	$("#lhierarchy")
 		.jstree({
 			'ui' : {
 				'select_limit' : 1,
@@ -32,9 +32,9 @@ $(function () {
 		})
 		
 		.bind("select_node.jstree", function (event, data) {
-			if (data.rslt.obj.hasClass('destination')) {
+			if (data.rslt.obj.hasClass('location')) {
 				selectVal = data.rslt.obj.attr('id');
-				$('#idLocation').attr('value', selectVal);	
+				$('#idLocation').attr('value', selectVal);
 			} else {
 				$('#idLocation').attr('value', '');
 			}
