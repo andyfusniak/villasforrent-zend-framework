@@ -53,10 +53,44 @@ class Vfr_Image_Processor
         if ($aspect < $targetAspect) {
             // if the source aspect ratio is less than the target - e.g. 4:3 (or 1.3333) converting to 3:2 (or 1.5)
             // then we need to crop some off the top and bottom of the source image
-            $newY = round($w * $targetAspect);
+            $newY = round($y * $targetAspect);
             
-            var_dump($newY);
-            die();
+			$needToLooseYLow  = ceil($y - $newY);
+            $needToLooseYHigh = floor($y - $newY);
+			
+			$aspectLow  = ($y - $needToLooseYLow) / $y;
+            $aspectHigh = ($y - $needToLooseYHigh) / $y;
+			
+			$diffLow  = abs($targetAspect - $aspectLow);
+            $diffHigh = abs($targetAspect - $aspectHigh);
+            
+            if ($diffLow < $diffHigh) {
+                $needToLooseY = (int) $needToLooseYLow;
+            } else {
+                $needToLooseY = (int) $needToLooseYHigh;
+            }
+            
+            if (($needToLooseY % 2) == 0) {
+                // divides equally, so chop half of each side
+                $top = $bottom = floor($needToLooseY / 2);
+            } else {
+                // 1 pixel difference, so chop more of the right hand side
+                $top  = floor($needToLooseY / 2);
+                $bottom = $top + 1;
+            }
+			
+			$destGdImage = imagecreatetruecolor($targetX, $targetY);
+            
+            if (!imagecopyresized($destGdImage, $sourceGdImage,
+									0, 0,
+									$left, 0,
+									$targetX, $targetY,
+									imagesx($sourceGdImage)-$top-$bottom, imagesy($sourceGdImage))) {
+				
+				throw new Vfr_Exception("Failed to resize the image");
+			}
+            imagedestroy($sourceGdImage);
+            return $destGdImage;
         } else {
             // if the source aspect ratio is greater than the target - e.g. 3:2 (or 1.5) converting to 4:3 (or 1.3333)
             // then we need to crop some off the sides the source image

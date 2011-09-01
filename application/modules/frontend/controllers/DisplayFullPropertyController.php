@@ -37,7 +37,7 @@ class DisplayFullPropertyController extends Zend_Controller_Action
 		
 		// fetch the photos for this property
 		$photoRowset = $propertyModel->getAllPhotosByPropertyId($locationRow->idProperty);
-		var_dump($photoRowset);
+		//var_dump($photoRowset);
 		
 		$allFacilities  = $propertyModel->getAllFacilities();
 		$facilityRowset = $propertyModel->getAllFacilities($locationRow->idProperty);
