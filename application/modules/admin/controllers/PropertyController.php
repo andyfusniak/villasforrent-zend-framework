@@ -94,7 +94,7 @@ class Admin_PropertyController extends Zend_Controller_Action
 			if ($form->isValid($this->getRequest()->getPost())) {
 				$propertyModel = new Common_Model_Property();
 				
-				$propertyModel->updatePropertyLocationId (
+				$propertyModel->updatePropertyLocationIdAndUrl(
 					$idProperty,
 					$form->getValue('idLocation')
 				);
@@ -104,14 +104,18 @@ class Admin_PropertyController extends Zend_Controller_Action
 		}
 
 		
-		$propertyModel			= new Common_Model_Property();
-		$propertyContentRowset	= $propertyModel->getPropertyContentArrayById($idProperty,
-																		 Common_Resource_PropertyContent::VERSION_MAIN,
-																		 'EN',
-																		 array (Common_Resource_PropertyContent::FIELD_COUNTRY,
-																				Common_Resource_PropertyContent::FIELD_REGION,
-																				Common_Resource_PropertyContent::FIELD_LOCATION)
-																		);
+		$propertyModel = new Common_Model_Property();
+		$propertyContentRowset	= $propertyModel->getPropertyContentArrayById(
+			$idProperty,
+			Common_Resource_PropertyContent::VERSION_MAIN,
+			'EN',
+			array (
+				Common_Resource_PropertyContent::FIELD_COUNTRY,
+				Common_Resource_PropertyContent::FIELD_REGION,
+				Common_Resource_PropertyContent::FIELD_LOCATION
+			)
+		);
+		
         $locationModel 	= new Common_Model_Location();
         $hierarchy = $locationModel->getLocationHierarchy();
         
@@ -161,9 +165,6 @@ class Admin_PropertyController extends Zend_Controller_Action
 		$jquery->enable()
 			   ->uiEnable();
         
-		
-		
-		
 		$this->view->form = $form;
 		$this->view->propertyContentRowset = $propertyContentRowset;
         $this->view->headScript()->appendFile('/js/jquery-plugins/jstree-1.0/jquery.jstree.js')
@@ -237,31 +238,38 @@ class Admin_PropertyController extends Zend_Controller_Action
 	{
 		$idProperty = $this->getRequest()->getParam('idProperty');
 		
-		$propertyModel		= new Common_Model_Property();
-		$fastLookupModel	= new Common_Model_FastLookup();
+		try {
+			$propertyModel	= new Common_Model_Property();
+			$propertyRow 	= $propertyModel->getPropertyById($idProperty);
+			if ($propertyModel) {
+				$locationModel 	= new Common_Model_Location();
+				$locationRow = $locationModel->getLocationByPk($propertyRow->idLocation);
+			}	
+		} catch (Exception $e) {
+			throw $e;
+		}
 		
-		$propertyRow 	= $propertyModel->getPropertyById($idProperty);
-		$fastLookupRow	= $fastLookupModel->getFastLookupByCountryRegionDestinationId($propertyRow->idCountry,
-																					  $propertyRow->idRegion,
-																					  $propertyRow->idDestination);
-		
-		$form = new Admin_Form_PropertyApprovalForm( array ('idProperty' => $idProperty));
+		$form = new Admin_Form_PropertyApprovalForm (
+			array (
+				'idProperty' => $idProperty
+			)
+		);
 		
 		if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
 				$propertyModel = new Common_Model_Property();
-				$propertyModel->initialApproveProperty($idProperty,
-													   $fastLookupRow->idCountry, $fastLookupRow->countryName,
-													   $fastLookupRow->idRegion, $fastLookupRow->regionName,
-													   $fastLookupRow->idDestination, $fastLookupRow->destinationName,
-													   $fastLookupRow->url, $propertyRow->urlName);
+				$propertyModel->initialApproveProperty($propertyRow);
 				
 				$this->_helper->redirector->gotoSimple('list-awaiting-initial-approval', 'index', 'admin', array());
 			}
 		}
 		
-		$this->view->form 			= $form;
-		$this->view->propertyRow 	= $propertyRow;
-		$this->view->fastLookupRow	= $fastLookupRow;
+		$this->view->assign (
+			array (
+				'form' => $form,
+				'propertyRow' => $propertyRow,
+				'locationRow' => $locationRow
+			)
+		);
 	}
 }

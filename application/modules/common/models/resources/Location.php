@@ -1,5 +1,7 @@
 <?php
-class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract implements Common_Resource_Location_Interface
+class Common_Resource_Location
+	extends Vfr_Model_Resource_Db_Table_Abstract
+	implements Common_Resource_Location_Interface
 {
     protected $_name = 'Locations';
     protected $_primary = 'idLocation';
@@ -24,8 +26,8 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
             'idLocation'    => $nullExpr,
             'idParent'      => $idParent,
             'url'           => $url,
-            'added'   			=>  new Zend_Db_Expr('NOW()'),
-			'updated' 			=>  new Zend_Db_Expr('NOW()')
+            'added'   		=>  new Zend_Db_Expr('NOW()'),
+			'updated' 		=>  new Zend_Db_Expr('NOW()')
         );
         
         try {
@@ -34,6 +36,56 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
             throw $e;
         }
     }
+	
+	
+	public function addProperty($propertyRow)
+	{
+		$this->_db->beginTransaction();
+		
+		// first create a gap in the nested set for the new property
+		$this->_makeGapForNewEntry($propertyRow-idLocation);
+		
+		$nowExpr  = new Zend_Db_Expr('NOW()');
+		$nullExpr = new Zend_Db_Expr('NULL');
+		
+        $url = $propertyRow->locationUrl . '/' . $propertyRow->urlName;
+        
+        // the idLocation is currently set to the parent
+        $locationRow = $this->getLocationByPk($propertyRow->idLocation);
+        
+        $dataInsert = array (
+			'idLocation' => $nullExpr,
+			'idParent'	 => $propertyRow->idLocation,
+			'url'		 => $locationRow->url . '/' . $propertyRow->urlName,
+			'lt'		 => $locationRow->rt,
+			'rt'		 => $locationRow->rt + 1,
+			'depth'		 => substr_count($url, '/') + 1,
+			'rowurl'	 => $propertyRow->urlName,
+			'idProperty' => $propertyRow->idProperty,
+			'displayPriority' => 1,
+			'totalVisible' => $nullExpr,
+			'total'      => $nullExpr,
+			'name'		 => $locationRow->name . ' : ' . $propertyRow->shortName,
+			'rowname'	 => $propertyRow->shortName,
+			'prefix'	 => '',
+			'postfix'	 => '',
+			'visible'	 => 1,
+			'added'      => $nowExpr,
+            'updated'    => $nowExpr
+		);
+        
+		var_dump($dataInsert);
+        try {
+            $this->insert($dataInsert);
+			$idLocation = $this->_db->lastInsertId();
+			$this->_db->commit();
+			
+			return $idLocation;
+        } catch (Exception $e) {
+			$this->_db->rollBack();
+            throw $e;
+        }
+	}
 	
 	public function rebuildTree($idParent, $lt)
 	{
@@ -79,7 +131,7 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
     public function getLocationByPk($idLocation)
     {
         $query = $this->select()
-					  ->where('idLocation = ?', $idLocation)
+					  ->where('idLocation=?', $idLocation)
 					  ->limit(1);
 		try {
 			$locationRow = $this->fetchRow($query);
@@ -108,14 +160,13 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
         }
     }
     
-    public function getAllLocationsIn($idParent=null)
+    public function getAllLocationsIn($idLocation=null)
     {
         $query = $this->select();
-	                  //->where('idProperty IS NULL');
-		if ($idParent == null)
+		if ($idLocation == null)
 			$query->where('idParent IS NULL');
         else
-			$query->where('idParent = ?', $idParent);
+			$query->where('idParent = ?', $idLocation);
         
 		$query->order('idLocation');
         try {
@@ -146,6 +197,30 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract impl
             throw $e;
         }
 	}
+	
+	private function _makeGapForNewEntry($idParent)
+	{
+		$exprRt = new Zend_Db_Expr('rt + 2');
+		$dataRt = array (
+			'rt' => $exprRt
+		);
+		
+		$exprLt = new Zend_Db_Expr('lt + 2');
+		$dataLt = array (
+			'lt' => $exprLt
+		);
+		
+		try {
+			$whereClauseRt = $this->getAdapter()->quoteInto('rt >= ?', $idParent);
+            $queryRt = $this->update($dataRt, $whereClauseRt);
+			
+			$whereClauseLt = $this->getAdapter()->quoteInto('lt > ?', $idParent);
+			$queryLt = $this->update($dataLt, $whereClauseLt);
+        } catch (Exception $e) {
+            throw $e;
+		}
+	}
+
 	
     //
     // DELETE

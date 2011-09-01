@@ -8,7 +8,7 @@ class LevelController extends Zend_Controller_Action
     
     public function init()
     {
-        $this->_locationModel   = new Common_Model_Location();
+        $this->_locationModel = new Common_Model_Location();
         
         // get the destination from the configuration
 		$bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
@@ -41,29 +41,36 @@ class LevelController extends Zend_Controller_Action
     public function countryAction()
     {
         $uri = $this->getRequest()->getParam('uri');
+		
+		//var_dump($uri);
         $locationRow = $this->_locationModel->lookup($uri);
-        
+		
         if (!$locationRow) {
             $this->getResponse()->setHttpResponseCode(404);
             return;
         }
         
         // get the list of regions within this country
-		$idParent = $locationRow->idLocation;
-        $locationRowset = $this->_locationModel->getAllLocationsIn($idParent);
+		$idLocation = $locationRow->idLocation;
+        $locationRowset = $this->_locationModel->getAllLocationsIn($idLocation);
         
         // get the summary for this level
         $this->_helper->levelSummary($locationRow->url);
         
         // get the country level featured properties
-        $this->_helper->featuredProperty(Common_Resource_Property::FEATURE_MASK_COUNTRY,
-										 $this->_featuredConfig['limit_per_page'],
-                                         $locationRow->url);
+        $this->_helper->featuredProperty(
+			Common_Resource_Property::FEATURE_MASK_COUNTRY,
+			$this->_featuredConfig['limit_per_page'],
+            $locationRow->url
+		);
+		
         // pass results to the view
-        $this->view->assign( array (
-			'locationRow'	  => $locationRow,
-            'locationRowset'  => $locationRowset
-        ));
+        $this->view->assign(
+			array (
+				'locationRow'	  => $locationRow,
+				'locationRowset'  => $locationRowset
+			)
+		);
     }
     
     public function regionAction()
@@ -77,21 +84,26 @@ class LevelController extends Zend_Controller_Action
         }
 
         // get the list of destinations within this region
-		$idParent = $locationRow->idLocation;
-        $locationRowset = $this->_locationModel->getAllLocationsIn($idParent);
+		$idLocation = $locationRow->idLocation;
+        $locationRowset = $this->_locationModel->getAllLocationsIn($idLocation);
 		
         // get the summary for this level
         $this->_helper->levelSummary($locationRow->url);
 
         // get the region level featured properties
-        $this->_helper->featuredProperty(Common_Resource_Property::FEATURE_MASK_REGION,
-										 $this->_featuredConfig['limit_per_page'],
-                                         $locationRow->url);
+        $this->_helper->featuredProperty(
+			Common_Resource_Property::FEATURE_MASK_REGION,
+			$this->_featuredConfig['limit_per_page'],
+            $locationRow->url
+		);
+		
         // pass results to the view
-        $this->view->assign( array (
-			'locationRow'	  => $locationRow,
-            'locationRowset'  => $locationRowset
-        ));
+        $this->view->assign(
+			array (
+				'locationRow'	  => $locationRow,
+				'locationRowset'  => $locationRowset
+			)
+		);
     }
 
     public function destinationAction()
@@ -107,14 +119,19 @@ class LevelController extends Zend_Controller_Action
 		// get the summary for this level
         $this->_helper->levelSummary($locationRow->url);
 		
-         // get the region level featured properties
-        $this->_helper->featuredProperty(Common_Resource_Property::FEATURE_MASK_DESTINATION,
-										 $this->_featuredConfig['limit_per_page'],
-                                         $locationRow->url);
+         // get the destination level featured properties
+        $this->_helper->featuredProperty(
+			Common_Resource_Property::FEATURE_MASK_DESTINATION,
+			$this->_featuredConfig['limit_per_page'],
+            $locationRow->url
+		);
+		
         // pass results to the view
-        $this->view->assign( array (
-            'locationRow'     => $locationRow
-        )); 
+        $this->view->assign(
+			array (
+				'locationRow' => $locationRow
+			)
+		); 
     }
     
     public function listDestinationsAction()
@@ -127,11 +144,4 @@ class LevelController extends Zend_Controller_Action
         $lookupEngine = new Vfr_Fastlookups();
         $lookupEngine->loadFastTable();    
     }
-	
-	public function testAction()
-	{
-		var_dump("HERE");
-		var_dump($this->getRequest()->getParams());
-		die();
-	}
 }

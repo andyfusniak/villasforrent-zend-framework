@@ -11,12 +11,14 @@ class DisplayFullPropertyController extends Zend_Controller_Action
 	
 		$uri = $this->getRequest()->getParam('uri');
 		
-		//var_dump($url);
+		//var_dump($uri);
 		$locationRow = $locationModel->lookup($uri);
 		if (null === $locationRow) {
 			var_dump('not found');
 			exit;
 		}
+		
+		//var_dump($locationRow);
 		
 		// get the main property details
 		$propertyRow = $propertyModel->getPropertyById($locationRow->idProperty);
@@ -35,19 +37,22 @@ class DisplayFullPropertyController extends Zend_Controller_Action
 		
 		// fetch the photos for this property
 		$photoRowset = $propertyModel->getAllPhotosByPropertyId($locationRow->idProperty);
-		//var_dump($photoRowset);
+		var_dump($photoRowset);
 		
 		$allFacilities  = $propertyModel->getAllFacilities();
 		$facilityRowset = $propertyModel->getAllFacilities($locationRow->idProperty);
 		//var_dump($facilityRowset);
 		
-		$this->view->assign( array (
-			'locationRow'		=> $locationRow,
-			'propertyRow'		=> $propertyRow,
-			'propertyContent'	=> $propertyContent,
-			'photoRowset'		=> $photoRowset,
-			'rateRowset'		=> $rateRowset
-		));
+		$this->view->assign(
+			array (
+				'locationRow'		=> $locationRow,
+				'propertyRow'		=> $propertyRow,
+				'propertyContent'	=> $propertyContent,
+				'photoRowset'		=> $photoRowset,
+				'rateRowset'		=> $rateRowset
+			)
+		);
 	}
+	
 }
 

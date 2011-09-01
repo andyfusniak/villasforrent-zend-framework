@@ -56,9 +56,9 @@ class Common_Model_Location extends Vfr_Model_Abstract
 		return $this->getResource('Location')->getLocationByPk($idLocation);
 	}
 	
-	public function getAllLocationsIn($idParent=null)
+	public function getAllLocationsIn($idLocation=null)
 	{
-		return $this->getResource('Location')->getAllLocationsIn($idParent);
+		return $this->getResource('Location')->getAllLocationsIn($idLocation);
 	}
 		
 	//

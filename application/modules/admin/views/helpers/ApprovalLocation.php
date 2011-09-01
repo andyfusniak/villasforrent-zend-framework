@@ -1,10 +1,11 @@
 <?php
-class Admin_View_Helper_ApprovalLocation extends Zend_View_Helper_Abstract
+class Admin_View_Helper_ApprovalLocation
+    extends Zend_View_Helper_Abstract
 {
-    public function approvalLocation($idProperty, $idLocation)
+    public function approvalLocation($propertyRow)
     {
-        $idProperty     = (int) $idProperty;
-        $idLocation     = (int) $idLocation;        
+        $idProperty     = (int) $propertyRow->idProperty;
+        $idLocation     = (int) $propertyRow->idLocation;
         
         if ($idLocation != null) {
             $locationModel = new Common_Model_Location();

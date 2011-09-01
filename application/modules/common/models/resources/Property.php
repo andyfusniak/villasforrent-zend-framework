@@ -422,17 +422,18 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
         }
     }
     
-    public function initialApproveProperty($idProperty)
+    public function initialApproveProperty($idProperty, $idLocation)
     {
         $params = array (
+			'idLocation'		=> $idLocation,
             'awaitingApproval'  => 0,
             'approved'          => 1,
             'visible'           => 1
         );
         
-        $where = $this->getAdapter()->quoteInto('approved=0 AND awaitingApproval=1 AND idProperty=?', $idProperty);
+        $whereClause = $this->getAdapter()->quoteInto('approved=0 AND awaitingApproval=1 AND idProperty=?', $idProperty);
         try {
-            $query = $this->update($params, $where);
+            $query = $this->update($params, $whereClause);
         } catch (Exception $e) {
             throw $e;
         }
@@ -452,10 +453,11 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
         }
     }
 	
-	public function updatePropertyLocationId($idProperty, $idLocation)
+	public function updatePropertyLocationIdAndUrl($idProperty, $idLocation, $locationUrl)
 	{
 		$params = array (
-			'idLocation' => $idLocation
+			'idLocation'  => $idLocation,
+			'locationUrl' => $locationUrl
 		);
 		
 		$whereClause = $this->getAdapter()->quoteInto('idProperty=?', $idProperty);

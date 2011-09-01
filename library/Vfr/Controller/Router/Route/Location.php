@@ -1,5 +1,6 @@
 <?php
-class Vfr_Controller_Router_Route_Location extends Zend_Controller_Router_Route_Abstract
+class Vfr_Controller_Router_Route_Location
+	extends Zend_Controller_Router_Route_Abstract
 {
     /**
      * URI delimiter

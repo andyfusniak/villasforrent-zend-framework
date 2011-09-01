@@ -36,11 +36,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		//$loader->setFallbackAutoloader(true);
         return $autoLoader;
 	}
-    
-    //protected function __initSessionHandling()
-    //{
-    //    
-    //}
 
 	protected function _initLogging()
 	{
@@ -92,39 +87,39 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 	}
 
-	protected function _initNavigation()
-	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-
-		$this->bootstrap('layout');
-		$layout = $this->getResource('layout');
-		$view = $layout->getView();
-		$config = new Zend_Config_Xml(APPLICATION_PATH . '/configs/navigation.xml', 'nav');
-
-		$navigation = new Zend_Navigation($config);
-
-		$view->navigation($navigation);
-		$this->_logger->log(__METHOD__. ' End', Zend_Log::INFO);
-	}
+	//protected function _initNavigation()
+	//{
+	//	$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
+	//
+	//	$this->bootstrap('layout');
+	//	$layout = $this->getResource('layout');
+	//	$view = $layout->getView();
+	//	$config = new Zend_Config_Xml(APPLICATION_PATH . '/configs/navigation.xml', 'nav');
+	//
+	//	$navigation = new Zend_Navigation($config);
+	//
+	//	$view->navigation($navigation);
+	//	$this->_logger->log(__METHOD__. ' End', Zend_Log::INFO);
+	//}
 
 
     protected function _initLocale()
     {
         $this->bootstrap('logging');
-        $this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
+        //$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
         
-        $this->_logger->log(__METHOD__ . ' Setting locale to en_GB', Zend_Log::DEBUG);
+        //$this->_logger->log(__METHOD__ . ' Setting locale to en_GB', Zend_Log::DEBUG);
         $locale = new Zend_Locale('en_GB');
         Zend_Registry::set('Zend_Locale', $locale);
         
-        $this->_logger->log(__METHOD__. ' End', Zend_Log::INFO);
+        //$this->_logger->log(__METHOD__. ' End', Zend_Log::INFO);
     }
 	
 	protected function _initRouting()
 	{   
         $this->bootstrap('logging');
 
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
+		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
 		
 		// main property route
 		//$this->_logger->log(__METHOD__ . ' setting up route for /in/country/region/dest/propertyurl', Zend_Log::DEBUG);
@@ -137,20 +132,21 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 																		'action' => 'render'));
 		
 		// image cache router
-		$routeImageCache = new Zend_Controller_Router_Route_Regex('photos/(.+)/(.+)/(.+)_(.+)x(.+)\.(.+)',
-												  array (
-													'module'		=> 'frontend',
-													'controller'	=> 'image-cache',
-													'action'		=> 'generate'
-												  ),
-												  array (
-													1	=> 'topLevel',
-													2	=> 'idProperty',
-													3	=> 'idPhoto',
-													4	=> 'width',
-													5	=> 'height',
-													6	=> 'ext'
-												  )
+		$routeImageCache = new Zend_Controller_Router_Route_Regex (
+			'photos/(.+)/(.+)/(.+)_(.+)x(.+)\.(.+)',
+			array (
+			  'module'		=> 'frontend',
+			  'controller'	=> 'image-cache',
+			  'action'		=> 'generate'
+			),
+			array (
+			  1	=> 'topLevel',
+			  2	=> 'idProperty',
+			  3	=> 'idPhoto',
+			  4	=> 'width',
+			  5	=> 'height',
+			  6	=> 'ext'
+			)
 		);
 		
         // RESTful API Interface
@@ -181,12 +177,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			)
 		);
 		
-		$fullPropertyRoute = new Zend_Controller_Router_Route(
-				'/in/:country/:region/:destination/:propertyurl',
-				 array( 'module'     => 'frontend',
-						'controller' => 'display-full-property',
-						'action'     => 'index')
-		);
+		
 		
         // setup a route for /in/<country>/<region>/<destination>
         //$routeDestination = new Zend_Controller_Router_Route(
@@ -199,10 +190,23 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	//	Zend_Controller_Front::getInstance()->getRouter()->addRoute('frontend',$route);
 		
 //		$this->logger->log("Bootstrap_Bootstrap _initRouting() setting up route for in/country/region", Zend_Log::DEBUG);
-        $routeRegion = new Zend_Controller_Router_Route('/in/:country/:region',
-													  array('module' 		=> 'frontend',
-															'controller' 	=> 'level',
-															'action'     	=> 'region'));
+
+		$fullPropertyRoute = new Zend_Controller_Router_Route(
+				'/in/:country/:region/:destination/:propertyurl',
+				 array( 'module'     => 'frontend',
+						'controller' => 'display-full-property',
+						'action'     => 'index')
+		);
+
+        $routeRegion = new Zend_Controller_Router_Route (
+			'/in/:country/:region',
+			array (
+				'module'     => 'frontend',
+				'controller' => 'level',
+				'action'     => 'region'
+			)
+		);
+		
 //		Zend_Controller_Front::getInstance()->getRouter()->addRoute('frontend',$route);
 
 //		$this->logger->log("Bootstrap_Bootstrap _initRouting() setting up route for in/country", Zend_Log::DEBUG);
@@ -219,13 +223,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		
         $routeRestApi = new Zend_Rest_Route($front, array (), array ('api'));
         
-		$sroute = new Vfr_Controller_Router_Route_Location('([a-z0-9-/]*)'
-			, array(
+		$sroute = new Vfr_Controller_Router_Route_Location (
+			'([a-z0-9-/]*)',
+			array (
 				'module'     => 'frontend',
 			    'controller' => 'level',
 			    'action'     => 'location'
-		));
-
+			)
+		);
 		
 		$router->addroute('location', $sroute)
 		       ->addroute('imageCache', $routeImageCache)

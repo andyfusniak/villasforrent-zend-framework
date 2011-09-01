@@ -162,3 +162,10 @@ body {
 form#set-url-name input#url {
 	width:600px
 }
+
+form#approve-property fieldset dl dt {
+	float:left
+}
+form#approve-property fieldset dl dd {
+	font-weight:bold
+}
