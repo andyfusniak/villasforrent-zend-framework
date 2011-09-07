@@ -220,7 +220,7 @@ def delete_filesystem_photos(id_property, photolist):
                 logging.debug("Following image exists on the filesystem:")
                 logging.debug(orig_img)
                 os.remove(orig_img)
-                logging.info("Deleted Original Photo " + p)             
+                logging.info("Deleted Original Photo " + orig_img)             
             else:
                 logging.info("Original image " + orig_img + " is missing from the filesystem")
         else:
