@@ -32,8 +32,5 @@ class AdvertiserAccountController extends Zend_Controller_Action
         }
     }
 	
-	public function digestKeyFailAction()
-	{
-	}
-	
+	public function digestKeyFailAction() {}
 }

@@ -69,7 +69,7 @@ class Vfr_View_Helper_SummaryBar extends Zend_View_Helper_Abstract
                             $xhtml .= '<li class="content_orange normal">' . $updateContentLnk . $sendForUpdateApprovalLnk . '</li>';
                         } elseif (($propertyRow->checksumMaster !== $propertyRow->checksumUpdate) &&
 								  ($propertyRow->awaitingApproval == 1)) {
-                            $xhtml .= '<li class="content_green normal"><p>Awaiting update</p></li>';
+                            $xhtml .= '<li class="content_orange normal"><p class="summary_label">Awaiting update</p></li>';
                         } else {
                             $xhtml .= '<li class="content_green normal">' . $updateContentLnk . '</li>';
                         }

@@ -25,9 +25,22 @@
 	
 	<div id="navbar">
 		<ul id="projects" class="clearfix">
-			<li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index', 'action' => 'index')) ?>" title="Overview">Overview</a></li>
-			<li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'advertiser', 'action' => 'index')) ?>" title="Advertisers">Advertisers</a></li>
-			<li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'member', 'action' => 'index')) ?>" title="Members">Members</a></li>
+			<li><a href="<?php echo $this->url(
+				array (
+					'module' => 'admin',
+					'controller' => 'index',
+					'action' => 'index')) ?>" title="Overview">Overview</a></li>
+			<li><a href="<?php echo $this->url(
+				array (
+					'module' => 'admin',
+					'controller' => 'advertiser',
+					'action' => 'index',
+					'page' => 1)) ?>" title="Advertisers">Advertisers</a></li>
+			<li><a href="<?php echo $this->url(
+				array (
+					'module' => 'admin',
+					'controller' => 'member',
+					'action' => 'index')) ?>" title="Members">Members</a></li>
 			<li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'administrator', 'action' => 'index')) ?>" title="Administrators">Administrators</a></li>
 			<li class="selected"><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'properties', 'action' => 'index')) ?>" title="Properties">Properties</a></li>
 			<li><a href="/projects/yui3/">YUI 3</a></li>

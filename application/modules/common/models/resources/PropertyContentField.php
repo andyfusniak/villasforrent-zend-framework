@@ -33,6 +33,39 @@ class Common_Resource_PropertyContentField implements Common_Resource_PropertyCo
 		Common_Resource_PropertyContent::FIELD_REGION 				=> 'region',
 		Common_Resource_PropertyContent::FIELD_LOCATION 			=> 'location'
 	);
+
+    public static $propertiesContentNiceHeadersMap = array (
+        Common_Resource_PropertyContent::FIELD_LOCATION_URL 		=> 'locationUrl',
+		Common_Resource_PropertyContent::FIELD_META_DATA 			=> 'metaData',
+		Common_Resource_PropertyContent::FIELD_SEO_DATA 			=> 'seoData',
+		Common_Resource_PropertyContent::FIELD_WEBSITE 				=> 'Owners Website',
+		Common_Resource_PropertyContent::FIELD_HEADLINE_1 			=> 'headline1',
+		Common_Resource_PropertyContent::FIELD_HEADLINE_2			=> 'headline2',
+		Common_Resource_PropertyContent::FIELD_SUMMARY 				=> 'Summary',
+		Common_Resource_PropertyContent::FIELD_DESCRIPTION 			=> 'Introduction',
+		Common_Resource_PropertyContent::FIELD_BEDROOM_DESC			=> 'Bedrooms',
+		Common_Resource_PropertyContent::FIELD_BATHROOM_DESC 		=> 'Bathroom',
+		Common_Resource_PropertyContent::FIELD_KITCHEN_DESC 		=> 'Kitchen',
+		Common_Resource_PropertyContent::FIELD_UTILITY_DESC 		=> 'Utility Room',
+		Common_Resource_PropertyContent::FIELD_LIVING_DESC 			=> 'Living Room',
+		Common_Resource_PropertyContent::FIELD_OTHER_DESC 			=> 'Other',
+		Common_Resource_PropertyContent::FIELD_SERVICE_DESC 		=> 'Service ',
+		Common_Resource_PropertyContent::FIELD_NOTES_DESC 			=> 'Notes on Accommodation',
+		Common_Resource_PropertyContent::FIELD_ACCESS_DESC 			=> 'Accessability',
+		Common_Resource_PropertyContent::FIELD_OUTSIDE_DESC 		=> 'Outside the Property',
+		Common_Resource_PropertyContent::FIELD_GOLF_DESC 			=> 'Golf',
+		Common_Resource_PropertyContent::FIELD_SKIING_DESC 			=> 'Skiing',
+		Common_Resource_PropertyContent::FIELD_SPECIAL_DESC 		=> 'Special Interests',
+		Common_Resource_PropertyContent::FIELD_BEACH_DESC 			=> 'Beach',
+		Common_Resource_PropertyContent::FIELD_TRAVEL_DESC 			=> 'Travel',
+		Common_Resource_PropertyContent::FIELD_BOOKING_DESC 		=> 'How to Book',
+		Common_Resource_PropertyContent::FIELD_TESTIMONIALS_DESC 	=> 'Testimonials',
+		Common_Resource_PropertyContent::FIELD_CHANGEOVER_DESC  	=> 'Changeover Day',
+		Common_Resource_PropertyContent::FIELD_CONTACT_DESC 		=> 'Contact Details',
+		Common_Resource_PropertyContent::FIELD_COUNTRY 				=> 'Country',
+		Common_Resource_PropertyContent::FIELD_REGION 				=> 'Region',
+		Common_Resource_PropertyContent::FIELD_LOCATION 			=> 'Location'
+    );
 	
 	public function getAllPropertyContentFields()
 	{

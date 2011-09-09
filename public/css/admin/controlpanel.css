@@ -169,3 +169,17 @@ form#approve-property fieldset dl dt {
 form#approve-property fieldset dl dd {
 	font-weight:bold
 }
+
+/* Advertisers */
+table#advertiser-list {
+	width: 100%;
+}
+table#advertiser-list tr {
+	height: 1.8em
+}
+table#advertiser-list tr.odd {
+	background-color: #eee
+}
+table#advertiser-list tr.even {
+	background-color: #fff
+}

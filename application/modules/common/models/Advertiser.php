@@ -1,9 +1,17 @@
 <?php
 class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
 {
-	public function getAll($page=null)
+	//
+	// CREATE
+	//
+	
+	//
+	// READ
+	//
+	
+	public function getAll($page=null, $interval=30, $sort='idAdvertiser', $direction='ASC')
 	{
-		return $this->getResource('Advertiser')->getAll($page);
+		return $this->getResource('Advertiser')->getAll($page, $interval, $sort, $direction);
 	}
 	
 	public function getAdvertiserById($idAdvertiser)
@@ -66,5 +74,13 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
 	public function getResourceId()
 	{
 		return 'Advertiser';
+	}
+	
+	//
+	// UPDATE
+	//
+	public function updateLastLogin($idAdvertiser)
+	{
+		return $this->getResource('Advertiser')->updateLastLogin($idAdvertiser);
 	}
 }

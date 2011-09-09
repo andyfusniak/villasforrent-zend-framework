@@ -15,13 +15,21 @@ class Admin_AdvertiserController extends Zend_Controller_Action
 		// we expect a Zend_Paginator to be returned because we have
 		// specifed a page number.  If we set page=null we will get
 		// the entire result set as a Common_Resource_Advertiser_Rowset
-		$page = $this->getRequest()->getParam('page');
-		$advertiserPaginator = $this->_advertiserModel->getAll($page);
+		$request = $this->getRequest();
+		$page      = $request->getParam('page');
+		$interval  = $request->getParam('interval', 30);
+		$sort      = $request->getParam('sort', 'idAdvertiser');
+		$direction = $request->getParam('direction', 'ASC');
 		
-		$this->view->advertiserPaginator = $advertiserPaginator;
+		$advertiserPaginator = $this->_advertiserModel->getAll($page, $interval, $sort, $direction);
 		
 		
-		//var_dump($advertiserPaginator);
+		$this->view->assign(
+			array (
+				'advertiserPaginator' => $advertiserPaginator,
+				'direction'		      => $direction
+			)
+		);
 		
 	}
 }

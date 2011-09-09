@@ -13,7 +13,7 @@
     <td><?php echo $this->propertyTinyThumb($row->idProperty) ?></td>
     <td>
 		<p>Ref: <?php echo $row->idProperty ?> <?php echo $this->propertyType($row->idPropertyType) ?>  <?php echo $this->escape($row->shortName) ?>
-		<?php echo $row->numBeds ?> beds. sleeps <?php echo $row->numSleeps ?>
+		<?php echo $row->numBeds ?> beds. Sleeps <?php echo $row->numSleeps ?>
 		<?php echo $this->holidayType($row->idHolidayType) ?>
 		(Expires: <?php echo $this->prettyDate($row->expiry) ?>)</p><?php echo $this->summaryBar($row) ?>
 	</td>

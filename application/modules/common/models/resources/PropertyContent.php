@@ -1,5 +1,7 @@
 <?php
-class Common_Resource_PropertyContent extends Vfr_Model_Resource_Db_Table_Abstract implements Common_Resource_PropertyContent_Interface
+class Common_Resource_PropertyContent
+    extends Vfr_Model_Resource_Db_Table_Abstract
+    implements Common_Resource_PropertyContent_Interface
 {
 	protected $_name = 'PropertiesContent';
 	protected $_primary = 'idPropertyContent';
@@ -56,12 +58,17 @@ class Common_Resource_PropertyContent extends Vfr_Model_Resource_Db_Table_Abstra
 	//
 	// CREATE
 	//
+
+    
 	
+	
+	
+	/*
 	public static function generateChecksum($data, $generateMatrix=false)
 	{
 		// filter out only what we need
 		$params = array (
-			'locationUrl'   	=> (isset($data['locationUrl']) ? $data['locationUrl'] : ''),		// 1
+			'locationUrl'   	=> (isset($data['locationUrl']) ? $data['locationUrl'] : ''),	// 1
 			'metaData'			=> (isset($data['metaData']) ? $data['metaData'] : ''),			// 2
 			'seoData'			=> (isset($data['seoData']) ? $data['seoData'] : ''),			// 3
 			'website'			=> (isset($data['website']) ? $data['website'] : ''),			// 4
@@ -95,7 +102,7 @@ class Common_Resource_PropertyContent extends Vfr_Model_Resource_Db_Table_Abstra
 	
 		if ($generateMatrix) {
 			foreach ($params as $name=>$value) {
-				$params[$name] = sha1($value);
+				$params[$name] = Vfr_Checksum::cs($value);
 			}
 			
 			return $params;
@@ -108,6 +115,8 @@ class Common_Resource_PropertyContent extends Vfr_Model_Resource_Db_Table_Abstra
 		
 		return sha1($stream);
 	}
+	
+	*/
 	
 	public function createPropertyContent($idProperty, $version, $lang, $idPropertyContentField, $content)
 	{
@@ -142,8 +151,39 @@ class Common_Resource_PropertyContent extends Vfr_Model_Resource_Db_Table_Abstra
 	//
 	// READ
 	//
-	
-	public function getPropertyContentByPropertyId($idProperty, $version=self::VERSION_MAIN, $lang='EN', $idPropertyContentFieldList = null)
+
+    public function checksumTotal($idProperty, $version=Common_Resource_PropertyContent::VERSION_MAIN, $lang='EN')
+	{
+		//$query = $this->select('cs')
+		$query = $this->select()->from($this->_name, 'cs')
+					  ->where('idProperty = ?', $idProperty)
+					  ->where('version = ?', $version)
+					  ->where('iso2char = ?', $lang);
+					  //->where('idPropertyContentField >= ?', (int) 4)
+					  //->where('idPropertyContentField <= ?', (int) 30);
+
+		try {
+			$propertyContentRowset = $this->fetchAll($query);
+
+			// add the checksums together. null and empty string values seem to count for nothing
+			$checksumTotal = '';
+			foreach ($propertyContentRowset as $propertyContentRow) {
+				$checksumTotal .= $propertyContentRow->cs;
+			}
+
+			return Vfr_Checksum::cs($checksumTotal);
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+
+    /**
+     *
+     * @param int $idProperty
+     * @return Common_Resource_PropertyContent_Rowset
+     */
+	public function getPropertyContentByPropertyId($idProperty, $version=self::VERSION_MAIN,
+        $lang='EN', $idPropertyContentFieldList = null)
 	{
 		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
 
@@ -158,8 +198,7 @@ class Common_Resource_PropertyContent extends Vfr_Model_Resource_Db_Table_Abstra
 		}
 		
 		try {
-			$propertyContentRowset = $this->fetchAll($query);
-			return $propertyContentRowset;
+			return $this->fetchAll($query);
 		} catch (Exception $e) {
 			throw $e;
 		}
@@ -199,7 +238,8 @@ class Common_Resource_PropertyContent extends Vfr_Model_Resource_Db_Table_Abstra
 	public function updatePropertyContent($idProperty, $version, $lang, $idPropertyContentField, $content)
 	{
 		$params = array (
-			'content'	=> $content
+			'content'	=> $content,
+			'cs'		=> Vfr_Checksum::cs($content)
 		);
 		
 		$adapter = $this->getAdapter();
@@ -213,6 +253,21 @@ class Common_Resource_PropertyContent extends Vfr_Model_Resource_Db_Table_Abstra
 			throw $e;
 		}
 	}
+
+    public function repairPropertyBatchChecksums() {
+        $expr = new Zend_Db_Expr('sha1(content)');
+        $params = array (
+            'cs' => $expr
+        );
+
+        $adapter = $this->getAdapter();
+		$whereClause = $adapter->quoteInto('(?)', (int) 1);
+        try {
+			$query = $this->update($params, $whereClause);
+		} catch (Exception $e) {
+			throw $e;
+		}
+    }
 	
 	public function copyUpdateToMaster($idProperty)
 	{

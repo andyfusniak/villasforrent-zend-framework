@@ -15,10 +15,17 @@ class Admin_PropertyController extends Zend_Controller_Action
 	{
 		$idProperty = (int) $this->getRequest()->getParam('idProperty');
 		
-		
 		$propertyModel = new Common_Model_Property();
-		$propertyContentMaster = $propertyModel->getPropertyContentArrayById($idProperty, Common_Resource_PropertyContent::VERSION_MAIN);
-		$propertyContentUpdate = $propertyModel->getPropertyContentArrayById($idProperty, Common_Resource_PropertyContent::VERSION_UPDATE);
+		$propertyContentMaster = $propertyModel->getPropertyContentByPropertyId(
+            $idProperty,
+            Common_Resource_PropertyContent::VERSION_MAIN
+        );
+
+		$propertyContentUpdate = $propertyModel->getPropertyContentByPropertyId(
+            $idProperty,
+            Common_Resource_PropertyContent::VERSION_UPDATE
+        );
+
 		//var_dump($propertyContentMaster);
 		//var_dump($propertyContentUpdate);
 		
@@ -27,29 +34,45 @@ class Admin_PropertyController extends Zend_Controller_Action
 		//var_dump(Common_Resource_PropertyContent::generateChecksum($propertyContentMaster, true));
 		//var_dump(Common_Resource_PropertyContent::generateChecksum($propertyContentUpdate, true));
 		
-		$changed = array ();
-		foreach ($propertyContentMaster as $name=>$value) {
-			if ($propertyContentUpdate[$name] != $value) {
-				$changed[$name] = array ('master' => $propertyContentMaster[$name],
-										 'update' => $propertyContentUpdate[$name]);
-			}
-		}
-		
-		$form = new Admin_Form_PropertyUpdateApprovalForm(array ('idProperty' => $idProperty));
+		$changedList = array ();
+        for ($i=0; $i < sizeof($propertyContentMaster); $i++) {
+            $propertyRowMaster = $propertyContentMaster[$i];
+            $propertyRowUpdate = $propertyContentUpdate[$i];
+
+            //var_dump($i);
+            //var_dump($propertyRowMaster);
+            //var_dump($propertyRowUpdate->cs);
+
+            // if the row checksums differ then changes need moderation
+            if ($propertyRowMaster->cs != $propertyRowUpdate->cs) {
+                $idPropertyContentField = $propertyRowMaster->idPropertyContentField;
+                $changedList[$idPropertyContentField] = true;
+            }
+        }
+
+		$form = new Admin_Form_PropertyUpdateApprovalForm(
+            array (
+                'idProperty' => $idProperty
+            )
+        );
 		
 		if ($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
 				$propertyModel = new Common_Model_Property();
 				$propertyModel->copyUpdateToMaster($idProperty);
+                
 				$this->_helper->redirector->gotoSimple('list-awaiting-update-approval', 'property', 'admin', array());
 			}
 		}
-		//var_dump($changed);
 		
-		$this->view->form		= $form;
-		$this->view->master 	= $propertyContentMaster;
-		$this->view->update 	= $propertyContentUpdate;
-		$this->view->changed 	= $changed;
+		$this->view->assign(
+            array (
+                'form'        => $form,
+                'master'      => $propertyContentMaster,
+                'update'      => $propertyContentUpdate,
+                'changedList' => $changedList
+            )
+        );
 	}
 	
     public function listAction()

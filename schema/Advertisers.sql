@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS Advertisers (
     mobile varchar(255) DEFAULT NULL,
     added datetime NOT NULL,
     updated datetime NOT NULL,
+    lastlogin datetime NULL,
     lastModifiedBy varchar(32) NOT NULL DEFAULT 'system',
     PRIMARY KEY (idAdvertiser),
     KEY added (added),
@@ -25,6 +26,7 @@ CREATE TABLE IF NOT EXISTS Advertisers (
     KEY lastModfiedBy (lastModifiedBy),
     KEY idAdministrator (idAdministrator),
     KEY username (username),
+    KEY lastlogin (lastlogin),
     CONSTRAINT advertisers_ibfk_1 FOREIGN KEY (iso2char) REFERENCES CountryList (iso2char) ON DELETE NO ACTION ON UPDATE CASCADE,
     CONSTRAINT advertisers_ibfk_2 FOREIGN KEY (idAdministrator) REFERENCES Administrators (idAdministrator) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

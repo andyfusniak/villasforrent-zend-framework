@@ -31,6 +31,7 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
 			'mobile'		  => $nullExpr,
 			'added'			  => $nowExpr,
 			'updated'		  => $nowExpr,
+			'lastlogin'		  => $nowExpr,
 			'lastModifiedBy'  => 'system'
 		);
 		
@@ -44,20 +45,27 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
 		}
 	}
 
+	//
+	// READ
+	//
+	
 	/**
 	 * Get all advertisers
 	 *
 	 * @param boolean $page	Use Zend_Paginator?
 	 * @return Common_Resource_Advertiser_Rowset|Zend_Paginator
 	 */
-	public function getAll($page=null)
+	public function getAll($page=null, $interval=30, $sort='idAdvertiser', $direction='ASC')
 	{
-		$query = $this->select();
-		
+		$adapter = $this->getAdapter();
+		$query = $this->select()
+		              //->order($this->getAdapter()->quoteIdentifier($sort) . ' ' . $direction);
+					  ->order($sort . ' ' . $direction);
+					  
 		if (null !== $page) {
 			$adapter = new Zend_Paginator_Adapter_DbTableSelect($query);
 			$paginator = new Zend_Paginator($adapter);
-			$paginator->setItemCountPerPage(3)
+			$paginator->setItemCountPerPage($interval)
 					  ->setCurrentPageNumber((int) $page);
 		
 			return $paginator;
@@ -92,5 +100,26 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
 		
 		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 		return $result;
+	}
+	
+	//
+	// UPDATE
+	//
+
+	
+	public function updateLastLogin($idAdvertiser)
+	{
+		$nowExpr = new Zend_Db_Expr('NOW()');
+		
+		$params = array (
+			'lastlogin' => $nowExpr
+		);
+		
+		$where = $this->getAdapter()->quoteInto('idAdvertiser=?', $idAdvertiser);
+        try {
+            $query = $this->update($params, $where);
+        } catch (Exception $e) {
+            throw $e;
+        }
 	}
 }

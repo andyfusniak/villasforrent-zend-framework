@@ -57,6 +57,7 @@ application/modules/admin/Bootstrap.php \
 application/modules/admin/controllers/AdvertiserController.php \
 application/modules/admin/controllers/AuthFailController.php \
 application/modules/admin/controllers/BuildLocationsController.php \
+application/modules/admin/controllers/ChecksumsController.php \
 application/modules/admin/controllers/ErrorController.php \
 application/modules/admin/controllers/FastLookupController.php \
 application/modules/admin/controllers/IndexController.php \
@@ -77,6 +78,7 @@ application/modules/admin/views/helpers/ToggleDirection.php \
 application/modules/admin/views/scripts/advertiser/index.phtml \
 application/modules/admin/views/scripts/auth-fail/auth-fail.phtml \
 application/modules/admin/views/scripts/build-locations/rebuild-tree.phtml \
+application/modules/admin/views/scripts/checksums/repair.phtml \
 application/modules/admin/views/scripts/fast-lookup/purge-table.phtml \
 application/modules/admin/views/scripts/fast-lookup/create-table.phtml \
 application/modules/admin/views/scripts/index/index.phtml \
@@ -262,6 +264,7 @@ library/Vfr/Acl/Interface.php \
 library/Vfr/Availability/Calendar/Exception.php \
 library/Vfr/Availability/Calendar/ImagePng.php \
 library/Vfr/Availability/Calendar/Object.php \
+library/Vfr/Checksum.php \
 library/Vfr/Controller/Helper/Acl.php \
 library/Vfr/Controller/Router/Route/Location.php \
 library/Vfr/DigestKey.php \
@@ -416,6 +419,7 @@ if [ "$INC_IMAGES" = "y" ]; then
     public/images/progressheader/rates_green.png \
     public/images/progressheader/rates_grey.png \
     public/images/progressheader/rates_orange.png \
+    public/images/homepage/special_offer.gif \
 	public/images/tile.gif \
 	public/images/zend_framework.png
 fi

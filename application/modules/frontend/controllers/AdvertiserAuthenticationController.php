@@ -50,6 +50,9 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
 					//$this->_logger->log("Frontend_Form_AdvertiserAuthenticationController storing " . $identity->idAdministrator . " on authStorage", Zend_Log::DEBUG);
 					$auth->getStorage()->write($identity);
 					
+					// update the last logged in date to now
+					$model->updateLastLogin($identity->idAdvertiser);
+					
 					$this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-account/home');
 				} else {
 					$this->_logger->log(__METHOD__ . ' Result is invalid', Zend_Log::DEBUG);

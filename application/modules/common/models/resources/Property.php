@@ -1,5 +1,7 @@
 <?php
-class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract implements Common_Resource_Property_Interface
+class Common_Resource_Property
+    extends Vfr_Model_Resource_Db_Table_Abstract
+    implements Common_Resource_Property_Interface
 {
 	protected $_name = 'Properties';
 	protected $_primary = 'idProperty';
@@ -117,8 +119,6 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
     
     public function createProperty($options)
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-		
 		$bootstrapOptions =  Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
 		$vfrConfig = $bootstrapOptions['vfr'];
 		
@@ -152,6 +152,8 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
 		try {
 			$this->insert($data);
 			$idProperty = $this->_db->lastInsertId();
+
+            return $idProperty;
 		} catch (Exception $e) {
 			//$dbAdapter = Zend_Db_Table::getDefaultAdapter();
 			//$profiler = $dbAdapter->getProfiler();
@@ -159,14 +161,66 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
             //var_dump($lastDbProfilerQuery->getQuery());
 			throw $e;
 		}
-
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
-		return $idProperty;
 	}
-    
+
+    public function setPropertyContentChecksum($idProperty, $checksum, $version=Common_Resource_PropertyContent::VERSION_MAIN)
+    {
+        if ($version == Common_Resource_PropertyContent::VERSION_MAIN) {
+            $params = array (
+                'checksumMaster' => $checksum
+            );
+        } elseif ($version == Common_Resource_PropertyContent::VERSION_UPDATE) {
+            $params = array (
+                'checksumUpdate' => $checksum
+            );
+        } elseif ($version == Common_Resource_PropertyContent::VERSION_BOTH) {
+            $params = array (
+                'checksumMaster' => $checksum,
+                'checksumUpdate' => $checksum
+            );
+        } else {
+            throw new Exception("Version invalid");
+        }
+
+        $where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
+        try {
+            $query = $this->update($params, $where);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+
     //
     // READ
     //
+
+    public function getAllProperties()
+    {
+        $query = $this->select();
+
+        try {
+            $propertyRowset = $this->fetchAll($query);
+
+            return $propertyRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function getAllPropertyIds()
+    {
+        $query = $this->select()
+                      ->from($this->_name, 'idProperty');
+        
+        try {
+            $propertyRowset = $this->fetchAll($query);
+
+            return $propertyRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
     
     /**
 	 * Get all properties
@@ -271,6 +325,7 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
     public function getAllPropertiesAwaitingInitialApproval()
     {
         $query = $this->select()
+                      ->where('approved = ?', (int) 0)
                       ->where('awaitingApproval = ?', (int) 1)
                       ->order('updated DESC');
                       
@@ -286,7 +341,7 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
     public function getAllPropertiesAwaitingUpdateApproval()
     {
         $query = $this->select()
-                      ->where('approved = ?', 1)
+                      ->where('approved = ?', (int) 1)
                       ->where('checksumMaster != checksumUpdate')
                       ->where('awaitingApproval = ?', 1)
                       ->order('updated DESC');
@@ -482,34 +537,31 @@ class Common_Resource_Property extends Vfr_Model_Resource_Db_Table_Abstract impl
             throw $e;
         }
     }
-    
-    public function setPropertyContentChecksum($idProperty, $checksum, $version=Common_Resource_PropertyContent::VERSION_MAIN)
+
+    private function _updateChecksum($idProperty, $cs, $name)
     {
-        if ($version == Common_Resource_PropertyContent::VERSION_MAIN) {
-            $params = array (
-                'checksumMaster' => $checksum
-            );    
-        } elseif ($version == Common_Resource_PropertyContent::VERSION_UPDATE) {
-            $params = array (
-                'checksumUpdate' => $checksum
-            );
-        } elseif ($version == Common_Resource_PropertyContent::VERSION_BOTH) {
-            $params = array (
-                'checksumMaster' => $checksum,
-                'checksumUpdate' => $checksum
-            ); 
-        } else {
-            throw new Exception("Version invalid");
-        }
-        
-        $where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
+        $params = array (
+            $name => $cs
+        );
+
+        $whereClause = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
         try {
-            $query = $this->update($params, $where);
+            $query = $this->update($params, $whereClause);
         } catch (Exception $e) {
             throw $e;
         }
     }
-   
+
+    public function updateMasterChecksum($idProperty, $cs)
+    {
+        $this->_updateChecksum($idProperty, $cs, 'checksumMaster');
+    }
+    
+    public function updateUpdateChecksum($idProperty, $cs)
+    {
+        $this->_updateChecksum($idProperty, $cs, 'checksumUpdate');
+    }
+    
     //
     // DELETE
     //

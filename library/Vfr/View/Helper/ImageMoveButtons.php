@@ -5,10 +5,13 @@ class Vfr_View_Helper_ImageMoveButtons extends Zend_View_Helper_Abstract
     {
         $last = $total - 1;
         
-        //var_dump($current, $last);
-        // there is only one item we don't need any up or down arrows
-        if ($total == 0) {
-            return '';
+        //var_dump($total);
+        // there is only one item we don't need any active up or down arrows
+        if ($total == 1) {
+            return '
+                <div class="left"><img alt="" src="/images/admin/move_up_inactive.gif" /></div>
+                <div class="right"><img alt="" src="/images/admin/move_down_inactive.gif" /></div>
+            ';
         }
         
         switch ($current) {

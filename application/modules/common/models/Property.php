@@ -17,220 +17,114 @@ class Common_Model_Property extends Vfr_Model_Abstract
 	{
 		$propertyResource 			= $this->getResource('Property');
 		$propertyContentResource	= $this->getResource('PropertyContent');
-		$propertyFacilityResource	= $this->getResource('PropertyFacility');
+		//$propertyFacilityResource	= $this->getResource('PropertyFacility');
         $calendarResource 			= $this->getResource('Calendar');
-		$facilitiesResource			= $this->getResource('Facility');
+		//$facilitiesResource			= $this->getResource('Facility');
 
         $idProperty = (int) $propertyResource->createProperty($options);
 		
 		// create the property facility switches
-		$facilityRowset	= $facilitiesResource->getAllFacilities(true);
-		foreach ($facilityRowset as $facilityRow) {
-			$propertyFacilityResource->createPropertyFacility($idProperty, $facilityRow->facilityCode);
-		}
+		//$facilityRowset	= $facilitiesResource->getAllFacilities(true);
+		//foreach ($facilityRowset as $facilityRow) {
+		//	$propertyFacilityResource->createPropertyFacility($idProperty, $facilityRow->facilityCode);
+		//}
 		
 		$calendarResource->createCalendar($idProperty);
 		
-		// setup the main version content
-		$params = $options['params'];
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_LOCATION_URL, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_META_DATA, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_SEO_DATA, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_WEBSITE, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_HEADLINE_1, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_HEADLINE_2, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_SUMMARY, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_DESCRIPTION, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_BEDROOM_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_BATHROOM_DESC, '');
-		
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_KITCHEN_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_UTILITY_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_LIVING_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_OTHER_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_SERVICE_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_NOTES_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_ACCESS_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_OUTSIDE_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_GOLF_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_SKIING_DESC, '');
-		
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_SPECIAL_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_BEACH_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_TRAVEL_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_BOOKING_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_TESTIMONIALS_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_CHANGEOVER_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_CONTACT_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_COUNTRY, $params['country']);
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_REGION, $params['region']);
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_MAIN, 'EN',
-														Common_Resource_PropertyContent::FIELD_LOCATION, $params['destination']);
-		
-		// setup the update version content
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_LOCATION_URL, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_META_DATA, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_SEO_DATA, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_WEBSITE, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_HEADLINE_1, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_HEADLINE_2, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_SUMMARY, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_DESCRIPTION, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_BEDROOM_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_BATHROOM_DESC, '');
-		
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_KITCHEN_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_UTILITY_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_LIVING_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_OTHER_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_SERVICE_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_NOTES_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_ACCESS_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_OUTSIDE_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_GOLF_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_SKIING_DESC, '');
-		
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_SPECIAL_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_BEACH_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_TRAVEL_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_BOOKING_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_TESTIMONIALS_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_CHANGEOVER_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_CONTACT_DESC, '');
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_COUNTRY, $params['country']);
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_REGION, $params['region']);
-		$propertyContentResource->createPropertyContent($idProperty,
-														Common_Resource_PropertyContent::VERSION_UPDATE, 'EN',
-														Common_Resource_PropertyContent::FIELD_LOCATION, $params['destination']);
+        $params = $options['params'];
+
+        $versionList = array (
+            Common_Resource_PropertyContent::VERSION_MAIN,
+            Common_Resource_PropertyContent::VERSION_UPDATE
+        );
         
-		$checksum = Common_Resource_PropertyContent::generateChecksum($params);
-		
-		$propertyResource->setPropertyContentChecksum($idProperty, $checksum, Common_Resource_PropertyContent::VERSION_BOTH);
-		
-		
+        $updateList = Common_Resource_PropertyContentField::$propertiesContentFieldsMap;
+
+        // unset these as they will be added manually outside the inner loop
+        unset($updateList[Common_Resource_PropertyContent::FIELD_COUNTRY]);
+        unset($updateList[Common_Resource_PropertyContent::FIELD_REGION]);
+        unset($updateList[Common_Resource_PropertyContent::FIELD_LOCATION]);
+
+        //var_dump($updateList);
+        //die();
+
+        foreach ($versionList as $version) {
+            foreach ($updateList as $key=>$value) {
+                $propertyContentResource->createPropertyContent(
+                    $idProperty,
+                    $version,
+                    'EN',
+					$key,
+                    ''
+                );
+            }
+
+            $propertyContentResource->createPropertyContent(
+                $idProperty,
+                $version,
+				'EN',
+				Common_Resource_PropertyContent::FIELD_COUNTRY,
+                $params['country']
+            );
+
+            $propertyContentResource->createPropertyContent(
+                $idProperty,
+                $version,
+				'EN',
+				Common_Resource_PropertyContent::FIELD_REGION,
+                $params['region']
+            );
+
+            $propertyContentResource->createPropertyContent(
+                $idProperty,
+                $version,
+				'EN',
+				Common_Resource_PropertyContent::FIELD_LOCATION,
+                $params['destination']
+            );
+
+            $checksumTotal = $propertyContentResource->checksumTotal(
+                    $idProperty,
+                    $version,
+                    $lang='EN'
+            );
+
+            $propertyResource->setPropertyContentChecksum(
+                $idProperty,
+				$checksumTotal,
+				$version
+            );
+        }
+     
 		return $idProperty;
 	}
 
 	//
 	// READ
 	//
+
+    public function checksumTotal($idProperty, $version=Common_Resource_PropertyContent::VERSION_MAIN, $lang='EN')
+	{
+        $idProperty = (int) $idProperty;
+        
+        $propertyContentResource = $this->getResource('PropertyContent');
+
+        return $propertyContentResource->checksumTotal($idProperty, $version, $lang);
+	}
+
+    public function getAllProperties()
+    {
+        $propertyResource = $this->getResource('Property');
+        
+        return $propertyResource->getAllProperties();
+    }
+
+    public function getAllPropertyIds()
+    {
+        $propertyResource = $this->getResource('Property');
+        
+        return $propertyResource->getAllPropertyIds();
+    }
 
 	public function getProperties($page, $interval=30, $order=null, $direction='ASC')
 	{
@@ -479,7 +373,7 @@ class Common_Model_Property extends Vfr_Model_Abstract
 	// UPDATE
 	//
 	
-	public function updateContent($idProperty, $mode='both', $data)
+	public function updateContent($idProperty, $updateSet, $data)
 	{
 		$idProperty = (int) $idProperty;
 		
@@ -498,11 +392,15 @@ class Common_Model_Property extends Vfr_Model_Abstract
 			'otherDesc'			=> $data['otherDesc'],
 			'serviceDesc'		=> $data['serviceDesc'],
 			'notesDesc'			=> $data['notesDesc'],
-			'accessDesc'		=> (isset($data['accessDesc']) && (mb_strlen($data['accessDesc']) > 0)) ? $data['accessDesc'] : '',	// optional field
+			'accessDesc'		=> (isset($data['accessDesc']) && (mb_strlen($data['accessDesc']) > 0))
+                                        ? $data['accessDesc'] : '',	// optional field
 			'outsideDesc'		=> $data['outsideDesc'],
-			'golfDesc'			=> (isset($data['golfDesc']) && (mb_strlen($data['golfDesc']) > 0)) ? $data['golfDesc'] : '', 		// optional field
-			'skiingDesc'		=> (isset($data['skiingDesc']) && (mb_strlen($data['skiingDesc']) > 0)) ? $data['skiingDesc'] : '',
-			'specialDesc'		=> (isset($data['specialDesc']) && (mb_strlen($data['specialDesc']) > 0)) ? $data['specialDesc'] : '',	// optional field
+			'golfDesc'			=> (isset($data['golfDesc']) && (mb_strlen($data['golfDesc']) > 0))
+                                        ? $data['golfDesc'] : '', 		// optional field
+			'skiingDesc'		=> (isset($data['skiingDesc']) && (mb_strlen($data['skiingDesc']) > 0))
+                                        ? $data['skiingDesc'] : '',
+			'specialDesc'		=> (isset($data['specialDesc']) && (mb_strlen($data['specialDesc']) > 0))
+                                        ? $data['specialDesc'] : '',	// optional field
 			'beachDesc'			=> $data['beachDesc'],
 			'travelDesc'		=> $data['travelDesc'],
 			'bookingDesc'		=> $data['bookingDesc'],
@@ -511,119 +409,39 @@ class Common_Model_Property extends Vfr_Model_Abstract
 			'contactDesc'		=> $data['contactDesc']
 		);
 		
-		//$facilityResource			= $this->getResource('Facility');
 		$propertyResource			= $this->getResource('Property');
-		$propertyFacilityResource	= $this->getResource('PropertyFacility');
 		$propertyContentResource	= $this->getResource('PropertyContent');
 		
-		//$facilityRowset = $facilityResource->getAllFacilities();
-		
-		$propertyFacilityResource->updateFacilitiesByPropertyId($idProperty, $data['facilities']);
-		
-		switch ($mode) {
-			case 'both':
-				$updateSet = array (
-					Common_Resource_PropertyContent::VERSION_MAIN,
-					Common_Resource_PropertyContent::VERSION_UPDATE
-				);
-				
-				$checksum = Common_Resource_PropertyContent::generateChecksum($params);
-				$propertyResource->setPropertyContentChecksum($idProperty,
-															  $checksum,
-															  Common_Resource_PropertyContent::VERSION_BOTH);
-			break;
-		
-			case 'main':
-				$updateSet = array (
-					Common_Resource_PropertyContent::VERSION_MAIN
-				);
-				
-				$checksum = Common_Resource_PropertyContent::generateChecksum($params);
-				$propertyResource->setPropertyContentChecksum($idProperty,
-															  $checksum,
-															  Common_Resource_PropertyContent::VERSION_MAIN);
-			break;
-		
-			case 'update':
-				$updateSet = array (
-					Common_Resource_PropertyContent::VERSION_UPDATE
-				);
-				
-				$checksum = Common_Resource_PropertyContent::generateChecksum($params);
-				$propertyResource->setPropertyContentChecksum($idProperty,
-															  $checksum,
-															  Common_Resource_PropertyContent::VERSION_UPDATE);
-			break;
-		
-			default:
-				throw new Exception('Invalid mode called');
-		}
-		
+        $updateList = Common_Resource_PropertyContentField::$propertiesContentFieldsMap;
+
+        // not used in the generation of checksum totals
+        unset($updateList[Common_Resource_PropertyContent::FIELD_LOCATION_URL]);
+        unset($updateList[Common_Resource_PropertyContent::FIELD_META_DATA]);
+        unset($updateList[Common_Resource_PropertyContent::FIELD_SEO_DATA]);
+         
 		foreach ($updateSet as $version) {
-			//$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN', Common_Resource_PropertyContent::FIELD_LOCATION_URL, '');  NOT USED
-			//$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN', Common_Resource_PropertyContent::FIELD_META_DATA, '');     NOT USED
-			//$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN', Common_Resource_PropertyContent::FIELD_SEO_DATA, '');      NOT USED
-			$propertyContentResource->updatePropertyContent($idProperty,
-															$version, 'EN',
-															Common_Resource_PropertyContent::FIELD_WEBSITE,
-															$params['website']);	
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_HEADLINE_1,
-															$params['headline1']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_HEADLINE_2, $params['headline2']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_SUMMARY, $params['summary']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_DESCRIPTION, $params['description']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_BEDROOM_DESC, $params['bedroomDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_BATHROOM_DESC, $params['bathroomDesc']);
-			
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_KITCHEN_DESC, $params['kitchenDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_UTILITY_DESC, $params['utilityDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_LIVING_DESC, $params['livingDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_OTHER_DESC, $params['otherDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_SERVICE_DESC, $params['serviceDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_NOTES_DESC, $params['notesDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_ACCESS_DESC, $params['accessDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_OUTSIDE_DESC, $params['outsideDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_GOLF_DESC, $params['golfDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_SKIING_DESC, $params['skiingDesc']);
-			
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_SPECIAL_DESC, $params['specialDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_BEACH_DESC, $params['beachDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_TRAVEL_DESC, $params['travelDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_BOOKING_DESC, $params['bookingDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_TESTIMONIALS_DESC, $params['testimonialsDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_CHANGEOVER_DESC, $params['changeoverDesc']);
-			$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-															Common_Resource_PropertyContent::FIELD_CONTACT_DESC, $params['contactDesc']);
-			//$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-			//Common_Resource_PropertyContent::FIELD_COUNTRY, '');
-			//$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-			//Common_Resource_PropertyContent::FIELD_REGION, '');
-			//$propertyContentResource->updatePropertyContent($idProperty, $version, 'EN',
-			//Common_Resource_PropertyContent::FIELD_LOCATION, '');
-		}
-		
+            foreach ($updateList as $key=>$value) {
+                $propertyContentResource->updatePropertyContent(
+                    $idProperty,
+                    $version, 'EN',
+                    $key,
+                    $params[$value]
+                );
+            }
+
+            $checksumTotal = $propertyContentResource->checksumTotal(
+                    $idProperty,
+                    $version,
+                    $lang='EN'
+            );
+
+            $propertyResource->setPropertyContentChecksum(
+                $idProperty,
+				$checksumTotal,
+				$version
+            );
+        }
+
 		return $this;
 	}
 	
@@ -726,7 +544,29 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		$propertyResource = $this->getResource('Property');
 		$propertyResource->setAwaitingApproval($idProperty);
 	}
+
+    public function repairPropertyBatchChecksums()
+    {
+        $propertyContentResource = $this->getResource('PropertyContent');
+        $propertyContentResource->repairPropertyBatchChecksums();
+    }
 	
+    public function updateMasterCheckSum($idProperty, $cs)
+    {
+        $idProperty = (int) $idProperty;
+        $propertyResource = $this->getResource('Property');
+        
+        $propertyResource->updateMasterChecksum($cs);
+    }
+
+    public function updateUpdateCheckSum($idProperty, $cs)
+    {
+        $idProperty = (int) $idProperty;
+        $propertyResource = $this->getResource('Property');
+
+        $propertyResource->updateUpdateChecksum($cs);
+    }
+
 	//
 	// DELETE
 	//

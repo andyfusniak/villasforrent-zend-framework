@@ -1,17 +1,28 @@
 <?php
 class Vfr_View_Helper_ImageUploadNotifier extends Zend_View_Helper_Abstract
 {
-    public function imageUploadNotifier($idProperty, $count)
+    public function imageUploadNotifier($propertyRow, $count)
     {
+	    // if this property has already been initially approved
+        // no need to provide work-flow
+		if ($propertyRow->approved)
+			return '';
+		
         // get the destination from the configuration
 		$bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
 		$photoConfig = $bootstrap['vfr']['photo'];
         
-		$step4url = $this->view->url(array('module' 	=> 'frontend',
-										   'controller' => 'advertiser-property',
-										   'action'	    => 'progress-step4',
-										   'idProperty' => $idProperty,
-										   'digestKey'  => Vfr_DigestKey::generate(array($idProperty))), null, true);
+		$step4url = $this->view->url(
+			array(
+				'module'     => 'frontend',
+				'controller' => 'advertiser-property',
+				'action'	 => 'progress-step4',
+				'idProperty' => $propertyRow->idProperty,
+				'digestKey'  => Vfr_DigestKey::generate(array($propertyRow->idProperty))
+			),
+			null,
+			true
+		);
 		
         if ($count < $photoConfig['min_limit_per_property']) {
             return '<div class="below_min">You must upload at least ' . $photoConfig['min_limit_per_property'] . ' photos to continue to step 4</div>';    

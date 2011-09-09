@@ -29,10 +29,14 @@ class AdvertiserPropertyController extends Zend_Controller_Action
                 $options['params']['idAdvertiser']  = $this->identity->idAdvertiser;
 				$options['params']['emailAddress']  = $this->identity->emailAddress;
 				$idProperty = $propertyModel->createProperty($options);
-				
-				$this->_helper->redirector->gotoSimple('step2-content', 'advertiser-property', 'frontend',
-													   array('idProperty' => $idProperty,
-															 'digestKey'  => Vfr_DigestKey::generate(array($idProperty, 'add'))));
+                
+				$this->_helper->redirector->gotoSimple(
+                    'step2-content', 'advertiser-property', 'frontend',
+					array(
+                        'idProperty' => $idProperty,
+						'digestKey'  => Vfr_DigestKey::generate(array($idProperty, 'add'))
+                    )
+                );
             }
         }
 		
@@ -45,9 +49,7 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$mode		= $this->getRequest()->getParam('mode', 'add');
 		$digestKey  = $this->getRequest()->getParam('digestKey', null);
 		
-		if (! $this->_helper->digestKey->isValid($digestKey, array(
-			$idProperty,
-			$mode))) {
+		if (! $this->_helper->digestKey->isValid($digestKey, array ($idProperty, $mode))) {
 			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
 		}
 		
@@ -64,18 +66,29 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		));
 		
 		// create the form and set the hidden form element	
-		$form = new Frontend_Form_Step2ContentForm(array ('idProperty' 		=> $idProperty,
-														  'idHolidayType'	=> $idHolidayType,
-														  'mode'			=> $mode,
-														  'digestKey'		=> $newDigestKey));
+		$form = new Frontend_Form_Step2ContentForm(
+            array (
+                'idProperty' => $idProperty,
+				'idHolidayType'	=> $idHolidayType,
+				'mode'			=> $mode,
+				'digestKey'		=> $newDigestKey
+            )
+        );
+
 		if ($mode == 'update') {
-			$propertyContentHash = $propertyModel->getPropertyContentArrayById($idProperty, Common_Resource_PropertyContent::VERSION_UPDATE);
+			$propertyContentList = $propertyModel->getPropertyContentArrayById(
+                $idProperty,
+                Common_Resource_PropertyContent::VERSION_UPDATE
+            );
 			
-			$form->populate($propertyContentHash);
+			$form->populate($propertyContentList);
 		} elseif ($mode == 'add') {
-            $propertyContentHash =  $propertyModel->getPropertyContentArrayById($idProperty,
-                                                                                Common_Resource_PropertyContent::VERSION_MAIN);
-            $form->populate($propertyContentHash);
+            $propertyContentList =  $propertyModel->getPropertyContentArrayById(
+                $idProperty,
+                Common_Resource_PropertyContent::VERSION_MAIN
+            );
+
+            $form->populate($propertyContentList);
         }
             
 		
@@ -84,15 +97,34 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 			if ($form->isValid($this->getRequest()->getPost())) {
 				$propertyModel = new Common_Model_Property();
 				
-				if ($mode == 'add')
-				{
-					$propertyModel->updateContent($idProperty, 'both', $form->getValues())
-								  ->updatePropertyStatus($idProperty, Common_Resource_Property::STEP_3_PICTURES);
-					$this->_helper->redirector->gotoSimple('step3-pictures', 'advertiser-property', 'frontend', array('idProperty' => $idProperty,
-																													  'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
+				if ($mode == 'add') {
+					$propertyModel->updateContent(
+                        $idProperty,
+                        array (
+                            Common_Resource_PropertyContent::VERSION_MAIN,
+                            Common_Resource_PropertyContent::VERSION_UPDATE
+                        ),
+                        $form->getValues()
+                    )->updatePropertyStatus($idProperty, Common_Resource_Property::STEP_3_PICTURES);
+					
+					$this->_helper->redirector->gotoSimple(
+						'step3-pictures',
+						'advertiser-property',
+						'frontend',
+						array (
+							'idProperty' => $idProperty,
+							'digestKey'  => Vfr_DigestKey::generate(array($idProperty))
+						)
+					);
 				} else {
 					// update mode
-					$propertyModel->updateContent($idProperty, 'update', $form->getValues());
+					$propertyModel->updateContent(
+                        $idProperty,
+                        array (
+                            Common_Resource_PropertyContent::VERSION_UPDATE
+                        ),
+                        $form->getValues()
+                    );
 					$this->_helper->redirector->gotoSimple('home', 'advertiser-account', 'frontend');
 				}
 				

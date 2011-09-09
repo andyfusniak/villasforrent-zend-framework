@@ -158,55 +158,63 @@ ul.summary_bar .end {
     background-repeat: no-repeat;
 }
 ul.summary_bar li.location_orange {
-    background-image: url('/images/accountsummary/location_orange.png');
+    background-image: url('/images/accountsummary/location_orange.png')
 }
 ul.summary_bar li.location_green {
-    background-image: url('/images/accountsummary/location_green.png');
+    background-image: url('/images/accountsummary/location_green.png')
 }
 ul.summary_bar li.location_grey {
-    background-image: url('/images/accountsummary/location_grey.png');
+    background-image: url('/images/accountsummary/location_grey.png')
 }
 
 ul.summary_bar li.content_orange {
-    background-image: url('/images/accountsummary/content_orange.png');
+    background-image: url('/images/accountsummary/content_orange.png')
 }
 ul.summary_bar li.content_green {
-    background-image: url('/images/accountsummary/content_green.png');
+    background-image: url('/images/accountsummary/content_green.png')
 }
 ul.summary_bar li.content_grey {
-    background-image: url('/images/accountsummary/content_grey.png');
+    background-image: url('/images/accountsummary/content_grey.png')
 }
 
 ul.summary_bar li.pictures_orange {
-    background-image: url('/images/accountsummary/pictures_orange.png');
+    background-image: url('/images/accountsummary/pictures_orange.png')
 }
 ul.summary_bar li.pictures_green {
-    background-image: url('/images/accountsummary/pictures_green.png');
+    background-image: url('/images/accountsummary/pictures_green.png')
 }
 ul.summary_bar li.pictures_grey {
-    background-image: url('/images/accountsummary/pictures_grey.png');
+    background-image: url('/images/accountsummary/pictures_grey.png')
 }
 
 ul.summary_bar li.rates_orange {
-    background-image: url('/images/accountsummary/rates_orange.png');
+    background-image: url('/images/accountsummary/rates_orange.png')
 }
 ul.summary_bar li.rates_green {
-    background-image: url('/images/accountsummary/rates_green.png');
+    background-image: url('/images/accountsummary/rates_green.png')
 }
 ul.summary_bar li.rates_grey {
-    background-image: url('/images/accountsummary/rates_grey.png');
+    background-image: url('/images/accountsummary/rates_grey.png')
 }
 
 ul.summary_bar li.availability_orange {
-    background-image: url('/images/accountsummary/availability_orange.png');
+    background-image: url('/images/accountsummary/availability_orange.png')
 }
 ul.summary_bar li.availability_green {
-    background-image: url('/images/accountsummary/availability_green.png');
+    background-image: url('/images/accountsummary/availability_green.png')
 }
 ul.summary_bar li.availability_grey {
-    background-image: url('/images/accountsummary/availability_grey.png');
+    background-image: url('/images/accountsummary/availability_grey.png')
 }
 
+ul.summary_bar li p.summary_label {
+    font-family: Verdana;
+    font-size: 85%;
+    color: #000;
+    position: relative;
+    top: 21px;
+    left: 6px
+}
 a.summary_link {
     font-family: Verdana;
     font-size: 85%;
