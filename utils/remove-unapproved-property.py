@@ -23,7 +23,7 @@ logging.basicConfig(filename=config.applogs['remove_unapproved_property'],
 def main():
     try:
         # connect to the mysql db
-        logging.info("Opening MySQL DB conncetion")
+        logging.info("Opening MySQL DB connection")
         conn = MySQLdb.connect (
             host   = config.dbhost,
             user   = config.dbuser,
