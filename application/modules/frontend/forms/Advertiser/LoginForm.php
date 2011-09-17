@@ -1,6 +1,13 @@
 <?php
 class Frontend_Form_Advertiser_LoginForm extends Zend_Form
 {
+	protected $emailAddress;
+	
+    public function setEmailAddress($emailAddress)
+    {
+		$this->emailAddress = $emailAddress;
+    }
+	
     public function __construct($options = null)
     {
         parent::__construct($options);
@@ -14,9 +21,10 @@ class Frontend_Form_Advertiser_LoginForm extends Zend_Form
 		$this->addElement('text', 'emailAddress', array(
 			'required' => true,
 			'filters' => array('StringTrim'),
+			'value' => $this->emailAddress,
 			'validators' => array(
 				array('NotEmpty', true, array('messages' => array('isEmpty' => 'Please enter your email address'))),
-				array('EmailAddress', true, array(
+				array(new Vfr_Validate_EmailCheck(), true, array(
 					'messages' => array('emailAddressInvalidFormat' => 'Your email address is invalid')))
 			)
 		));
@@ -24,8 +32,10 @@ class Frontend_Form_Advertiser_LoginForm extends Zend_Form
 		$this->addElement('password', 'passwd', array(
 			'required' => true,
 			'filters' => array('StringTrim'),
+			'value' => $this->passwd,
 			'validators' => array(
-				array('NotEmpty', true, array('messages' => array('isEmpty' => 'Please enter your password')))
+				array('NotEmpty', true, array('messages' => array('isEmpty' => 'Please enter your password'))),
+				array('StringLength', false, array(6,24))
 			)
 		));
 	}

@@ -5,6 +5,17 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
 	// CREATE
 	//
 	
+	public function addPasswordReset($idAdvertiser, $token)
+	{
+		$advertiserResetResource = $this->getResource('AdvertiserReset');
+		
+		// remove the old tokens first
+		$advertiserResetResource->voidOldTokens($idAdvertiser, $keepToken=$token);
+		
+		return $advertiserResetResource->addPasswordReset($idAdvertiser, $token);
+	}
+	
+	
 	//
 	// READ
 	//
@@ -12,6 +23,13 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
 	public function getAll($page=null, $interval=30, $sort='idAdvertiser', $direction='ASC')
 	{
 		return $this->getResource('Advertiser')->getAll($page, $interval, $sort, $direction);
+	}
+	
+	public function login($emailAddress, $passwd)
+	{
+		$advertiserResource = $this->getResource('Advertiser');
+		$valid = $advertiserResource->login($emailAddress, $passwd);
+		return $valid;
 	}
 	
 	public function getAdvertiserById($idAdvertiser)
@@ -61,7 +79,23 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
         return $this->_acl;
     }
 
-    public function setAcl(Vfr_Acl_Interface $acl)
+   
+	public function getResourceId()
+	{
+		return 'Advertiser';
+	}
+	
+	public function getAdvertiserResetDetailsByToken($token)
+	{
+		return $this->getResource('AdvertiserReset')->getAdvertiserResetDetailsByToken($token);
+	}
+	
+	
+	//
+	// UPDATE
+	//
+
+	public function setAcl(Vfr_Acl_Interface $acl)
     {
         if (!$acl->has($this->getResourceId())) {
 		    $acl->add($this)->allow('Advertiser', $this, 'listAccount');
@@ -71,14 +105,13 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
 		return $this;
     }
 
-	public function getResourceId()
+
+	public function updatePassword($idAdvertiser, $passwd)
 	{
-		return 'Advertiser';
+		return $this->getResource('Advertiser')->updatePassword($idAdvertiser, $passwd);
 	}
 	
-	//
-	// UPDATE
-	//
+	
 	public function updateLastLogin($idAdvertiser)
 	{
 		return $this->getResource('Advertiser')->updateLastLogin($idAdvertiser);

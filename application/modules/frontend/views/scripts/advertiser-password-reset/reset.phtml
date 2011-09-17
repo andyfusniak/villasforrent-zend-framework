@@ -1,0 +1,26 @@
+<h1>Advertiser - Reset your password</h1>
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<input type="hidden" name="token" value="<?php echo $this->form->getValue('token') ?>" />
+<fieldset>
+    <dl>
+        <dt>
+            <label for="passwd">Choose a new password</label>
+        </dt>
+        
+        <dd>
+            <input type="password" name="passwd" value="<?php echo $this->escape($this->form->getValue('passwd')) ?>" />
+            <?php echo $this->displayErrors($this->form->getMessages('passwd')) ?>
+        </dd>
+        
+        <dt>
+            <label for="passwdVerify">Repeat your password:</label>
+        </dt>
+        
+        <dd>
+            <input type="password" name="passwdVerify" value="<?php echo $this->escape($this->form->getValue('passwdVerify')) ?>" />
+            <?php echo $this->displayErrors($this->form->getMessages('passwdVerify')) ?>
+        </dd>
+    </dl>
+    
+    <input type="submit" name="submit" id="submit" value="Set my password" />
+</form>

@@ -72,7 +72,9 @@ application/modules/admin/forms/UrlNameForm.php \
 application/modules/admin/plugins/Auth.php \
 application/modules/admin/views/helpers/ApprovalLocation.php \
 application/modules/admin/views/helpers/ApproveProperty.php \
+application/modules/admin/views/helpers/DirectionArrow.php \
 application/modules/admin/views/helpers/LocationUrl.php \
+application/modules/admin/views/helpers/SecurePassword.php \
 application/modules/admin/views/helpers/PropertyExpiry.php \
 application/modules/admin/views/helpers/ToggleDirection.php \
 application/modules/admin/views/scripts/advertiser/index.phtml \
@@ -120,6 +122,10 @@ application/modules/common/models/resources/Advertiser/Interface.php \
 application/modules/common/models/resources/Advertiser/Row.php \
 application/modules/common/models/resources/Advertiser/Rowset.php \
 application/modules/common/models/resources/Advertiser.php \
+application/modules/common/models/resources/AdvertiserReset/Interface.php \
+application/modules/common/models/resources/AdvertiserReset/Row.php \
+application/modules/common/models/resources/AdvertiserReset/Rowset.php \
+application/modules/common/models/resources/AdvertiserReset.php \
 application/modules/common/models/resources/AdvertiserApiAccount/Row.php \
 application/modules/common/models/resources/AdvertiserApiAccount/Rowset.php \
 application/modules/common/models/resources/AdvertiserApiAccount/Interface.php \
@@ -195,7 +201,7 @@ application/modules/frontend/controllers/AdvertiserAuthenticationController.php 
 application/modules/frontend/controllers/AdvertiserAvailabilityController.php \
 application/modules/frontend/controllers/AdvertiserContinueController.php \
 application/modules/frontend/controllers/AdvertiserImageManagerController.php \
-application/modules/frontend/controllers/AdvertiserPasswordReminderController.php \
+application/modules/frontend/controllers/AdvertiserPasswordResetController.php \
 application/modules/frontend/controllers/AdvertiserPropertyController.php \
 application/modules/frontend/controllers/AdvertiserRatesController.php \
 application/modules/frontend/controllers/AdvertiserRegistrationController.php \
@@ -205,8 +211,9 @@ application/modules/frontend/controllers/ErrorController.php \
 application/modules/frontend/controllers/ImageCacheController.php \
 application/modules/frontend/controllers/IndexController.php \
 application/modules/frontend/controllers/LevelController.php \
+application/modules/frontend/forms/Advertiser/ChooseNewPasswordForm.php \
 application/modules/frontend/forms/Advertiser/LoginForm.php \
-application/modules/frontend/forms/Advertiser/PasswordReminderForm.php \
+application/modules/frontend/forms/Advertiser/PasswordResetForm.php \
 application/modules/frontend/forms/Advertiser/RegistrationForm.php \
 application/modules/frontend/forms/Step1LocationForm.php \
 application/modules/frontend/forms/Step2ContentForm.php \
@@ -227,8 +234,8 @@ application/modules/frontend/layouts/scripts/layout.phtml \
 application/modules/frontend/models/Acl/Frontend.php \
 application/modules/frontend/plugins/AdvertiserAccessCheck.php \
 application/modules/frontend/views/emails/admin-new-advertiser-join.txt \
-application/modules/frontend/views/emails/advertiser-password-reminder.html \
-application/modules/frontend/views/emails/advertiser-password-reminder.txt \
+application/modules/frontend/views/emails/advertiser-password-reset.html \
+application/modules/frontend/views/emails/advertiser-password-reset.txt \
 application/modules/frontend/views/helpers/PhotoGrid.php \
 application/modules/frontend/views/scripts/advertiser-account/digest-key-fail.phtml \
 application/modules/frontend/views/scripts/advertiser-account/home.phtml \
@@ -237,8 +244,11 @@ application/modules/frontend/views/scripts/advertiser-authentication/logout.phtm
 application/modules/frontend/views/scripts/advertiser-availability/delete-confirm.phtml \
 application/modules/frontend/views/scripts/advertiser-availability/edit.phtml \
 application/modules/frontend/views/scripts/advertiser-image-manager/confirm.phtml \
-application/modules/frontend/views/scripts/advertiser-password-reminder/index.phtml \
-application/modules/frontend/views/scripts/advertiser-password-reminder/sent-confirm.phtml \
+application/modules/frontend/views/scripts/advertiser-password-reset/expired.phtml \
+application/modules/frontend/views/scripts/advertiser-password-reset/index.phtml \
+application/modules/frontend/views/scripts/advertiser-password-reset/reset.phtml \
+application/modules/frontend/views/scripts/advertiser-password-reset/sent.phtml \
+application/modules/frontend/views/scripts/advertiser-password-reset/successfully-updated.phtml \
 application/modules/frontend/views/scripts/advertiser-property/complete-confirmation.phtml \
 application/modules/frontend/views/scripts/advertiser-property/step1-location.phtml \
 application/modules/frontend/views/scripts/advertiser-property/step2-content.phtml \
@@ -264,10 +274,15 @@ library/Vfr/Acl/Interface.php \
 library/Vfr/Availability/Calendar/Exception.php \
 library/Vfr/Availability/Calendar/ImagePng.php \
 library/Vfr/Availability/Calendar/Object.php \
+library/Vfr/BlowfishHasher.php \
 library/Vfr/Checksum.php \
 library/Vfr/Controller/Helper/Acl.php \
 library/Vfr/Controller/Router/Route/Location.php \
 library/Vfr/DigestKey.php \
+library/Vfr/Exception/AdvertiserNotFound.php \
+library/Vfr/Exception/AdvertiserPasswordFail.php \
+library/Vfr/Exception/BlowfishInvalidHash.php \
+library/Vfr/Exception/BlowfishUnsupport.php \
 library/Vfr/Exception.php \
 library/Vfr/Form/Element/AvailabilityRangePicker.php \
 library/Vfr/Form/Element/RatesRangePicker.php \
@@ -282,6 +297,7 @@ library/Vfr/Model/Resource/Db/Table/Row/Abstract.php \
 library/Vfr/Model/Resource/Db/Table/Rowset/Abstract.php \
 library/Vfr/Model/Exception.php \
 library/Vfr/Property/Converter.php \
+library/Vfr/Token.php \
 library/Vfr/Validate/AvailabilityRange.php \
 library/Vfr/Validate/RatesRange.php \
 library/Vfr/Validate/EmailCheck.php \
@@ -320,6 +336,7 @@ if [ "$INC_SCHEMA" = "y" ]; then
 	schema/Administrators.sql \
     schema/AdvertiserApiAccounts.sql \
 	schema/Advertisers.sql \
+    schema/AdvertisersReset.sql \
     schema/ApiAccounts.sql \
 	schema/Availability.sql \
 	schema/Calendars.sql \
@@ -377,6 +394,9 @@ if [ "$INC_IMAGES" = "y" ]; then
     public/images/accountsummary/rates_orange.png \
     public/images/admin/bluecross.png \
 	public/images/admin/gradient1.png \
+    public/images/admin/icons/greentick.png \
+    public/images/admin/icons/green-tick-transparency.png \
+    public/images/admin/icons/red-cross-transparency.png \
     public/images/admin/move_down.gif \
     public/images/admin/move_down_inactive.gif \
     public/images/admin/move_up.gif \

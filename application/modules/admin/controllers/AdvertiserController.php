@@ -27,6 +27,7 @@ class Admin_AdvertiserController extends Zend_Controller_Action
 		$this->view->assign(
 			array (
 				'advertiserPaginator' => $advertiserPaginator,
+				'sort'				  => $sort,
 				'direction'		      => $direction
 			)
 		);

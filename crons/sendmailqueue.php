@@ -67,7 +67,8 @@ foreach($messages as $msg) {
     
     // set the HTML and TXT bodies and send
 	$mail->setBodyText($params['bodyText']);
-	$mail->setBodyHtml($params['bodyHtml']);
+    if ($params['bodyHtml'])
+        $mail->setBodyHtml($params['bodyHtml']);
 	
     // send this email
     try {

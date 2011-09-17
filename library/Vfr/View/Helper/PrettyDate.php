@@ -4,6 +4,7 @@ class Vfr_View_Helper_PrettyDate extends Zend_View_Helper_Abstract
 	const STYLE_DEFAULT		= 1;
 	const STYLE_DD_MMM_YY	= 2;
 	const STYLE_DD_MMM_YY_HH_MM_AMPM = 3;
+	const STYLE_DD_MMM_YY_HH_MM = 4;
 	
     public function prettyDate($mysqlDate, $style=self::STYLE_DEFAULT)
     {
@@ -23,7 +24,11 @@ class Vfr_View_Helper_PrettyDate extends Zend_View_Helper_Abstract
 			break;
 		
 			case self::STYLE_DD_MMM_YY_HH_MM_AMPM:
-				return strftime("%d-%b-%y %I:%M %P", $timestamp);
+				return strftime("%d-%b-%y %l:%M %P", $timestamp);
+			break;
+		
+			case self::STYLE_DD_MMM_YY_HH_MM:
+				return strftime("%d-%b-%y %X", $timestamp);
 			break;
 		}
     }

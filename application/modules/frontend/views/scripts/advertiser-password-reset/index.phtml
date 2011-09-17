@@ -1,0 +1,19 @@
+<h1>Advertiser - Reset Your Password</h1>
+<p>If you have forgotten your password, we can send you an email with a link to reset your login.</p>
+
+<form method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<fieldset>
+    <dl>
+        <dt>
+            <label for="emailAddress">Email address you use to login:</label>
+        </dt>
+        
+        <dd>
+            <input type="text" name="emailAddress" maxlength="255" value="<?php echo $this->escape($this->form->getValue('emailAddress')) ?>" />
+            <?php echo $this->displayErrors($this->form->getMessages('emailAddress')) ?>
+        </dd>
+                                                                                
+        <input type="submit" name="submit" value="Login" />
+    </dl>
+ </fieldset>
+ </form>

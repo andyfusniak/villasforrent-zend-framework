@@ -170,7 +170,32 @@ form#approve-property fieldset dl dd {
 	font-weight:bold
 }
 
+/* Generic */
+
+span.green-tick {
+	background-image: url('/images/admin/icons/greentick.png');
+	background-repeat: no-repeat;
+	width: 60px
+}
+
+.direction-asc {
+	background-image: url('/images/admin/tablenav/ascend.gif');
+	background-position: right;
+	background-repeat: no-repeat
+}
+
+.direction-desc {
+	background-image: url('/images/admin/tablenav/descend.gif');
+	background-position: right;
+	background-repeat: no-repeat
+}
+
+
 /* Advertisers */
+
+
+
+
 table#advertiser-list {
 	width: 100%;
 }

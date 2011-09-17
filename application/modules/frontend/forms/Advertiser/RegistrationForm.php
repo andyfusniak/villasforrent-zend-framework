@@ -52,7 +52,8 @@ class Frontend_Form_Advertiser_RegistrationForm extends Zend_Form
 		$this->addElement('password', 'passwd', array(
 			'required' => true,
 			'validators' => array(
-				array('NotEmpty', true, array('messages' => array('isEmpty' => 'Please choose a password')))
+				array('NotEmpty', true, array('messages' => array('isEmpty' => 'Please choose a password'))),
+				array('StringLength', false, array(6,24))
 			)
 		));
 		
@@ -60,6 +61,7 @@ class Frontend_Form_Advertiser_RegistrationForm extends Zend_Form
 			'required' => true,
 			'validators' => array(
 				array('NotEmpty', true, array('messages' => array('isEmpty' => 'Please confirm your password'))),
+				array('StringLength', false, array(6,24)),
 				array('PasswordConfirmation', false)
 			)
 		));

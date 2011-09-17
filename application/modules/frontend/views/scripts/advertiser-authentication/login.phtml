@@ -32,6 +32,7 @@ can <a href="<?php echo $this->url(array('module'     => 'frontend',
 
 <?php echo $this->errorMessage ?>
 
-<p>If you have <a href="<?php echo $this->url(array('module'     => 'frontend',
-											        'controller' => 'advertiser-password-reminder',
-											        'action'     => 'index')) ?>">forgotten your details</a> we can send you a reminder email.</p>
+<p>If you have forgotten your login details, you can <a href="<?php echo $this->url(array (
+    'module'     => 'frontend',
+    'controller' => 'advertiser-password-reset',
+    'action'     => 'index')) ?>">reset your password here</a>.</p>
