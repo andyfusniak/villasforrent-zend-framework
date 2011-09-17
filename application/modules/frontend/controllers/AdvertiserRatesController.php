@@ -98,11 +98,13 @@ class AdvertiserRatesController extends Zend_Controller_Action
 		}
 		
 		$newDigestKey = Vfr_DigestKey::generate(array($idProperty, $idRate));
-		$form = new Frontend_Form_Step4RateDeleteConfirmForm(array(
-			'idProperty' => $idProperty,
-			'idRate'	 => $idRate,
-			'digestKey'  => $newDigestKey
-		));
+		$form = new Frontend_Form_Step4RateDeleteConfirmForm(
+			array (
+				'idProperty' => $idProperty,
+				'idRate'	 => $idRate,
+				'digestKey'  => $newDigestKey
+			)
+		);
 		
 		// lookup the rate row
 		$calendarModel = new Common_Model_Calendar();
@@ -158,6 +160,7 @@ class AdvertiserRatesController extends Zend_Controller_Action
 		
 		$rateRow = $calendarModel->getRateByPk($idRate);
 		
+		//var_dump($ratesRowset);
 		//die();
 		
 		$newDigestKey = Vfr_DigestKey::generate(array($idProperty, $idRate));
@@ -177,17 +180,21 @@ class AdvertiserRatesController extends Zend_Controller_Action
 															 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
             }
 		} else {
-			$form = new Frontend_Form_Step4RateEditForm(array('idProperty'  => $idProperty,
-															  'name' 	    => $rateRow->name,
-															  'idRate'	    => $rateRow->idRate,
-															  'rates'	    => array ('start'	 			=> $rateRow->startDate,
-																					  'end'					=> $rateRow->endDate,
-																					  'weeklyRate'			=> $rateRow->weeklyRate,
-																					  'weekendNightlyRate'	=> $rateRow->weekendNightlyRate,
-																					  'midweekNightlyRate'  => $rateRow->midweekNightlyRate,
-																					  'minStayDays'		    => $rateRow->minStayDays),
-															  'digestKey'  => $newDigestKey));
-		}
+			$form = new Frontend_Form_Step4RateEditForm(
+				array (
+					'idProperty'         => $idProperty,
+					'name' 	             => $rateRow->name,
+                    'idRate'             => $rateRow->idRate,
+					'rates'              => array ('start' => $rateRow->startDate,
+					'end'				 => $rateRow->endDate,
+					'weeklyRate'		 => $rateRow->weeklyRate,
+					'weekendNightlyRate' => $rateRow->weekendNightlyRate,
+					'midweekNightlyRate' => $rateRow->midweekNightlyRate,
+					'minStayDays'		 => $rateRow->minStayDays),
+					'digestKey'          => $newDigestKey
+                )
+            );
+        }
 		
 		//'2012-05-01#2012-05-08#300#340#400#7'
 		
