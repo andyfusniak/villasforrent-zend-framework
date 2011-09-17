@@ -1,6 +1,6 @@
 # db config
 import os
-if os.getenv('APPLICATION_ENV') == 'production':
+if os.getenv('APPLICATION_ENV') == 'development':
     dbhost = 'localhost'
     dbuser = 'root'
     dbpass = 'mrgrey'
@@ -16,12 +16,13 @@ else:
     application_path = '/var/www/www.holidaypropertyworldwide.com/application'
 
 applogs = {
-    'remove_unapproved_property': "/home/andy/.hpw/remove-unapproved-property.log"
+    'remove_unapproved_property': '/home/andy/.hpw/remove-unapproved-property.log',
+    'delete-expired-password-resets': '/home/andy/.hpw/delete-expired-password-resets.log'
 }
 
 # set to True to enable debug and prevent real SQL queries
 debug = {
-    'sql': False
+    'sql': True
 }
 
 

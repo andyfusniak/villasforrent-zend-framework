@@ -1,3 +1,4 @@
+import datetime
 import exceptions
 import math
 
@@ -24,4 +25,5 @@ def path_to_photo_file(id_property, id_photo, block_interval=50):
         'fullpath': fp
     }
 
-
+def parse_mysql_datetime(mysql_d):
+    return datetime.datetime.strptime(mysql_d, "%Y-%m-%d %H:%M:%S")
