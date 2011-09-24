@@ -83,17 +83,17 @@ class Common_Model_Property extends Vfr_Model_Abstract
                 $params['destination']
             );
 
-            $checksumTotal = $propertyContentResource->checksumTotal(
-                    $idProperty,
-                    $version,
-                    $lang='EN'
-            );
+            //$checksumTotal = $propertyContentResource->checksumTotal(
+            //        $idProperty,
+            //        $version,
+            //        $lang='EN'
+            //);
 
-            $propertyResource->setPropertyContentChecksum(
-                $idProperty,
-				$checksumTotal,
-				$version
-            );
+            //$propertyResource->setPropertyContentChecksum(
+            //    $idProperty,
+			//	$checksumTotal,
+			//	$version
+            //);
         }
      
 		return $idProperty;
@@ -103,6 +103,7 @@ class Common_Model_Property extends Vfr_Model_Abstract
 	// READ
 	//
 
+/*
     public function checksumTotal($idProperty, $version=Common_Resource_PropertyContent::VERSION_MAIN, $lang='EN')
 	{
         $idProperty = (int) $idProperty;
@@ -111,6 +112,7 @@ class Common_Model_Property extends Vfr_Model_Abstract
 
         return $propertyContentResource->checksumTotal($idProperty, $version, $lang);
 	}
+*/
 
     public function getAllProperties()
     {
@@ -429,17 +431,17 @@ class Common_Model_Property extends Vfr_Model_Abstract
                 );
             }
 
-            $checksumTotal = $propertyContentResource->checksumTotal(
-                    $idProperty,
-                    $version,
-                    $lang='EN'
-            );
+            //$checksumTotal = $propertyContentResource->checksumTotal(
+            //        $idProperty,
+            //        $version,
+            //        $lang='EN'
+            //);
 
-            $propertyResource->setPropertyContentChecksum(
-                $idProperty,
-				$checksumTotal,
-				$version
-            );
+            //$propertyResource->setPropertyContentChecksum(
+            //    $idProperty,
+			//	$checksumTotal,
+			//	$version
+            //);
         }
 
 		return $this;
@@ -453,6 +455,7 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		$propertyResource			= $this->getResource('Property');
 		
 		$checksum = $propertyContentResource->copyUpdateToMaster($idProperty);
+		
 		$propertyResource->setPropertyContentChecksum($idProperty,
 													  $checksum,
 													  Common_Resource_PropertyContent::VERSION_MAIN);

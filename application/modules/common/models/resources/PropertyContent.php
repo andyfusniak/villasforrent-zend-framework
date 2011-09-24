@@ -58,10 +58,6 @@ class Common_Resource_PropertyContent
 	//
 	// CREATE
 	//
-
-    
-	
-	
 	
 	/*
 	public static function generateChecksum($data, $generateMatrix=false)
@@ -120,8 +116,6 @@ class Common_Resource_PropertyContent
 	
 	public function createPropertyContent($idProperty, $version, $lang, $idPropertyContentField, $content)
 	{
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-		
 		$nowExpr = new Zend_Db_Expr('NOW()');
 		$data = array (
 			'idPropertyContent' 		=> new Zend_Db_Expr('NULL'),
@@ -144,38 +138,58 @@ class Common_Resource_PropertyContent
 			//var_dump($lastDbProfilerQuery->getQuery());
 			throw $e;
 		}
-		
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
 	}
 	
 	//
 	// READ
 	//
 
+/*
     public function checksumTotal($idProperty, $version=Common_Resource_PropertyContent::VERSION_MAIN, $lang='EN')
 	{
-		//$query = $this->select('cs')
-		$query = $this->select()->from($this->_name, 'cs')
-					  ->where('idProperty = ?', $idProperty)
-					  ->where('version = ?', $version)
-					  ->where('iso2char = ?', $lang);
-					  //->where('idPropertyContentField >= ?', (int) 4)
-					  //->where('idPropertyContentField <= ?', (int) 30);
-
+		$query->select(new Zend_Db_Expr('sha1(group_concat(cs)) AS cs'))
+			  ->where('version=?', $version)
+			  ->where('iso2char=?', $lang)
+			  ->where('idProperty=?', $idProperty)
+			  ->order('idPropertyContentField ASC');
+	
 		try {
-			$propertyContentRowset = $this->fetchAll($query);
-
-			// add the checksums together. null and empty string values seem to count for nothing
-			$checksumTotal = '';
-			foreach ($propertyContentRowset as $propertyContentRow) {
-				$checksumTotal .= $propertyContentRow->cs;
-			}
-
-			return Vfr_Checksum::cs($checksumTotal);
+			$row = $this->fetchRow($query);
+			
+			return $row->cs;
 		} catch (Exception $e) {
 			throw $e;
 		}
+		
+		//$query = $this->select('cs')
+		//$query = $this->select()->from($this->_name, 'cs')
+		//			  ->where('idProperty = ?', $idProperty)
+		//			  ->where('version = ?', $version)
+		//			  ->where('iso2char = ?', $lang)
+		//			  ->order('idPropertyContentField');
+
+		//try {
+		//	$propertyContentRowset = $this->fetchAll($query);
+
+		//	// concat the checksums together.
+		//	// null strings should be treated as empty strings
+		//	$checksumSum = '';
+		//	foreach ($propertyContentRowset as $propertyContentRow) {
+		//		if ($propertyContentRow->cs == null)
+		//			$content = '';
+		//		else
+		//			$content = $propertyContentRow->cs;
+		//			
+		//		$checksumSum .= $content;
+		//	}
+
+		//	# get the hash of the concatted hashes
+		//	return Vfr_Checksum::cs($checksumSum);
+		//} catch (Exception $e) {
+		//	throw $e;
+		//}
 	}
+*/
 
     /**
      *
@@ -185,8 +199,6 @@ class Common_Resource_PropertyContent
 	public function getPropertyContentByPropertyId($idProperty, $version=self::VERSION_MAIN,
         $lang='EN', $idPropertyContentFieldList = null)
 	{
-		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-
 		$query = $this->select()
 					  ->where('idProperty = ?', $idProperty)
 					  ->where('version = ?', $version)
@@ -197,13 +209,13 @@ class Common_Resource_PropertyContent
 			$query->where('idPropertyContentField IN (?)', $idPropertyContentFieldList);
 		}
 		
+		$query->order('idPropertyContentField ASC');
+		
 		try {
 			return $this->fetchAll($query);
 		} catch (Exception $e) {
 			throw $e;
 		}
-	
-		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);	
 	}
 	
 	public function getPropertyContentByPropertyList($propertyRowset, $version, $lang, $idPropertyContentFieldList)
@@ -239,14 +251,14 @@ class Common_Resource_PropertyContent
 	{
 		$params = array (
 			'content'	=> $content,
-			'cs'		=> Vfr_Checksum::cs($content)
+			'updated'	=> new Zend_Db_Expr('NOW()')
 		);
 		
 		$adapter = $this->getAdapter();
-		$where = $adapter->quoteInto('idProperty = ?', $idProperty)
-			   . $adapter->quoteInto(' AND version = ?', $version)
-			   . $adapter->quoteInto(' AND iso2char = ?', $lang)
-			   . $adapter->quoteInto(' AND idPropertyContentField = ?', $idPropertyContentField);
+		$where = $adapter->quoteInto('idProperty=?', $idProperty)
+			   . $adapter->quoteInto(' AND version=?', $version)
+			   . $adapter->quoteInto(' AND iso2char=?', $lang)
+			   . $adapter->quoteInto(' AND idPropertyContentField=?', $idPropertyContentField);
 		try {
 			$query = $this->update($params, $where);
 		} catch (Exception $e) {
@@ -271,12 +283,111 @@ class Common_Resource_PropertyContent
 	
 	public function copyUpdateToMaster($idProperty)
 	{
+		
+		/*
+		 * This query gets a list of fields that need to be changed
+		 *
+		 * SELECT DISTINCT t1.idPropertyContent, t2.content, t2.cs, t1.idProperty
+		 * FROM PropertiesContent AS t1 INNER JOIN PropertiesContent AS t2
+		 * WHERE t1.version = 1 AND t2.version = 2
+		 * AND t1.idProperty = 10500
+		 * AND t1.iso2char = 'EN'
+		 * AND t1.idProperty = t2.idProperty
+		 * AND t1.iso2char = t2.iso2char
+		 * AND t1.idPropertyContentField = t2.idPropertyContentField
+		 * AND t1.cs != t2.cs
+		 */
+		//$query = $this->select()
+		//		      ->from(
+		//					array ('t1' => 'PropertiesContent'),
+		//					array(new Zend_Db_Expr('DISTINCT t1.idPropertyContent'), 't1.idProperty', 't2.content', 't2.cs')
+		//				)->joinInner(
+		//					array('t2' => 'PropertiesContent'),
+		//					'
+		//					t1.idPropertyContentField=t2.idPropertyContentField
+		//					AND t1.idProperty=t2.idProperty
+		//					AND t1.cs!=t2.cs
+		//					AND t1.iso2char=t2.iso2char
+		//					',
+		//					array('content', 'cs')
+		//				)->where('t1.version=1 AND t2.version=1')
+		//			     ->where('t1.idProperty=?', 10500)
+		//				 ->where('t1.iso2char=?', 'EN');
+	
+		//try {
+		//	$propertyContentRowset = $this->fetchAll($query);
+		//	
+		//	die();
+		//	foreach ($propertyContentRowset as $propertyContentRow) {
+		//		$params = array (
+		//			'content' => $propertyContentRow->content,
+		//			'cs' => $propertyContentRow->cs,
+		//			'updated' => new Zend_Db_Expr('NOW()')
+		//		);
+				
+		//		$whereClause = $this->getAdapter()->quoteInto('idPropertyContent=?', $propertyContentRow->idPropertyContent);
+		//		try {
+        //   $query = $this->update($params, $whereClause);
+        //} catch (Exception $e) {
+        //   throw $e;
+        //}
+		//	}
+			
+			
+		//	var_dump($propertyContentRowset);
+		//	die();
+		//} catch (Exception $e) {
+		//	throw $e;
+		//}
+	
+		//$query = $this->select()
+		//		      ->from($this->_name, array('t1.idPropertyContent', 't2.content', 't2.cs'))
+		//			  ->where('t1.version=?', (int) 1)
+		//			  ->where('t2.version=?', (int) 2)
+		//			  ->where('t1.idProperty=?', (int) $idProperty)
+		//			  ->where('t1.iso2char=?', 'EN')
+		//			  ->where('t1.');
+			
+		$sql = "
+			UPDATE PropertiesContent AS c
+				JOIN
+				(
+				SELECT DISTINCT
+					t1.idPropertyContent, t1.idProperty, t2.content, t2.cs
+				FROM
+					PropertiesContent AS t1
+				INNER JOIN PropertiesContent AS t2 ON
+					t1.idPropertyContentField=t2.idPropertyContentField
+					AND t1.idProperty=t2.idProperty
+					AND t1.cs!=t2.cs
+					AND t1.iso2char=t2.iso2char
+				WHERE
+					t1.version=1 AND t1.idProperty=10519 AND t1.iso2char='EN'
+				)
+				AS tm
+				ON
+					tm.idPropertyContent=c.idPropertyContent
+				SET
+					c.content=tm.content, c.cs=tm.cs, c.updated=now()
+		";
+		
+		die(); 
+		
+		$mPropertyContentRowset = $this->getPropertyContentByPropertyId($idProperty, self::VERSION_MAIN);
+		$uPropertyContentRowset = $this->getPropertyContentByPropertyId($idProperty, self::VERSION_UPDATE);
+		
+		
 		$propertyContentRowset = $this->getPropertyContentByPropertyId($idProperty, self::VERSION_UPDATE);
+		
 		
 		$stream = '';
 		foreach ($propertyContentRowset as $row) {
 			$this->updatePropertyContent($idProperty, self::VERSION_MAIN, 'EN', $row->idPropertyContentField, $row->content);
-			$stream .= $row->content;
+			$content = $row->content;
+			if ($content == null)
+				$content = '';
+				
+			$stream .= Vfr_Checksum::cs($content);
 		}
 		
 		return sha1($stream);

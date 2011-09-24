@@ -33,7 +33,6 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
 			'iso2char'	   	  => $nullExpr,
 			'idAdministrator' => 1,
 			'username'		  => $nullExpr,
-			'passwd'		  => $params['passwd'],
 			'hash'			  => $hash,
 			'emailAddress'	  => $params['emailAddress'],
 			'firstname'		  => $params['firstname'],
