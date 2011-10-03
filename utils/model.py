@@ -35,6 +35,45 @@ def delete_advertiser_reset(cursor, id_ar):
         cursor.execute(sql)
     logging.debug(sql)
 
+### Properties
+def update_property_checksums(cursor, id_prop, m_cs, u_cs):
+    sql = """
+    UPDATE Properties
+    SET checksumMaster='{m_cs}', checksumUpdate='{u_cs}', updated=NOW(), lastModifiedBy='python'
+    WHERE idProperty={id_prop}
+    """.format(m_cs = m_cs, u_cs = u_cs, id_prop = id_prop)
+
+    if not config.debug['sql']:
+        cursor.execute(sql)
+        #print sql
+    logging.debug(sql)
+
+
+### PropertiesContent
+def get_property_content_by_property_id(cursor, id_prop, version):
+    sql = """
+    SELECT *
+    FROM PropertiesContent
+    WHERE idProperty={id_property}
+    AND version={version}
+    """.format(id_property = id_prop, version=version)
+    cursor.execute(sql)
+
+    rows = cursor.fetchall()
+
+    return rows
+
+def update_property_content_by_pk(cursor, pk, checksum):
+    sql = """
+    UPDATE PropertiesContent
+    SET cs='{cs}', updated=NOW()
+    WHERE idPropertyContent={pk}
+    """.format(cs = checksum, pk = pk)
+    
+    if not config.debug['sql']:
+        cursor.execute(sql)
+    logging.debug(sql)
+
 
 # CREATE
 
