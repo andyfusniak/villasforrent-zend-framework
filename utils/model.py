@@ -48,6 +48,19 @@ def update_property_checksums(cursor, id_prop, m_cs, u_cs):
         #print sql
     logging.debug(sql)
 
+def repair_property_checksum(cursor, id_prop, ver):
+    sql = """
+    UPDATE Properties
+    SET {field} = (SELECT SHA1(GROUP_CONCAT(cs SEPARATOR ''))
+    FROM PropertiesContent WHERE idProperty={id_prop} AND version = {ver}
+    ORDER BY idPropertyContentField ASC) WHERE idProperty = {id_prop}
+    """.format(field='checksumMaster' if ver == 1 else 'checksumUpdate', id_prop=id_prop, ver=ver)
+
+    print sql
+
+    if not config.debug['sql']:
+        cursor.execute(sql)
+    logging.debug(sql)
 
 ### PropertiesContent
 def get_property_content_by_property_id(cursor, id_prop, version):

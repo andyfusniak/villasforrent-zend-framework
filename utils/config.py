@@ -22,7 +22,7 @@ applogs = {
 
 # set to True to enable debug and prevent real SQL queries
 debug = {
-    'sql': True
+    'sql': False # live mode
 }
 
 
