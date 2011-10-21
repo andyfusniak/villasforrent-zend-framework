@@ -1,6 +1,6 @@
 #!/bin/bash
-cd /var/www/beta.villasforrent.net/
-tar zxfp zend_vfr.tar.gz
+cd /var/www/beta.holidaypropertyworldwide.com/
+tar zxfp app.tar.gz
 
 directory="./data"
 if [ ! -d $directory ]; then
@@ -21,5 +21,6 @@ else
     fi
 fi
 
-mv /var/www/beta.villasforrent.net/public/.htaccess-beta /var/www/beta.villasforrent.net/public/.htaccess
+rm /var/www/beta.holidaypropertyworldwide.com/app.tar.gz
+mv /var/www/beta.holidaypropertyworldwide.com/public/.htaccess-beta /var/www/beta.holidaypropertyworldwide.com/public/.htaccess
 chgrp devteam -fR *

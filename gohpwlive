@@ -21,4 +21,5 @@ else
     fi
 fi
 
+rm /var/www/www.holidaypropertyworldwide.com/app.tar.gz
 chgrp devteam -fR *

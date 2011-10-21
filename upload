@@ -22,19 +22,19 @@ if [ "$DEPLOY" = "l" ]; then
 	DEPLOY_DIR=/var/www/www.holidaypropertyworldwide.com
 elif [ "$DEPLOY" = "b" ]; then
 	echo "BETA Selected"
-	DEPLOY_SCRIPT=gobeta
-	DEPLOY_DIR=/var/www/beta.villasforrent.net
+	DEPLOY_SCRIPT=gohpwbeta
+	DEPLOY_DIR=/var/www/beta.holidaypropertyworldwide.com
 else
 	echo "You must specify LIVE or BETA mode"
 	exit;
 fi
 
 echo -e "\E[32mCleaning up temp files\E[37m"
-rm -f zend_vfr.tar
-rm -f zend_vfr.tar.gz
+rm -f app.tar
+rm -f app.tar.gz
 
 echo -e "\E[32mCreating code archive\E[37m"
-tar cfp zend_vfr.tar \
+tar cfp app.tar \
 public/.htaccess \
 public/.htaccess-beta \
 public/googleae3066b83fcfab45.html \
@@ -52,10 +52,12 @@ application/Command.php \
 application/configs/application.ini \
 application/configs/navigation.xml \
 application/configs/passwd.txt \
+application/configs/passwd-beta.txt \
 application/Cron.php \
 application/modules/admin/Bootstrap.php \
 application/modules/admin/controllers/AdvertiserController.php \
 application/modules/admin/controllers/AuthFailController.php \
+application/modules/admin/controllers/AutoLoginController.php \
 application/modules/admin/controllers/BuildLocationsController.php \
 application/modules/admin/controllers/ChecksumsController.php \
 application/modules/admin/controllers/ErrorController.php \
@@ -227,6 +229,7 @@ application/modules/frontend/forms/Step5AvailabilityDeleteConfirmForm.php \
 application/modules/frontend/forms/Step5AvailabilityEditForm.php \
 application/modules/frontend/forms/Step5AvailablityForm.php \
 application/modules/frontend/helpers/DigestKey.php \
+application/modules/frontend/helpers/EnsureSecure.php \
 application/modules/frontend/helpers/LevelSummary.php \
 application/modules/frontend/helpers/FeaturedProperty.php \
 application/modules/frontend/layouts/scripts/fullscreen.phtml \
@@ -234,6 +237,7 @@ application/modules/frontend/layouts/scripts/layout.phtml \
 application/modules/frontend/models/Acl/Frontend.php \
 application/modules/frontend/plugins/AdvertiserAccessCheck.php \
 application/modules/frontend/views/emails/admin-new-advertiser-join.txt \
+application/modules/frontend/views/emails/advertiser-password-reset-confirmation.txt \
 application/modules/frontend/views/emails/advertiser-password-reset.html \
 application/modules/frontend/views/emails/advertiser-password-reset.txt \
 application/modules/frontend/views/helpers/PhotoGrid.php \
@@ -332,7 +336,7 @@ utils/updatechecksums
 
 if [ "$INC_SCHEMA" = "y" ]; then
 	echo -e "\E[32mAppending Schema to archive\E[37m"
-	tar rfp zend_vfr.tar \
+	tar rfp app.tar \
 	schema/Administrators.sql \
     schema/AdvertiserApiAccounts.sql \
 	schema/Advertisers.sql \
@@ -376,7 +380,7 @@ fi
 
 if [ "$INC_IMAGES" = "y" ]; then
 	echo -e "\E[32mAppending Images to archive\E[37m"
-	tar rfp zend_vfr.tar \
+	tar rfp app.tar \
     public/images/accountsummary/availability_green.png \
     public/images/accountsummary/availability_grey.png \
     public/images/accountsummary/availability_orange.png \
@@ -441,23 +445,24 @@ if [ "$INC_IMAGES" = "y" ]; then
     public/images/progressheader/rates_orange.png \
     public/images/homepage/special_offer.gif \
 	public/images/tile.gif \
-	public/images/zend_framework.png
+    public/images/other/valid-xhtml10-blue.png \
+	public/images/other/zend-framework.png
 fi
 
 if [ "$INC_ZEND" = "y" ]; then
 	echo -e "\E[32mAppending Zend Framework to archive\E[37m"
-	tar rfhp zend_vfr.tar library/Zend \
+	tar rfhp app.tar library/Zend \
     library/ZendX
 fi
 
 if [ "$INC_YUI2" = "y" ]; then
 	echo -e "\E[32mAppending YUI2 to archive\E[37m"
-	tar rfhp zend_vfr.tar public/js/yui2
+	tar rfhp app.tar public/js/yui2
 fi
 
 if [ "$INC_JQUERY" = "y" ]; then
 	echo -e "\E[32mAppending jQuery/UI/Theme to archive\E[37m"
-    tar rfhp zend_vfr.tar \
+    tar rfhp app.tar \
     public/js/jquery/jquery-1.6.js \
     public/js/jquery/jquery-1.6.min.js \
     public/js/jquery-ui-1.8.12 \
@@ -467,20 +472,20 @@ fi
 
 
 echo -e "\E[32mCompressing archive\E[37m"
-gzip -9 -f zend_vfr.tar
+gzip -9 -f app.tar
 
 echo -e "\E[32mSending to server...\E[37m"
 #
 # upload the archive to the beta server
 #
-scp -P22 -p -C zend_vfr.tar.gz andy@mrgrey.villasforrent.net:$DEPLOY_DIR
+scp -P22 -p -C app.tar.gz andy@zeus.holidaypropertyworldwide.com:$DEPLOY_DIR
 
 echo -e "\E[32mRunning remote process to unbundle the package\E[37m"
-scp -P22 -p -C $DEPLOY_SCRIPT andy@villasforrent.net:$DEPLOY_DIR
+scp -P22 -p -C $DEPLOY_SCRIPT andy@zeus.holidaypropertyworldwide.com:$DEPLOY_DIR
 
-ssh -p22 andy@mrgrey.villasforrent.net $DEPLOY_DIR/$DEPLOY_SCRIPT
+ssh -p22 andy@zeus.holidaypropertyworldwide.com $DEPLOY_DIR/$DEPLOY_SCRIPT
 
 echo -e "\E[32mCleaning up local files\E[37m"
-rm -f zend_vfr.tar.gz
+rm -f app.tar.gz
 
 echo -e "\E[35mCompleted\E[37m"
