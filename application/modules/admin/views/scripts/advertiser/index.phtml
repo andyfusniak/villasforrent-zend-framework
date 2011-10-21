@@ -25,12 +25,7 @@
 				'sort' => 'emailAddress',
 				'direction' => $this->toggleDirection($this->direction)
 		    )) ?>">Email address</a> <?php echo $this->directionArrow('emailAddress', $this->sort, $this->direction) ?></th>
-		<th>Secure P</th>
-		<th><a href="<?php echo $this->url(
-			array (
-		        'sort' => 'passwd',
-				'direction' => $this->toggleDirection($this->direction)
-		    )) ?>">Password</a> <?php echo $this->directionArrow('passwd', $this->sort, $this->direction) ?></th>
+		<th>P Set?</th>
 		<th><a href="<?php echo $this->url(
 			array (
 				'sort' => 'added',
@@ -41,6 +36,7 @@
 				'sort' => 'lastLogin',
 				'direction' => $this->toggleDirection($this->direction)
 			)) ?>">Last Logged In</a> <?php echo $this->directionArrow('lastLogin', $this->sort, $this->direction) ?></th>
+		<th>Auto Login</th>
 	</tr>
 <?php foreach ($this->advertiserPaginator as $advertiserRow): ?>
 <?php //var_dump($advertiserRow) ?>
@@ -50,9 +46,9 @@
 		<td><?php echo $this->escape($advertiserRow->lastname) ?></td>
 		<td><?php echo $this->escape($advertiserRow->emailAddress) ?></td>
 		<td><?php echo $this->securePassword($advertiserRow->hash) ?></td>
-		<td><?php echo $this->escape($advertiserRow->passwd) ?></td>
 		<td><?php echo $this->prettyDate($advertiserRow->added, Vfr_View_Helper_PrettyDate::STYLE_DD_MMM_YY) ?></td>
 		<td><?php echo $this->prettyDate($advertiserRow->lastlogin, Vfr_View_Helper_PrettyDate::STYLE_DD_MMM_YY_HH_MM_AMPM) ?></td>
+		<td><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'auto-login', 'action' => 'login', 'idAdvertiser' => $advertiserRow->idAdvertiser), null, true) ?>">login</a></td>
 	</tr>
 	<?php // echo $item['idAdvertiser'], $item['iso2char'], $item['username'] ?>
 <?php endforeach ?>
