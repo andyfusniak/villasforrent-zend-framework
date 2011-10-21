@@ -10,6 +10,11 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
 		
 		$this->_advertiserModel = new Common_Model_Advertiser();
     }
+	
+	public function preDispatch()
+	{
+		$this->_helper->ensureSecure();
+	}
 
     public function registerAction()
     {
@@ -19,14 +24,45 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
 			if ($form->isValid($this->getRequest()->getPost())) {
 				$this->_advertiserModel->addNewAdvertiser($form->getValues());
 				
-				// automatically login the advertiser
+				// get the new advertiser row
 				$model = new Common_Model_Advertiser();
                 $identity = $model->getAdvertiserByEmail($form->getValue('emailAddress')); // type Common_Resource_Advertiser_Row
 				
-				$auth = Zend_Auth::getInstance();
-				$auth->getStorage()->write($identity);
-				
-				$this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-account/home');
+                //// notify the admin
+                //if ($identity) {
+                //    $vfrMail = new Vfr_Mail('/modules/frontend/views/emails', 'advertiser-password-reset');
+                //    $vfrMail->send(
+                //        $identity->emailAddress,
+                //        "HolidayPropertyWorldwide.com New Advertiser Joined",
+                //        array (
+                //            'idAdvertiser'  => $identity->idAdvertiser,
+                //            'firstname'     => $identity->firstname,
+                //            'lastname'      => $identity->lastname,
+                //            'emailAddress'  => $identity->emailAddress,
+                //            'added'         => $identity->added
+                //        ),
+                //        Vfr_Mail::MODE_ONLY_TXT
+                //    );
+                    
+                //    $auth = Zend_Auth::getInstance();
+                //    $auth->getStorage()->write($identity);
+                //}
+                
+                
+                $vfrMail = new Vfr_Mail('/modules/frontend/views/emails', 'advertiser-r-reset');
+                $vfrMail->send(
+                        $identity->emailAddress,
+                        "HolidayPropertyWorldwide.com Confirm Your Email Address",
+                        array (
+                            'idAdvertiser'  => $identity->idAdvertiser,
+                            'firstname'     => $identity->firstname,
+                            'lastname'      => $identity->lastname,
+                            'emailAddress'  => $identity->emailAddress
+                        ),
+                        Vfr_Mail::MODE_ONLY_TXT
+                    );
+                
+				$this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-registration/continue');
 			} else {
 				$form->populate($this->getRequest()->getPost());
 			}
@@ -35,8 +71,5 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 	
-	public function completeAction()
-	{
-		
-	}
+	public function continueAction() {}
 }

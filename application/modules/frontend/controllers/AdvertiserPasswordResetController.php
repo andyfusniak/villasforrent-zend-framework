@@ -1,8 +1,13 @@
 <?php
 class AdvertiserPasswordResetController extends Zend_Controller_Action
 {
+    public function preDispatch()
+	{
+		$this->_helper->ensureSecure();
+	}
+    
     public function resetAction()
-    {
+    {        
         $request = $this->getRequest();
         $token = $request->getParam('token');
         
@@ -22,35 +27,15 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
                 if ($advertiserResetRow) {
                     $advertiserModel->updatePassword($advertiserResetRow->idAdvertiser, $request->getParam('passwd'));
                     
-                    // load the templates
-					$text = file_get_contents(APPLICATION_PATH . '/modules/frontend/views/emails/advertiser-password-reset-confirmation.txt');
-                                        
-                    // get the the configuration
-                    $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
-					$options = array(
-						'name'          => 'sendmail',
-						'driverOptions' => array(
-							'host'      => $bootstrap['resources']['db']['params']['host'],
-							'port'      => '3306',
-							'username'  => $bootstrap['resources']['db']['params']['username'],
-							'password'  => $bootstrap['resources']['db']['params']['password'],
-							'dbname'    => $bootstrap['resources']['db']['params']['dbname'],
-							'type'      => 'pdo_mysql'
-						)
-					);
-					
-                    // queue the message
-					$queue = new Zend_Queue('Db', $options);
-					$test = array (
-						'to' 		=> $advertiserRow->emailAddress,
-						'subject' 	=> 'HolidayPropertyWorldwide.com Password Changed',
-						'bodyText'  => $text,
-						'bodyHtml'	=> null
-					);
-					
-					$message = serialize($test);
-					$queue->send($message);
-                    
+                    // send the template
+                    $vfrMail = new Vfr_Mail('/modules/frontend/views/emails', 'advertiser-password-reset-confirmation');
+                    $vfrMail->send(
+                        $advertiserRow->emailAddress,
+                        "HolidayPropertyWorldwide.com Password Changed",
+                        null,
+                        Vfr_Mail::MODE_ONLY_TXT
+                    );
+                      
                     // delete this advertiser reset token entry
                     $advertiserResetRow->delete();
                     
@@ -58,9 +43,6 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
                 } else {
                     $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-password-reset/expired');
                 }
-              
-                //var_dump($advertiserResetRow, $token);
-                //die();
             }
         } else {
             // check to see if the token exists
@@ -92,46 +74,23 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
                 //var_dump($advertiserRow);
                 
                 if ($advertiserRow) {
-                    // load the templates
-					$text = file_get_contents(APPLICATION_PATH . '/modules/frontend/views/emails/advertiser-password-reset.txt');
-					$html = file_get_contents(APPLICATION_PATH . '/modules/frontend/views/emails/advertiser-password-reset.html');
-		
                     // generate a new random token
                     $tokenObj = new Vfr_Token();
         			$token = $tokenObj->generateUniqueToken();
                     
                     // add this token to the reset table
                     $advertiserModel->addPasswordReset($advertiserRow->idAdvertiser, $token);
-                    
-					// fill the template placeholders
-					$text = str_replace("[[token]]", $token, $text);
-					$html = str_replace("[[token]]", $this->view->escape($token), $html);
-                    
-                    // get the the configuration
-                    $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
-					$options = array(
-						'name'          => 'sendmail',
-						'driverOptions' => array(
-							'host'      => $bootstrap['resources']['db']['params']['host'],
-							'port'      => '3306',
-							'username'  => $bootstrap['resources']['db']['params']['username'],
-							'password'  => $bootstrap['resources']['db']['params']['password'],
-							'dbname'    => $bootstrap['resources']['db']['params']['dbname'],
-							'type'      => 'pdo_mysql'
-						)
-					);
-					
-                    // queue the message
-					$queue = new Zend_Queue('Db', $options);
-					$test = array (
-						'to' 		=> $advertiserRow->emailAddress,
-						'subject' 	=> 'HolidayPropertyWorldwide.com Reset Your Password',
-						'bodyText'  => $text,
-						'bodyHtml'	=> null
-					);
-					
-					$message = serialize($test);
-					$queue->send($message);
+                                        
+                    // send the template
+                    $vfrMail = new Vfr_Mail('/modules/frontend/views/emails', 'advertiser-password-reset');
+                    $vfrMail->send(
+                        $advertiserRow->emailAddress,
+                        "HolidayPropertyWorldwide.com Reset Your Password",
+                        array (
+                            'token' => $token  
+                        ),
+                        Vfr_Mail::MODE_ONLY_TXT
+                    );
                 }
                 //die('sending reset email');
                 
@@ -146,13 +105,7 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
         ));
     }
     
-    public function sentAction()
-    {   
-    }
-    
-    public function expiredAction()
-    {   
-    }
-    
+    public function sentAction() {}
+    public function expiredAction() {}
     public function successfullyUpdatedAction() {}
 }
