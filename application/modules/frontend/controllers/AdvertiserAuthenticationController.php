@@ -6,7 +6,14 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
         $this->_logger = Zend_Registry::get('logger');
 		//$this->_logger->log(__METHOD__ . ' started method function init()', Zend_Log::INFO);
     }
-
+	
+	public function preDispatch()
+	{
+		$this->_helper->ensureSecure();
+	}
+    
+    
+	
     public function loginAction()
     {
 		// check to see if the administrator is already logged in
@@ -17,7 +24,9 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
 			$this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-account/home');
 		}
 		
-		$this->_logger->log("Frontend_AdvertiserAuthenticationController creating new Frontend_Form_AdvertiserLoginForm", Zend_Log::DEBUG);
+		$this->_logger->log(
+            "Frontend_AdvertiserAuthenticationController creating new Frontend_Form_AdvertiserLoginForm",
+							Zend_Log::DEBUG);
 		
 		$request = $this->getRequest();
 		$form = new Frontend_Form_Advertiser_LoginForm(

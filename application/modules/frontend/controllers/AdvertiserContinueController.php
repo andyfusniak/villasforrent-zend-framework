@@ -3,6 +3,11 @@ class AdvertiserContinueController extends Zend_Controller_Action
 {
     protected $_front;
 
+	public function preDispatch()
+	{
+		$this->_helper->ensureSecure();
+	}
+
     public function init()
     {
         // Disable the ViewRenderer helper:

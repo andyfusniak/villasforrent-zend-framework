@@ -1,6 +1,11 @@
 <?php
 class AdvertiserRatesController extends Zend_Controller_Action
-{ 
+{
+    public function preDispatch()
+	{
+		$this->_helper->ensureSecure();
+	}
+    
     public function rentalBasisAction()
     {
         $idProperty = $this->getRequest()->getParam('idProperty');

@@ -10,6 +10,11 @@ class AdvertiserImageManagerController extends Zend_Controller_Action
 		
 		$this->identity = Zend_Auth::getInstance()->getIdentity();
     }
+	
+	public function preDispatch()
+	{
+		$this->_helper->ensureSecure();
+	}
     
     public function confirmAction()
 	{
