@@ -1,23 +1,25 @@
 <h1>Update Approval for property <?php echo $this->idProperty ?></h1>
 
-
-<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
-<input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
-
-<?php foreach ($this->changedList as $key=>$value) : ?>
-<h2><?php echo Common_Resource_PropertyContentField::$propertiesContentNiceHeadersMap[$key-1] ?></h2>
-<div class="yui-g">
-    <div class="yui-u first">
-        <?php echo nl2br($this->escape($this->master[$key-1]->content)) ?>
-        <?php //echo $this->master[$key-1]->cs ?>
+<div id="view-update-approval">
+    <form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+    <input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
+    
+    <?php foreach ($this->changedList as $key=>$value) : ?>
+    <h2><?php echo Common_Resource_PropertyContentField::$propertiesContentNiceHeadersMap[$key] ?></h2>
+    <div class="yui-g">
+        <div class="yui-u first">
+            <?php echo nl2br($this->escape($this->master[$key-1]->content)) ?>
+            <?php //echo $this->master[$key-1]->cs ?>
+        </div>
+    
+        <div class="yui-u">
+            <?php echo nl2br($this->escape($this->update[$key-1]->content)) ?>
+            <?php //echo $this->update[$key-1]->cs ?>
+        </div>
     </div>
-
-    <div class="yui-u">
-        <?php echo nl2br($this->escape($this->update[$key-1]->content)) ?>
-        <?php //echo $this->update[$key-1]->cs ?>
-    </div>
+    <br />
+    <?php endforeach ?>
+    
+    <input type="submit" value="Approve This Update" />
+    </form>
 </div>
-<?php endforeach ?>
-
-<input type="submit" value="Approval Updates" />
-</form>
