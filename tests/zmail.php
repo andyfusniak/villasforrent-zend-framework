@@ -3,6 +3,7 @@ set_include_path('../library');
 
 
 require_once 'Zend/Mail.php';
+require_once 'Zend/Mail/Transport/Sendmail.php';
 require_once 'Zend/View.php';
 
 $html = new Zend_View();
@@ -25,7 +26,7 @@ $bodyText = $html->render('template.phtml');
 // configure base stuff
 $mail->addTo('andyfusniak@gmail.com');
 $mail->setSubject('Welcome to my test');
-$mail->setFrom('support@holidaypropertyworldwide.com', 'HPW');
+$mail->setFrom('info@holidaypropertyworldwide.com', 'HPW');
 $mail->setBodyHtml($bodyText);
 $mail->send();
 
