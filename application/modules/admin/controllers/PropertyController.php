@@ -15,6 +15,21 @@ class Admin_PropertyController extends Zend_Controller_Action
 	{
 		$idProperty = (int) $this->getRequest()->getParam('idProperty');
 		
+		$form = new Admin_Form_PropertyUpdateApprovalForm(
+            array (
+                'idProperty' => $idProperty
+            )
+        );
+		
+		if ($this->getRequest()->isPost()) {
+            if ($form->isValid($this->getRequest()->getPost())) {
+				$propertyModel = new Common_Model_Property();
+				$propertyModel->copyUpdateToMaster($idProperty);
+                
+				$this->_helper->redirector->gotoSimple('list-awaiting-update-approval', 'property', 'admin', array());
+			}
+		}
+		
 		$propertyModel = new Common_Model_Property();
 		$propertyContentMaster = $propertyModel->getPropertyContentByPropertyId(
             $idProperty,
@@ -49,21 +64,6 @@ class Admin_PropertyController extends Zend_Controller_Action
                 $changedList[$idPropertyContentField] = true;
             }
         }
-
-		$form = new Admin_Form_PropertyUpdateApprovalForm(
-            array (
-                'idProperty' => $idProperty
-            )
-        );
-		
-		if ($this->getRequest()->isPost()) {
-            if ($form->isValid($this->getRequest()->getPost())) {
-				$propertyModel = new Common_Model_Property();
-				$propertyModel->copyUpdateToMaster($idProperty);
-                
-				$this->_helper->redirector->gotoSimple('list-awaiting-update-approval', 'property', 'admin', array());
-			}
-		}
 		
 		$this->view->assign(
             array (
