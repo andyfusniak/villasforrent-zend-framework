@@ -78,23 +78,6 @@ class Common_Resource_Photo extends Vfr_Model_Resource_Db_Table_Abstract impleme
 			throw $e;
 		}
 	}
-	
-	public function getCountries($visible=true)
-	{
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
-
-		$query = $this->select()
-		              ->where('visible = ?', (($visible) ? '1' : '0'))
-					  ->order('idCountry');
-
-		try {
-			$countryRowset = $this->fetchAll($query);
-			
-			return $countryRowset;
-		} catch (Exception $e) {
-			throw $e;
-		}
-	}
 
 	public function getAllPhotosByPropertyId($idProperty, $visible=true)
 	{
@@ -141,6 +124,34 @@ class Common_Resource_Photo extends Vfr_Model_Resource_Db_Table_Abstract impleme
 		}
 	}
 	
+	public function getPrimaryPhotosByPropertyList($idPropertyList)
+	{
+		// Example SQL
+		// SELECT *, MIN(displayPriority) AS displayPriority
+		// FROM Photos
+		// WHERE idProperty IN (10516, 10000, 10273) GROUP BY idProperty;
+		$query = $this->select()
+					  ->from($this,
+							    array (
+									'idProperty',
+									'idPhoto',
+									'widthPixels',
+									'heightPixels',
+									'caption',
+									new Zend_Db_Expr('MIN(displayPriority) AS newpri')
+								)
+							)
+		              ->where('idProperty IN (?)', $idPropertyList)
+					  ->group('idProperty')
+					  ->order('idProperty DESC');
+		try {
+			$photoRowset = $this->fetchAll($query);
+			
+			return $photoRowset;
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
 	
 	public function getPhotoByPhotoId($idPhoto)
 	{

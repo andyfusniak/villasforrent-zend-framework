@@ -163,34 +163,6 @@ class Common_Resource_Property
 		}
 	}
 
-    public function setPropertyContentChecksum($idProperty, $checksum, $version=Common_Resource_PropertyContent::VERSION_MAIN)
-    {
-        if ($version == Common_Resource_PropertyContent::VERSION_MAIN) {
-            $params = array (
-                'checksumMaster' => $checksum
-            );
-        } elseif ($version == Common_Resource_PropertyContent::VERSION_UPDATE) {
-            $params = array (
-                'checksumUpdate' => $checksum
-            );
-        } elseif ($version == Common_Resource_PropertyContent::VERSION_BOTH) {
-            $params = array (
-                'checksumMaster' => $checksum,
-                'checksumUpdate' => $checksum
-            );
-        } else {
-            throw new Exception("Version invalid");
-        }
-
-        $where = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
-        try {
-            $query = $this->update($params, $where);
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-
-
     //
     // READ
     //
@@ -538,28 +510,38 @@ class Common_Resource_Property
         }
     }
 
-    private function _updateChecksum($idProperty, $cs, $name)
+    private function _updateChecksum($idProperty, $version)
     {
-        $params = array (
-            $name => $cs
-        );
-
-        $whereClause = $this->getAdapter()->quoteInto('idProperty = ?', $idProperty);
-        try {
-            $query = $this->update($params, $whereClause);
+		$adapter = $this->getAdapter();
+		if ($version == 1)
+			$field = 'checksumMaster';
+		else
+			$field = 'checksumUpdate';
+			
+		$query = $this->getAdapter()->quoteInto("
+			UPDATE Properties
+			SET $field = (
+				SELECT SHA1(GROUP_CONCAT(cs SEPARATOR ''))
+				FROM PropertiesContent
+				WHERE version=?", $version);
+			$query .= $adapter->quoteInto(" AND idProperty=?", $idProperty);
+			$query .= $adapter->quoteInto(" ORDER BY idPropertyContentField ASC) WHERE idProperty=?", $idProperty);
+        
+		try {
+            $this->_db->query($query);
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public function updateMasterChecksum($idProperty, $cs)
+    public function updateMasterChecksum($idProperty)
     {
-        $this->_updateChecksum($idProperty, $cs, 'checksumMaster');
+        $this->_updateChecksum($idProperty, 1);
     }
     
-    public function updateUpdateChecksum($idProperty, $cs)
+    public function updateUpdateChecksum($idProperty)
     {
-        $this->_updateChecksum($idProperty, $cs, 'checksumUpdate');
+        $this->_updateChecksum($idProperty, 2);
     }
     
     //

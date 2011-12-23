@@ -82,18 +82,6 @@ class Common_Model_Property extends Vfr_Model_Abstract
 				Common_Resource_PropertyContent::FIELD_LOCATION,
                 $params['destination']
             );
-
-            //$checksumTotal = $propertyContentResource->checksumTotal(
-            //        $idProperty,
-            //        $version,
-            //        $lang='EN'
-            //);
-
-            //$propertyResource->setPropertyContentChecksum(
-            //    $idProperty,
-			//	$checksumTotal,
-			//	$version
-            //);
         }
      
 		return $idProperty;
@@ -102,17 +90,6 @@ class Common_Model_Property extends Vfr_Model_Abstract
 	//
 	// READ
 	//
-
-/*
-    public function checksumTotal($idProperty, $version=Common_Resource_PropertyContent::VERSION_MAIN, $lang='EN')
-	{
-        $idProperty = (int) $idProperty;
-        
-        $propertyContentResource = $this->getResource('PropertyContent');
-
-        return $propertyContentResource->checksumTotal($idProperty, $version, $lang);
-	}
-*/
 
     public function getAllProperties()
     {
@@ -321,12 +298,41 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		return $photoResource->getAllPhotosByPropertyId($idProperty);
 	}
 	
+	public function getPrimaryPhotosByPropertyList($idPropertyList)
+	{
+		$idPropertyList = (array) $idPropertyList;
+		
+		$photoResource = $this->getResource('Photo');
+		return $photoResource->getPrimaryPhotosByPropertyList($idPropertyList);
+	}
+	
+	public function getPrimaryPhotosByPropertyLookup($idPropertyList)
+	{
+		$photoRowset = $this->getPrimaryPhotosByPropertyList($idPropertyList);
+		
+		$lookup = array ();
+		foreach ($photoRowset as $photoRow) {
+			$idProperty = $photoRow->idProperty;
+			$lookup[$idProperty] = $photoRow;
+		}
+		
+		return $lookup;
+	}
+	
 	public function getPrimaryPhotoByPropertyId($idProperty)
 	{
 		$idProperty = (int) $idProperty;
 		
 		$photoResource = $this->getResource('Photo');
 		return $photoResource->getPrimaryPhotoByPropertyId($idProperty);
+	}
+	
+	public function getPrimaryPhotosByPropertyIds($idPropertyList)
+	{
+		$idPropertyList = (array) $idPropertyList;
+		
+		$photoResource = $this->getResource('Photo');
+		return $photoResource->getPrimaryPhotosByPropertyIds($idPropertyList);
 	}
 	
 	public function getAllFacilities($inUse=true)
@@ -414,35 +420,10 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		$propertyResource			= $this->getResource('Property');
 		$propertyContentResource	= $this->getResource('PropertyContent');
 		
-        $updateList = Common_Resource_PropertyContentField::$propertiesContentFieldsMap;
-
-        // not used in the generation of checksum totals
-        unset($updateList[Common_Resource_PropertyContent::FIELD_LOCATION_URL]);
-        unset($updateList[Common_Resource_PropertyContent::FIELD_META_DATA]);
-        unset($updateList[Common_Resource_PropertyContent::FIELD_SEO_DATA]);
-         
 		foreach ($updateSet as $version) {
-            foreach ($updateList as $key=>$value) {
-                $propertyContentResource->updatePropertyContent(
-                    $idProperty,
-                    $version, 'EN',
-                    $key,
-                    $params[$value]
-                );
-            }
-
-            //$checksumTotal = $propertyContentResource->checksumTotal(
-            //        $idProperty,
-            //        $version,
-            //        $lang='EN'
-            //);
-
-            //$propertyResource->setPropertyContentChecksum(
-            //    $idProperty,
-			//	$checksumTotal,
-			//	$version
-            //);
-        }
+			$version = (int) $version;
+			$propertyContentResource->updatingPropertyContentDataset($idProperty, $version, $params);	
+		}
 
 		return $this;
 	}
@@ -454,11 +435,8 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		$propertyContentResource	= $this->getResource('PropertyContent');
 		$propertyResource			= $this->getResource('Property');
 		
-		$checksum = $propertyContentResource->copyUpdateToMaster($idProperty);
-		
-		$propertyResource->setPropertyContentChecksum($idProperty,
-													  $checksum,
-													  Common_Resource_PropertyContent::VERSION_MAIN);
+		$propertyContentResource->copyUpdateToMaster($idProperty);
+		$propertyResource->updateMasterChecksum($idProperty);
 		$propertyResource->updateApproveProperty($idProperty);
 	}
 	
@@ -554,20 +532,20 @@ class Common_Model_Property extends Vfr_Model_Abstract
         $propertyContentResource->repairPropertyBatchChecksums();
     }
 	
-    public function updateMasterCheckSum($idProperty, $cs)
+    public function updateMasterCheckSum($idProperty)
     {
         $idProperty = (int) $idProperty;
+		
         $propertyResource = $this->getResource('Property');
-        
-        $propertyResource->updateMasterChecksum($cs);
+        $propertyResource->updateMasterChecksum($idProperty);
     }
 
-    public function updateUpdateCheckSum($idProperty, $cs)
+    public function updateUpdateCheckSum($idProperty)
     {
         $idProperty = (int) $idProperty;
-        $propertyResource = $this->getResource('Property');
-
-        $propertyResource->updateUpdateChecksum($cs);
+        
+		$propertyResource = $this->getResource('Property');
+        $propertyResource->updateUpdateChecksum($idProperty);
     }
 
 	//
