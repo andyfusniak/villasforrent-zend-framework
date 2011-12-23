@@ -1,5 +1,4 @@
-#!/usr/bin/python2.6
-
+#!/usr/bin/env python
 import hashlib
 import sys
 import MySQLdb
@@ -12,20 +11,20 @@ from model import *
 import property_content
 
 
-#def repair_property_content(cursor, id_prop, version):
-#    rows = get_property_content_by_property_id(cursor, id_prop, version)
-#    
-#    cs_sum = ''
-#    for row in rows:
-#        content = row['content']
-#        if content == None:
-#            content = ''
-#            
-#        checksum = hashlib.sha1(content).hexdigest()
-#        update_property_content_by_pk(cursor, row['idPropertyContent'], checksum)
-#        cs_sum += checksum 
+def repair_property_content(cursor, id_prop, version):
+    rows = get_property_content_by_property_id(cursor, id_prop, version)
     
-#    return hashlib.sha1(cs_sum).hexdigest()
+    cs_sum = ''
+    for row in rows:
+        content = row['content']
+        if content == None:
+            content = ''
+            
+        checksum = hashlib.sha1(content).hexdigest()
+        update_property_content_by_pk(cursor, row['idPropertyContent'], checksum)
+        cs_sum += checksum 
+    
+    return hashlib.sha1(cs_sum).hexdigest()
     
 def main():
     try:
@@ -46,14 +45,11 @@ def main():
         id_prop = sys.argv[1]
     
         # repair all checksums for main and update versions 
-        repair_property_checksum(cursor, id_prop, 1)
-        repair_property_checksum(cursor, id_prop, 2)
-        
-        #m_cs = repair_property_content(cursor, id_prop, 1) 
-        #u_cs = repair_property_content(cursor, id_prop, 2) 
+        m_cs = repair_property_content(cursor, id_prop, 1) 
+        u_cs = repair_property_content(cursor, id_prop, 2) 
     
         # repair the master property table checksum totals
-        #update_property_checksums(cursor, id_prop, m_cs, u_cs)
+        update_property_checksums(cursor, id_prop, m_cs, u_cs)
 
     except IndexError, e:
         cursor.execute("SELECT idProperty FROM Properties")
@@ -62,13 +58,11 @@ def main():
         for proprow in rowall:
             id_prop = proprow['idProperty']
             # repair all checksums for main and update versions 
-            repair_property_checksum(cursor, id_prop, 1)
-            repair_property_checksum(cursor, id_prop, 2)
-            #m_cs = repair_property_content(cursor, id_prop, 1) 
-            #u_cs = repair_property_content(cursor, id_prop, 2) 
+            m_cs = repair_property_content(cursor, id_prop, 1) 
+            u_cs = repair_property_content(cursor, id_prop, 2) 
     
             # repair the master property table checksum totals
-            #update_property_checksums(cursor, id_prop, m_cs, u_cs)
+            update_property_checksums(cursor, id_prop, m_cs, u_cs)
 
             print "Reparing... " + str(id_prop)
 

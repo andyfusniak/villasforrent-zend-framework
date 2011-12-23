@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/env python
 import hashlib
 import sys
 import MySQLdb
@@ -7,7 +7,9 @@ import MySQLdb.cursors
 import config
 import logging
 
-from model import *
+from hpw.models import property
+
+#from model import *
 import property_content
 
 def main():
@@ -29,8 +31,8 @@ def main():
 
     id_prop = sys.argv[1]
 
-    rows_master = get_property_content_by_property_id(cursor, id_prop, 1)
-    rows_update = get_property_content_by_property_id(cursor, id_prop, 2)
+    rows_master = property.get_property_content_by_property_id(cursor, id_prop, 1)
+    rows_update = property.get_property_content_by_property_id(cursor, id_prop, 2)
 
    
     master_total_cs = ''
@@ -63,4 +65,4 @@ def main():
     conn.close()
      
 if __name__ == '__main__':
-    main();
+    main()

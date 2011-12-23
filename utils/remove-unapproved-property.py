@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import sys
 import MySQLdb
 import MySQLdb.cursors
@@ -37,9 +36,14 @@ def main():
         
         
     cursor = conn.cursor()
-    
-    id_property = sys.argv[1]
-    
+   
+    try: 
+        id_property = sys.argv[1]
+    except IndexError:
+        #IndexError: list index out of range
+        print 'Syntax: ' + os.path.basename(sys.argv[0]) + ' <prop_id>'
+        sys.exit(1)
+
     # make sure we're dealing with an unapproved property
     try :
         if is_property_approved(cursor, id_property):
