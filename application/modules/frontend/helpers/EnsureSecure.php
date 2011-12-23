@@ -5,6 +5,9 @@ class Frontend_Helper_EnsureSecure extends Zend_Controller_Action_Helper_Abstrac
     
     public function redirectOnNonSecure()
     {
+		if (APPLICATION_ENV == 'beta')
+			return;
+		
         $request = $this->getActionController()->getRequest();
 				
 		$server   = $request->getServer();
