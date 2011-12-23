@@ -1,6 +1,11 @@
 <?php
 class AdvertiserAvailabilityController extends Zend_Controller_Action
 {
+	public function preDispatch()
+	{
+		$this->_helper->ensureSecure();
+	}
+	
     public function deleteConfirmAction()
 	{
 		$idProperty     = $this->getRequest()->getParam('idProperty');

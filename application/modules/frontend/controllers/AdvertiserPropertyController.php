@@ -16,6 +16,11 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$this->identity = Zend_Auth::getInstance()->getIdentity();
     }
 	
+	public function preDispatch()
+	{
+		$this->_helper->ensureSecure();
+	}
+	
     public function step1LocationAction()
     {
         $form = new Frontend_Form_Step1LocationForm();
@@ -125,6 +130,7 @@ class AdvertiserPropertyController extends Zend_Controller_Action
                         ),
                         $form->getValues()
                     );
+					$propertyModel->updateUpdateCheckSum($idProperty);
 					$this->_helper->redirector->gotoSimple('home', 'advertiser-account', 'frontend');
 				}
 				
