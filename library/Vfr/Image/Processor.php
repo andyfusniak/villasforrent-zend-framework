@@ -35,8 +35,10 @@ class Vfr_Image_Processor
         $aspect        = $x / $y;
         $targetAspect  = $targetX / $targetY;
        
-        //var_dump("source aspect = " . $aspect);
-        //var_dump("target aspect = " . $targetAspect);
+        var_dump("source aspect = " . $aspect);
+        var_dump("target aspect = " . $targetAspect);
+		die();
+		
         if ($aspect == $targetAspect)  {
 			$destGdImage = imagecreatetruecolor($targetX, $targetY);
 			

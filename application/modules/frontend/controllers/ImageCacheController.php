@@ -67,6 +67,7 @@ class ImageCacheController extends Zend_Controller_Action
                                . DIRECTORY_SEPARATOR . $idPhoto
                                . '.' . $fileType;
 							   
+		
         if (is_file($originalImageFullPath)) {
             switch ($fileType) {
                 case 'jpg':
@@ -79,8 +80,8 @@ class ImageCacheController extends Zend_Controller_Action
             
                 default:
                     throw new Vfr_Exception("Unsupported image type " . $fileType);
-            }
-        }
+            }	
+		}
         
         if (!$sourceGdImage)
             throw new Vfr_Exception("Failed to create GD image for " . $originalImageFullPath);
@@ -113,10 +114,9 @@ class ImageCacheController extends Zend_Controller_Action
 									$origWidth, $origHeight))
             throw new Vfr_Exception("Failed to resize the image " . $originalImageFullPath);
 		} else {
-			//var_dump("before processing");
-			//var_dump(imagesx($sourceGdImage));
-			//var_dump(imagesy($sourceGdImage));
-			
+			var_dump("before processing");
+			var_dump("x=" . imagesx($sourceGdImage));
+			var_dump("y=" . imagesy($sourceGdImage));
 			$destGdImage = $this->_imageProcessor->gdImageToNewAspect($sourceGdImage, $width, $height);
 		}
 		
