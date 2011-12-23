@@ -1,8 +1,8 @@
-AuthType Basic
-AuthName "BETA Villas For Rent Project"
-AuthUserFile /var/www/beta.villasforrent.net/application/configs/passwd.txt
+AuthType Digest
+AuthName "Admin"
+AuthUserFile /var/www/beta.holidaypropertyworldwide.com/application/configs/passwd-beta.txt
 <Limit GET POST>
-    require valid-user
+    Require valid-user
 </limit>
 
 RewriteEngine On
