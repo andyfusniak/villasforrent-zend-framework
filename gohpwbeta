@@ -24,3 +24,11 @@ fi
 rm /var/www/beta.holidaypropertyworldwide.com/app.tar.gz
 mv /var/www/beta.holidaypropertyworldwide.com/public/.htaccess-beta /var/www/beta.holidaypropertyworldwide.com/public/.htaccess
 chgrp devteam -fR *
+chmod g+rwx /var/www/beta.holidaypropertyworldwide.com/data
+chmod g+rwx /var/www/beta.holidaypropertyworldwide.com/data/logs
+chmod g+rwx /var/www/beta.holidaypropertyworldwide.com/data/session
+
+cd /var/www/beta.holidaypropertyworldwide.com/library
+ln -s /var/www/ZendFramework-1.11.11/library/Zend/ Zend
+ln -s /var/www/ZendFramework-1.11.11/extras/library/ZendX/ ZendX
+

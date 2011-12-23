@@ -11,7 +11,7 @@ read -e INC_IMAGES
 echo -n "Include Zend Framework (y) or (n) :"
 read -e INC_ZEND
 
-echo -n "Include YUI2 (y) or (n) :"
+echo -n "Include YUI2 Reset-Fonts-Grids (y) or (n) :"
 read -e INC_YUI2
 
 echo -n "Include jQuery, jQuery UI/Plugins/Themess (y) or (n) :"
@@ -457,7 +457,7 @@ fi
 
 if [ "$INC_YUI2" = "y" ]; then
 	echo -e "\E[32mAppending YUI2 to archive\E[37m"
-	tar rfhp app.tar public/js/yui2
+	tar rfhp app.tar public/js/yui2/reset-fonts-grids
 fi
 
 if [ "$INC_JQUERY" = "y" ]; then
