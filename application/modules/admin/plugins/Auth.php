@@ -6,7 +6,21 @@ class Admin_Plugin_Auth extends Zend_Controller_Plugin_Abstract
         $moduleName = $request->getModuleName();
         if ($moduleName != 'admin')
             return;
+        
+        // force SSL connection
+        $request = $this->getRequest();
+        $server   = $request->getServer();
+        $hostname = $server['HTTP_HOST'];
+        
+        if (!$request->isSecure()) {
+			//url scheme is not secure so we rebuild url with secureScheme
+            $url = Zend_Controller_Request_Http::SCHEME_HTTPS . "://" . $hostname . $request->getPathInfo();
 
+            $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
+            $redirector->setGoToUrl($url);
+            $redirector->redirectAndExit();
+		}
+                
         $config = array (
             'accept_schemes' => 'digest',
             'realm'          => 'Admin',
