@@ -263,7 +263,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 		//$frontController->registerPlugin(new Frontend_Plugin_AdvertiserAccessCheck());
 		$frontController->registerPlugin($layoutModulePlugin);
-		$frontController->registerPlugin($adminAuthPlugin);
+
+        // switch on HTTP Digest Authentication for the admin module
+        // only if we're live
+        if (APPLICATION_ENV != 'beta')
+		    $frontController->registerPlugin($adminAuthPlugin);
 		
 		$frontController->registerPlugin(new Api_Plugin_RestAuth());
 
@@ -276,10 +280,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
 
 		//Zend_Controller_Action_HelperBroker::addPrefix('Frontend_Helper');
-		Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/modules/frontend/helpers','Frontend_Helper');
-        Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/modules/api/helpers','Api_Helper');
+		Zend_Controller_Action_HelperBroker::addPath(
+			APPLICATION_PATH . '/modules/frontend/helpers','Frontend_Helper');
+        Zend_Controller_Action_HelperBroker::addPath(
+			APPLICATION_PATH . '/modules/api/helpers','Api_Helper');
         
-		//Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/modules/admin/helpers', 'Admin_Helper');
+		//Zend_Controller_Action_HelperBroker::addPath(
+		//    APPLICATION_PATH . '/modules/admin/helpers', 'Admin_Helper');
 		//Zend_Controller_Action_HelperBroker::addPrefix('Admin_Helper');
 		
 		Zend_Controller_Action_HelperBroker::addHelper(new Vfr_Controller_Helper_Acl());
