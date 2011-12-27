@@ -1,9 +1,18 @@
 # db config
+import sys
 import os
 
 hwd = os.getenv('HOME') + os.sep
+app_env = os.getenv('APPLICATION_ENV')
 
-if os.getenv('APPLICATION_ENV') == 'development':
+if app_env == 'development':
+    dbhost = 'localhost'
+    dbuser = 'root'
+    dbpass = 'mrgrey'
+    dbname = 'hpw'
+    
+    application_path = '/var/www/zendvfr/application'
+elif app_env == 'mars':
     dbhost = 'localhost'
     dbuser = 'root'
     dbpass = 'mrgrey'
@@ -21,7 +30,8 @@ else:
 applogs = {
     'remove_unapproved_property': hwd + os.sep + '.hpw/remove-unapproved-property.log',
     'delete-expired-password-resets': hwd + os.sep + '.hpw/delete-expired-password-resets.log',
-    'check-locations': hwd + os.sep + '.hpw/check-locations.log'
+    'check-locations': hwd + os.sep + '.hpw/check-locations.log',
+    'update-property-count': hwd + os.sep + '.hpw/update-property-count.log'
 }
 
 # set to True to enable debug and prevent real SQL queries

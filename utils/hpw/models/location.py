@@ -1,3 +1,4 @@
+import sys
 import logging
 import config
 
@@ -5,11 +6,10 @@ def delete_location_by_property_id(cursor, id_property):
     # need to analyse the nested-set model before implementing
     return
 
-def get_all_non_prop_nodes(cursor):
+def get_all_nodes(cursor):
     sql = """
     SELECT *
     FROM Locations
-    WHERE idProperty IS NULL
     ORDER BY lt ASC
     """
     
@@ -19,21 +19,39 @@ def get_all_non_prop_nodes(cursor):
     rows = cursor.fetchall()
     return rows
 
-def count_properties_by_loc_name(cursor, url, visible=None):
+### DEPRECATED - properties are no longer stored on the Location objects
+### check models/property.py
+#def count_properties_by_loc_name(cursor, url, visible=None):
+#    sql = """
+#    SELECT COUNT(1) AS cnt
+#    FROM Properties
+#    WHERE locationUrl LIKE '{url}%'
+#    """.format(url=url)
+#    
+#    if visible == True:
+#        sql += ' AND visible=1'
+#        
+#    cursor.execute(sql)
+#    logging.debug(sql)
+#    
+#    row = cursor.fetchone()
+#    return row['cnt']
+
+def get_id_loc_by_url(cursor, url):
     sql = """
-    SELECT COUNT(1) AS cnt
-    FROM Properties
-    WHERE locationUrl LIKE '{url}%'
+    SELECT idLocation
+    FROM Locations WHERE url = '{url}'
     """.format(url=url)
     
-    if visible == True:
-        sql += ' AND visible=1'
-        
     cursor.execute(sql)
     logging.debug(sql)
     
     row = cursor.fetchone()
-    return row['cnt']
+    
+    if row == None:
+        return None
+    
+    return row['idLocation']
 
 def get_all_leaf_nodes(cursor, mode=None, count=None):
     
@@ -96,7 +114,34 @@ def update_totals(cursor, id_loc, t, t_vis):
     """.format(t=t,t_vis=t_vis,id_loc=id_loc)
     
     if not config.debug['sql']:
-        print "UPDATING !!!!"
         cursor.execute(sql)
         
     logging.debug(sql)
+    
+def delete_leaf_node(cursor, lft):
+    cursor.execute('BEGIN')
+    
+    sql_delete = """
+    DELETE FROM Locations
+    WHERE lf = {lf}
+    """.format(lf=lft)
+    if not config.debug['sql']:
+        cursor.execute(sql_delete)
+        
+    sql_update_lft = """
+    UPDATE Locations
+    SET lt = lt - 2
+    WHERE lt > {lft_new}
+    """.format(lft_new=lft+1)
+    if not config.debug['sql']:
+        cursor.execute(sql_update_lft)
+        
+    sql_update_rgt = """
+    UPDATE Locations
+    SET rt = rt - 2
+    WHERE rt > {rgt_new}
+    """.format(rgt_new=lft+1)
+    if not config.debug['sql']:
+        cursor.execute(sql_update_rgt)
+    
+    cursor.execute('COMMIT')

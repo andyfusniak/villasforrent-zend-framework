@@ -32,17 +32,21 @@ def get_property_content_by_property_id(cursor, id_prop, version):
     
     return rows
 
-def update_property_content_by_pk(cursor, pk, checksum):
+def count_by_loc_name(cursor, url, visible=None):
     sql = """
-    UPDATE PropertiesContent
-    SET cs='{cs}', updated=NOW()
-    WHERE idPropertyContent={pk}
-    """.format(cs = checksum, pk = pk)
+    SELECT COUNT(1) as cnt
+    FROM Properties
+    WHERE locationUrl LIKE '{url}%'
+    """.format(url=url)
     
-    if not config.debug['sql']:
-        cursor.execute(sql)
+    if visible == True:
+        sql += ' AND visible=1'
+        
+    cursor.execute(sql)
     logging.debug(sql)
-
+    
+    row = cursor.fetchone()
+    return row['cnt']
 
 # CREATE
 
@@ -100,3 +104,28 @@ def delete_property_by_pk(cursor, id_property):
     if not config.debug['sql']:
         cursor.execute(sql)
     logging.debug(sql)
+
+# UPDATE  
+    
+def update_property_content_by_pk(cursor, pk, checksum):
+    sql = """
+    UPDATE PropertiesContent
+    SET cs='{cs}', updated=NOW()
+    WHERE idPropertyContent={pk}
+    """.format(cs = checksum, pk = pk)
+    
+    if not config.debug['sql']:
+        cursor.execute(sql)
+    logging.debug(sql)
+
+def update_property_location_id(cursor, id_prop, id_loc):
+    sql = """
+    UPDATE Properties
+    SET idLocation = {id_loc}
+    WHERE idProperty = {id_prop}
+    """.format(id_prop=id_prop, id_loc=id_loc)
+    
+    if not config.debug['sql']:
+        cursor.execute(sql)
+    logging.debug(sql)
+    
