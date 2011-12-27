@@ -14,7 +14,7 @@ class Common_Resource_Location
     // CREATE
     //
     
-    public function addLocation($idParent=null, $url, $totalVisible=null, $total=null, $idProperty=null)
+    public function addLocation($idParent=null, $url, $totalVisible=null, $total=null)
     {
 		//
 		// needs modifying for nested set DB structure
@@ -38,6 +38,10 @@ class Common_Resource_Location
     }
 	
 	
+	/**
+	 * DEPRECATED - Properties are no longer stored on the Location objects
+	 * Instead the Locations table holds only the hierarchy of the geography
+	 */
 	public function addProperty($propertyRow)
 	{
 		$this->_db->beginTransaction();
@@ -145,7 +149,6 @@ class Common_Resource_Location
     public function getAllLocations($depth=null)
     {
         $query = $this->select()
-					  //->where('idProperty IS NULL')
                       ->order('lt');
 					  
 		if ($depth)

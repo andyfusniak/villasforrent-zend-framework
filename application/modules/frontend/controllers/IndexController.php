@@ -1,15 +1,17 @@
 <?php
 class IndexController extends Zend_Controller_Action
 {
+	private $locationModel;
+	
     public function init() {}
 
     public function indexAction()
-    {	
-		$this->_helper->featuredProperty(Common_Resource_Property::FEATURE_MASK_HOMEPAGE);
+    {
+		$locationModel = new Common_Model_Location();
+		$propertyModel = new Common_Model_Property();
+		
+		$idLocationRow = $locationModel->lookup('/');
+		
+		$this->_helper->featuredProperty($idLocationRow->idLocation);
     }
-
-	public function testAction()
-	{
-		$this->view->form = new Frontend_Form_TestForm();
-	}
 }

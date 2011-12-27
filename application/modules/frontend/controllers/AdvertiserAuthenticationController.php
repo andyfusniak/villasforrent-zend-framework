@@ -12,8 +12,6 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
 		$this->_helper->ensureSecure();
 	}
     
-    
-	
     public function loginAction()
     {
 		// check to see if the administrator is already logged in

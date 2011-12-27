@@ -125,6 +125,12 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		return $propertyResource->getPropertiesByGeoUri($uri, $page, $itemCountPerPage, $order, $direction);
 	}
 
+	public function getPropertyByUrl($url)
+	{
+		$propertyResource = $this->getResource('Property');
+		return $propertyResource->getPropertyByUrl($url);
+	}
+
 	public function getPropertyById($idProperty)
 	{
 		$idProperty = (int) $idProperty;
@@ -172,29 +178,39 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		return $propertyContentResource->getPropertyContentByPropertyId($idProperty, $version, $lang, $idPropertyContentFieldList);
 	}
 	
-	public function getPropertyContentByPropertyList($propertyRowset,
+	public function getPropertyContentByPropertyList($properties,
 													 $version=Common_Resource_PropertyContent::VERSION_MAIN,
 													 $lang='EN', $idPropertyContentFieldList=null)
 	{
-		if (!$propertyRowset instanceof Common_Resource_Property_Rowset) {
-			throw new Exception('Invalid propertyRowset type passed must be of type Common_Resource_Property_Rowset, instead got ' . gettype($propertyRowset));
+		if ((!$properties instanceof Common_Resource_Property_Rowset)
+			&& (!$properties instanceof Common_Resource_FeaturedProperty_Rowset)
+			&& (! is_array($properties))) {
+				throw new Exception('Invalid propertyRowset type passed must be of type Common_Resource_Property_Rowset, Common_Resource_FeaturedProperty_Rowset or array, instead got ' . gettype($properties));
 		}
 		
 		$propertyContentResource = $this->getResource('PropertyContent');
-		return $propertyContentResource->getPropertyContentByPropertyList($propertyRowset, $version, $lang, $idPropertyContentFieldList);
+		return $propertyContentResource->getPropertyContentByPropertyList($properties, $version, $lang, $idPropertyContentFieldList);
 	}
 	
-	public function getPropertyContentArrayByPropertyList($propertyRowset,
+	public function getPropertyContentArrayByPropertyList($properties,
 														  $version=Common_Resource_PropertyContent::VERSION_MAIN,
 														  $lang='EN', $idPropertyContentFieldList=null)
 	{
-		if (!$propertyRowset instanceof Common_Resource_Property_Rowset) {
-			throw new Exception('Invalid propertyRowset type passed must be of type Common_Resource_Property_Rowset, instead got ' . gettype($propertyRowset));
+		if ((!$properties instanceof Common_Resource_Property_Rowset)
+			&& (!$properties instanceof Common_Resource_FeaturedProperty_Rowset)
+			&& (! is_array($properties))) {
+				throw new Exception('Invalid propertyRowset type passed must be of type Common_Resource_Property_Rowset, Common_Resource_FeaturedProperty_Rowset or array, instead got ' . gettype($properties));
 		}
 		
 		$propertyContentResource = $this->getResource('PropertyContent');
-		$propertyContentRowset = $propertyContentResource->getPropertyContentByPropertyList($propertyRowset, $version, $lang, $idPropertyContentFieldList);
+		$propertyContentRowset = $propertyContentResource->getPropertyContentByPropertyList(
+			$properties,
+			$version,
+			$lang,
+			$idPropertyContentFieldList
+		);
 		
+		// convert to an associative array
 		$fieldsArray = array();
 		foreach ($propertyContentRowset as $propertyContentRow) {
 			$idProperty		 		= $propertyContentRow->idProperty;
@@ -369,12 +385,14 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		return $propertyResource->isUrlNameTaken($idProperty, $urlName);
 	}
 	
-	public function getFeaturedProperties($mask=Common_Resource_Property::FEATURE_MASK_HOMEPAGE,
-										  $limit=3, $uri)
+	public function getFeaturedProperties($idLocation, $limit=null)
 	{
-		$propertyResource = $this->getResource('Property');
+		if ($limit)
+			$limit = (int) $limit;
+			
+		$propertyResource = $this->getResource('FeaturedProperty');
 		
-		return $propertyResource->getFeaturedProperties($mask, $limit, $uri);
+		return $propertyResource->getFeaturedProperties($idLocation, $limit);
 	}
 	
 	//

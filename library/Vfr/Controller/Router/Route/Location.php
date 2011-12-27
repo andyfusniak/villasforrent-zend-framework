@@ -20,6 +20,7 @@ class Vfr_Controller_Router_Route_Location
     
     public function match($path)
     {
+		//var_dump("location route");
         if ($path instanceof Zend_Controller_Request_Http) {
             $path = $path->getPathInfo();
         }
@@ -28,48 +29,34 @@ class Vfr_Controller_Router_Route_Location
         
         $locationModel = new Common_Model_Location();
         $locationRow = $locationModel->lookup($path);
-        //var_dump($locationRow);
+		
         if (null == $locationRow)
             return false;
 
-        // check if this is a property URI or a geo-location URI
-        if ($locationRow->idProperty == null) {
-            // geo-location
-            $params['module']       = 'frontend';
-            $params['controller']   = 'level';
+        
+        $params = array (
+			'module'		=> 'frontend',
+			'controller'	=> 'level',
+			'uri'			=> $path
+		);
+		    
+        switch ($locationRow->depth) {
+            case 1:
+                $params['action'] = 'country';
+            break;
             
-            switch ($locationRow->depth) {
-                case 1:
-                    $params['action'] = 'country';
-                    break;
-                case 2:
-                    $params['action'] = 'region';
-                    break;
-                case 3:
-                    $params['action'] = 'destination';
-                    break;
-                default:
-                    $params['action'] = 'location';
-            }
-        } else {
-            // property
-            $params['module']       = 'frontend';
-            $params['controller']   = 'display-full-property';
-            $params['action']       = 'index';
+			case 2:
+                $params['action'] = 'region';
+            break;
+            
+			case 3:
+                $params['action'] = 'destination';
+            break;
+            default:
+                $params['action'] = 'location';
         }
-        
-        $params['uri'] = $path;
-        
-        //$pathBits = explode(self::URI_DELIMITER, $path);
-
-        //echo "<hr />";
-        //var_dump($locationRow);
-        //var_dump("match location...");
-        //var_dump($pathBits);
-        //if (!$partial) {
-        //    $path = trim(urldecode($path), '/');
-        //}
-        return $params;
+	    
+		return $params;
     }
 
     public function assemble($data = array(), $reset = false, $encode = false)

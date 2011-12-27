@@ -191,12 +191,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		
 //		$this->logger->log("Bootstrap_Bootstrap _initRouting() setting up route for in/country/region", Zend_Log::DEBUG);
 
-		$fullPropertyRoute = new Zend_Controller_Router_Route(
-				'/in/:country/:region/:destination/:propertyurl',
-				 array( 'module'     => 'frontend',
-						'controller' => 'display-full-property',
-						'action'     => 'index')
-		);
+		//$fullPropertyRoute = new Zend_Controller_Router_Route(
+		//		'/in/:country/:region/:destination/:propertyurl',
+		//		 array( 'module'     => 'frontend',
+		//				'controller' => 'display-full-property',
+		//				'action'     => 'index')
+		//);
 
         $routeRegion = new Zend_Controller_Router_Route (
 			'/in/:country/:region',
@@ -223,18 +223,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		
         $routeRestApi = new Zend_Rest_Route($front, array (), array ('api'));
         
-		$sroute = new Vfr_Controller_Router_Route_Location (
-			'([a-z0-9-/]*)',
-			array (
-				'module'     => 'frontend',
-			    'controller' => 'level',
-			    'action'     => 'location'
-			)
+		$location = new Vfr_Controller_Router_Route_Location (
+			'([a-z0-9-/]*)'
 		);
 		
-		$router->addroute('location', $sroute)
-		       ->addroute('imageCache', $routeImageCache)
-			   ->addroute('property', $fullPropertyRoute)
+		$property = new Vfr_Controller_Router_Route_Property (
+			'([a-z0-9-/]*)'
+		);
+		
+		$router->addroute('location', $location)
+		       ->addroute('property', $property)
+			   ->addroute('imageCache', $routeImageCache)
 			   ->addRoute('availabilityImage', $routeAvailbilityImage)
 			   ->addRoute('restPropertyCalendar', $restPropertyCalendar)
                ->addRoute('ratePropertiesRatesB', $restPropertiesRatesB)

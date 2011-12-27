@@ -17,8 +17,11 @@ class LevelController extends Zend_Controller_Action
     
 	public function locationAction()
 	{
+		var_dump($this->getRequest()->getParams());
 		$url = $this->getRequest()->getParam('1');
 		$locationRow = $this->_locationModel->lookup($url);
+		var_dump($locationRow);
+		die();
 		
 		if ($locationRow === null) {
 			$this->getResponse()->setHttpResponseCode(404);
@@ -56,13 +59,9 @@ class LevelController extends Zend_Controller_Action
         
         // get the summary for this level
         $this->_helper->levelSummary($locationRow->url);
-        
-        // get the country level featured properties
-        $this->_helper->featuredProperty(
-			Common_Resource_Property::FEATURE_MASK_COUNTRY,
-			$this->_featuredConfig['limit_per_page'],
-            $locationRow->url
-		);
+		
+		// get the featured properties
+        $this->_helper->featuredProperty($locationRow->idLocation);
 		
         // pass results to the view
         $this->view->assign(
@@ -90,12 +89,8 @@ class LevelController extends Zend_Controller_Action
         // get the summary for this level
         $this->_helper->levelSummary($locationRow->url);
 
-        // get the region level featured properties
-        $this->_helper->featuredProperty(
-			Common_Resource_Property::FEATURE_MASK_REGION,
-			$this->_featuredConfig['limit_per_page'],
-            $locationRow->url
-		);
+        // get the featured properties
+        $this->_helper->featuredProperty($locationRow->idLocation);
 		
         // pass results to the view
         $this->view->assign(
@@ -119,12 +114,8 @@ class LevelController extends Zend_Controller_Action
 		// get the summary for this level
         $this->_helper->levelSummary($locationRow->url);
 		
-         // get the destination level featured properties
-        $this->_helper->featuredProperty(
-			Common_Resource_Property::FEATURE_MASK_DESTINATION,
-			$this->_featuredConfig['limit_per_page'],
-            $locationRow->url
-		);
+        // get the featured properties
+        $this->_helper->featuredProperty($locationRow->idLocation);
 		
         // pass results to the view
         $this->view->assign(
@@ -142,6 +133,6 @@ class LevelController extends Zend_Controller_Action
     
         // create a fastlookup engine instance
         $lookupEngine = new Vfr_Fastlookups();
-        $lookupEngine->loadFastTable();    
+        $lookupEngine->loadFastTable();
     }
 }

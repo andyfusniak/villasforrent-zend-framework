@@ -18,7 +18,9 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
 
     public function registerAction()
     {
-		$form = new Frontend_Form_Advertiser_RegistrationForm(array('idAdministrator' => 1));
+		$form = new Frontend_Form_Advertiser_RegistrationForm(
+			array('idAdministrator' => 1)
+		);
         
 		if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
@@ -26,7 +28,9 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
 				
 				// get the new advertiser row
 				$model = new Common_Model_Advertiser();
-                $identity = $model->getAdvertiserByEmail($form->getValue('emailAddress')); // type Common_Resource_Advertiser_Row
+                $identity = $model->getAdvertiserByEmail(
+					$form->getValue('emailAddress')
+				); // type Common_Resource_Advertiser_Row
 				
                 //// notify the admin
                 //if ($identity) {
@@ -48,19 +52,22 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
                 //    $auth->getStorage()->write($identity);
                 //}
                 
-                
-                $vfrMail = new Vfr_Mail('/modules/frontend/views/emails', 'advertiser-r-reset');
+				$vfrMail = new Vfr_Mail(
+					'/modules/frontend/views/emails',
+					'advertiser-register-confirm-email' // no extensions required
+				);
+				
                 $vfrMail->send(
-                        $identity->emailAddress,
-                        "HolidayPropertyWorldwide.com Confirm Your Email Address",
-                        array (
-                            'idAdvertiser'  => $identity->idAdvertiser,
-                            'firstname'     => $identity->firstname,
-                            'lastname'      => $identity->lastname,
-                            'emailAddress'  => $identity->emailAddress
-                        ),
-                        Vfr_Mail::MODE_ONLY_TXT
-                    );
+                    $identity->emailAddress,
+                    "HolidayPropertyWorldwide.com Confirm Your Email Address",
+                    array (
+                        'idAdvertiser'  => $identity->idAdvertiser,
+                        'firstname'     => $identity->firstname,
+                        'lastname'      => $identity->lastname,
+                        'emailAddress'  => $identity->emailAddress
+                    ),
+                    Vfr_Mail::MODE_ONLY_TXT
+                );
                 
 				$this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-registration/continue');
 			} else {

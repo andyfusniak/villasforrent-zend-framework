@@ -14,7 +14,7 @@ class Common_Resource_Property
 		),
 
 		'Advertiser' => array (
-			'columns' => array('idAdvertise'),
+			'columns' => array('idAdvertiser'),
 			'refTableClass' => 'Common_Resource_Advertiser'
 		)
 	);
@@ -251,6 +251,20 @@ class Common_Resource_Property
         }
     }
 
+	public function getPropertyByUrl($url)
+	{
+		$concat = new Zend_Db_Expr("CONCAT(locationUrl, '/', urlName)");
+		$query = $this->select('idProduct')
+		              ->where($concat . ' = ?', $url);
+		try {
+			$result = $this->fetchRow($query);
+			
+			return $result;
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+
 	public function getPropertyById($idProperty)
 	{
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
@@ -263,6 +277,8 @@ class Common_Resource_Property
 		
 		try {
 			$result = $this->fetchRow($query);
+			
+			return $result;			
 		} catch (Exception $e) {
 			echo $query;
 			exit;
@@ -274,10 +290,8 @@ class Common_Resource_Property
 			}
 			throw $e;
 		}
-		
-		
+	
 		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
-		return $result;	
 	}
 
     public function getPropertiesByAdvertiserId($idAdvertiser)

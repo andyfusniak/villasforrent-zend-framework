@@ -44,7 +44,7 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
 			'mobile'		  => $nullExpr,
 			'added'			  => $nowExpr,
 			'updated'		  => $nowExpr,
-			'lastlogin'		  => $nowExpr,
+			'lastlogin'		  => $nullExpr,
 			'lastModifiedBy'  => 'system'
 		);
 		

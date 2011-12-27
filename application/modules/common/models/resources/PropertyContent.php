@@ -115,11 +115,22 @@ class Common_Resource_PropertyContent
 		}
 	}
 	
-	public function getPropertyContentByPropertyList($propertyRowset, $version, $lang, $idPropertyContentFieldList)
+	public function getPropertyContentByPropertyList($properties, $version, $lang, $idPropertyContentFieldList)
 	{
-		$propertyList = array();
-		foreach ($propertyRowset as $propertyRow) {
-			array_push($propertyList, $propertyRow->idProperty);
+		if ($properties instanceof Common_Resource_Property_Rowset) {
+			$propertyList = array ();
+			foreach ($properties as $propertyRow) {
+				array_push($propertyList, $propertyRow->idProperty);
+			}
+		} elseif ($properties instanceof Common_Resource_FeaturedProperty_Rowset) {
+			$propertyList = array ();
+			foreach ($properties as $featuerdProperty) {
+				array_push($propertyList, $featuerdProperty->idProperty);
+			}
+		} elseif (is_array($properties)) {
+			$propertyList = $properties;
+		} else {
+			throw new Exception("Unsupported type passed");
 		}
 		
 		$query = $this->select()
