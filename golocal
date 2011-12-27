@@ -1,0 +1,31 @@
+#!/bin/bash
+cd /var/www/zendvfr
+
+directory="./data"
+if [ ! -d $directory ]; then
+	mkdir data
+	mkdir data/logs
+	touch data/logs/application.log
+    mkdir data/session
+	chmod g+rw data/logs/application.log
+else
+	if [ ! -d "./data/logs" ]; then
+		mkdir data/logs
+		touch data/logs/application.log
+		chmod g+rw data/logs/application.log
+	fi
+    
+    if [ ! -d "./data/session" ]; then
+        mkdir data/session
+    fi
+fi
+
+chgrp -fR _www *
+chmod g+rwx /var/www/zendvfr/data
+chmod g+rwx /var/www/zendvfr/data/logs
+chmod g+rwx /var/www/zendvfr/data/session
+
+cd /var/www/zendvfr/library
+ln -s /var/www/ZendFramework-1.11.11/library/Zend/ Zend
+ln -s /var/www/ZendFramework-1.11.11/extras/library/ZendX/ ZendX
+
