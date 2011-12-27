@@ -5,6 +5,7 @@ data
 public/properties
 public/photos
 library/Zend
+library/ZendX
 nbproject
 vfr.komodoproject
 *.pyc
