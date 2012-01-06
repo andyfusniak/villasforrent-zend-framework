@@ -193,6 +193,19 @@ class Common_Resource_Property
             throw $e;
         }
     }
+	
+	public function getAllPaginator($page=1, $interval=30, $order='idProperty', $direction='ASC')
+	{
+		$query = $this->select()
+		              ->order($order . ' ' . $direction);
+		
+		$adapter = new Zend_Paginator_Adapter_DbTableSelect($query);
+		$paginator = new Zend_Paginator($adapter);
+		$paginator->setItemCountPerPage($interval)
+				  ->setCurrentPageNumber($page);
+				  
+		return $paginator;
+	}
     
     /**
 	 * Get all properties
@@ -463,10 +476,9 @@ class Common_Resource_Property
         }
     }
     
-    public function initialApproveProperty($idProperty, $idLocation)
+    public function initialApproveProperty($idProperty)
     {
         $params = array (
-			'idLocation'		=> $idLocation,
             'awaitingApproval'  => 0,
             'approved'          => 1,
             'visible'           => 1
@@ -524,7 +536,7 @@ class Common_Resource_Property
         }
     }
 
-    private function _updateChecksum($idProperty, $version)
+    public function _updateChecksum($idProperty, $version)
     {
 		$adapter = $this->getAdapter();
 		if ($version == 1)
@@ -539,7 +551,7 @@ class Common_Resource_Property
 				FROM PropertiesContent
 				WHERE version=?", $version);
 			$query .= $adapter->quoteInto(" AND idProperty=?", $idProperty);
-			$query .= $adapter->quoteInto(" ORDER BY idPropertyContentField ASC) WHERE idProperty=?", $idProperty);
+			$query .= $adapter->quoteInto(" ORDER BY idPropertyContentField ASC), updated=NOW() WHERE idProperty=?", $idProperty);
         
 		try {
             $this->_db->query($query);

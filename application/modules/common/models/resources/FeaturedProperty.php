@@ -47,6 +47,10 @@ class Common_Resource_FeaturedProperty
         }
     }
     
+    //
+    // READ
+    //
+    
     public function getFeaturedProperties($idLocation)
     {
         $bootstrapOptions = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
@@ -63,6 +67,37 @@ class Common_Resource_FeaturedProperty
         } catch (Exception $e) {
             throw $e;
         }
+    }
+    
+    public function getAllFeaturedPropertiesPaginator($page, $interval, $order, $direction)
+    {
+        $query = $this->select($this::SELECT_WITHOUT_FROM_PART)
+                      ->reset(Zend_Db_Select::COLUMNS)
+                      ->setIntegrityCheck(false)
+                      ->from(
+                          array ('F' => $this->_name),
+                          array (
+                              'F.idProperty',
+                              'F.position',
+                              'F.startDate',
+                              'F.expiryDate'
+                          )
+                      )
+                      ->join(
+                          array ('L' => 'Locations'),
+                          'F.idLocation = L.idLocation',
+                          array (
+                              'L.name'
+                          )
+                      )
+                      ->limit($interval);
+                      
+        $adapter = new Zend_Paginator_Adapter_DbTableSelect($query);
+		$paginator = new Zend_Paginator($adapter);
+        $paginator->setItemCountPerPage($interval)
+				  ->setCurrentPageNumber($page);
+				  
+		return $paginator;
     }
     
     

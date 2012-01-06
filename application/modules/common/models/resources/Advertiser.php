@@ -104,10 +104,9 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
 	 * @return Common_Resource_Advertiser_Rowset|Zend_Paginator
 	 */
 	public function getAll($page=null, $interval=30, $sort='idAdvertiser', $direction='ASC')
-	{
+	{		
 		$adapter = $this->getAdapter();
 		$query = $this->select()
-		              //->order($this->getAdapter()->quoteIdentifier($sort) . ' ' . $direction);
 					  ->order($sort . ' ' . $direction);
 					  
 		if (null !== $page) {
@@ -126,6 +125,19 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
 		} catch (Exception $e) {
 			throw $e;
 		}
+	}
+	
+	public function getAllPaginator($page=1, $interval=30, $order='idAdvertiser', $direction='ASC')
+	{
+		$query = $this->select()
+		              ->order($order . ' ' . $direction);
+		
+		$adapter = new Zend_Paginator_Adapter_DbTableSelect($query);
+		$paginator = new Zend_Paginator($adapter);
+		$paginator->setItemCountPerPage($interval)
+				  ->setCurrentPageNumber($page);
+				  
+		return $paginator;
 	}
 	
 	public function getAdvertiserById($idAdvertiser)

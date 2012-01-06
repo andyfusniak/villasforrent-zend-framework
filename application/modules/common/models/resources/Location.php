@@ -37,60 +37,6 @@ class Common_Resource_Location
         }
     }
 	
-	
-	/**
-	 * DEPRECATED - Properties are no longer stored on the Location objects
-	 * Instead the Locations table holds only the hierarchy of the geography
-	 */
-	public function addProperty($propertyRow)
-	{
-		$this->_db->beginTransaction();
-		
-		// first create a gap in the nested set for the new property
-		$this->_makeGapForNewEntry($propertyRow-idLocation);
-		
-		$nowExpr  = new Zend_Db_Expr('NOW()');
-		$nullExpr = new Zend_Db_Expr('NULL');
-		
-        $url = $propertyRow->locationUrl . '/' . $propertyRow->urlName;
-        
-        // the idLocation is currently set to the parent
-        $locationRow = $this->getLocationByPk($propertyRow->idLocation);
-        
-        $dataInsert = array (
-			'idLocation' => $nullExpr,
-			'idParent'	 => $propertyRow->idLocation,
-			'url'		 => $locationRow->url . '/' . $propertyRow->urlName,
-			'lt'		 => $locationRow->rt,
-			'rt'		 => $locationRow->rt + 1,
-			'depth'		 => substr_count($url, '/') + 1,
-			'rowurl'	 => $propertyRow->urlName,
-			'idProperty' => $propertyRow->idProperty,
-			'displayPriority' => 1,
-			'totalVisible' => $nullExpr,
-			'total'      => $nullExpr,
-			'name'		 => $locationRow->name . ' : ' . $propertyRow->shortName,
-			'rowname'	 => $propertyRow->shortName,
-			'prefix'	 => '',
-			'postfix'	 => '',
-			'visible'	 => 1,
-			'added'      => $nowExpr,
-            'updated'    => $nowExpr
-		);
-        
-		var_dump($dataInsert);
-        try {
-            $this->insert($dataInsert);
-			$idLocation = $this->_db->lastInsertId();
-			$this->_db->commit();
-			
-			return $idLocation;
-        } catch (Exception $e) {
-			$this->_db->rollBack();
-            throw $e;
-        }
-	}
-	
 	public function rebuildTree($idParent, $lt)
 	{
 		// the right value of this node is the left value + 1
@@ -180,6 +126,33 @@ class Common_Resource_Location
             throw $e;
         }
     }
+	
+	public function getPathFromRootNode($idLocation)
+	{        
+        $query = $this->select($this::SELECT_WITHOUT_FROM_PART)
+                      ->reset(Zend_Db_Select::COLUMNS)
+                      ->from(
+                          array ('ancestor' => $this->_name),
+                          array (
+                              'ancestor.idLocation',
+                              'ancestor.rowname',
+                              'ancestor.url',
+                              'ancestor.totalVisible'
+                          )
+                      )
+                      ->from(array ('child' => $this->_name), array())
+                      ->where('child.lt BETWEEN ancestor.lt AND ancestor.rt')
+                      ->where('child.idLocation = ?', $idLocation)
+                      ->where('ancestor.url != ?', '')
+                      ->group('ancestor.idLocation');
+        try {
+            $locationRowset = $this->fetchAll($query);
+            
+            return $locationRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
+	}
     
     
     //
