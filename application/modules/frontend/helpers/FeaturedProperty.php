@@ -6,11 +6,10 @@ class Frontend_Helper_FeaturedProperty extends Zend_Controller_Action_Helper_Abs
     public function getFeaturedProperties($idLocation, $limit=null)
     {
         // get the homepage featured properties
-        $propertyModel 	= new Common_Model_Property();
+        $propertyModel = new Common_Model_Property();
+		$locationModel = new Common_Model_Location();
 		$featuredPropertyRowset = $propertyModel->getFeaturedProperties($idLocation, $limit);
         
-		
-		
         if ($featuredPropertyRowset->count()) {
             $featuredPropertyContent = $propertyModel->getPropertyContentArrayByPropertyList(
 				$featuredPropertyRowset,
@@ -22,18 +21,16 @@ class Frontend_Helper_FeaturedProperty extends Zend_Controller_Action_Helper_Abs
 				)
 			);
 			
-            $locationModel = new Common_Model_Location();
-            
             $partials = array ();
             foreach ($featuredPropertyRowset as $featuredPropertyRow) {
 				$propertyRow = $propertyModel->getPropertyById($featuredPropertyRow->idProperty);
-	
+				
                 $partials[] = $this->getActionController()->view->partial(
 					'partials/featured-property.phtml',
 					array (
 						'locationRow'	=> $locationModel->getLocationByPk($propertyRow->idLocation),
                         'photoRow'		=> $propertyModel->getPrimaryPhotoByPropertyId($featuredPropertyRow->idProperty),
-                        'featuredProperty' => $propertyRow,
+                        'propertyRow'   => $propertyRow,
                         'featuredContent'  => $featuredPropertyContent[$featuredPropertyRow->idProperty]
 					)
 				);

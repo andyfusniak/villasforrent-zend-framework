@@ -1,4 +1,9 @@
-<h1>Properties in <?php echo $this->escape($this->locationRow->name) ?> (<?php echo $this->locationRow->totalVisible ?>)</h1>
+<?php //die('dest'); ?>
+<h1>Properties in <?php echo $this->locationBreadcrumb(
+                                        $this->locationRow->idLocation,
+                                        array (
+                                            'totalsMode' => Vfr_View_Helper_LocationBreadcrumb::TOTALS_ALL_NODES
+                                        )) ?></h1>
 <?php if ($this->showFeatured) : ?>
 <div class="yui-gb">
     <div class="yui-u first"><?php echo $this->featuredPartials[0] ?></div>

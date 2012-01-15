@@ -19,7 +19,7 @@ class Zend_View_Helper_PhotoGrid extends Zend_View_Helper_Abstract
        
             if ($i < $count-1) {
                 $rowB = $photoRowset[$i+1];
-                $htmlLine = str_replace("%B", $this->view->photo($rowB, $x, $y) . '<p>' . $rowA->caption . '</p>', $htmlLine);
+                $htmlLine = str_replace("%B", $this->view->photo($rowB, $x, $y) . '<p>' . $rowB->caption . '</p>', $htmlLine);
             } else {
                 $htmlLine = str_replace("%B", "&nbsp;", $htmlLine);
             }

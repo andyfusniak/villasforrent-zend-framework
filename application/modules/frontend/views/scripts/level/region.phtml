@@ -1,5 +1,10 @@
+<?php //var_dump($this->locationRow) ?>
 <div id="browse_country">
-    <h1>Destinations in <?php echo $this->escape($this->locationRow->name) ?></h1>
+    <h1>Destinations in <?php echo $this->locationBreadcrumb(
+                                        $this->locationRow->idLocation,
+                                        array (
+                                            'totalsMode' => Vfr_View_Helper_LocationBreadcrumb::TOTALS_ALL_NODES
+                                        )) ?></h1>
     <?php if ($this->locationRowset) : ?>
     <ul>
         <?php foreach ($this->locationRowset as $row): ?>
@@ -15,14 +20,17 @@
 
 <?php if ($this->showFeatured) : ?>
 <div class="yui-gb">
-    <div class="yui-u first"><?php echo $this->featuredPartials[0] ?></div>
-    <div class="yui-u"><?php echo $this->featuredPartials[1] ?></div>
-    <div class="yui-u"><?php echo $this->featuredPartials[2] ?></div>
+    <div class="yui-u first"><?php // echo $this->featuredPartials[0] ?></div>
+    <div class="yui-u"><?php // echo $this->featuredPartials[1] ?></div>
+    <div class="yui-u"><?php // echo $this->featuredPartials[2] ?></div>
 </div>
 <?php endif ?>
 
 <div>
-   <h1>Properties in <?php echo $this->locationRow->name ?> (<?php echo $this->locationRow->totalVisible ?>)</h1>
+    <?php //echo $this->locationBreadcrumb(77) ?>
+    <?php //die('bailout') ?>
+    
+   <h1>Properties in <?php echo $this->locationBreadcrumb($this->locationRow->idLocation) ?></h1>
     <?php if ($this->showProperties) : ?>
     <ul>
         <?php foreach ($this->partials as $partial): ?>

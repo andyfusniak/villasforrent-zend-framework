@@ -1,6 +1,6 @@
 <?php //var_dump($this->propertyContent); exit; ?>
 
-<h1 class="full"><?php echo $this->propertyType($this->propertyRow->idPropertyType) ?> to rent in <?php echo $this->locationBreadcrumb($this->locationRow) ?><br /><?php echo $this->propertyRow->numBeds ?> bedrooms (Sleeps <?php echo $this->propertyRow->numSleeps ?>) : Property Reference <?php echo $this->propertyRow->idProperty ?></h1>
+<h1 class="full"><?php echo $this->propertyType($this->propertyRow->idPropertyType) ?> to rent in <?php echo $this->locationBreadcrumb($this->propertyRow->idLocation) ?><br /><?php echo $this->propertyRow->numBeds ?> bedrooms (Sleeps <?php echo $this->propertyRow->numSleeps ?>) : Property Reference <?php echo $this->propertyRow->idProperty ?></h1>
 
 <p class="headline1"><?php echo $this->escape($this->propertyContent['headline1']) ?></p>
 <p class="headline2"><?php echo $this->escape($this->propertyContent['headline2']) ?></p>
@@ -40,51 +40,42 @@
 <p><?php echo nl2br($this->escape($this->propertyContent['notesDesc'])) ?></p>
 
 <?php if ($this->propertyRow->idHolidayType == Common_Resource_HolidayType::HOLIDAY_TYPE_ACCESS) : ?>
+<?php echo $this->sectionTitle("Accessibility", $this->propertyContent['accessDesc']) ?>
 <h3>Accessibility</h3>
 <p><?php echo nl2br($this->escape($this->propertyContent['livingDesc'])) ?></p>
 <?php endif ?>
 
-<h3>Outside</h3>
-<p><?php echo nl2br($this->escape($this->propertyContent['outsideDesc'])) ?></p>
+<?php echo $this->sectionTitle("Outside", $this->propertyContent['outsideDesc']) ?>
 
 <?php if ($this->propertyRow->idHolidayType == Common_Resource_HolidayType::HOLIDAY_TYPE_GOLF) : ?>
-<h3>Golf</h3>
-<p><?php echo nl2br($this->escape($this->propertyContent['golfDesc'])) ?></p>
+<?php echo $this->sectionTitle("Golf", $this->propertyContent['golfDesc']) ?>
 <?php endif ?>
 
 <?php if ($this->propertyRow->idHolidayType == Common_Resource_HolidayType::HOLIDAY_TYPE_SKIING) : ?>
-<h3>Skiing</h3>
-<p><?php echo nl2br($this->escape($this->propertyContent['skiingDesc'])) ?></p>
+<?php echo $this->sectionTitle("Skiing", $this->propertyContent['skiingDesc']) ?>
 <?php endif ?>
 
 <?php if ($this->propertyRow->idHolidayType == Common_Resource_HolidayType::HOLIDAY_TYPE_INTEREST) : ?>
-<h3>Special Interests</h3>
-<p><?php echo nl2br($this->escape($this->propertyContent['specialDesc'])) ?></p>
+<?php echo $this->sectionTitle("Special Interests", $this->propertyConten['specialDesc']) ?>
 <?php endif ?>
 
-<h3>Coast/Beach</h3>
-<p><?php echo $this->escape($this->propertyContent['beachDesc']) ?></p>
+<?php echo $this->sectionTitle("Coast/Beach", $this->propertyContent['beachDesc']) ?>
 
-<h3>Travel Details</h3>
-<p><?php echo nl2br($this->escape($this->propertyContent['travelDesc'])) ?></p>
+<?php echo $this->sectionTitle("Travel Details", $this->propertyContent['travelDesc']) ?>
 
-<h3>Booking details</h3>
-<p><?php echo nl2br($this->escape($this->propertyContent['bookingDesc'])) ?></p>
+<?php echo $this->sectionTitle("Booking details", $this->propertyContent['bookingDesc']) ?>
 
-<h3>Changeover Day</h3>
-<p><?php echo nl2br($this->escape($this->propertyContent['changeoverDesc'])) ?></p>
+<?php echo $this->sectionTitle("Changeover Day", $this->propertyContent['changeoverDesc']) ?>
 
-<h3>Contact Details</h3>
-<p><?php echo nl2br($this->escape($this->propertyContent['contactDesc'])) ?></p>
+<?php echo $this->sectionTitle("Contact Details", $this->propertyContent['contactDesc']) ?>
 
 <h3>Owners Website</h3>
-<p><?php echo nl2br($this->escape($this->propertyContent['website'])) ?></p>
+<p><?php echo $this->websiteUrl($this->propertyContent['website']) ?></p>
 
-<h3>Testimonials from previous renters</h3>
-<p><?php echo nl2br($this->escape($this->propertyContent['testimonialsDesc'])) ?></p>
+<?php echo $this->sectionTitle("Testimonials from previous renters", $this->propertyContent['testimonialsDesc']) ?>
 
-<h3>Rental Rates</h3>
-<?php //var_dump($this->rates) ?>
+<h3>Rental Rates (Rates below in <?php echo $this->calendarRow->currencyCode ?> on a
+<?php echo $this->rentalBasis($this->calendarRow->rentalBasis) ?> rental basis)</h3>
 <table style="width:100%">
 <tr>
 	<th>Period name</th>
@@ -100,13 +91,13 @@
 	<td><?php echo $this->escape($row->name) ?></td>
 	<td><?php echo $this->prettyDate($row->startDate) ?></td>
 	<td><?php echo $this->prettyDate($row->endDate) ?></td>
-	<td><?php echo $row->weekendNightlyRate ?></td>
-	<td><?php echo $row->midweekNightlyRate ?></td>
-	<td><?php echo $row->weeklyRate ?></td>
-	<td><?php echo $row->minStayDays ?></td>
+	<td><?php echo $this->formatCurrency($row->weekendNightlyRate) ?></td>
+	<td><?php echo $this->formatCurrency($row->midweekNightlyRate) ?></td>
+	<td><?php echo $this->formatCurrency($row->weeklyRate) ?></td>
+	<td><?php echo $this->minStayDuration($row->minStayDays) ?></td>
 </tr>
 <?php endforeach; ?>
 </table>
 
 <h3>Availability Calendar</h3>
-<p><img class="imgright" alt="Availability Calendar" title="<?php echo $this->escape($this->propertyRow->shortName) ?>" src="/ic.php?idProperties=<?php echo $this->propertyRow->idProperty ?>&amp;du=18&amp;cc=5" /></p>
+<p><img class="imgright" alt="Availability Calendar" title="<?php echo $this->escape($this->propertyRow->shortName) ?>" src="/availability-image/render/idProperty/<?php echo $this->propertyRow->idProperty ?>/du/18/cc/5" /></p>

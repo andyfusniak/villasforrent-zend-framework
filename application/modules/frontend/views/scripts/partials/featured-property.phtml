@@ -1,9 +1,10 @@
 <div>
-    <h1>Featured <?php echo $this->propertyType($this->featuredProperty->idPropertyType) ?> in <?php echo $this->locationBreadcrumb($this->locationRow) ?></h1>
+    <h1>Featured <?php echo $this->propertyType($this->propertyRow->idPropertyType) ?>
+    in <?php echo $this->locationBreadcrumb($this->propertyRow->idLocation) ?></h1>
     <div>
-        <a href="/<?php echo $this->featuredProperty->locationUrl . '/' . $this->featuredProperty->urlName ?>"><?php echo $this->photo($this->photoRow, 250, 167) ?></a>
+        <a href="/<?php echo $this->propertyRow->locationUrl . '/' . $this->propertyRow->urlName ?>"><?php echo $this->photo($this->photoRow, 250, 167) ?></a>
         <p><?php echo $this->featuredContent[Common_Resource_PropertyContent::FIELD_HEADLINE_1] ?></p>
         <p><?php echo $this->featuredContent[Common_Resource_PropertyContent::FIELD_HEADLINE_2] ?></p>
-        <p><a href="/<?php echo $this->featuredProperty->locationUrl . '/' . $this->featuredProperty->urlName ?>">read more...</a></p>
+        <p><a href="/<?php echo $this->propertyRow->locationUrl . '/' . $this->propertyRow->urlName ?>">read more...</a></p>
     </div>
 </div>

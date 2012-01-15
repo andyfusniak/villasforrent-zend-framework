@@ -8,7 +8,7 @@
 	<?php echo $this->headStyle() ?>
     <?php
     if ($this->jQuery()->isEnabled()) {
-        $this->jQuery()->setLocalPath('/js/jquery/jquery-1.6.min.js')
+        $this->jQuery()->setLocalPath('/js/jquery/jquery-1.7.1.min.js')
                        ->setUiLocalPath('/js/jquery-ui-1.8.12/ui/jquery-ui.js')
                        ->addStylesheet('/js/jquery-ui-themes-1.8.12/themes/sunny/jquery-ui.css');
         echo $this->jQuery();
