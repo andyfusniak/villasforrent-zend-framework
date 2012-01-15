@@ -50,8 +50,8 @@ class Frontend_Form_Step3PicturesForm extends Zend_Form
 			'value'		=> $this->getElement('filename')->getMaxFileSize()
 		));
 		
-		$this->addElement('hidden', ini_get('apc.rfc1867_name'), array (
-			'value'		=> uniqid()
-		));
+		//$this->addElement('hidden', ini_get('apc.rfc1867_name'), array (
+		//	'value'		=> uniqid()
+		//));
 	}
 }
