@@ -33,9 +33,6 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
             )
 		);
 		
-		$form->setMethod('post');
-		$form->setAction(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-authentication/login');
-		$this->view->form = $form;
 		
 		//var_dump($this->_getAllParams());
 		
@@ -59,6 +56,8 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
 					$advertiserModel->updateLastLogin($advertiserRow->idAdvertiser);
 					
 					$this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-account/home');
+                //} catch (Vfr_Exception_AdvertiserEmailNotConfirmed $e) {
+                //    $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-email-confirmation/activation-required');
 				} catch (Vfr_Exception_AdvertiserNotFound $e) {
 					// advertiser failed to login
 					//var_dump('advertiser not found');
@@ -73,9 +72,9 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
 				}
 			}
 		}
-		
-		//$this->_logger->log("Frontend_Form_AdvertiserAuthenticationController loginAction() end", Zend_Log::DEBUG);
-    }
+        
+		$this->view->form = $form;
+	}
     
     public function logoutAction()
     {

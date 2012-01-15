@@ -67,7 +67,8 @@ class ImageCacheController extends Zend_Controller_Action
                                . DIRECTORY_SEPARATOR . $idPhoto
                                . '.' . $fileType;
 							   
-		
+	
+        $sourceGdImage = null;	
         if (is_file($originalImageFullPath)) {
             switch ($fileType) {
                 case 'jpg':
@@ -86,8 +87,6 @@ class ImageCacheController extends Zend_Controller_Action
         if (!$sourceGdImage)
             throw new Vfr_Exception("Failed to create GD image for " . $originalImageFullPath);
         
-		
-        
         // check to see if the target image is the same aspect ratio as the original
         $destPhoto  = $this->_modelPhoto->getPhotoEvaluation($width, $height);
         
@@ -103,6 +102,7 @@ class ImageCacheController extends Zend_Controller_Action
 		// if the original image is smaller than the target image, don't stretch it up
 		// instead position it inside the canvas of the target
 		if (($width > $origWidth) && ($height > $origHeight)) {
+			//die('too small');
 			$this->_logger->log(__METHOD__ . ' Original image is smaller than target', Zend_Log::DEBUG);
 			$this->_logger->log(__METHOD__ . ' ImageCreate (original (x,y) = (' . $origWidth . ',' . $origHeight . ')  new (x,y) = (' . $width . ',' . $height . ')', Zend_Log::DEBUG);
 			$destGdImage = imagecreatetruecolor($origWidth, $origHeight);
@@ -114,9 +114,9 @@ class ImageCacheController extends Zend_Controller_Action
 									$origWidth, $origHeight))
             throw new Vfr_Exception("Failed to resize the image " . $originalImageFullPath);
 		} else {
-			var_dump("before processing");
-			var_dump("x=" . imagesx($sourceGdImage));
-			var_dump("y=" . imagesy($sourceGdImage));
+			//var_dump("before processing");
+			//var_dump("x=" . imagesx($sourceGdImage));
+			//var_dump("y=" . imagesy($sourceGdImage));
 			$destGdImage = $this->_imageProcessor->gdImageToNewAspect($sourceGdImage, $width, $height);
 		}
 		
@@ -124,15 +124,18 @@ class ImageCacheController extends Zend_Controller_Action
 		//die();
 		
         // write the newly generated each to the file cache
-        $cacheTopLevel      = $this->_modelPhoto->topLevelDirByPropertyId($photoRow->idProperty);
-        $cacheSecondLevel   = $this->_modelPhoto->generateDirectoryStructure($photoRow->idProperty, $idPhoto, $this->_vfrConfig['photo']['images_dynamic_dir']);
-        $newFileFullPath    = $cacheSecondLevel . DIRECTORY_SEPARATOR . $idPhoto . '_' . $width . 'x' . $height . '.' . $ext;
+        //$cacheTopLevel      = $this->_modelPhoto->topLevelDirByPropertyId($photoRow->idProperty);
+        //$cacheSecondLevel   = $this->_modelPhoto->generateDirectoryStructure($photoRow->idProperty, $idPhoto, $this->_vfrConfig['photo']['images_dynamic_dir']);
+        //$newFileFullPath    = $cacheSecondLevel . DIRECTORY_SEPARATOR . $idPhoto . '_' . $width . 'x' . $height . '.' . $ext;
                        
         // write the new image
-        imagejpeg($destGdImage, $newFileFullPath, $this->_vfrConfig['photo']['gd_quality']);
+        //imagejpeg($destGdImage, $newFileFullPath, $this->_vfrConfig['photo']['gd_quality']);
         
         //var_dump($originalImageFullPath);
-        $this->getResponse()->setHeader('Content-type', 'image/jpeg');
+        //var_dump($destGdImage);
+		//die();
+		
+		$this->getResponse()->setHeader('Content-type', 'image/jpeg');
         imagejpeg($destGdImage);
     }
 }

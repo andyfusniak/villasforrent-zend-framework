@@ -1,7 +1,12 @@
 <?php
 class AdvertiserAccountController extends Zend_Controller_Action
 {
-    protected $_model;
+	const version = '4.0.2';
+	
+	public static function getVersion() { return '4.0.0'; }
+	
+    protected $_advertiserModel;
+	protected $_propertyModel;
 
     public function init()
     {
@@ -12,6 +17,7 @@ class AdvertiserAccountController extends Zend_Controller_Action
 	public function preDispatch()
 	{
 		$this->_helper->ensureSecure();
+		$this->_helper->ensureAccountEmailConfirmed();
 	}
 
     public function homeAction()
@@ -20,6 +26,7 @@ class AdvertiserAccountController extends Zend_Controller_Action
             $advertiserRow = Zend_Auth::getInstance()->getIdentity();
             $idAdvertiser = $advertiserRow->idAdvertiser;
 
+			//var_dump($idAdvertiser);die();
             // get a list of properties belonging to this advertiser
             $propertyRowset = $this->_propertyModel->getPropertiesByAdvertiserId($idAdvertiser);
 
@@ -29,13 +36,8 @@ class AdvertiserAccountController extends Zend_Controller_Action
 				array_push($idPropertyList, $propertyRow->idProperty);
 			}
 			
-			//var_dump($idPropertyList);
-			
 			$photoRowsetLookup = $this->_propertyModel->getPrimaryPhotosByPropertyLookup($idPropertyList);
-
-			//var_dump($photoRowsetLookup);
-			//die();
-
+			
 		    // setup the view
 			$this->view->assign(
 				array(

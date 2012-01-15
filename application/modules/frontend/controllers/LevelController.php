@@ -54,8 +54,9 @@ class LevelController extends Zend_Controller_Action
         }
         
         // get the list of regions within this country
-		$idLocation = $locationRow->idLocation;
-        $locationRowset = $this->_locationModel->getAllLocationsIn($idLocation);
+        $locationRowset = $this->_locationModel->getAllLocationsIn(
+			$locationRow->idLocation
+		);
         
         // get the summary for this level
         $this->_helper->levelSummary($locationRow->url);

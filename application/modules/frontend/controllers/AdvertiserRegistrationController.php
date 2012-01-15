@@ -24,7 +24,7 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
         
 		if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
-				$this->_advertiserModel->addNewAdvertiser($form->getValues());
+				$token = $this->_advertiserModel->addNewAdvertiser($form->getValues());
 				
 				// get the new advertiser row
 				$model = new Common_Model_Advertiser();
@@ -64,7 +64,8 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
                         'idAdvertiser'  => $identity->idAdvertiser,
                         'firstname'     => $identity->firstname,
                         'lastname'      => $identity->lastname,
-                        'emailAddress'  => $identity->emailAddress
+                        'emailAddress'  => $identity->emailAddress,
+						'token'         => $token 
                     ),
                     Vfr_Mail::MODE_ONLY_TXT
                 );

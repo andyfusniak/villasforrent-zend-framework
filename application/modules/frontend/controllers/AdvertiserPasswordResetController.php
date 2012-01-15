@@ -21,14 +21,21 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
             if ($form->isValid($request->getPost())) {
                 $advertiserModel = new Common_Model_Advertiser();
                 
-                $advertiserResetRow = $advertiserModel->getAdvertiserResetDetailsByToken($token);
-                $advertiserRow = $advertiserModel->getAdvertiserById($advertiserResetRow->idAdvertiser);
+                $tokenRow = $advertiserModel->getAdvertiserResetDetailsByToken($token);
+                $advertiserRow = $advertiserModel->getAdvertiserById($tokenRow->idAdvertiser);
                 
-                if ($advertiserResetRow) {
-                    $advertiserModel->updatePassword($advertiserResetRow->idAdvertiser, $request->getParam('passwd'));
+                if ($tokenRow) {
+                    $advertiserModel->updatePassword(
+						$tokenRow->idAdvertiser,
+                        $request->getParam('passwd')
+                    );
                     
                     // send the template
-                    $vfrMail = new Vfr_Mail('/modules/frontend/views/emails', 'advertiser-password-reset-confirmation');
+                    $vfrMail = new Vfr_Mail(
+                        '/modules/frontend/views/emails',
+                        'advertiser-password-reset-confirmation'
+                    );
+                    
                     $vfrMail->send(
                         $advertiserRow->emailAddress,
                         "HolidayPropertyWorldwide.com Password Changed",
@@ -37,7 +44,7 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
                     );
                       
                     // delete this advertiser reset token entry
-                    $advertiserResetRow->delete();
+                    $tokenRow->delete();
                     
                     $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-password-reset/successfully-updated');
                 } else {
@@ -47,9 +54,9 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
         } else {
             // check to see if the token exists
             $advertiserModel = new Common_Model_Advertiser();
-            $advertiserResetRow = $advertiserModel->getAdvertiserResetDetailsByToken($token);
+            $tokenRow = $advertiserModel->getAdvertiserResetDetailsByToken($token);
             
-            if (!$advertiserResetRow) {
+            if (!$tokenRow) {
                 $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-password-reset/expired');
             }
         }

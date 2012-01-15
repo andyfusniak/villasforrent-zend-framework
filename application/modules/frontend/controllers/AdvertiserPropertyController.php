@@ -65,37 +65,31 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$propertyModel = new Common_Model_Property();
 		$idHolidayType = $propertyModel->getHolidayTypeByPropertyId($idProperty);
 		
-		$newDigestKey = Vfr_DigestKey::generate(array (
-			$idProperty,
-			$mode
-		));
+		// generate the digest key
+		$newDigestKey = Vfr_DigestKey::generate(
+			array (
+				$idProperty,
+				$mode
+			)
+		);
 		
 		// create the form and set the hidden form element	
 		$form = new Frontend_Form_Step2ContentForm(
             array (
-                'idProperty' => $idProperty,
+                'idProperty' 	=> $idProperty,
 				'idHolidayType'	=> $idHolidayType,
 				'mode'			=> $mode,
 				'digestKey'		=> $newDigestKey
             )
         );
 
-		if ($mode == 'update') {
-			$propertyContentList = $propertyModel->getPropertyContentArrayById(
-                $idProperty,
-                Common_Resource_PropertyContent::VERSION_UPDATE
-            );
-			
-			$form->populate($propertyContentList);
-		} elseif ($mode == 'add') {
-            $propertyContentList =  $propertyModel->getPropertyContentArrayById(
-                $idProperty,
-                Common_Resource_PropertyContent::VERSION_MAIN
-            );
 
-            $form->populate($propertyContentList);
-        }
-            
+		$propertyContentList = $propertyModel->getPropertyContentArrayById(
+			$idProperty,
+			($mode == 'add') ? Common_Resource_PropertyContent::VERSION_MAIN : Common_Resource_PropertyContent::VERSION_UPDATE
+		);
+		
+		$form->populate($propertyContentList);    
 		
 		if ($this->getRequest()->isPost()) {
 			// if the client posts back the form, first check if the params were altered
@@ -130,7 +124,6 @@ class AdvertiserPropertyController extends Zend_Controller_Action
                         ),
                         $form->getValues()
                     );
-					$propertyModel->updateUpdateCheckSum($idProperty);
 					$this->_helper->redirector->gotoSimple('home', 'advertiser-account', 'frontend');
 				}
 				
@@ -154,12 +147,15 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		// get the destination from the configuration
 		$bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
 		$vfrConfig = $bootstrap['vfr'];
-				
-		$form = new Frontend_Form_Step3PicturesForm(array(
-			'idProperty' => $idProperty,
-			'digestKey'  => $newDigestKey));
 		
-		//var_dump($form);
+		
+		//var_dump($idProperty, $newDigestKey);
+		$form = new Frontend_Form_Step3PicturesForm(
+			array (
+				'idProperty' => $idProperty,
+				'digestKey'  => $newDigestKey
+			)
+		);
 		
 		// get the file information, we need this to write the photo DB entry if the
 		// file is valid, or if it's not a valid we'll use to to log the type for future support

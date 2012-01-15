@@ -25,6 +25,8 @@ class DisplayFullPropertyController extends Zend_Controller_Action
 		
 		// fetch the rates and availability
 		$idCalendar = $propertyModel->getCalendarIdByPropertyId($propertyRow->idProperty);
+		$calendarRow = $propertyModel->getCalendarById($idCalendar);
+		
 		//$availabilityRowset = $calendarModel->getAvailabilityByCalendarId($idCalendar);
 		$rateRowset	= $calendarModel->getRatesByCalendarId($idCalendar);
 		
@@ -46,6 +48,7 @@ class DisplayFullPropertyController extends Zend_Controller_Action
 		$this->view->assign(
 			array (
 				'propertyRow'		=> $propertyRow,
+				'calendarRow'		=> $calendarRow,
 				'locationRow'		=> $locationRow,
 				'propertyContent'	=> $propertyContent,
 				'photoRowset'		=> $photoRowset,

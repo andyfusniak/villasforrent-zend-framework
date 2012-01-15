@@ -10,7 +10,7 @@ class IndexController extends Zend_Controller_Action
 		$locationModel = new Common_Model_Location();
 		$propertyModel = new Common_Model_Property();
 		
-		$idLocationRow = $locationModel->lookup('/');
+		$idLocationRow = $locationModel->lookup('');
 		
 		$this->_helper->featuredProperty($idLocationRow->idLocation);
     }
