@@ -6,14 +6,18 @@
 	<?php echo $this->headMeta() ?>
 	<?php echo $this->headLink() ?>
 	<?php echo $this->headStyle() ?>
+    <?php echo $this->headStyle() ?>
     <?php
-    if ($this->jQuery()->isEnabled()) {
-        $this->jQuery()->setLocalPath('/js/jquery/jquery-1.7.1.min.js')
-                       ->setUiLocalPath('/js/jquery-ui-1.8.12/ui/jquery-ui.js')
-                       ->addStylesheet('/js/jquery-ui-themes-1.8.12/themes/sunny/jquery-ui.css');
-        echo $this->jQuery();
-    }
+        if ($this->jQuery()->isEnabled()) {
+            if ('live' != APPLICATION_ENV) {
+                $this->jQuery()->setLocalPath('/js/jquery/jquery-1.7.1.min.js');
+                $this->jQuery()->setUiLocalPath('/js/jquery-ui-1.8.12/ui/jquery-ui.js');    
+            }
+            
+            $this->jQuery()->addStylesheet('/js/jquery-ui-themes-1.8.12/themes/sunny/jquery-ui.css');
+        }
     ?>
+    <?php echo $this->jQuery() ?>
     <?php echo $this->headScript() ?>
 	
 	<?php if ('live' == APPLICATION_ENV): ?>
@@ -46,19 +50,19 @@
 			<?php if (!Zend_Auth::getInstance()->hasIdentity()) : ?>
 			<h1>New Advertisers</h1>
 			<ul class="menu">
-				<li id="nav-register"><a tabindex="1" accesskey="R" href="/advertiser-registration/register/">register now</a></li>
+				<li id="nav-register"><a tabindex="1" accesskey="R" href="/controlpanel/registration/register/">register now</a></li>
 			</ul>
 			<?php endif ?>
 			
 			<h1>Existing Advertisers</h1>
 			<ul class="menu">
 				<?php if (!Zend_Auth::getInstance()->hasIdentity()) : ?>
-				<li id="nav-advertiser-login"><a tabindex="2" accesskey="L" href="/advertiser-authentication/login/">login</a></li>
+				<li id="nav-advertiser-login"><a tabindex="2" accesskey="L" href="/controlpanel/authentication/login/">login</a></li>
 				<?php endif ?>
 				
 				<?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
-				<li id="nav-advertiser-home"><a tabindex="3" accesskey="H" href="/advertiser-account/home/">account home</a></li>
-				<li id="nav-advertiser-logout"><a tabindex="4" accesskey="O" href="/advertiser-authentication/logout/">logout</a></li>
+				<li id="nav-advertiser-home"><a tabindex="3" accesskey="H" href="/controlpanel/account/home/">account home</a></li>
+				<li id="nav-advertiser-logout"><a tabindex="4" accesskey="O" href="/controlpanel/authentication/logout/">logout</a></li>
 				<?php endif ?>
 			</ul>
             

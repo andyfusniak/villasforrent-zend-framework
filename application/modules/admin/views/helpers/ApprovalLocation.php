@@ -17,7 +17,13 @@ class Admin_View_Helper_ApprovalLocation
                                                         'idProperty'   => $idProperty,
                                                         'idLocation'   => $locationRow->idLocation), null, true);
             
-            return $this->view->locationBreadcrumb($locationRow, array ('whitespace' => false)) . ' <a href="' . $changeLocationUrl . '">[change]</a>';
+            return $this->view->locationBreadcrumb(
+                $locationRow->idLocation,
+                array (
+                    'whitespace' => false,
+                    'makeLinks'  => false
+                )
+            ) . ' <a href="' . $changeLocationUrl . '">[change]</a>';
         } else {
             $setLocationUrl = $this->view->url(array('module'     => 'admin',
                                                      'controller' => 'property',

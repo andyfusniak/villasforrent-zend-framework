@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_PrettyDate extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
 	const STYLE_DEFAULT		= 1;
 	const STYLE_DD_MMM_YY	= 2;
 	const STYLE_DD_MMM_YY_HH_MM_AMPM = 3;

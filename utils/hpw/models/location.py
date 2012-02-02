@@ -6,6 +6,21 @@ def delete_location_by_property_id(cursor, id_property):
     # need to analyse the nested-set model before implementing
     return
 
+def get_all_non_prop_nodes(cursor):
+    sql = """
+    SELECT *
+    FROM Locations
+    WHERE idProperty IS NULL
+    ORDER BY lt ASC
+    """
+    
+    cursor.execute(sql)
+    logging.debug(sql)
+    
+    rows = cursor.fetchall()
+    return rows
+
+
 def get_all_nodes(cursor):
     sql = """
     SELECT *

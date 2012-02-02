@@ -1,0 +1,23 @@
+<h1>Account Settings</h1>
+
+<h2>Email address</h2>
+<p>Your account email address is <?php echo $this->escape($this->advertiserRow->emailAddress)  ?>
+
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+    <input type="hidden" name="process" value="change-email-address" />
+    <fieldset>
+        <dl>
+            <dt>
+                <label for="emailAddress">New email address</label>
+            </dt>
+            
+            <dd>
+                <input type="text" name="emailAddress" value="<?php echo $this->escape($this->form->getValue('emailAddress')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('emailAddress')) ?>
+            </dd>
+            
+            <input type="submit" name="submit" id="submit" value="Request Change" />
+    </fieldset>
+</form>
+
+<?php echo $this->changeSuccessXhtml ?>

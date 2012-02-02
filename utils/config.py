@@ -19,6 +19,20 @@ elif app_env == 'mars':
     dbname = 'hpw'
     
     application_path = '/var/www/zendvfr/application'
+elif app_env == 'beta':
+    dbhost = 'localhost'
+    dbuser = 'beta'
+    dbpass = 'beta4046'
+    dbname = 'hpw_beta'
+
+    application_path = '/var/www/beta.holidaypropertyworldwide.com'
+elif app_env == 'release4':
+    dbhost = 'localhost'
+    dbuser = 'beta'
+    dbpass = 'beta4046'
+    dbname = 'hpw-release4'
+
+    application_path = '/var/www/www.holidaypropertyworldwide.com/application'
 else:
     dbhost = 'localhost'
     dbuser = 'beta'

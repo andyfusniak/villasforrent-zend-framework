@@ -81,7 +81,10 @@ class Vfr_Mail
         }
         
         // send the email using the default Zend_Sendmail transport (i.e. postfix)
-        $this->_mail->send();
+        if (APPLICATION_ENV == 'mars')
+            var_dump($this->_mail);
+        else
+            $this->_mail->send();
     }
     
 }

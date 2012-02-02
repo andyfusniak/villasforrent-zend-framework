@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_Step4RateEditForm extends Zend_Form
+class Controlpanel_Form_Property_Step4RateEditForm extends Zend_Form
 {
     protected $_idProperty;
     protected $_idRate;
@@ -41,7 +41,7 @@ class Frontend_Form_Step4RateEditForm extends Zend_Form
     public function init()
     {
         $this->setMethod('post');
-        $this->setAction('/advertiser-rates/edit');
+        $this->setAction('/controlpanel/rates/edit');
         
         $this->addPrefixPath('Vfr_Form', 'Vfr/Form');
         $this->addElementPrefixPath('Vfr_Validate', 'Vfr/Validate', 'validate');

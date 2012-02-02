@@ -1,0 +1,76 @@
+#!/bin/bash
+cd /var/www/release4.holidaypropertyworldwide.com/
+tar zxfp app.tar.gz
+rm /var/www/release4.holidaypropertyworldwide.com/app.tar.gz
+chgrp devteam -fR *
+chmod g+rwx /var/www/release4.holidaypropertyworldwide.com/data
+chmod g+rwx /var/www/release4.holidaypropertyworldwide.com/data/logs
+chmod g+rwx /var/www/release4.holidaypropertyworldwide.com/data/session
+chmod g+rwx /var/www/release4.holidaypropertyworldwide.com/data/cache
+
+# data directory and files
+if [ ! -d "./data" ]; then
+	mkdir data
+    chmod ug+rwx data
+    
+    mkdir data/cache
+    chmod ug+rwx cache
+    
+    mkdir data/images_originals
+    chmod ug+rwx images_originals
+    
+	mkdir data/logs
+    chmod ug+rwx data/logs
+    
+	touch data/logs/application.log
+    chmod ug+rw data/logs/application.log
+    
+    mkdir data/session
+	chmod ug+rwx data/session
+    
+    mkdir data/uploads
+    chmod ug+rwx data/uploads
+else
+    if [ ! -d "./data/cache" ]; then
+        mkdir data/cache
+        chmod ug+rwx data/cache
+    fi
+    
+    if [ ! -d "./data/images_originals" ]; then
+        mkdir data/images_originals
+        chmod ug+rwx data/images_originals
+    fi
+    
+	if [ ! -d "./data/logs" ]; then
+		mkdir data/logs
+        chmod ug+rwx data/logs
+        
+        touch data/logs/application.log
+		chmod ug+rw data/logs/application.log
+	fi
+    
+    if [ ! -d "./data/session" ]; then
+        mkdir data/session
+        chmod ug+rwx data/session
+    fi
+    
+    if [ ! -d "./data/uploads" ]; then
+        mkdir data/uploads
+        chmod ug+rwx data/uploads
+    fi
+fi
+
+if [ ! -d "./public/photos" ]; then
+    mkdir public/photos
+    chmod ug+rwx public/photos
+fi
+
+# Symlinks for Zend library components
+cd /var/www/release4.holidaypropertyworldwide.com/library
+if [ ! -e Zend ]; then
+    ln -s /var/www/ZendFramework-1.11.11/library/Zend/ Zend
+fi
+
+if [ ! -e ZendX ]; then
+    ln -s /var/www/ZendFramework-1.11.11/extras/library/ZendX/ ZendX
+fi

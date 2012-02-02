@@ -1,4 +1,4 @@
-def get_all_advertisers_reset(cursor):
+def get_all_tokens(cursor):
     sql = """
     SELECT *
     FROM AdvertisersReset
@@ -9,12 +9,12 @@ def get_all_advertisers_reset(cursor):
 
     return rows
 
-def delete_advertiser_reset(cursor, id_ar):
+def delete_token(cursor, id_token):
     sql = """
     DELETE
     FROM AdvertisersReset 
-    WHERE idAdvertiserReset={id_advertisers_reset}
-    """.format(id_advertisers_reset = id_ar)
+    WHERE idToken={id_token}
+    """.format(id_token = id_token)
 
     if not config.debug['sql']:
         cursor.execute(sql)

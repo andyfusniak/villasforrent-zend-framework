@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_RentalBasis extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+    
     public function rentalBasis($rentalBasis)
     {
         switch ($rentalBasis)

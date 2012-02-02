@@ -1,5 +1,5 @@
 <?php
-class AdvertiserRegistrationController extends Zend_Controller_Action
+class Controlpanel_RegistrationController extends Zend_Controller_Action
 {
 	protected $_advertiserModel;
 	
@@ -18,7 +18,7 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
 
     public function registerAction()
     {
-		$form = new Frontend_Form_Advertiser_RegistrationForm(
+		$form = new Controlpanel_Form_RegistrationForm(
 			array('idAdministrator' => 1)
 		);
         
@@ -34,7 +34,7 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
 				
                 //// notify the admin
                 //if ($identity) {
-                //    $vfrMail = new Vfr_Mail('/modules/frontend/views/emails', 'advertiser-password-reset');
+                //    $vfrMail = new Vfr_Mail('/modules/controlpanel/views/emails', 'password-reset');
                 //    $vfrMail->send(
                 //        $identity->emailAddress,
                 //        "HolidayPropertyWorldwide.com New Advertiser Joined",
@@ -53,8 +53,8 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
                 //}
                 
 				$vfrMail = new Vfr_Mail(
-					'/modules/frontend/views/emails',
-					'advertiser-register-confirm-email' // no extensions required
+					'/modules/controlpanel/views/emails',
+					'register-confirm-email' // no extensions required
 				);
 				
                 $vfrMail->send(
@@ -70,7 +70,11 @@ class AdvertiserRegistrationController extends Zend_Controller_Action
                     Vfr_Mail::MODE_ONLY_TXT
                 );
                 
-				$this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-registration/continue');
+                $this->_helper->redirector->gotoSimple(
+                    'continue',
+                    'registration',
+                    'controlpanel'
+                );
 			} else {
 				$form->populate($this->getRequest()->getPost());
 			}

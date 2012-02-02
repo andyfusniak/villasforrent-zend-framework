@@ -1,8 +1,7 @@
 <?php
-class Frontend_Form_Step4RentalBasis extends Zend_Form
+class Controlpanel_Form_Property_Step4RentalBasis extends Zend_Form
 {
-	protected $_idProperty;
-	
+    protected $_idProperty;
 	protected $_digestKey = null;
 	
     public function __construct($options = null)
@@ -23,7 +22,7 @@ class Frontend_Form_Step4RentalBasis extends Zend_Form
     public function init()
     {
         $this->setMethod('post');
-		$this->setAction('/advertiser-rates/rental-basis');
+		$this->setAction('/controlpanel/rates/rental-basis');
 		
 		$this->addElement('hidden', 'idProperty', array (
 			'value'	=> $this->_idProperty

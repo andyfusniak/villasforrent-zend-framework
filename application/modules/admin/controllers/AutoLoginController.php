@@ -10,12 +10,18 @@ class Admin_AutoLoginController extends Zend_Controller_Action
         Zend_Auth::getInstance()->clearIdentity();
 
         $advertiserModel = new Common_Model_Advertiser();
-        $advertiserRow = $advertiserModel->getAdvertiserById($idAdvertiser);
+        
+        $advertiserRow = $advertiserModel->getAdvertiserById(
+            $idAdvertiser
+        );
 
         $auth = Zend_Auth::getInstance();
         $auth->getStorage()->write($advertiserRow);
 
-        $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-account/home');
+        $this->_helper->redirector->gotoSimple(
+            'home',
+            'account',
+            'controlpanel'
+        );
     }
 }
-

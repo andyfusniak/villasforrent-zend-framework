@@ -1,6 +1,8 @@
 <?php
 class Vfr_Property_Converter
 {
+    const version = '1.0.0';
+
     private function __construct() {}
 
 

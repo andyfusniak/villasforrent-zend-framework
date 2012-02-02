@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_Advertiser_RegistrationForm extends Zend_Form
+class Controlpanel_Form_RegistrationForm extends Zend_Form
 {
 	protected $idAdministrator;
 	
@@ -18,7 +18,7 @@ class Frontend_Form_Advertiser_RegistrationForm extends Zend_Form
         );
 
         $this->setMethod('post');
-		$this->setAction('/advertiser-registration/register/');
+		$this->setAction('/controlpanel/registration/register/');
 		
 		$this->addElement('hidden', 'idAdministrator', array (
 			'value'	=> $this->idAdministrator

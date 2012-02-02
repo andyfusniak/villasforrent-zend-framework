@@ -13,8 +13,8 @@
 	<dl>
 		<dt><label for="rental_basis">Rental Basis</label></dt>
 		<dd><input readonly="Y" name="rentalBasis" value="<?php echo $this->escape($this->rentalBasis($this->rentalBasis)) ?>" /> <?php echo $this->rentalBasisLink ?>
-		<a href="<?php echo $this->url(array('module'       => 'frontend',
-											 'controller'   => 'advertiser-rates',
+		<a href="<?php echo $this->url(array('module'       => 'controlpanel',
+											 'controller'   => 'rates',
 											 'action'       => 'rental-basis',
 											 'idProperty'   => $this->propertyRow->idProperty,
 											 'digestKey'    => Vfr_DigestKey::generate(array(
@@ -27,8 +27,8 @@
 		<dd><input readonly="Y" name="base_currency" value="<?php echo $this->escape($this->baseCurrency($this->baseCurrency)) ?>" />  <?php echo $this->baseCurrencyLink ?>
 		<a href="<?php echo $this->url(
 			array (
-				'module'     => 'frontend',
-				'controller' => 'advertiser-rates',
+				'module'     => 'controlpanel',
+				'controller' => 'rates',
 				'action'     => 'base-currency',
 				'idProperty' => $this->propertyRow->idProperty,
 				'digestKey'  => Vfr_DigestKey::generate(array (
@@ -73,8 +73,8 @@ if ($this->ratesRowset) {
 			<td><input type="submit" name="submit" value="update" /></td>
 			<td><a href="<?php echo $this->url(
 				array (
-					'module'     => 'frontend',
-					'controller' => 'advertiser-property',
+					'module'     => 'controlpanel',
+					'controller' => 'property',
 					'action'     => 'step4-rates',
 					'idProperty' => $this->propertyRow->idProperty,
 					'digestKey'  => Vfr_DigestKey::generate(array (
@@ -101,8 +101,8 @@ if ($this->ratesRowset) {
 			<td class="<?php echo $line_style ?>"><?php echo $this->minStayDuration($row->minStayDays) ?></td>
 			<td class="<?php echo $line_style ?>"><a href="<?php echo $this->url(
 				array (
-					'module'     => 'frontend',
-				    'controller' => 'advertiser-rates',
+					'module'     => 'controlpanel',
+				    'controller' => 'rates',
 					'action'     => 'edit',
 					'idProperty' => $this->propertyRow->idProperty,
 					'idRate'     => $row->idRate,
@@ -116,8 +116,8 @@ if ($this->ratesRowset) {
 			) ?>">[edit]</a></td>
 			<td class="<?php echo $line_style ?>"><a href="<?php echo $this->url(
 				array (
-					'module'     => 'frontend',
-				    'controller' => 'advertiser-rates',
+					'module'     => 'controlpanel',
+				    'controller' => 'rates',
 					'action'     => 'delete-confirm',
 					'idProperty' => $this->propertyRow->idProperty,
 					'idRate'	 => $row->idRate,

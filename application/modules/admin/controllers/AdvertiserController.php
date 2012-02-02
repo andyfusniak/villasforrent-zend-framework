@@ -1,36 +1,33 @@
 <?php
 class Admin_AdvertiserController extends Zend_Controller_Action
 {
-	protected $_advertisersModel;
+	const version = '1.0.0';
 	
-	public function init()
-	{	
-		$this->_advertiserModel = new Common_Model_Advertiser();
-	}
-
 	public function indexAction()
 	{
-		//$advertiser = $this->_advertiserModel->getAdvertiserById(3);
-	
-		// we expect a Zend_Paginator to be returned because we have
-		// specifed a page number.  If we set page=null we will get
-		// the entire result set as a Common_Resource_Advertiser_Rowset
+        $advertiserModel = new Common_Model_Advertiser();
+        
 		$request = $this->getRequest();
 		$page      = $request->getParam('page');
-		$interval  = $request->getParam('interval', 30);
-		$sort      = $request->getParam('sort', 'idAdvertiser');
-		$direction = $request->getParam('direction', 'ASC');
+		$interval  = $request->getParam('interval');
+		$order     = $request->getParam('order');
+		$direction = $request->getParam('direction');
 		
-		$advertiserPaginator = $this->_advertiserModel->getAll($page, $interval, $sort, $direction);
+		$advertiserPaginator = $advertiserModel->getAllPaginator(
+			$page,
+			$interval,
+			$order,
+			$direction
+		);		
 		
+		$session = new Zend_Session_Namespace(Common_Model_Advertiser::SESSION_NS_ADMIN_ADVERTISER);
 		
 		$this->view->assign(
 			array (
 				'advertiserPaginator' => $advertiserPaginator,
-				'sort'				  => $sort,
-				'direction'		      => $direction
+				'order'				  => isset($session->order) ? $session->order : $order,
+				'direction'		      => isset($session->direction) ? $session->direction : $direction
 			)
 		);
-		
 	}
 }

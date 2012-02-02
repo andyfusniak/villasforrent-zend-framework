@@ -1,5 +1,5 @@
 <?php
-class Common_Resource_AdvertiserReset_Rowset extends Vfr_Model_Resource_Db_Table_Rowset_Abstract
+class Common_Resource_Token_Rowset extends Vfr_Model_Resource_Db_Table_Rowset_Abstract
 {
 	public function objectSplice($offset, $length)
 	{

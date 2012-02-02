@@ -70,9 +70,41 @@ class Common_Plugin_Layout extends Zend_Controller_Plugin_Abstract
 
 		switch($moduleName) {
 			case 'admin':
+				$view = $layout->getView();
+				
 				//$this->_logger->log(__METHOD__ . ' Setting view helpers for admin module', Zend_Log::DEBUG);
 				//$view->headLink()->prependStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
+				$config = new Zend_Config_Xml(APPLICATION_PATH . '/configs/admin-navigation.xml', 'nav');
+				
+				$adminNav = new Zend_Navigation($config);
+				$view->navigation($adminNav);
+				//$view->navigation()->menu()->setPartial(array('nav1.phtml','default'));
 			break;
+			
+			case 'controlpanel':
+                $front = Zend_Controller_Front::getInstance();
+				$view = $layout->getView();
+                
+                //$config = new Zend_Config_Xml(
+                //    APPLICATION_PATH . '/configs/advertisercp-navigation.xml',
+                //    'nav'
+                //);
+                
+                // Controller based ACL for advertiser controlpanel
+                $advertiserControlpanelAcl = new Controlpanel_Model_Acl_Controlpanel();
+        
+                
+                // setup the navigation bar for the advertiser controlpanel
+                //$advertiserCpNav = new Zend_Navigation($config);
+                //$view->navigation($advertiserCpNav)
+                //     ->setAcl($advertiserControlpanelAcl);
+                
+                $view->headMeta()->appendHttpEquiv('robots', 'NOINDEX, NOFOLLOW');
+                $view->headMeta()->appendHttpEquiv('description', 'Control Panel');
+                $view->headLink()->appendStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
+                $view->headLink()->appendStylesheet('/css/villastorent.css');
+				$view->headLink()->appendStylesheet('/css/advertisercp/control-panel.css');
+            break;
 
 			case 'frontend':
 				$front = Zend_Controller_Front::getInstance();

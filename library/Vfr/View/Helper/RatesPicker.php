@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_RatesPicker extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     public function ratesPicker($value, $field)
     {
         if (!$value) {

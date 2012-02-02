@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_Step1LocationForm extends Zend_Form
+class Controlpanel_Form_Property_Step1LocationForm extends Zend_Form
 {
     public function __construct($options = null)
     {
@@ -9,7 +9,7 @@ class Frontend_Form_Step1LocationForm extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-        $this->setAction('/advertiser-property/step1-location');
+        $this->setAction('/controlpanel/property/step1-location');
         
 		// load the property types in use from the DB
 		// and setup an array for the select box

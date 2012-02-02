@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configdata>
+    <nav>
+        <overview>
+            <label>Overview</label>
+            <module>controlpanel</module>
+            <controller>account</controller>
+            <action>home</action>
+            
+            <pages>
+                <login>
+                    <label>Login</label>
+                    <module>controlpanel</module>
+                    <controller>authentication</controller>
+                    <action>login</action>
+                    
+                    <resource>authentication</resource>
+                    <privilege>login</privilege>
+                </login>
+                
+                <home>
+                    <label>Account home</label>
+                    <module>controlpanel</module>
+                    <controller>account</controller>
+                    <action>home</action>
+                    
+                    
+                    <pages>
+                        <step1-location>
+                            <label>Step 1 Location</label>
+                            <module>controlpanel</module>
+                            <controller>property</controller>
+                            <action>step1-location</action>
+                        </step1-location>
+                        
+                        <step2-content>
+                            <label>Step 2 Content</label>
+                            <module>controlpanel</module>
+                            <controller>property</controller>
+                            <action>step2-content</action>
+                        </step2-content>
+                        
+                        <step3-pictures>
+                            <label>Step 3 Pictures</label>
+                            <module>controlpanel</module>
+                            <controller>property</controller>
+                            <action>step3-pictures</action>
+                        </step3-pictures>
+
+                        <step4-rates>
+                            <label>Step 4 Rates</label>
+                            <module>controlpanel</module>
+                            <controller>property</controller>
+                            <action>step4-rates</action>
+                            
+                            <pages>
+                                <step4-rates-rental-basis>
+                                    <label>Step 4 Rates :: Rental Basis</label>
+                                    <module>controlpanel</module>
+                                    <controller>rates</controller>
+                                    <action>rental-basis</action>
+                                </step4-rates-rental-basis>
+                                
+                                <step4-rates-base-currency>
+                                    <label>Step 4 Rates :: Base Currency</label>
+                                    <module>controlpanel</module>
+                                    <controller>rates</controller>
+                                    <action>base-currency</action>
+                                </step4-rates-base-currency>
+                            </pages>
+                        </step4-rates>
+                        
+                        <step5-availability>
+                            <label>Step 5 Availability</label>
+                            <module>controlpanel</module>
+                            <controller>property</controller>
+                            <action>step5-availability</action>
+                        </step5-availability>
+                        
+                        
+                    </pages>
+                </home>
+            </pages>
+        </overview>
+        
+        <logout>
+            <label>Logout</label>
+            <module>controlpanel</module>
+            <controller>authentication</controller>
+            <action>logout</action>
+            <resource>authentication</resource>
+            <privilege>logout</privilege>
+        </logout>
+    </nav>
+</configdata>

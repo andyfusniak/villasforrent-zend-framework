@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_MinStayDuration extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
 	public function minStayDuration($d)
 	{
 		$d = (int) $d;

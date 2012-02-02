@@ -77,18 +77,43 @@ class Admin_PropertyController extends Zend_Controller_Action
 	
     public function listAction()
     {
-        $page       = $this->getRequest()->getParam('page', 1);
-        $interval   = $this->getRequest()->getParam('interval', 30);
-        $order      = $this->getRequest()->getParam('order', null);
-        $direction  = $this->getRequest()->getParam('direction', 'ASC');
+        $request = $this->getRequest();
+        $page       = $request->getParam('page');
+        $interval   = $request->getParam('interval');
+        $order      = $request->getParam('order');
+        $direction  = $request->getParam('direction');
         
         $propertyModel = new Common_Model_Property();
-        $paginator = $propertyModel->getProperties($page, $interval, $order, $direction);
         
-        $this->view->assign( array (
-            'paginator' => $paginator,
-            'direction' => $direction
-        ));
+		$paginator = $propertyModel->getAllPaginator(
+			$page,
+			$interval,
+			$order,
+			$direction
+		);
+        
+        $session = new Zend_Session_Namespace(Common_Model_Property::SESSION_NS_ADMIN_PROPERTY);
+        
+        // get a list of advertisers and locatiokn
+        // to initise the view helper
+        $advertisersList = array ();
+        $locationList    = array ();
+        
+        foreach ($paginator as $property) {
+            array_push($advertisersList, $property->idAdvertiser);
+            array_push($locationList, $property->idLocation);
+        }
+        
+        $this->view->advertiserIdToName($advertisersList);
+        $this->view->locationIdToName($locationList);
+        
+        $this->view->assign(
+			array (
+				'paginator' => $paginator,
+                'order'     => isset($session->order) ? $session->order : $order,
+				'direction' => isset($session->direction) ? $session->direction : $direction
+			)
+		);
     }
     
 	private function indent($depth=1) {
@@ -106,6 +131,10 @@ class Admin_PropertyController extends Zend_Controller_Action
 		$idProperty = $request->getParam('idProperty');
 		$idLocation	= $request->getParam('idLocation');
 		
+        
+        $locationModel = new Common_Model_Location();
+        $locationsRowset = $locationModel->getAllLocations();
+        
 		$form = new Admin_Form_LocationSelectForm (
 			array (
 				'idProperty' => $idProperty,
@@ -137,64 +166,34 @@ class Admin_PropertyController extends Zend_Controller_Action
 				Common_Resource_PropertyContent::FIELD_REGION,
 				Common_Resource_PropertyContent::FIELD_LOCATION
 			)
-		);
-		
-        $locationModel 	= new Common_Model_Location();
-        $hierarchy = $locationModel->getLocationHierarchy();
+		);    
         
-		$xhtml = '<div id="lhierarchy">' . "\n";
-		$xhtml .= '<ul id="browser" class="filetree treeview">' . "\n";
-		$currentDepth = $hierarchy[0]->depth;
-		$starting = true;
-		foreach ($hierarchy as $row) {
-			if ($row->depth > $currentDepth) {
-				$xhtml .= $this->indent($currentDepth) . "<ul>\n";
-				$currentDepth = $row->depth;
-			} elseif ($row->depth < $currentDepth) {
-				$num = $currentDepth - $row->depth;
-				//var_dump($num);
-				for ($i=0; $i<$num; $i++) {
-					$xhtml .= $this->indent($currentDepth-1) . "</ul>\n" . $this->indent($currentDepth-1) . "</li>\n\n";					
-				}
-				$currentDepth = $row->depth;
-			}// else if (($row->depth == $currentDepth) && (!$starting)) {
-			//	$xhtml .= "</li>\n";
-			//	$starting = false;
-			//}
-							
-			
-			if (($row->lt == ($row->rt - 1)) && ($row->idProperty)) {
-				$xhtml .= $this->indent($currentDepth) . '<li class="jstree-leaf jstree-locked" id="' . $row->idLocation . '"><a href="#">' . $row->rowname . "</a></li>\n";
-			} else {
-				$xhtml .= $this->indent($currentDepth) . '<li class="jstree-closed location" id="' . $row->idLocation . '"><a href="#">' . $row->rowname . "</a>\n";
-			}
-			//var_dump($row);
-	
-			//var_dump($xhtml);
-			//echo "<hr />";
-		}
-		
-		
-		$xhtml .= "</ul></li>\n";
-		$xhtml .= "</div>\n";
-		
-		$this->view->hierarchy = $xhtml;
-		
         
+		//$this->view->headScript()->appendFile('/js/jquery-plugins/jstree-1.0/jquery.jstree.js')
+		//						 ->appendFile('/js/jquery-plugins/jstree-1.0/jquery.cookie.js')
+         //                        ->appendFile('/js/admin/set-location.js');
+        //$this->view->headLink()->appendStylesheet('/js/jquery-plugins/jstree-1.0/themes/default/style.css');
+        //$this->view->hierarchy = $hierarchy;
         
         // Enable jQuery to pickup the headers etc
 		ZendX_JQuery::enableForm($form);
+        ZendX_JQuery::enableView($this->view);
         $jquery = $this->view->jQuery();
 		$jquery->enable()
 			   ->uiEnable();
         
-		$this->view->form = $form;
-		$this->view->propertyContentRowset = $propertyContentRowset;
-        $this->view->headScript()->appendFile('/js/jquery-plugins/jstree-1.0/jquery.jstree.js')
-								 ->appendFile('/js/jquery-plugins/jstree-1.0/jquery.cookie.js')
-                                 ->appendFile('/js/admin/set-location.js');
-        $this->view->headLink()->appendStylesheet('/js/jquery-plugins/jstree-1.0/themes/default/style.css');
-        //$this->view->hierarchy = $hierarchy;
+        $this->view->headScript()->appendFile('/js/dynatree/jquery.dynatree.min.js');
+        $this->view->headScript()->appendFile('/js/admin/set-location-tree.js');
+        $this->view->headLink()->appendStylesheet('/js/dynatree/skin/ui.dynatree.css');
+        
+        $this->view->assign(
+            array (
+                'form'                  => $form,
+                'propertyContentRowset' => $propertyContentRowset,
+                'locationRowset'        => $locationsRowset
+            )
+        );
+        
     }
 	
 	public function setUrlNameAction()

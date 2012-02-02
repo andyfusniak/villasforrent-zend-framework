@@ -1,5 +1,5 @@
 <?php
-class Frontend_Helper_DigestKey extends Zend_Controller_Action_Helper_Abstract
+class Controlpanel_Helper_DigestKey extends Zend_Controller_Action_Helper_Abstract
 {
     public function init() {}
 	

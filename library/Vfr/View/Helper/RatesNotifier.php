@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_RatesNotifier extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     public function ratesNotifier($propertyRow)
     {
 		// if this property has already been initially approved
@@ -10,8 +12,8 @@ class Vfr_View_Helper_RatesNotifier extends Zend_View_Helper_Abstract
 		
 		$step5url = $this->view->url(
 			array (
-				'module'	 => 'frontend',
-				'controller' => 'advertiser-property',
+				'module'	 => 'controlpanel',
+				'controller' => 'property',
 				'action'	 => 'progress-step5',
 				'idProperty' => $propertyRow->idProperty,
 				'digestKey'  => Vfr_DigestKey::generate(array($propertyRow->idProperty))

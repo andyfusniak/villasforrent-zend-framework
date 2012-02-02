@@ -20,6 +20,10 @@
 <input type="hidden" id="idLocation" name="idLocation" value="<?php echo $this->form->getValue('idLocation') ?>" />
 <input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
 
+<!-- The name attribute is used by tree.serializeArray()  -->
+
+<?php echo $this->locationTree($this->locationRowset) ?>
+    
 <?php echo $this->hierarchy ?>
 
 <?php echo $this->displayErrors($this->form->getMessages('idLocation')) ?>

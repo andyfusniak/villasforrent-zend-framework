@@ -2,8 +2,8 @@
 //$this->view->errorMsg;
 ?><h1>Advertiser Login</h1>
 <p>Existing advertisers enter your email address and password below to access your control panel. New advertisers
-can <a href="<?php echo $this->url(array('module'     => 'frontend',
-                                         'controller' => 'advertiser-registration',
+can <a href="<?php echo $this->url(array('module'     => 'controlpanel',
+                                         'controller' => 'registration',
                                          'action'     => 'register')) ?>">register now</a> for an account.</p>
 
 <form id="advertiser_id" enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
@@ -33,6 +33,6 @@ can <a href="<?php echo $this->url(array('module'     => 'frontend',
 <?php echo $this->errorMessage ?>
 
 <p>If you have forgotten your login details, you can <a href="<?php echo $this->url(array (
-    'module'     => 'frontend',
-    'controller' => 'advertiser-password-reset',
+    'module'     => 'controlpanel',
+    'controller' => 'password-reset',
     'action'     => 'index')) ?>">reset your password here</a>.</p>

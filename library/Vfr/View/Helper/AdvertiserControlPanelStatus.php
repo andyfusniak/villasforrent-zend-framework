@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_AdvertiserControlPanelStatus extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     public function advertiserControlPanelStatus($row)
     {
         $idProperty  = $row->idProperty;
@@ -21,8 +23,8 @@ class Vfr_View_Helper_AdvertiserControlPanelStatus extends Zend_View_Helper_Abst
         return '<a href="'
                . $this->view->url( array(
                     'action'      => 'index',
-                    'controller'  => 'advertiser-continue',
-                    'module'      => 'frontend',
+                    'controller'  => 'continue',
+                    'module'      => 'controlpanel',
                     'idProperty'  => $idProperty,
                     'digestKey'   => Vfr_DigestKey::generate(array($idProperty))),
                  null, true)

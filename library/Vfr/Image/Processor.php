@@ -27,91 +27,115 @@ class Vfr_Image_Processor
     private function __clone() {}
 
 
-    public function gdImageToNewAspect($sourceGdImage, $targetX, $targetY)
+    public function gdImageToNewAspect($originalGdImage, $targetX, $targetY)
     {
-        $x = (float) imagesx($sourceGdImage);
-        $y = (float) imagesy($sourceGdImage);
+        $originalX = (float) imagesx($originalGdImage);
+        $originalY = (float) imagesy($originalGdImage);
         
-        $aspect        = $x / $y;
-        $targetAspect  = $targetX / $targetY;
+        $originalAspect  = $originalX / $originalY;
+        $targetAspect    = $targetX / $targetY;
        
-        var_dump("source aspect = " . $aspect);
-        var_dump("target aspect = " . $targetAspect);
-		die();
+        //var_dump("source aspect = " . $originalAspect);
+        //var_dump("target aspect = " . $targetAspect);
 		
-        if ($aspect == $targetAspect)  {
+		//die();
+		
+        if ($originalAspect == $targetAspect)  {
+			//die('AR match');
 			$destGdImage = imagecreatetruecolor($targetX, $targetY);
 			
-			if (!imagecopyresampled($destGdImage, $sourceGdImage,
-									0, 0,
-									0, 0,
-									$targetX, $targetY,
-									imagesx($sourceGdImage), imagesy($sourceGdImage)))
-				throw new Vfr_Exception("Failed to resize the image");
-				
+			if (!imagecopyresampled(
+					$destGdImage, $originalGdImage,
+					0, 0, // dst_x, dst_y
+					0, 0, // src_x, src_y
+					$targetX, $targetY, // dst_w, dst_h
+					imagesx($originalGdImage), imagesy($originalGdImage) // src_w, src_h
+				))
+					throw new Vfr_Exception("Failed to resize the image");
+			
             return $destGdImage;
         }
         
-        if ($aspect < $targetAspect) {
-            // if the source aspect ratio is less than the target - e.g. 4:3 (or 1.3333) converting to 3:2 (or 1.5)
-            // then we need to crop some off the top and bottom of the source image
-            $newY = round($y * $targetAspect);
-            
-			$needToLooseYLow  = ceil($y - $newY);
-            $needToLooseYHigh = floor($y - $newY);
+        if ($originalAspect < $targetAspect) {
+            // if the original AR is less than the target AR
+			// e.g. 4:3 (AR = 1.3333) converting to 3:2 (AR = 1.5)
+            // then we need to crop some off the top and/or bottom
+			// of the original image before rescaling takes place
 			
-			$aspectLow  = ($y - $needToLooseYLow) / $y;
-            $aspectHigh = ($y - $needToLooseYHigh) / $y;
+			$newY = $originalX / $targetAspect;            
+			
+			$needToLooseYLow  = ceil($originalY - $newY);
+            $needToLooseYHigh = floor($originalY - $newY);
+			
+			//var_dump("NeedToLooseYLow=$needToLooseYLow, NeedToLooseYHigh=$needToLooseYHigh");
+			
+			$aspectLow  = $originalX / ($originalY - $needToLooseYLow);
+            $aspectHigh = $originalX / ($originalY - $needToLooseYHigh);
+			
+			//var_dump("aspectLow=$aspectLow, aspectHigh=$aspectHigh");
+			
+			//var_dump("NewY=$newY, originalY=$originalY, targetAspect=$targetAspect");
 			
 			$diffLow  = abs($targetAspect - $aspectLow);
             $diffHigh = abs($targetAspect - $aspectHigh);
             
+			//var_dump("diffLow=$diffLow, diffHigh=$diffHigh");
+			
+			//die('example 1');
             if ($diffLow < $diffHigh) {
                 $needToLooseY = (int) $needToLooseYLow;
             } else {
                 $needToLooseY = (int) $needToLooseYHigh;
             }
             
+			
             if (($needToLooseY % 2) == 0) {
                 // divides equally, so chop half of each side
-                $top = $bottom = floor($needToLooseY / 2);
+                $top = $bottom = $needToLooseY / 2;
             } else {
                 // 1 pixel difference, so chop more of the right hand side
                 $top  = floor($needToLooseY / 2);
                 $bottom = $top + 1;
             }
 			
+			//var_dump("Need to loose Y=" . $needToLooseY);
+			//var_dump("top=$top, bottom=$bottom");
+			//die();
+			
 			$destGdImage = imagecreatetruecolor($targetX, $targetY);
-            
-            if (!imagecopyresized($destGdImage, $sourceGdImage,
-									0, 0,
-									$left, 0,
-									$targetX, $targetY,
-									imagesx($sourceGdImage)-$top-$bottom, imagesy($sourceGdImage))) {
+			//var_dump("Created image X=$targetX, Y=$targetY");
+			//die();
+			
+            if (!imagecopyresampled(
+					$destGdImage, $originalGdImage,
+					0, 0, // dst_x, dst_y
+					0, $top, // src_x, src_y
+					$targetX, $targetY, // dst_w, dst_h
+					imagesx($originalGdImage), imagesy($originalGdImage)-$top-$bottom // src_w, src_h
+				)) {
 				
 				throw new Vfr_Exception("Failed to resize the image");
 			}
-            imagedestroy($sourceGdImage);
+            
             return $destGdImage;
         } else {
-            // if the source aspect ratio is greater than the target - e.g. 3:2 (or 1.5) converting to 4:3 (or 1.3333)
-            // then we need to crop some off the sides the source image
-            //var_dump("x = " . $x);
-            //var_dump("y = " . $y);
+			// if the original AR is greater than the target AR
+			// e.g. 3:2 (AR=1.5) converting to 4:3 (AR=1.3333)
+            // then we need to crop some off the sides the source image           
+            $newX = ($originalY * $targetAspect);
+			
+            //var_dump("newX=", $newX);
             
-            $newX = ($y * $targetAspect);
-            //var_dump("newX", $newX);
+            $needToLooseXLow  = ceil($originalX - $newX);
+            $needToLooseXHigh = floor($originalX - $newX);
+            //var_dump("NeedToLooseXLow=$needToLooseXLow, NeedToLooseXHigh=$needToLooseXHigh");
             
-            $needToLooseXLow  = ceil($x - $newX);
-            $needToLooseXHigh = floor($x - $newX);
-            //var_dump("need to loose", $needToLooseXLow, $needToLooseXHigh);
-            //var_dump(189 * $targetAspect);
-        
-            $aspectLow  = ($x - $needToLooseXLow) / $y;
-            $aspectHigh = ($x - $needToLooseXHigh) / $y;
+            $aspectLow  = ($originalX - $needToLooseXLow) / $originalY;
+            $aspectHigh = ($originalX - $needToLooseXHigh) / $originalY;
             
-            //var_dump("aspect",$aspectLow, $aspectHigh);
+            //var_dump("aspectLow=$aspectLow, aspectHigh=$aspectHigh");
             
+			
             $diffLow  = abs($targetAspect - $aspectLow);
             $diffHigh = abs($targetAspect - $aspectHigh);
             
@@ -126,13 +150,15 @@ class Vfr_Image_Processor
             
             if (($needToLooseX % 2) == 0) {
                 // divides equally, so chop half of each side
-                $left = $right = floor($needToLooseX / 2);
+                $left = $right = $needToLooseX / 2;
             } else {
                 // 1 pixel difference, so chop more of the right hand side
                 $left  = floor($needToLooseX / 2);
                 $right = $left + 1;
             }
            
+			//var_dump("left=$left, right=$right");
+			//die();
             //var_dump($x);
             //var_dump($needToLooseX);
             //die();
@@ -140,17 +166,17 @@ class Vfr_Image_Processor
             //var_dump("creating image ", (int) $x - $needToLooseX, (int) $y);
             //die();
             
-            $destGdImage = imagecreatetruecolor($targetX, $targetY);
-            
-            if (!imagecopyresized($destGdImage, $sourceGdImage,
-									0, 0,
-									$left, 0,
-									$targetX, $targetY,
-									imagesx($sourceGdImage)-$left-$right, imagesy($sourceGdImage))) {
-				
+            $destGdImage = imagecreatetruecolor($targetX, $targetY);  
+            if (!imagecopyresampled(
+					$destGdImage, $originalGdImage,
+					0, 0,
+					$left, 0,
+					$targetX, $targetY,
+					imagesx($originalGdImage)-$left-$right, imagesy($originalGdImage)
+				)) {
 				throw new Vfr_Exception("Failed to resize the image");
 			}
-            imagedestroy($sourceGdImage);
+				
             return $destGdImage;
          }
     }

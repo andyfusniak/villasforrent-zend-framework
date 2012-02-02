@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_Advertiser_ChooseNewPasswordForm extends Zend_Form
+class Controlpanel_Form_ChooseNewPasswordForm extends Zend_Form
 {
     protected $token;
     
@@ -18,7 +18,7 @@ class Frontend_Form_Advertiser_ChooseNewPasswordForm extends Zend_Form
         );
         
         $this->setMethod('post');
-        $this->setAction('/advertiser-password-reset/reset');
+        $this->setAction('/controlpanel/password-reset/reset');
     
         $this->addElement('hidden', 'token', array (
 			'value'	=> $this->token
@@ -37,7 +37,7 @@ class Frontend_Form_Advertiser_ChooseNewPasswordForm extends Zend_Form
                 array('NotEmpty', true, array('messages' => array('isEmpty' => 'Please confirm your password'))),
                 array('StringLength', false, array(6,24)),
                 array('PasswordConfirmation', false)
-        )));
+            )
+        ));
     }
-    
 }

@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_ImageMoveButtons extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     public function imageMoveButtons($idProperty, $idPhoto, $current, $total)
     {
         $last = $total - 1;
@@ -16,10 +18,10 @@ class Vfr_View_Helper_ImageMoveButtons extends Zend_View_Helper_Abstract
         
         switch ($current) {
             case 0:
-                //$moveDownUrl = '/advertiser-image-manager/move/idProperty/' . $idProperty . '/idPhoto/' . $idPhoto .'/moveDirection/down';
+                //$moveDownUrl = '/controlpanel/image-manager/move/idProperty/' . $idProperty . '/idPhoto/' . $idPhoto .'/moveDirection/down';
                 $url = $this->view->url(array(
-                    'module'        => 'frontend',
-                    'controller'    => 'advertiser-image-manager',
+                    'module'        => 'controlpanel',
+                    'controller'    => 'image-manager',
                     'action'        => 'move',
                     'idProperty'    => $idProperty,
                     'idPhoto'       => $idPhoto,
@@ -32,8 +34,8 @@ class Vfr_View_Helper_ImageMoveButtons extends Zend_View_Helper_Abstract
         
             case $last:
                 $url = $this->view->url(array(
-                    'module'        => 'frontend',
-                    'controller'    => 'advertiser-image-manager',
+                    'module'        => 'controlpanel',
+                    'controller'    => 'image-manager',
                     'action'        => 'move',
                     'idProperty'    => $idProperty,
                     'idPhoto'       => $idPhoto,
@@ -47,8 +49,8 @@ class Vfr_View_Helper_ImageMoveButtons extends Zend_View_Helper_Abstract
             default:
             
                 $moveUpUrl = $this->view->url(array(
-                    'module'        => 'frontend',
-                    'controller'    => 'advertiser-image-manager',
+                    'module'        => 'controlpanel',
+                    'controller'    => 'image-manager',
                     'action'        => 'move',
                     'idProperty'    => $idProperty,
                     'idPhoto'       => $idPhoto,
@@ -57,8 +59,8 @@ class Vfr_View_Helper_ImageMoveButtons extends Zend_View_Helper_Abstract
                 ), null, true);
             
                 $moveDownUrl = $this->view->url(array(
-                    'module'        => 'frontend',
-                    'controller'    => 'advertiser-image-manager',
+                    'module'        => 'controlpanel',
+                    'controller'    => 'image-manager',
                     'action'        => 'move',
                     'idProperty'    => $idProperty,
                     'idPhoto'       => $idPhoto,

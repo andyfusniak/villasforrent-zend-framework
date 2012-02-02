@@ -15,7 +15,7 @@ class Common_Model_Photo extends Vfr_Model_Abstract
             $aspect = (float) 1.00;
         } elseif ($width < $height) {
             $details['orientation'] = 'portrait';
-            $aspect = (float) $height / $width;
+            $aspect = (float) $width / $height;
         }
         
         $details['aspect'] = $aspect;

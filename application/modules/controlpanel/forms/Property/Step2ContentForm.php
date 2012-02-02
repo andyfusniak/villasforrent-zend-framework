@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_Step2ContentForm extends Zend_Form
+class Controlpanel_Form_Property_Step2ContentForm extends Zend_Form
 {
 	protected $idProperty		= null;
 	protected $idHolidayType	= null;
@@ -40,7 +40,7 @@ class Frontend_Form_Step2ContentForm extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-        $this->setAction('/advertiser-property/step2-content');
+        $this->setAction('/controlpanel/property/step2-content');
 		
 		$this->addElement('hidden', 'idProperty', array (
 			'value'	=> $this->idProperty	

@@ -1,5 +1,5 @@
 <?php
-class AdvertiserPasswordResetController extends Zend_Controller_Action
+class Controlpanel_PasswordResetController extends Zend_Controller_Action
 {
     public function preDispatch()
 	{
@@ -11,7 +11,7 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
         $request = $this->getRequest();
         $token = $request->getParam('token');
         
-        $form = new Frontend_Form_Advertiser_ChooseNewPasswordForm(
+        $form = new Controlpanel_Form_ChooseNewPasswordForm(
             array (
                 'token' => $token
             )
@@ -30,10 +30,14 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
                         $request->getParam('passwd')
                     );
                     
+                    $advertiserModel->updateEmailLastConfirmed(
+                        $tokenRow->idAdvertiser
+                    );
+                    
                     // send the template
                     $vfrMail = new Vfr_Mail(
-                        '/modules/frontend/views/emails',
-                        'advertiser-password-reset-confirmation'
+                        '/modules/controlpanel/views/emails',
+                        'password-reset-confirmation'
                     );
                     
                     $vfrMail->send(
@@ -46,9 +50,17 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
                     // delete this advertiser reset token entry
                     $tokenRow->delete();
                     
-                    $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-password-reset/successfully-updated');
+                    $this->_helper->redirector->gotoSimple(
+                        'successfully-updated',
+                        'password-reset',
+                        'controlpanel'
+                    );
                 } else {
-                    $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-password-reset/expired');
+                    $this->_helper->redirector->gotoSimple(
+                        'expired',
+                        'password-reset',
+                        'controlpanel'
+                    );
                 }
             }
         } else {
@@ -56,19 +68,25 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
             $advertiserModel = new Common_Model_Advertiser();
             $tokenRow = $advertiserModel->getAdvertiserResetDetailsByToken($token);
             
-            if (!$tokenRow) {
-                $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-password-reset/expired');
+            if (! $tokenRow) {
+                $this->_helper->redirector->gotoSimple(
+                    'expired',
+                    'password-reset',
+                    'controlpanel'
+                );
             }
         }
         
-        $this->view->assign(array (
-           'form' => $form 
-        ));
+        $this->view->assign(
+            array (
+                'form' => $form
+            )
+        );
     }
     
     public function indexAction()
     {
-        $form = new Frontend_Form_Advertiser_PasswordResetForm();
+        $form = new Controlpanel_Form_PasswordResetForm();
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -89,7 +107,11 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
                     $advertiserModel->addPasswordReset($advertiserRow->idAdvertiser, $token);
                                         
                     // send the template
-                    $vfrMail = new Vfr_Mail('/modules/frontend/views/emails', 'advertiser-password-reset');
+                    $vfrMail = new Vfr_Mail(
+                        '/modules/controlpanel/views/emails',
+                        'password-reset'
+                    );
+                    
                     $vfrMail->send(
                         $advertiserRow->emailAddress,
                         "HolidayPropertyWorldwide.com Reset Your Password",
@@ -101,15 +123,21 @@ class AdvertiserPasswordResetController extends Zend_Controller_Action
                 }
                 //die('sending reset email');
                 
-                $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-password-reset/sent');
+                $this->_helper->redirector->gotoSimple(
+                    'sent',
+                    'password-reset',
+                    'controlpanel'
+                );
             } else {
                 $form->populate($request->getParams());
             }
         }
 
-        $this->view->assign( array (
-            'form' => $form
-        ));
+        $this->view->assign(
+            array (
+                'form' => $form
+            )
+        );
     }
     
     public function sentAction() {}

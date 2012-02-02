@@ -1,5 +1,5 @@
 <?php
-class AdvertiserPropertyController extends Zend_Controller_Action
+class Controlpanel_PropertyController extends Zend_Controller_Action
 {
 	protected $identity;
 	
@@ -10,7 +10,11 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		
 		// ensure the advertiser is logged in
 		if (!Zend_Auth::getInstance()->hasIdentity()) {
-            $this->_helper->redirector->gotoSimple('login', 'advertiser-account', 'frontend');
+            $this->_helper->redirector->gotoSimple(
+                'login',
+                'account',
+                'controlpanel'
+            );
 		}
 		
 		$this->identity = Zend_Auth::getInstance()->getIdentity();
@@ -23,7 +27,7 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 	
     public function step1LocationAction()
     {
-        $form = new Frontend_Form_Step1LocationForm();
+        $form = new Controlpanel_Form_Property_Step1LocationForm();
         
         if ($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
@@ -36,8 +40,10 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 				$idProperty = $propertyModel->createProperty($options);
                 
 				$this->_helper->redirector->gotoSimple(
-                    'step2-content', 'advertiser-property', 'frontend',
-					array(
+                    'step2-content',
+                    'property',
+                    'controlpanel',
+					array (
                         'idProperty' => $idProperty,
 						'digestKey'  => Vfr_DigestKey::generate(array($idProperty, 'add'))
                     )
@@ -55,7 +61,11 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$digestKey  = $this->getRequest()->getParam('digestKey', null);
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array ($idProperty, $mode))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 		
 		//var_dump('mode ' . $mode);
@@ -74,7 +84,7 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		);
 		
 		// create the form and set the hidden form element	
-		$form = new Frontend_Form_Step2ContentForm(
+		$form = new Controlpanel_Form_Property_Step2ContentForm(
             array (
                 'idProperty' 	=> $idProperty,
 				'idHolidayType'	=> $idHolidayType,
@@ -82,7 +92,6 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 				'digestKey'		=> $newDigestKey
             )
         );
-
 
 		$propertyContentList = $propertyModel->getPropertyContentArrayById(
 			$idProperty,
@@ -108,8 +117,8 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 					
 					$this->_helper->redirector->gotoSimple(
 						'step3-pictures',
-						'advertiser-property',
-						'frontend',
+						'property',
+						'controlpanel',
 						array (
 							'idProperty' => $idProperty,
 							'digestKey'  => Vfr_DigestKey::generate(array($idProperty))
@@ -124,9 +133,13 @@ class AdvertiserPropertyController extends Zend_Controller_Action
                         ),
                         $form->getValues()
                     );
-					$this->_helper->redirector->gotoSimple('home', 'advertiser-account', 'frontend');
+                    
+					$this->_helper->redirector->gotoSimple(
+                        'home',
+                        'account',
+                        'controlpanel'
+                    );
 				}
-				
             }
         }
 	
@@ -139,7 +152,11 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$digestKey  = $this->getRequest()->getParam('digestKey');
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 		
 		$newDigestKey = Vfr_DigestKey::generate(array($idProperty));
@@ -150,7 +167,7 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		
 		
 		//var_dump($idProperty, $newDigestKey);
-		$form = new Frontend_Form_Step3PicturesForm(
+		$form = new Controlpanel_Form_Property_Step3PicturesForm(
 			array (
 				'idProperty' => $idProperty,
 				'digestKey'  => $newDigestKey
@@ -199,7 +216,11 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 				$modelPhoto = new Common_Model_Photo();
 				$idPhoto 	= $modelPhoto->addPhotoByPropertyId($idProperty, $params);
 				try {
-					$destinationDirectory = $modelPhoto->generateDirectoryStructure($idProperty, $idPhoto, $vfrConfig['photo']['images_original_dir']);
+					$destinationDirectory = $modelPhoto->generateDirectoryStructure(
+                        $idProperty,
+                        $idPhoto,
+                        $vfrConfig['photo']['images_original_dir']
+                    );
 				} catch (Vfr_Exception $e) {
 					throw $e;
 				}
@@ -212,7 +233,14 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 					// Rename Uploaded File
 					$renameFile 		= $idPhoto . '.' . strtolower($typeString);
 					$fullFilePath 		= $destinationDirectory . DIRECTORY_SEPARATOR . $renameFile;			
-					$filterFileRename 	= new Zend_Filter_File_Rename(array('target' => $fullFilePath, 'overwrite' => false));
+					
+                    $filterFileRename 	= new Zend_Filter_File_Rename(
+                        array (
+                            'target'    => $fullFilePath,
+                            'overwrite' => false
+                        )
+                    );
+                    
 					$transferAdapter->addfilter($filterFileRename);
 					$transferAdapter->receive();
 				} catch (Zend_File_Transfer_Exception $e) {
@@ -226,12 +254,13 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$propertyRow = $propertyModel->getPropertyById($idProperty);
 		$photoRowset = $propertyModel->getAllPhotosByPropertyId($idProperty);
 		
-		$this->view->assign(array (
-			'photoRowset'			=> $photoRowset,
-			'photoCount'			=> sizeof($photoRowset),
-			'propertyRow'			=> $propertyRow,
-			'imagesOriginalDir'		=> $vfrConfig['photo']['images_original_dir'],
-			'maxLimitPerProperty'	=> $vfrConfig['photo']['max_limit_per_property']
+		$this->view->assign(
+            array (
+                'photoRowset'         => $photoRowset,
+                'photoCount'          => sizeof($photoRowset),
+                'propertyRow'         => $propertyRow,
+                'imagesOriginalDir'   => $vfrConfig['photo']['images_original_dir'],
+                'maxLimitPerProperty' => $vfrConfig['photo']['max_limit_per_property']
 		));
 		
 		if ($this->view->photoCount < $this->view->maxLimitPerProperty)
@@ -244,20 +273,27 @@ class AdvertiserPropertyController extends Zend_Controller_Action
         $digestKey  = $this->getRequest()->getParam('digestKey');
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 		
 		$propertyModel = new Common_Model_Property();
         $calendarModel = new Common_Model_Calendar();
+        
 		$propertyRow = $propertyModel->getPropertyById($idProperty);
         $idCalendar  = $propertyModel->getCalendarIdByPropertyId($idProperty);
 		
 		$newDigestKey = Vfr_DigestKey::generate(array($idProperty));
 		
-		//var_dump($this->_getAllParams());
-        $form = new Frontend_Form_Step4RatesForm(array(
-			'idProperty' => $idProperty,
-			'digestKey'  => $newDigestKey));
+		$form = new Controlpanel_Form_Property_Step4RatesForm(
+            array (
+                'idProperty' => $idProperty,
+                'digestKey'  => $newDigestKey
+            )
+        );
 		
 		// Enable jQuery to pickup the headers etc
 		ZendX_JQuery::enableForm($form);
@@ -270,9 +306,15 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 			//var_dump($request->getParam('rates'));
         	if ($form->isValid($request->getPost())) {
 				$calendarModel->addNewRate($idCalendar, $form->getValues());
-				$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend',
-													   array('idProperty' => $idProperty,
-															 'digestKey'  => $newDigestKey));
+				$this->_helper->redirector->gotoSimple(
+                    'step4-rates',
+                    'property',
+                    'controlpanel',
+					array (
+                        'idProperty' => $idProperty,
+						'digestKey'  => $newDigestKey
+                    )
+                );
 			}
 		}
 		
@@ -283,13 +325,15 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 
 		$this->view->headScript()->appendFile('/js/vfr/step4-rates.js');
 
-		$this->view->assign(array(
-			'form'		    => $form,
-			'propertyRow'	=> $propertyRow,
-			'rentalBasis'	=> $calendarRow->rentalBasis,
-			'baseCurrency'	=> $calendarRow->currencyCode,
-			'ratesRowset'	=> $ratesRowset
-		));
+		$this->view->assign(
+            array (
+                'form'		    => $form,
+                'propertyRow'	=> $propertyRow,
+                'rentalBasis'	=> $calendarRow->rentalBasis,
+                'baseCurrency'	=> $calendarRow->currencyCode,
+                'ratesRowset'	=> $ratesRowset
+            )
+        );
 	}
 	
 	public function step5AvailabilityAction()
@@ -298,7 +342,11 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$digestKey  = $this->getRequest()->getParam('digestKey');
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 		
 		$propertyModel = new Common_Model_Property();
@@ -308,10 +356,12 @@ class AdvertiserPropertyController extends Zend_Controller_Action
         $idCalendar  = $propertyModel->getCalendarIdByPropertyId($idProperty);
         
 		$newDigestKey = Vfr_DigestKey::generate(array($idProperty));
-		$form = new Frontend_Form_Step5AvailablityForm(array(
-			'idProperty' => $idProperty,
-			'digestKey'	 => $newDigestKey
-		));
+		$form = new Controlpanel_Form_Property_Step5AvailablityForm(
+            array (
+                'idProperty' => $idProperty,
+                'digestKey'	 => $newDigestKey
+            )
+        );
 		
 		// Enable jQuery to pickup the headers etc
 		ZendX_JQuery::enableForm($form);
@@ -322,8 +372,15 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
 				$calendarModel->addNewBooking($idCalendar, $form->getValues());
-				$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend', array('idProperty' => $idProperty,
-																													  'digestKey'  => $newDigestKey));
+				$this->_helper->redirector->gotoSimple(
+                    'step5-availability',
+                    'property',
+                    'controlpanel',
+                    array (
+                        'idProperty' => $idProperty,
+						'digestKey'  => $newDigestKey
+                    )
+                );
 			}
 		}
 		
@@ -338,17 +395,11 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		));
 	}
 	
-	public function completeConfirmationAction()
-	{
-	}
+	public function completeConfirmationAction() {}
 
-	public function updateSendConfirmationAction()
-	{
-	}
+	public function updateSendConfirmationAction() {}
 
-    public function addAction()
-    {
-    }
+    public function addAction() {}
 	
 	public function progressStep4Action()
 	{
@@ -356,15 +407,29 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$digestKey  = $this->getRequest()->getParam('digestKey');
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 		
 		$propertyModel = new Common_Model_Property();
-		$propertyModel->updatePropertyStatus($idProperty, Common_Resource_Property::STEP_4_RATES);
 		
-		$newDigestKey = Vfr_DigestKey::generate(array($idProperty));
-		$this->_helper->redirector->gotoSimple('step4-rates', 'advertiser-property', 'frontend', array('idProperty' => $idProperty,
-																									   'digestKey'  => $digestKey));
+        $propertyModel->updatePropertyStatus(
+            $idProperty,
+            Common_Resource_Property::STEP_4_RATES
+        );
+		
+		$this->_helper->redirector->gotoSimple(
+            'step4-rates',
+            'property',
+            'controlpanel',
+            array (
+                'idProperty' => $idProperty,
+				'digestKey'  => Vfr_DigestKey::generate(array($idProperty))
+            )
+        );
 	}
 	
 	public function progressStep5Action()
@@ -373,15 +438,29 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$digestKey  = $this->getRequest()->getParam('digestKey');
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 		
 		$propertyModel = new Common_Model_Property();
-		$propertyModel->updatePropertyStatus($idProperty, Common_Resource_Property::STEP_5_AVAILABILITY);
+        
+		$propertyModel->updatePropertyStatus(
+            $idProperty,
+            Common_Resource_Property::STEP_5_AVAILABILITY
+        );
 		
-		$newDigestKey = Vfr_DigestKey::generate(array($idProperty));
-		$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend', array('idProperty' => $idProperty,
-																											  'digestKey'  => $digestKey));
+		$this->_helper->redirector->gotoSimple(
+            'step5-availability',
+            'property',
+            'controlpanel',
+            array (
+                'idProperty' => $idProperty,
+				'digestKey'  => Vfr_DigestKey::generate(array($idProperty))
+            )
+        );
 	}
 	
 	public function sendForInitialApprovalAction()
@@ -390,16 +469,28 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$digestKey  = $this->getRequest()->getParam('digestKey');
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 		
 		$propertyModel = new Common_Model_Property();
-		$propertyModel->updatePropertyStatus($idProperty, Common_Resource_Property::COMPLETE)
-					  ->setAwaitingApproval($idProperty);
-	
-		$newDigestKey = Vfr_DigestKey::generate(array($idProperty));
-		$this->_helper->redirector->gotoSimple('complete-confirmation', 'advertiser-property', 'frontend', array('idProperty' => $idProperty,
-																												 'digestKey'  => $digestKey));
+		$propertyModel->updatePropertyStatus(
+            $idProperty,
+            Common_Resource_Property::COMPLETE
+        )->setAwaitingApproval($idProperty);
+
+		$this->_helper->redirector->gotoSimple(
+            'complete-confirmation',
+            'property',
+            'controlpanel',
+            array (
+                'idProperty' => $idProperty,
+				'digestKey'  => Vfr_DigestKey::generate(array($idProperty))
+            )
+        );
 	}
 	
 	public function sendForUpdateApprovalAction()
@@ -408,14 +499,24 @@ class AdvertiserPropertyController extends Zend_Controller_Action
 		$digestKey  = $this->getRequest()->getParam('digestKey');
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 		
 		$propertyModel = new Common_Model_Property();
 		$propertyModel->advertiserSendForUpdateApproval($idProperty);
 		
-		$newDigestKey = Vfr_DigestKey::generate(array($idProperty));
-		$this->_helper->redirector->gotoSimple('update-send-confirmation', 'advertiser-property', 'frontend', array('idProperty' => $idProperty,
-																													'digestKey'  => $digestKey));	
+		$this->_helper->redirector->gotoSimple(
+            'update-send-confirmation',
+            'property',
+            'controlpanel',
+            array (
+                'idProperty' => $idProperty,
+				'digestKey'  => Vfr_DigestKey::generate(array($idProperty))
+            )
+        );
 	}
 }

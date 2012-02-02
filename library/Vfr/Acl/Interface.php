@@ -1,4 +1,3 @@
 <?php
-interface Vfr_Acl_Interface
-{
-}
+interface Vfr_Acl_Interface {}
+

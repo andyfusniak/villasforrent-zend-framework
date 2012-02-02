@@ -23,7 +23,7 @@ class Vfr_Controller_Helper_Acl extends Zend_Controller_Action_Helper_Abstract
 	{
 		$module = ucfirst($this->getRequest()->getModuleName());
 		$acl = $module . '_Model_Acl_' . $module;
-
+        
         if (class_exists($acl)) {
             $this->_acl = new $acl;
         }

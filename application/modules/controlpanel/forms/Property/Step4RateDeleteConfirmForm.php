@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_Step4RateDeleteConfirmForm extends Zend_Form
+class Controlpanel_Form_Property_Step4RateDeleteConfirmForm extends Zend_Form
 {
 	protected $_idProperty;
 	protected $_idRate;
@@ -29,7 +29,7 @@ class Frontend_Form_Step4RateDeleteConfirmForm extends Zend_Form
 	public function init()
 	{ 
 		$this->setMethod('post');
-		$this->setAction('/advertiser-rates/delete-confirm');
+		$this->setAction('/controlpanel/rates/delete-confirm');
 		
 		$this->addElement('hidden', 'idProperty', array (
 			'value'	=> $this->_idProperty

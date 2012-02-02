@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_HolidayType extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     private $_holidayTypes = null;
     
     public function holidayType($idHolidayType)

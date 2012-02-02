@@ -1,8 +1,7 @@
 <?php
-class Frontend_Form_Step4BaseCurrency extends Zend_Form
+class Controlpanel_Form_Property_Step4BaseCurrency extends Zend_Form
 {
-	protected $_idProperty;
-	
+	protected $_idProperty;	
 	protected $_digestKey = null;
 	
     public function __construct($options = null)
@@ -23,7 +22,7 @@ class Frontend_Form_Step4BaseCurrency extends Zend_Form
     public function init()
     {
         $this->setMethod('post');
-		$this->setAction('/advertiser-rates/base-currency');
+		$this->setAction('/controlpanel/rates/base-currency');
         
 		$this->addElement('hidden', 'idProperty', array(
 			'value' => $this->_idProperty,

@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_TinyThumb extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     public function tinyThumb($idProperty, $idPhoto, $width, $height, $caption)
     {
         $idPhoto = (int) $idPhoto;
@@ -9,6 +11,8 @@ class Vfr_View_Helper_TinyThumb extends Zend_View_Helper_Abstract
         $photoModel = new Common_Model_Photo();
         $evaluation = $photoModel->getPhotoEvaluation($width, $height);
        
+        //var_dump($evaluation);
+        
         switch ($evaluation['aspectString'])
         {
             case '1:1':
@@ -37,7 +41,15 @@ class Vfr_View_Helper_TinyThumb extends Zend_View_Helper_Abstract
             break;
         
             default:
-                $size = '80x80';
+                if ($evaluation['orientation'] == 'portrait') {
+                    $height = 60;
+                    $width  = intval( round($height * $evaluation['aspect']) );
+                    //var_dump($width);
+                    $size = strval($width) . 'x' . strval($height);
+                    //var_dump($size);
+                } else {
+                    $size = '80x80';
+                }
         }
         
         // get the group container dir        

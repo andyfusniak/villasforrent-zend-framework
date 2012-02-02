@@ -72,7 +72,10 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
 			
 			if ($advertiserRow == null)
 				throw new Vfr_Exception_AdvertiserNotFound();
-				
+			
+			//if ($advertiserRow->emailLastConfirmed == null)
+			//	throw new Vfr_Exception_AdvertiserEmailNotConfirmed();
+			
 			// 8 is the iteration count
 			$blowfishHasher = new Vfr_BlowfishHasher(8);
 			
@@ -152,6 +155,20 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
         }
     }
 	
+	public function getAdvertiserList($advertiserList)
+	{
+		try {
+			$query = $this->select()
+		              ->where('idAdvertiser IN (?)', $advertiserList);
+					  
+			$advertiserRowset = $this->fetchAll($query);
+			
+			return $advertiserRowset;
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
 	public function getAdvertiserByEmail($emailAddress)
 	{
 		try {
@@ -165,6 +182,7 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
 			throw $e;
 		}
 	}
+	
 	
 	//
 	// UPDATE
@@ -204,8 +222,104 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
 		$where = $this->getAdapter()->quoteInto('idAdvertiser=?', $idAdvertiser);
         try {
             $query = $this->update($params, $where);
+			
+			return $this;
         } catch (Exception $e) {
             throw $e;
         }
+	}
+	
+	public function changeEmailAddress($idAdvertiser, $newEmailAddress)
+	{
+		$params = array (
+			'emailAddress'   => $newEmailAddress,
+			'updated' 		 => new Zend_Db_Expr('NOW()'),
+			'lastModifiedBy' => 'system'
+		);
+		
+		$where = $this->getAdapter()->quoteInto(
+			'idAdvertiser=?', $idAdvertiser
+		);
+		
+		try {
+			$query = $this->update($params, $where);
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
+	public function updateEmailLastConfirmed($idAdvertiser)
+	{
+		$nowExpr = new Zend_Db_Expr('NOW()');
+		
+		$params = array (
+			'emailLastConfirmed' => $nowExpr,
+			'updated'			 => $nowExpr
+		);
+		
+		$where = $this->getAdapter()->quoteInto('idAdvertiser=?', $idAdvertiser);
+        try {
+            $query = $this->update($params, $where);
+			
+			return $this;
+        } catch (Exception $e) {
+            throw $e;
+        }
+	}
+	
+	public function updateChangeEmailAddress($idAdvertiser, $changeEmailAddress)
+	{
+		$nowExpr = new Zend_Db_Expr('NOW()');
+		
+		$params = array (
+			'changeEmailAddress' => $changeEmailAddress,
+			'updated' => $nowExpr
+		);
+		
+		$where = $this->getAdapter()->quoteInto('idAdvertiser=?', $idAdvertiser);
+		try {
+			$query = $this->update($params, $where);
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
+	public function switchToChangeEmailAddress($idAdvertiser)
+	{
+		// the last part of the clause is to avoid orphaned accounts
+		$query = $this->getAdapter()->quoteInto("
+			UPDATE Advertisers
+			SET emailAddress = changeEmailAddress,
+			changeEmailAddress = NULL,
+			updated = NOW()
+			WHERE idAdvertiser=? AND changeEmailAddress IS NOT NULL",
+			$idAdvertiser
+		);
+		
+		try {
+            $this->_db->query($query);
+        } catch (Exception $e) {
+			// if it is a Duplicate entry code 
+			if ($e->getCode() == 1062)
+				throw new Vfr_Exception_Advertiser_Db_DuplicateEntry($e);
+				
+			throw $e;
+        }
+	}
+	
+	public function resetChangeEmailAddress($idAdvertiser)
+	{
+		$params = array (
+			'changeEmailAddress' => new Zend_Db_Expr('NULL'),
+			'updated' 			 => new Zend_Db_Expr('NOW()'),
+			'lastModifiedBy'	 => 'system'
+		);
+		
+		$where = $this->getAdapter()->quoteInto('idAdvertiser=?', $idAdvertiser);
+		try {
+			$query = $this->update($params, $where);
+		} catch (Exception $e) {
+			throw $e;
+		}
 	}
 }

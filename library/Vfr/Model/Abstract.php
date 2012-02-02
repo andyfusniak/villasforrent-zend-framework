@@ -65,4 +65,3 @@ abstract class Vfr_Model_Abstract implements Vfr_Model_Interface
 		return ucfirst($inflector->filter(array('class' => $name)));
 	}
 }
-

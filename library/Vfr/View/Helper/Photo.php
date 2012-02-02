@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_Photo extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     public function photo($photoRow, $x, $y)
     {
         if (!$photoRow)

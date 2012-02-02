@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_Step5AvailabilityDeleteConfirmForm extends Zend_Form
+class Frontend_Form_Property_Step5AvailabilityDeleteConfirmForm extends Zend_Form
 {
 	protected $_idProperty;
 	protected $_idAvailability;
@@ -29,7 +29,7 @@ class Frontend_Form_Step5AvailabilityDeleteConfirmForm extends Zend_Form
 	public function init()
 	{ 
 		$this->setMethod('post');
-		$this->setAction('/advertiser-availability/delete-confirm');
+		$this->setAction('/controlpanel/availability/delete-confirm');
 		
 		$this->addElement('hidden', 'idProperty', array (
 			'value'	=> $this->_idProperty

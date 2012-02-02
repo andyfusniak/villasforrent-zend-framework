@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_TestForm extends Zend_Form
+class Controlpanel_Form_TestForm extends Zend_Form
 {
 	public function init()
 	{

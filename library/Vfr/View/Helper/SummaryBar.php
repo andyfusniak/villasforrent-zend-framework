@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_SummaryBar extends Zend_View_Helper_Abstract
-{   
+{
+    const version = '1.0.0';
+       
     public function summaryBar($propertyRow)
     {
         $idProperty = $propertyRow->idProperty;
@@ -42,8 +44,8 @@ class Vfr_View_Helper_SummaryBar extends Zend_View_Helper_Abstract
                     case 'content':
                         $updateContentLnk = '<a class="summary_link" href="'
 							. $this->view->url(array(
-							    'module'     => 'frontend',
-								'controller' => 'advertiser-property',
+							    'module'     => 'controlpanel',
+								'controller' => 'property',
 								'action' 	 => 'step2-content',
 								'idProperty' => $propertyRow->idProperty,
                                 'mode'		 => 'update',
@@ -57,8 +59,8 @@ class Vfr_View_Helper_SummaryBar extends Zend_View_Helper_Abstract
 							($propertyRow->awaitingApproval == 0)) {
                             $sendForUpdateApprovalLnk = '<a class="summary_link2" href="'
 							    . $this->view->url(array(
-									'module'     => 'frontend',
-								    'controller' => 'advertiser-property',
+									'module'     => 'controlpanel',
+								    'controller' => 'property',
 									'action'     => 'send-for-update-approval',
 									'idProperty' => $propertyRow->idProperty,
 									'digestKey'  => Vfr_DigestKey::generate(array(
@@ -78,8 +80,8 @@ class Vfr_View_Helper_SummaryBar extends Zend_View_Helper_Abstract
                     case 'pictures':
                         $updatePhotoLnk = '<a class="summary_link" href="'
 						    . $this->view->url(array(
-								'module'     => 'frontend',
-							    'controller' => 'advertiser-property',
+								'module'     => 'controlpanel',
+							    'controller' => 'property',
                                 'action'     => 'step3-pictures',
                                 'idProperty' => $propertyRow->idProperty,
 								'digestKey'  => Vfr_DigestKey::generate(array(
@@ -93,8 +95,8 @@ class Vfr_View_Helper_SummaryBar extends Zend_View_Helper_Abstract
                     case 'rates':
                         $updateRatesLnk = '<a class="summary_link" href="'
 						    . $this->view->url(array(
-							    'module'     => 'frontend',
-                                'controller' => 'advertiser-property',
+							    'module'     => 'controlpanel',
+                                'controller' => 'property',
 								'action'     => 'step4-rates',
 								'idProperty' => $propertyRow->idProperty,
 								'digestKey'  => Vfr_DigestKey::generate(array(
@@ -108,8 +110,8 @@ class Vfr_View_Helper_SummaryBar extends Zend_View_Helper_Abstract
                     case 'availability':
                         $updateAvailabilityLnk = '<a class="summary_link" href="'
 						    . $this->view->url(array(
-							    'module'     => 'frontend',
-                                'controller' => 'advertiser-property',
+							    'module'     => 'controlpanel',
+                                'controller' => 'property',
                                 'action'     => 'step5-availability',
                                 'idProperty' => $propertyRow->idProperty,
 								'digestKey'  => Vfr_DigestKey::generate(array(

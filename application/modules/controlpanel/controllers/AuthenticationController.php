@@ -1,5 +1,5 @@
 <?php
-class AdvertiserAuthenticationController extends Zend_Controller_Action
+class Controlpanel_AuthenticationController extends Zend_Controller_Action
 {
     public function init()
     {
@@ -14,88 +14,62 @@ class AdvertiserAuthenticationController extends Zend_Controller_Action
     
     public function loginAction()
     {
-		// check to see if the administrator is already logged in
+		// check to see if the advertiser is already logged in
 		if (Zend_Auth::getInstance()->hasIdentity()) {
-			//var_dump(Zend_Auth::getInstance()->getIdentity());
-			//exit;
-			$this->_logger->log("Frontend_AuthenticationController already logged in, redirecting away", Zend_Log::DEBUG);
-			$this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-account/home');
+		    $this->_helper->redirector->gotoSimple(
+                'home',
+                'account',
+                'controlpanel'
+            );
 		}
 		
-		$this->_logger->log(
-            "Frontend_AdvertiserAuthenticationController creating new Frontend_Form_AdvertiserLoginForm",
-							Zend_Log::DEBUG);
-		
 		$request = $this->getRequest();
-		$form = new Frontend_Form_Advertiser_LoginForm(
+		$form = new Controlpanel_Form_LoginForm(
 			 array (
                 'emailAddress' => $request->getParam('emailAddress', null)
             )
 		);
 		
-		
-		//var_dump($this->_getAllParams());
-		
-		if ($request->isPost()) {
-			
+		if ($request->isPost()) {	
 			if ($form->isValid($this->getRequest()->getPost())) {
-				$authAdapter = $this->getAuthAdapter();
 				
 				$emailAddress = $form->getValue('emailAddress');
 				$passwd 	  = $form->getValue('passwd');
 				
-				$advertiserModel = new Common_Model_Advertiser();
 				try {
-					//var_dump($emailAddress, $passwd);
+                    $advertiserModel = new Common_Model_Advertiser();
 					$advertiserRow = $advertiserModel->login($emailAddress, $passwd);
 					
-					$auth = Zend_Auth::getInstance();
+                    $auth = Zend_Auth::getInstance();
 					$auth->getStorage()->write($advertiserRow);
 					
-					// update the last logged in date to now
-					$advertiserModel->updateLastLogin($advertiserRow->idAdvertiser);
-					
-					$this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-account/home');
+                    $this->_helper->redirector->gotoSimple(
+                        'home',
+                        'account',
+                        'controlpanel'
+                    );    
                 //} catch (Vfr_Exception_AdvertiserEmailNotConfirmed $e) {
-                //    $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-email-confirmation/activation-required');
+                //    redit to /controlpanel/email-confirmation/activation-required
 				} catch (Vfr_Exception_AdvertiserNotFound $e) {
-					// advertiser failed to login
-					//var_dump('advertiser not found');
 					$this->view->errorMessage = "Email address and password combination incorrect";
-					return;
 				} catch (Vfr_Exception_AdvertiserPasswordFail $e) {
 					//var_dump('password incorrect');
 					$this->view->errorMessage = "Email address and password combination incorrect";
-					return;
 				} catch (Vfr_Exception_BlowfishInvalidHash $e) {
 					$this->view->errorMessage = "You need to reset your password";
 				}
 			}
 		}
         
-		$this->view->form = $form;
+		$this->view->assign(
+            array (
+                'form' => $form
+            )
+        );
 	}
     
     public function logoutAction()
     {
-		$this->_logger->log("AdvertiserAuthenticationController logoutAction() start", Zend_Log::DEBUG);
-		
-		$this->_logger->log("AdvertiserAuthenticationController clearing identity", Zend_Log::DEBUG);
-       
         Zend_Auth::getInstance()->clearIdentity();
-        
-		$this->_logger->log("AdvertiserAuthenticationController calling function \$this->_redirect", Zend_Log::DEBUG);
-		//$this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-account/home/');
-		
-		$this->_logger->log("AdvertiserAuthenticationController logoutAction() end", Zend_Log::DEBUG);
-    }
-
-    private function getAuthAdapter()
-    {
-        $authAdapter = new Zend_Auth_Adapter_DbTable(Zend_Db_Table::getDefaultAdapter());
-        $authAdapter->setTableName('Advertisers')
-                    ->setIdentityColumn('emailAddress')
-					->setCredentialColumn('passwd');
-		return $authAdapter;
     }
 }

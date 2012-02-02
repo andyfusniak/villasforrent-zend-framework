@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_Advertiser_LoginForm extends Zend_Form
+class Controlpanel_Form_LoginForm extends Zend_Form
 {
 	protected $emailAddress;
 	
@@ -16,7 +16,7 @@ class Frontend_Form_Advertiser_LoginForm extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAction('/advertiser-authentication/login');
+		$this->setAction('/controlpanel/authentication/login');
 		
 		$this->addElement('text', 'emailAddress', array(
 			'required' => true,

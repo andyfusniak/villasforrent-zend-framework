@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_PropertyTinyThumb extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     public function propertyTinyThumb($idProperty, $photoRowsetLookup=null)
     {
         //var_dump($idProperty);

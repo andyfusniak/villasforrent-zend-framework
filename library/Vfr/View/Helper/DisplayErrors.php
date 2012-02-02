@@ -6,6 +6,8 @@ require_once 'Zend/View/Helper/FormElement.php';
 
 class Vfr_View_Helper_DisplayErrors extends Zend_View_Helper_FormElement
 {
+    const version = '1.0.0';
+
     /**
      * @var Zend_Form_Element
      */

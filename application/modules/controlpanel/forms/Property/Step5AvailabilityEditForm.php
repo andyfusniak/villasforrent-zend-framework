@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_Step5AvailabilityEditForm extends Zend_Form
+class Controlpanel_Form_Property_Step5AvailabilityEditForm extends Zend_Form
 {
     protected $_idProperty;
     protected $_idAvailability;
@@ -35,7 +35,7 @@ class Frontend_Form_Step5AvailabilityEditForm extends Zend_Form
     public function init()
     {
         $this->setMethod('post');
-        $this->setAction('/advertiser-availability/edit');
+        $this->setAction('/controlpanel/availability/edit');
         
         $this->addPrefixPath('Vfr_Form', 'Vfr/Form');
         $this->addElementPrefixPath('Vfr_Validate', 'Vfr/Validate', 'validate');

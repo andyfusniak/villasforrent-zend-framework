@@ -1,6 +1,8 @@
 <?php
 class Vfr_Validate_PasswordConfirmation extends Zend_Validate_Abstract
 {
+    const version = '1.0.0';
+
 	const NOT_MATCH = 'notMatch';
 	
 	protected $_messageTemplates = array(

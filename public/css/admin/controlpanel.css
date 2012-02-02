@@ -190,25 +190,126 @@ span.green-tick {
 	background-repeat: no-repeat
 }
 
+h1 {
+	margin: 0;
+	padding:0;
+	margin-bottom: 10px;
+	font-size: 131%;
+	font-family: Georgia;
+	border-bottom: 1px solid #bbb
+}
 
-/* Advertisers */
+h2 {
+	margin: 0;
+	padding:0;
+	margin-bottom: 10px;
+	font-size: 121.1%;
+	font-family: Georgia;
+}
 
-table#advertiser-list {
+h3 {
+	margin: 0;
+	padding: 0;
+	margin-bottom: 5px;
+	font-size: 116%;
+	font-family: Georgia;
+}
+
+.system-check-table {
+	margin: 0;
+	margin-bottom: 20px;
+}
+
+.system-check-table .description {
+	width: 300px
+}
+
+.system-check-table .tickcell {
+	margin: 0;
+	margin-bottom: 8px
+}
+
+.system-check-table .leftpadding {
+	padding-left: 20px;
+}
+
+.system-check-table .datavalue {
+	font-size: 93%;
+	font-weight: bold;
+	font-family: "courier new";
+}
+
+/* System Component Versions */
+.system-versions-table {
+	margin: 0;
+	margin-bottom: 20px;
+}
+.system-versions-table .component-name {
+	width: 250px;
+	vertical-align: top;
+}
+.system-versions-table .description {
+	width: 400px;
+	padding-left: 20px;
+	vertical-align: top
+}
+.system-versions-table .version-number {
+	width: 40px;
+	padding-left: 20px;
+	vertical-align: top
+}
+
+
+/* Advertisers and properties */
+table#advertiser-list, table#property-list {
 	width: 100%;
 }
-table#advertiser-list tr {
-	height: 1.8em
+table#advertiser-list tr, table#property-list tr {
+	height: 2.5em
 }
-table#advertiser-list tr.odd {
+table#advertiser-list tr.odd, table#property-list tr.odd {
 	background-color: #eee
 }
-table#advertiser-list tr.even {
+table#advertiser-list tr.even, table#property-list tr.even {
 	background-color: #fff
 }
 
-/* View Update Approval */
+span.status-complete {
+	color:#090
+}
+span.status-err {
+	color:#900
+}
 
+/* View Update Approval */
 div#view-update-approval h2 {
 	color: #009;
 	font-weight: bold
 }
+
+/* Featured */
+table#featured-property-list {
+	width: 100%
+}
+table#featured-property-list tr {
+	height: 1.8em
+}
+table#featured-property-list tr.odd {
+	background-color: #eee
+}
+table#featured-property-list tr.even {
+	background-color: #fff
+}
+
+table#featured-property-list tr.inprogress {
+	background-color: green;
+}
+
+table#featured-property-list tr.pending {
+	background-color: yellow;
+}
+
+table#featured-property-list tr.expired {
+	background-color: red;
+}
+

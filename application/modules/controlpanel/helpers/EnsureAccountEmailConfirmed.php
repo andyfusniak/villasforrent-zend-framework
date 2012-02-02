@@ -1,5 +1,5 @@
 <?php
-class Frontend_Helper_EnsureAccountEmailConfirmed extends Zend_Controller_Action_Helper_Abstract
+class Controlpanel_Helper_EnsureAccountEmailConfirmed extends Zend_Controller_Action_Helper_Abstract
 {
     private $_advertiserRow;
     
@@ -14,16 +14,14 @@ class Frontend_Helper_EnsureAccountEmailConfirmed extends Zend_Controller_Action
     {
         if ($this->_advertiserRow == null)
             return;
-        
-        $emailLastConfirmed = $this->_advertiserRow->emailLastConfirmed;
-        
-        if ($emailLastConfirmed == null) {
+                
+        if (null === $this->_advertiserRow->emailLastConfirmed) {
             $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
-            $redirector->setGoToUrl(
-                Zend_Controller_Front::getInstance()->getBaseUrl()
-                . '/advertiser-resend-confirmation/resend'
-            );
-            $redirector->redirectAndExit();   
+            $redirector->gotoSimple(
+                'resend',
+                'resend-confirmation',
+                'controlpanel'
+            );   
         }
     }
     

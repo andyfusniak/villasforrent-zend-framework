@@ -266,6 +266,16 @@ div.success{  border-color:#060; background-color:#cfc; background-image:url("/t
 div.warning { border-color:#c60; background-color:#ff9; background-image:url("/templates/images/icons/red_cross_trans.png"); color:#c60 }
 div.error { border-color:#c00; background-color:#f99; background-image:url("/templates/images/icons/red_cross_trans.png"); color:#c00 }
 
+div.successbox {
+    margin: 0;
+    margin-top: 20px;
+    border: 1px solid #060;
+    background-color: #cfc;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
 p {
     color: #555;
@@ -273,11 +283,16 @@ p {
     margin-bottom: 10px;
     padding:0;
 }
+
+
 a { border:0; color:#3b5998; background-color:transparent; font-weight:normal; text-decoration:none }
 a:link {  }
 a:visited { }
 a:hover { text-decoration:underline }
 a:active { }
+
+a.breadcrumb { text-decoration: underline }
+h1 a.breadcrumb { color:#fff; text-decoration: underline }
 
 /*#footer1 { margin-top:16px; padding-top:6px; font-size:0.6em; width:980px;  border-top: 1px solid #d6d9de; color:#666 }
 #footer1 span.left { float:left }

@@ -1,6 +1,8 @@
 <?php
 class Vfr_Validate_PropertyUrl extends Zend_Validate_Abstract
 {
+    const version = '1.0.0';
+
     const URL_INVALID   = 'urlInvalid';
     const URL_IN_USE    = 'urlAlreadyInUse';
     

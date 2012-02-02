@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_Bytes extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     public function bytes($bytes, $precision=1)
     {
         if ($bytes == 0) {

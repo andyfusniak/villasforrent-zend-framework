@@ -1,6 +1,8 @@
 <?php
 class Vfr_Validate_UniqueAdvertiserEmail extends Zend_Validate_Abstract
 {
+    const version = '1.0.0';
+
 	const EMAIL_EXISTS = 'emailExists';
 	
 	protected $_messageTemplates = array(

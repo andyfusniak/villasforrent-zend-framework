@@ -1,13 +1,18 @@
 #!/bin/bash
 cd /var/www/zendvfr
 
-directory="./data"
-if [ ! -d $directory ]; then
+if [ ! -d "./data" ]; then
 	mkdir data
 	mkdir data/logs
-	touch data/logs/application.log
-    mkdir data/session
+	
+    touch data/logs/application.log
 	chmod g+rw data/logs/application.log
+
+    mkdir data/session
+    chmod g+rw uploads
+
+    mkdir data/uploads
+    chmod g+rw data/uploads
 else
 	if [ ! -d "./data/logs" ]; then
 		mkdir data/logs

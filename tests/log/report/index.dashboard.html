@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="jquery.min.js" type="text/javascript"></script>
+    <script src="highcharts.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+          var classCoverageDistribution = new Highcharts.Chart({
+             chart: {
+                renderTo: 'classCoverageDistribution',
+                type: 'column'
+             },
+             title: {text: ''},
+             legend: {enabled: false},
+             credits: {enabled: false},
+             tooltip: {enabled: false},
+             xAxis: {
+                 labels: {style: {fontSize: '8px'}},
+                 categories: [
+                 '0%','0-10%','10-20%','20-30%','30-40%','40-50%','50-60%','60-70%','70-80%','80-90%','90-100%','100%'
+                 ]
+            },
+            yAxis: {
+                title: '',
+                labels: {style: {fontSize: '8px'}},
+            },
+            series: [{
+                data: [157,1,0,0,0,0,0,0,0,0,1,2]
+            }],
+          });
+
+        var classComplexity = new Highcharts.Chart({
+            chart: {
+              renderTo: 'classComplexity',
+              type: 'scatter'
+            },
+            title: {text: ''},
+            legend: {enabled: false},
+            credits: {enabled: false},
+            xAxis: {
+               labels: {enabled: false},
+            },
+            yAxis: {
+              title: '',
+              labels: {enabled: false},
+            },
+            tooltip: {
+                formatter: function() {
+                    return this.point.config[2];
+                }
+            },
+            series: [{
+              data: [[93.20987654321,11,"<a href=\"Bootstrap.php.html#2\">Bootstrap<\/a>"],[0,2,"<a href=\"Command.php.html#2\">Command<\/a>"],[0,6,"<a href=\"Cron.php.html#2\">Cron<\/a>"],[100,1,"<a href=\"modules_admin_Bootstrap.php.html#2\">Admin_Bootstrap<\/a>"],[0,3,"<a href=\"modules_admin_controllers_AdvertiserController.php.html#2\">Admin_AdvertiserController<\/a>"],[0,2,"<a href=\"modules_admin_controllers_AuthFailController.php.html#2\">Admin_AuthFailController<\/a>"],[0,1,"<a href=\"modules_admin_controllers_AutoLoginController.php.html#2\">Admin_AutoLoginController<\/a>"],[0,5,"<a href=\"modules_admin_controllers_BuildLocationsController.php.html#2\">Admin_BuildLocationsController<\/a>"],[0,4,"<a href=\"modules_admin_controllers_ChecksumsController.php.html#2\">Admin_ChecksumsController<\/a>"],[0,8,"<a href=\"modules_admin_controllers_ErrorController.php.html#3\">ErrorController<\/a>"],[0,4,"<a href=\"modules_admin_controllers_FeaturedController.php.html#2\">Admin_FeaturedController<\/a>"],[0,3,"<a href=\"modules_admin_controllers_IndexController.php.html#2\">Admin_IndexController<\/a>"],[0,1,"<a href=\"modules_admin_controllers_LocationController.php.html#2\">Admin_LocationController<\/a>"],[0,3,"<a href=\"modules_admin_controllers_MigratePhotosController.php.html#2\">Admin_MigratePhotosController<\/a>"],[0,26,"<a href=\"modules_admin_controllers_PropertyController.php.html#2\">Admin_PropertyController<\/a>"],[0,7,"<a href=\"modules_admin_controllers_SystemCheckController.php.html#2\">Admin_SystemCheckController<\/a>"],[0,1,"<a href=\"modules_admin_controllers_SystemVersionsController.php.html#2\">Admin_SystemVersionsController<\/a>"],[0,4,"<a href=\"modules_admin_forms_LocationSelectForm.php.html#2\">Admin_Form_LocationSelectForm<\/a>"],[0,3,"<a href=\"modules_admin_forms_PropertyApprovalForm.php.html#2\">Admin_Form_PropertyApprovalForm<\/a>"],[0,6,"<a href=\"modules_admin_forms_PropertyExpiryForm.php.html#2\">Admin_Form_PropertyExpiryForm<\/a>"],[0,3,"<a href=\"modules_admin_forms_PropertyUpdateApprovalForm.php.html#2\">Admin_Form_PropertyUpdateApprovalForm<\/a>"],[0,4,"<a href=\"modules_admin_forms_UrlNameForm.php.html#2\">Admin_Form_UrlNameForm<\/a>"],[0,4,"<a href=\"modules_admin_plugins_Auth.php.html#2\">Admin_Plugin_Auth<\/a>"],[0,2,"<a href=\"modules_admin_views_helpers_ApprovalLocation.php.html#2\">Admin_View_Helper_ApprovalLocation<\/a>"],[0,5,"<a href=\"modules_admin_views_helpers_ApproveProperty.php.html#2\">Admin_View_Helper_ApproveProperty<\/a>"],[0,2,"<a href=\"modules_admin_views_helpers_DirectionArrow.php.html#2\">Admin_View_Helper_DirectionArrow<\/a>"],[0,4,"<a href=\"modules_admin_views_helpers_FeaturedBoxLabel.php.html#2\">Admin_View_Helper_FeaturedBoxLabel<\/a>"],[0,5,"<a href=\"modules_admin_views_helpers_FeaturedStatusClass.php.html#2\">Admin_View_Helper_FeaturedStatusClass<\/a>"],[0,20,"<a href=\"modules_admin_views_helpers_LocationTree.php.html#2\">Admin_View_Helper_LocationTree<\/a>"],[0,2,"<a href=\"modules_admin_views_helpers_LocationUrl.php.html#2\">Admin_View_Helper_LocationUrl<\/a>"],[0,3,"<a href=\"modules_admin_views_helpers_PropertyExpiry.php.html#2\">Admin_View_Helper_PropertyExpiry<\/a>"],[0,2,"<a href=\"modules_admin_views_helpers_SecurePassword.php.html#2\">Admin_View_Helper_SecurePassword<\/a>"],[0,4,"<a href=\"modules_admin_views_helpers_ShowOnceForGroup.php.html#2\">Admin_View_Helper_ShowOnceForGroup<\/a>"],[0,2,"<a href=\"modules_admin_views_helpers_TickOrCross.php.html#2\">Admin_View_Helper_TickOrCross<\/a>"],[0,3,"<a href=\"modules_admin_views_helpers_ToggleDirection.php.html#2\">Admin_View_Helper_ToggleDirection<\/a>"],[0,8,"<a href=\"modules_api_controllers_PropertyCalendarController.php.html#2\">Api_PropertyCalendarController<\/a>"],[0,15,"<a href=\"modules_api_controllers_PropertyController.php.html#2\">Api_PropertyController<\/a>"],[0,8,"<a href=\"modules_api_controllers_PropertyRatesController.php.html#2\">Api_PropertyRatesController<\/a>"],[0,5,"<a href=\"modules_api_helpers_RestfulApi.php.html#2\">Api_Helper_RestfulApi<\/a>"],[0,2,"<a href=\"modules_api_plugins_RestAuth.php.html#2\">Api_Plugin_RestAuth<\/a>"],[0,1,"<a href=\"modules_common_models_Acl_Role_Admin.php.html#2\">Common_Model_Acl_Role_Admin<\/a>"],[0,1,"<a href=\"modules_common_models_Acl_Role_Advertiser.php.html#2\">Common_Model_Acl_Role_Advertiser<\/a>"],[0,1,"<a href=\"modules_common_models_Acl_Role_Guest.php.html#2\">Common_Model_Acl_Role_Guest<\/a>"],[0,1,"<a href=\"modules_common_models_Acl_Role_Member.php.html#2\">Common_Model_Acl_Role_Member<\/a>"],[0,0,"<a href=\"modules_common_models_Administrator.php.html#2\">Common_Model_Administrator<\/a>"],[0,31,"<a href=\"modules_common_models_Advertiser.php.html#2\">Common_Model_Advertiser<\/a>"],[0,1,"<a href=\"modules_common_models_Api.php.html#2\">Common_Model_Api<\/a>"],[0,21,"<a href=\"modules_common_models_Calendar.php.html#2\">Common_Model_Calendar<\/a>"],[0,0,"<a href=\"modules_common_models_CountryList.php.html#2\">Common_Model_CountryList<\/a>"],[0,0,"<a href=\"modules_common_models_Currency.php.html#2\">Common_Model_Currency<\/a>"],[0,0,"<a href=\"modules_common_models_DbTable_Fastlookups.php.html#2\">Common_Model_DbTable_Fastlookups<\/a>"],[0,2,"<a href=\"modules_common_models_DbTable_PropertyTypes.php.html#2\">Common_Model_DbTable_PropertyTypes<\/a>"],[0,0,"<a href=\"modules_common_models_DisapprovalStandardComments.php.html#2\">Common_Model_DisapprovalStandardComments<\/a>"],[0,0,"<a href=\"modules_common_models_IsoLanguageCodes.php.html#2\">Common_Model_IsoLanguageCodes<\/a>"],[0,13,"<a href=\"modules_common_models_Location.php.html#2\">Common_Model_Location<\/a>"],[0,0,"<a href=\"modules_common_models_Messages.php.html#2\">Common_Model_Messages<\/a>"],[0,31,"<a href=\"modules_common_models_Photo.php.html#2\">Common_Model_Photo<\/a>"],[0,92,"<a href=\"modules_common_models_Property.php.html#2\">Common_Model_Property<\/a>"],[0,2,"<a href=\"modules_common_models_System.php.html#2\">Common_Model_System<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Administrator.php.html#2\">Common_Resource_Administrator<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Administrator_Row.php.html#2\">Common_Resource_Administrators_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Administrator_Rowset.php.html#2\">Common_Resource_Administrators_Rowset<\/a>"],[0,21,"<a href=\"modules_common_models_resources_Advertiser.php.html#2\">Common_Resource_Advertiser<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Advertiser_Row.php.html#2\">Common_Resource_Advertiser_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Advertiser_Rowset.php.html#2\">Common_Resource_Advertiser_Rowset<\/a>"],[0,0,"<a href=\"modules_common_models_resources_AdvertiserApiAccount_Row.php.html#2\">Common_Resource_AdvertiserApiAccount_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_AdvertiserApiAccount_Rowset.php.html#2\">Common_Resource_AdvertiserApiAccount_Rowset<\/a>"],[0,3,"<a href=\"modules_common_models_resources_ApiAccount.php.html#2\">Common_Resource_ApiAccount<\/a>"],[0,0,"<a href=\"modules_common_models_resources_ApiAccount_Row.php.html#2\">Common_Resource_ApiAccount_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_ApiAccount_Rowset.php.html#2\">Common_Resource_ApiAccount_Rowset<\/a>"],[0,19,"<a href=\"modules_common_models_resources_Availability.php.html#2\">Common_Resource_Availability<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Availability_Row.php.html#2\">Common_Resource_Availability_Row<\/a>"],[0,1,"<a href=\"modules_common_models_resources_Availability_Rowset.php.html#2\">Common_Resource_Availability_Rowset<\/a>"],[0,13,"<a href=\"modules_common_models_resources_Calendar.php.html#2\">Common_Resource_Calendar<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Calendar_Row.php.html#2\">Common_Resource_Calendar_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Calendar_Rowset.php.html#2\">Common_Resource_Calendar_Rowset<\/a>"],[0,2,"<a href=\"modules_common_models_resources_Currency.php.html#2\">Common_Resource_Currency<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Currency_Row.php.html#2\">Common_Resource_Currency_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Currency_Rowset.php.html#2\">Common_Resource_Currency_Rowset<\/a>"],[0,4,"<a href=\"modules_common_models_resources_Facility.php.html#2\">Common_Resource_Facility<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Facility_Row.php.html#2\">Common_Resource_Facility_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Facility_Rowset.php.html#2\">Common_Resource_Facility_Rowset<\/a>"],[0,5,"<a href=\"modules_common_models_resources_FeaturedProperty.php.html#2\">Common_Resource_FeaturedProperty<\/a>"],[0,0,"<a href=\"modules_common_models_resources_FeaturedProperty_Row.php.html#2\">Common_Resource_FeaturedProperty_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_FeaturedProperty_Rowset.php.html#2\">Common_Resource_FeaturedProperty_Rowset<\/a>"],[0,1,"<a href=\"modules_common_models_resources_HolidayType.php.html#2\">Common_Resource_HolidayType<\/a>"],[0,20,"<a href=\"modules_common_models_resources_Location.php.html#2\">Common_Resource_Location<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Location_Row.php.html#2\">Common_Resource_Location_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Location_Rowset.php.html#2\">Common_Resource_Location_Rowset<\/a>"],[0,24,"<a href=\"modules_common_models_resources_Photo.php.html#2\">Common_Resource_Photo<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Photo_Row.php.html#2\">Common_Resource_Photo_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Photo_Rowset.php.html#2\">Common_Resource_Photo_Rowset<\/a>"],[0,66,"<a href=\"modules_common_models_resources_Property.php.html#2\">Common_Resource_Property<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Property_Row.php.html#2\">Common_Resource_Property_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Property_Rowset.php.html#2\">Common_Resource_Property_Rowset<\/a>"],[0,25,"<a href=\"modules_common_models_resources_PropertyContent.php.html#2\">Common_Resource_PropertyContent<\/a>"],[0,0,"<a href=\"modules_common_models_resources_PropertyContent_Row.php.html#2\">Common_Resource_PropertyContent_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_PropertyContent_Rowset.php.html#2\">Common_Resource_PropertyContent_Rowset<\/a>"],[0,1,"<a href=\"modules_common_models_resources_PropertyContentField.php.html#2\">Common_Resource_PropertyContentField<\/a>"],[0,17,"<a href=\"modules_common_models_resources_PropertyFacility.php.html#2\">Common_Resource_PropertyFacility<\/a>"],[0,0,"<a href=\"modules_common_models_resources_PropertyFacility_Row.php.html#2\">Common_Resource_PropertyFacility_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_PropertyFacility_Rowset.php.html#2\">Common_Resource_PropertyFacility_Rowset<\/a>"],[0,5,"<a href=\"modules_common_models_resources_PropertyType.php.html#2\">Common_Resource_PropertyType<\/a>"],[0,0,"<a href=\"modules_common_models_resources_PropertyType_Row.php.html#2\">Common_Resource_PropertyType_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_PropertyType_Rowset.php.html#2\">Common_Resource_PropertyType_Rowset<\/a>"],[0,21,"<a href=\"modules_common_models_resources_Rate.php.html#2\">Common_Resource_Rate<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Rate_Row.php.html#2\">Common_Resource_Rate_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Rate_Rowset.php.html#2\">Common_Resource_Rate_Rowset<\/a>"],[0,10,"<a href=\"modules_common_models_resources_Token.php.html#2\">Common_Resource_Token<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Token_Row.php.html#2\">Common_Resource_Token_Row<\/a>"],[0,1,"<a href=\"modules_common_models_resources_Token_Rowset.php.html#2\">Common_Resource_Token_Rowset<\/a>"],[0,4,"<a href=\"modules_common_models_resources_Trigger.php.html#2\">Common_Resource_Trigger<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Trigger_Row.php.html#2\">Common_Resource_Trigger_Row<\/a>"],[0,0,"<a href=\"modules_common_models_resources_Trigger_Rowset.php.html#2\">Common_Resource_Trigger_Rowset<\/a>"],[9.4339622641509,14,"<a href=\"modules_common_plugins_Layout.php.html#2\">Common_Plugin_Layout<\/a>"],[0,9,"<a href=\"modules_controlpanel_controllers_AccountController.php.html#2\">Controlpanel_AccountController<\/a>"],[0,10,"<a href=\"modules_controlpanel_controllers_AuthenticationController.php.html#2\">Controlpanel_AuthenticationController<\/a>"],[0,10,"<a href=\"modules_controlpanel_controllers_AvailabilityController.php.html#2\">Controlpanel_AvailabilityController<\/a>"],[0,10,"<a href=\"modules_controlpanel_controllers_ContinueController.php.html#2\">Controlpanel_ContinueController<\/a>"],[0,5,"<a href=\"modules_controlpanel_controllers_EmailConfirmationController.php.html#2\">Controlpanel_EmailConfirmationController<\/a>"],[0,20,"<a href=\"modules_controlpanel_controllers_ImageManagerController.php.html#2\">Controlpanel_ImageManagerController<\/a>"],[0,13,"<a href=\"modules_controlpanel_controllers_PasswordResetController.php.html#2\">Controlpanel_PasswordResetController<\/a>"],[0,40,"<a href=\"modules_controlpanel_controllers_PropertyController.php.html#2\">Controlpanel_PropertyController<\/a>"],[0,20,"<a href=\"modules_controlpanel_controllers_RatesController.php.html#2\">Controlpanel_RatesController<\/a>"],[0,6,"<a href=\"modules_controlpanel_controllers_RegistrationController.php.html#2\">Controlpanel_RegistrationController<\/a>"],[0,1,"<a href=\"modules_controlpanel_controllers_ResendConfirmationController.php.html#2\">Controlpanel_ResendConfirmationController<\/a>"],[0,2,"<a href=\"modules_controlpanel_forms_ChooseNewPasswordForm.php.html#2\">Controlpanel_Form_ChooseNewPasswordForm<\/a>"],[0,3,"<a href=\"modules_controlpanel_forms_LoginForm.php.html#2\">Controlpanel_Form_LoginForm<\/a>"],[0,2,"<a href=\"modules_controlpanel_forms_PasswordReminderForm.php.html#2\">Frontend_Form_PasswordReminderForm<\/a>"],[0,1,"<a href=\"modules_controlpanel_forms_PasswordResetForm.php.html#2\">Controlpanel_Form_PasswordResetForm<\/a>"],[0,5,"<a href=\"modules_controlpanel_forms_Property_Step1LocationForm.php.html#2\">Controlpanel_Form_Property_Step1LocationForm<\/a>"],[0,11,"<a href=\"modules_controlpanel_forms_Property_Step2ContentForm.php.html#2\">Controlpanel_Form_Property_Step2ContentForm<\/a>"],[0,4,"<a href=\"modules_controlpanel_forms_Property_Step3PicturesForm.php.html#2\">Controlpanel_Form_Property_Step3PicturesForm<\/a>"],[0,5,"<a href=\"modules_controlpanel_forms_Property_Step4BaseCurrency.php.html#2\">Controlpanel_Form_Property_Step4BaseCurrency<\/a>"],[0,5,"<a href=\"modules_controlpanel_forms_Property_Step4RateDeleteConfirmForm.php.html#2\">Controlpanel_Form_Property_Step4RateDeleteConfirmForm<\/a>"],[0,7,"<a href=\"modules_controlpanel_forms_Property_Step4RateEditForm.php.html#2\">Controlpanel_Form_Property_Step4RateEditForm<\/a>"],[0,4,"<a href=\"modules_controlpanel_forms_Property_Step4RatesForm.php.html#2\">Controlpanel_Form_Property_Step4RatesForm<\/a>"],[0,4,"<a href=\"modules_controlpanel_forms_Property_Step4RentalBasis.php.html#2\">Controlpanel_Form_Property_Step4RentalBasis<\/a>"],[0,5,"<a href=\"modules_controlpanel_forms_Property_Step5AvailabilityDeleteConfirmForm.php.html#2\">Frontend_Form_Property_Step5AvailabilityDeleteConfirmForm<\/a>"],[0,6,"<a href=\"modules_controlpanel_forms_Property_Step5AvailabilityEditForm.php.html#2\">Controlpanel_Form_Property_Step5AvailabilityEditForm<\/a>"],[0,4,"<a href=\"modules_controlpanel_forms_Property_Step5AvailablityForm.php.html#2\">Controlpanel_Form_Property_Step5AvailablityForm<\/a>"],[0,2,"<a href=\"modules_controlpanel_forms_RegistrationForm.php.html#2\">Controlpanel_Form_RegistrationForm<\/a>"],[0,1,"<a href=\"modules_controlpanel_forms_TestForm.php.html#2\">Controlpanel_Form_TestForm<\/a>"],[0,6,"<a href=\"modules_controlpanel_helpers_DigestKey.php.html#2\">Controlpanel_Helper_DigestKey<\/a>"],[0,6,"<a href=\"modules_controlpanel_helpers_EnsureAccountEmailConfirmed.php.html#2\">Controlpanel_Helper_EnsureAccountEmailConfirmed<\/a>"],[0,5,"<a href=\"modules_controlpanel_helpers_EnsureSecure.php.html#2\">Controlpanel_Helper_EnsureSecure<\/a>"],[0,1,"<a href=\"modules_controlpanel_models_Acl_Controlpanel.php.html#2\">Controlpanel_Model_Acl_Controlpanel<\/a>"],[0,5,"<a href=\"modules_cron_plugins_Cron_TouchFile.php.html#2\">Frontend_Plugin_Cron_TouchFile<\/a>"],[100,1,"<a href=\"modules_frontend_Bootstrap.php.html#2\">Frontend_Bootstrap<\/a>"],[0,3,"<a href=\"modules_frontend_controllers_AndyController.php.html#2\">AndyController<\/a>"],[0,8,"<a href=\"modules_frontend_controllers_AvailabilityImageController.php.html#2\">AvailabilityImageController<\/a>"],[0,3,"<a href=\"modules_frontend_controllers_DisplayFullPropertyController.php.html#2\">DisplayFullPropertyController<\/a>"],[0,11,"<a href=\"modules_frontend_controllers_ImageCacheController.php.html#2\">ImageCacheController<\/a>"],[0,2,"<a href=\"modules_frontend_controllers_IndexController.php.html#2\">IndexController<\/a>"],[0,11,"<a href=\"modules_frontend_controllers_LevelController.php.html#2\">LevelController<\/a>"],[0,6,"<a href=\"modules_frontend_helpers_FeaturedProperty.php.html#2\">Frontend_Helper_FeaturedProperty<\/a>"],[0,7,"<a href=\"modules_frontend_helpers_LevelSummary.php.html#2\">Frontend_Helper_LevelSummary<\/a>"],[0,2,"<a href=\"modules_frontend_plugins_AdvertiserAccessCheck.php.html#3\">Frontend_Plugin_AdvertiserAccessCheck<\/a>"],[0,6,"<a href=\"modules_frontend_views_helpers_GroupSectionTitle.php.html#2\">Zend_View_Helper_TitleSection<\/a>"],[0,4,"<a href=\"modules_frontend_views_helpers_PhotoGrid.php.html#2\">Zend_View_Helper_PhotoGrid<\/a>"],[0,7,"<a href=\"modules_frontend_views_helpers_SectionTitle.php.html#2\">Zend_View_Helper_SectionTitle<\/a>"]],
+              marker: {
+                  symbol: 'diamond'
+              }
+            }],
+        });
+    });
+    </script>
+  </head>
+
+  <body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr><td class="title"></td></tr>
+      <tr><td><div align="center"><p><a href="index.html">Back to Code Coverage report</a></p></div></td></tr>
+      <tr><td class="ruler"><img src="glass.png" width="3" height="3" alt=""></td></tr>
+    </table>
+
+    <br />
+
+    <center>
+      <table width="90%" cellpadding="2" cellspacing="1" border="0">
+        <tr>
+          <td valign="top">
+            <h2>Class Coverage Distribution</h2>
+            <div id="classCoverageDistribution"></div>
+          </td>
+
+          <td valign="top">
+            <h2>Class Complexity</h2>
+            <div id="classComplexity"></div>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <h2>Top Project Risks</h2>
+            <ul>
+              <li><a href="modules_common_models_Property.php.html#2">Common_Model_Property</a> (8556)</li>
+              <li><a href="modules_common_models_resources_Property.php.html#2">Common_Resource_Property</a> (4422)</li>
+              <li><a href="modules_controlpanel_controllers_PropertyController.php.html#2">Controlpanel_PropertyController</a> (1640)</li>
+              <li><a href="modules_common_models_Photo.php.html#2">Common_Model_Photo</a> (992)</li>
+              <li><a href="modules_common_models_Advertiser.php.html#2">Common_Model_Advertiser</a> (992)</li>
+              <li><a href="modules_admin_controllers_PropertyController.php.html#2">Admin_PropertyController</a> (702)</li>
+              <li><a href="modules_common_models_resources_PropertyContent.php.html#2">Common_Resource_PropertyContent</a> (650)</li>
+              <li><a href="modules_common_models_resources_Photo.php.html#2">Common_Resource_Photo</a> (600)</li>
+              <li><a href="modules_common_models_Calendar.php.html#2">Common_Model_Calendar</a> (462)</li>
+              <li><a href="modules_common_models_resources_Rate.php.html#2">Common_Resource_Rate</a> (462)</li>
+
+            </ul>
+          </td>
+
+          <td valign="top">
+            <h2>Least Tested Methods</h2>
+            <ul>
+              <li><a href="modules_controlpanel_controllers_AccountController.php.html#17">Controlpanel_AccountController::init</a> (0%)</li>
+              <li><a href="modules_controlpanel_controllers_AccountController.php.html#23">Controlpanel_AccountController::preDispatch</a> (0%)</li>
+              <li><a href="modules_controlpanel_controllers_AccountController.php.html#12">Controlpanel_AccountController::getResourceId</a> (0%)</li>
+              <li><a href="modules_controlpanel_controllers_AccountController.php.html#7">Controlpanel_AccountController::getVersion</a> (0%)</li>
+              <li><a href="modules_common_plugins_Layout.php.html#129">Common_Plugin_Layout::postDispatch</a> (0%)</li>
+              <li><a href="modules_common_plugins_Layout.php.html#134">Common_Plugin_Layout::dispatchLoopShutdown</a> (0%)</li>
+              <li><a href="modules_controlpanel_controllers_AccountController.php.html#29">Controlpanel_AccountController::homeAction</a> (0%)</li>
+              <li><a href="modules_controlpanel_controllers_AccountController.php.html#65">Controlpanel_AccountController::digestKeyFailAction</a> (0%)</li>
+              <li><a href="modules_controlpanel_controllers_AuthenticationController.php.html#71">Controlpanel_AuthenticationController::logoutAction</a> (0%)</li>
+              <li><a href="modules_controlpanel_controllers_AvailabilityController.php.html#4">Controlpanel_AvailabilityController::preDispatch</a> (0%)</li>
+
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </center>
+
+    <br />
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr><td class="ruler"><img src="glass.png" width="3" height="3" alt=""></td></tr>
+      <tr><td class="versionInfo">Generated by <a href="http://github.com/sebastianbergmann/php-code-coverage" target="_top">PHP_CodeCoverage 1.1.1</a> using <a href="http://www.php.net/" target="_top">PHP 5.3.6</a> and PHPUnit 3.6.7 at Wed Jan 18 2:08:31 GMT 2012.</td></tr>
+    </table>
+
+    <br/>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS FeaturedProperties (
+  idFeaturedProperty int(10) unsigned NOT NULL AUTO_INCREMENT,
+  idProperty int(10) unsigned NOT NULL,
+  idLocation int(10) unsigned NOT NULL,
+  startDate date NOT NULL,
+  expiryDate date NOT NULL,
+  position int(2) unsigned NOT NULL DEFAULT '1',
+  added datetime NOT NULL,
+  updated datetime NOT NULL,
+  lastModifiedBy varchar(32) CHARACTER SET ascii NOT NULL DEFAULT 'system',
+  PRIMARY KEY (idFeaturedProperty),
+  UNIQUE KEY idProperty (idProperty,idLocation,startDate,expiryDate),
+  KEY startDate (startDate),
+  KEY expiryDate (expiryDate),
+  KEY idProperty (idProperty),
+  KEY idLocation (idLocation),
+  KEY position (position),
+  KEY added (added,updated),
+  KEY lastModifiedBy (lastModifiedBy),
+  CONSTRAINT featuredproperties_ibfk_1 FOREIGN KEY (idProperty) REFERENCES Properties (idProperty) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT featuredproperties_ibfk_2 FOREIGN KEY (idLocation) REFERENCES Locations (idLocation) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

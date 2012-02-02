@@ -24,13 +24,21 @@ class Vfr_Controller_Router_Route_Location
         if ($path instanceof Zend_Controller_Request_Http) {
             $path = $path->getPathInfo();
         }
-        
+		
         $path = trim($path, self::URI_DELIMITER);
-        
+	
+		// the home page isn't a match for this router
+		if ($path == '')
+			return false;
+		
+		$urlExceptionChecker = new Vfr_Controller_Router_UrlExcemptionChecker();
+        if ($urlExceptionChecker->isExcempt($path))
+            return false;
+		
         $locationModel = new Common_Model_Location();
         $locationRow = $locationModel->lookup($path);
 		
-        if (null == $locationRow)
+		if (null == $locationRow)
             return false;
 
         

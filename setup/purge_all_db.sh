@@ -53,9 +53,6 @@ echo "SET foreign_key_checks=0; DROP TABLE IF EXISTS Enquiries" | $CMD
 echo "Deleting DB Table DisapprovalStandardComments"
 echo "DROP TABLE IF EXISTS DisapprovalStandardComments" | $CMD 
 
-echo "Deleting DB Table FastLookups"
-echo "SET foreign_key_checks=0; DROP TABLE IF EXISTS FastLookups" | $CMD
-
 echo "Deleting DB Table Availability"
 echo "SET foreign_key_checks=0; DROP TABLE IF EXISTS Availability" | $CMD 
 

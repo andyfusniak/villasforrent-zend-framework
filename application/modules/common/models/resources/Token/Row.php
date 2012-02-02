@@ -1,4 +1,4 @@
 <?php
-class Common_Resource_AdvertiserReset_Row extends Vfr_Model_Resource_Db_Table_Row_Abstract
+class Common_Resource_Token_Row extends Vfr_Model_Resource_Db_Table_Row_Abstract
 {
 }

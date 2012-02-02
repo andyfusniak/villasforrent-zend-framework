@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_ImageUploadNotifier extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     public function imageUploadNotifier($propertyRow, $count)
     {
 	    // if this property has already been initially approved
@@ -14,8 +16,8 @@ class Vfr_View_Helper_ImageUploadNotifier extends Zend_View_Helper_Abstract
         
 		$step4url = $this->view->url(
 			array(
-				'module'     => 'frontend',
-				'controller' => 'advertiser-property',
+				'module'     => 'controlpanel',
+				'controller' => 'property',
 				'action'	 => 'progress-step4',
 				'idProperty' => $propertyRow->idProperty,
 				'digestKey'  => Vfr_DigestKey::generate(array($propertyRow->idProperty))

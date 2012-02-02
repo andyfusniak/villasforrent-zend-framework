@@ -1,6 +1,8 @@
 <?php
 class Vfr_View_Helper_PropertyType extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     private $_propertyTypeHash = null;
     
     public function propertyType($idPropertyType)

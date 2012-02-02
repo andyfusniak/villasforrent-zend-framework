@@ -1,11 +1,15 @@
 <?php
-class AdvertiserImageManagerController extends Zend_Controller_Action
+class Controlpanel_ImageManagerController extends Zend_Controller_Action
 {
     public function init()
     {
 		// ensure the advertiser is logged in
 		if (!Zend_Auth::getInstance()->hasIdentity()) {
-            $this->_helper->redirector->gotoSimple('login', 'advertiser-account', 'frontend');
+            $this->_helper->redirector->gotoSimple(
+                'login',
+                'account',
+                'controlpanel'
+            );
 		}
 		
 		$this->identity = Zend_Auth::getInstance()->getIdentity();
@@ -25,7 +29,11 @@ class AdvertiserImageManagerController extends Zend_Controller_Action
 		$digestKey  = $request->getParam('digestKey');
         
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idPhoto))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 		
         // decide what size to use based on original image aspect
@@ -90,17 +98,25 @@ class AdvertiserImageManagerController extends Zend_Controller_Action
 		$digestKey  = $request->getParam('digestKey');
         
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idPhoto))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 
         $photoModel = new Common_Model_Photo();
         $photoModel->deletePhotoByPhotoId($idProperty, $idPhoto);
                 
-        $this->_helper->redirector->gotoSimple('step3-pictures',
-											   'advertiser-property',
-											   'frontend',
-											   array('idProperty' => $idProperty,
-													 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
+        $this->_helper->redirector->gotoSimple(
+            'step3-pictures',
+			'property',
+			'controlpanel',
+			array (
+                'idProperty' => $idProperty,
+				'digestKey'  => Vfr_DigestKey::generate(array($idProperty))
+            )
+        );
     }
     
     public function cancelAction()
@@ -112,14 +128,22 @@ class AdvertiserImageManagerController extends Zend_Controller_Action
 		$digestKey  = $request->getParam('digestKey');
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idPhoto))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
                
-        $this->_helper->redirector->gotoSimple('step3-pictures',
-											   'advertiser-property',
-											   'frontend',
-											   array('idProperty' => $idProperty,
-													 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
+        $this->_helper->redirector->gotoSimple(
+            'step3-pictures',
+			'property',
+			'controlpanel',
+			array (
+                'idProperty' => $idProperty,
+                'digestKey'  => Vfr_DigestKey::generate(array($idProperty))
+            )
+        );
     }
 	
 	public function moveAction()
@@ -132,7 +156,11 @@ class AdvertiserImageManagerController extends Zend_Controller_Action
 		$digestKey      = $request->getParam('digestKey');
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idPhoto, $moveDirection))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 
 		if (($moveDirection !== 'up') && ($moveDirection !== 'down')) {
@@ -141,12 +169,20 @@ class AdvertiserImageManagerController extends Zend_Controller_Action
 		
 		$photoModel = new Common_Model_Photo();
 		//$photoModel->fixBrokenDisplayPriorities($idProperty);
-		$photoModel->updateMovePosition($idProperty, $idPhoto, $moveDirection);
+		$photoModel->updateMovePosition(
+            $idProperty,
+            $idPhoto,
+            $moveDirection
+        );
 		
-		$this->_helper->redirector->gotoSimple('step3-pictures',
-											   'advertiser-property',
-											   'frontend',
-											   array('idProperty' => $idProperty,
-													 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
+		$this->_helper->redirector->gotoSimple(
+            'step3-pictures',
+			'property',
+			'controlpanel',
+			array (
+                'idProperty' => $idProperty,
+				'digestKey'  => Vfr_DigestKey::generate(array ($idProperty))
+            )
+        );
 	}
 }

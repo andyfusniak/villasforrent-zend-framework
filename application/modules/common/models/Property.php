@@ -1,6 +1,9 @@
 <?php
 class Common_Model_Property extends Vfr_Model_Abstract
 {
+	const SESSION_NS_ADMIN_PROPERTY = 'AdminPropertyNS';
+	const SESSION_NS_ADMIN_PROPERTY_LIST_BY_PROPERTY = 'AdminPropertyNSPropertyListByProperty';
+	
 	private $_facilityResource = null;
 	
 	public function doSearch($options=null)
@@ -104,6 +107,56 @@ class Common_Model_Property extends Vfr_Model_Abstract
         
         return $propertyResource->getAllPropertyIds();
     }
+	
+	public function getAllPaginator($page=1, $interval=30, $order='idProperty', $direction = 'ASC')
+	{
+		$session = new Zend_Session_Namespace(self::SESSION_NS_ADMIN_PROPERTY);
+		
+		// defaults
+		if ($page !== null)
+			$session->page = $page;
+		
+		if ($interval !== null)
+			$session->interval = $interval;
+		
+		if ($order !== null)
+			$session->order = $order;
+			
+		if ($direction !== null)
+			$session->direction = $direction;
+		
+		return $this->getResource('Property')->getAllPaginator(
+			isset($session->page)      ? $session->page : 1,
+			isset($session->interval)  ? $session->interval : 30,
+			isset($session->order)     ? $session->order : 'idProperty',
+			isset($session->direction) ? $session->direction : 'ASC'
+		);
+	}
+	
+	public function getAllFeaturedPropertiesPaginator($page=1, $interval=30, $order='F.idProperty, L.name', $direction='ASC')
+	{
+		$session = new Zend_Session_Namespace(Common_Model_Property::SESSION_NS_ADMIN_PROPERTY_LIST_BY_PROPERTY);
+		
+		// defaults
+		if ($page !== null)
+			$session->page = $page;
+			
+		if ($interval !== null)
+			$session->interval = $interval;
+		
+		if ($order !== null)
+			$session->order = $order;
+			
+		if ($direction !== null)
+			$session->direction = $direction;
+		
+		return $this->getResource('FeaturedProperty')->getAllFeaturedPropertiesPaginator(
+			isset($session->page)      ? $session->page : 1,
+			isset($session->interval)  ? $session->interval : 30,
+			isset($session->order)     ? $session->order : 'F.idProperty, L.name',
+			isset($session->direction) ? $session->direction : 'ASC'
+		);
+	}
 
 	public function getProperties($page, $interval=30, $order=null, $direction='ASC')
 	{
@@ -318,6 +371,9 @@ class Common_Model_Property extends Vfr_Model_Abstract
 	{
 		$idPropertyList = (array) $idPropertyList;
 		
+		if (empty($idPropertyList))
+			return null;
+		
 		$photoResource = $this->getResource('Photo');
 		return $photoResource->getPrimaryPhotosByPropertyList($idPropertyList);
 	}
@@ -327,9 +383,11 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		$photoRowset = $this->getPrimaryPhotosByPropertyList($idPropertyList);
 		
 		$lookup = array ();
-		foreach ($photoRowset as $photoRow) {
-			$idProperty = $photoRow->idProperty;
-			$lookup[$idProperty] = $photoRow;
+		if ($photoRowset) {
+			foreach ($photoRowset as $photoRow) {
+				$idProperty = $photoRow->idProperty;
+				$lookup[$idProperty] = $photoRow;
+			}	
 		}
 		
 		return $lookup;
@@ -438,11 +496,25 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		$propertyResource			= $this->getResource('Property');
 		$propertyContentResource	= $this->getResource('PropertyContent');
 		
-		foreach ($updateSet as $version) {
-			$version = (int) $version;
-			$propertyContentResource->updatingPropertyContentDataset($idProperty, $version, $params);	
+		// we need all the updates to happen or none
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$db->beginTransaction();
+		
+		try {
+			foreach ($updateSet as $version) {
+				$version = (int) $version;
+				$propertyContentResource->updatingPropertyContentDataset($idProperty, $version, $params);
+				$propertyResource->_updateChecksum($idProperty, $version);
+			}
+			
+			$db->commit();
+		} catch (Exception $e) {
+			$db->rollBack();
+			
+			throw $e;
 		}
-
+		
+		// fluent interface
 		return $this;
 	}
 	
@@ -530,10 +602,7 @@ class Common_Model_Property extends Vfr_Model_Abstract
 		$idProperty = (int) $propertyRow->idProperty;
 		
 		$propertyResource = $this->getResource('Property');
-		$locationResource = $this->getResource('Location');
-		
-		$idLocation = $locationResource->addProperty($propertyRow);
-		$propertyResource->initialApproveProperty($idProperty, $idLocation);
+		$propertyResource->initialApproveProperty($idProperty);
 	}
 	
 	public function advertiserSendForUpdateApproval($idProperty)

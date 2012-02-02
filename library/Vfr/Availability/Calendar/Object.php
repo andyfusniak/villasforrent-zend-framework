@@ -1,6 +1,8 @@
 <?php
 class Vfr_Availability_Calendar_Object
 {
+    const version = '1.0.0';
+
 	const DAY_SUNDAY = 0;
 	const DAY_MONDAY = 1;
 	const DAY_TUESDAY = 2;

@@ -1,6 +1,41 @@
 <?php
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
+    protected function _initPluginLoaderCache()
+    {
+        if ('live' == $this->getEnvironment()) {
+            $classFileIncCache = APPLICATION_PATH . '/../data/cache/pluginLoaderCache.php';
+            if (file_exists($classFileIncCache)) {
+                include_once $classFileIncCache;
+            }
+        
+            Zend_Loader_PluginLoader::setIncludeFileCache(
+                $classFileIncCache
+            );
+        }
+    }
+    
+    protected function _initDbCaches()
+    {
+        if ('live' == $this->getEnvironment()) {
+            $frontendOptions = array (
+                'automatic_serialization' => true
+            );
+            
+            try {
+                $cache = Zend_Cache::factory('Core',
+                    'Apc',
+                    $frontendOptions
+                );    
+            } catch (Zend_Cache_Exception $e) {
+                var_dump($e);
+                die();
+            }
+            
+            Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
+        }
+    }
+    
 	protected function _initAutoload()
 	{
         $autoLoader = new Zend_Application_Module_Autoloader(
@@ -8,28 +43,42 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 				'namespace' => 'Common',
 				'basePath' => APPLICATION_PATH . '/modules/common'));
         
-		$autoLoader->addResourceTypes((array(
-				'modelResource' => array(
-						'path' => 'models/resources',
-						'namespace' => 'Resource',
-						)
+		$autoLoader->addResourceTypes(
+            array(
+				'modelResource' => array (
+                    'path'      => 'models/resources',
+                    'namespace' => 'Resource',
 				)
-		));
+			)
+		);
 		
 		$autoLoader = new Zend_Application_Module_Autoloader(
-			array(
+			array (
 				'namespace' => 'Admin',
-				'basePath' => APPLICATION_PATH . '/modules/admin'));
+				'basePath'  => APPLICATION_PATH . '/modules/admin'
+			)
+		);
+        
+        $autoLoader = new Zend_Application_Module_Autoloader(
+			array (
+				'namespace' => 'Controlpanel',
+				'basePath'  => APPLICATION_PATH . '/modules/controlpanel'
+			)
+		);
 		
 		$autoLoader = new Zend_Application_Module_Autoloader(
-			array(
+			array (
 				'namespace' => 'Frontend',
-				'basePath' => APPLICATION_PATH . '/modules/frontend'));
+				'basePath'  => APPLICATION_PATH . '/modules/frontend'
+			)
+		);
 
 		$autoLoader = new Zend_Application_Module_Autoloader(
-			array(
+			array (
 				'namespace' => 'Api',
-				'basePath' => APPLICATION_PATH . '/modules/api'));
+				'basePath'  => APPLICATION_PATH . '/modules/api'
+			)
+		);
 		
 		//$loader = Zend_Loader_Autoloader::getInstance();
 		//$loader->registerNamespace('Vfr_');
@@ -89,7 +138,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 	//protected function _initNavigation()
 	//{
-	//	$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
 	//
 	//	$this->bootstrap('layout');
 	//	$layout = $this->getResource('layout');
@@ -105,32 +153,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     protected function _initLocale()
     {
-        $this->bootstrap('logging');
-        //$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-        
-        //$this->_logger->log(__METHOD__ . ' Setting locale to en_GB', Zend_Log::DEBUG);
-        $locale = new Zend_Locale('en_GB');
-        Zend_Registry::set('Zend_Locale', $locale);
-        
-        //$this->_logger->log(__METHOD__. ' End', Zend_Log::INFO);
+        Zend_Registry::set(
+            'Zend_Locale',
+            new Zend_Locale('en_GB')
+        );
     }
 	
 	protected function _initRouting()
 	{   
         $this->bootstrap('logging');
 
-		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-		
-		// main property route
-		//$this->_logger->log(__METHOD__ . ' setting up route for /in/country/region/dest/propertyurl', Zend_Log::DEBUG);
 		$front  = Zend_Controller_Front::getInstance();
 		$router = $front->getRouter();
-        
-		$routeAvailbilityImage = new Zend_Controller_Router_Route('/ic.php',
-																  array('module' => 'frontend',
-																		'controller' => 'availability-image',
-																		'action' => 'render'));
-		
+    	
 		// image cache router
 		$routeImageCache = new Zend_Controller_Router_Route_Regex (
 			'photos/(.+)/(.+)/(.+)_(.+)x(.+)\.(.+)',
@@ -176,27 +211,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 				'action'	 => 'index'
 			)
 		);
-		
-		
-		
-        // setup a route for /in/<country>/<region>/<destination>
-        //$routeDestination = new Zend_Controller_Router_Route(
-		//		'/in/:country/:region/:destination',
-		//		array('module'     => 'frontend',
-		//		      'controller' => 'level',
-		//			  'action'     => 'destination')
-		//);
-		
-	//	Zend_Controller_Front::getInstance()->getRouter()->addRoute('frontend',$route);
-		
-//		$this->logger->log("Bootstrap_Bootstrap _initRouting() setting up route for in/country/region", Zend_Log::DEBUG);
-
-		//$fullPropertyRoute = new Zend_Controller_Router_Route(
-		//		'/in/:country/:region/:destination/:propertyurl',
-		//		 array( 'module'     => 'frontend',
-		//				'controller' => 'display-full-property',
-		//				'action'     => 'index')
-		//);
 
         $routeRegion = new Zend_Controller_Router_Route (
 			'/in/:country/:region',
@@ -216,10 +230,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 															'action'     	=> 'country')
 		);
 		
-		$routeLocation = new Zend_Controller_Router_Route_Regex('in/(\w+)(?:/(\w+))',
-																array ('module'		=> 'frontend',
-																	   'controller' => 'level',
-																	   'action'		=> 'test'));
+		//$routeLocation = new Zend_Controller_Router_Route_Regex('in/(\w+)(?:/(\w+))',
+		//														array ('module'		=> 'frontend',
+		//															   'controller' => 'level',
+		//															   'action'		=> 'test'));
 		
         $routeRestApi = new Zend_Rest_Route($front, array (), array ('api'));
         
@@ -227,6 +241,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			'([a-z0-9-/]*)'
 		);
 		
+		//  /^(.(?!foo).(?!wobble))*$/
+		// /^((?!admin).(?!login).)*$/
 		$property = new Vfr_Controller_Router_Route_Property (
 			'([a-z0-9-/]*)'
 		);
@@ -234,7 +250,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$router->addroute('location', $location)
 		       ->addroute('property', $property)
 			   ->addroute('imageCache', $routeImageCache)
-			   ->addRoute('availabilityImage', $routeAvailbilityImage)
 			   ->addRoute('restPropertyCalendar', $restPropertyCalendar)
                ->addRoute('ratePropertiesRatesB', $restPropertiesRatesB)
                ->addRoute('restPropertiesRatesA', $restPropertiesRatesA);
@@ -247,17 +262,25 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	protected function _initPlugins()
 	{
         $this->bootstrap('logging');
-
-		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-		
 		$frontController = Zend_Controller_Front::getInstance();
 		
 		$layoutModulePlugin = new Common_Plugin_Layout();
-		$layoutModulePlugin->registerModuleLayout('frontend', APPLICATION_PATH . '/modules/frontend/layouts/scripts');
-		$layoutModulePlugin->registerModuleLayout('admin', APPLICATION_PATH . '/modules/admin/layouts/scripts');
+        
+		$layoutModulePlugin->registerModuleLayout(
+			'frontend',
+			APPLICATION_PATH . '/modules/frontend/layouts/scripts'
+		);
+        
+        $layoutModulePlugin->registerModuleLayout(
+            'controlpanel',
+            APPLICATION_PATH . '/modules/controlpanel/layouts/scripts'
+        );
 		
-		$adminAuthPlugin = new Admin_Plugin_Auth();
-		
+		$layoutModulePlugin->registerModuleLayout(
+			'admin',
+			APPLICATION_PATH . '/modules/admin/layouts/scripts'
+		);
+				
 		//$acl = new Frontend_Model_AdvertiserAcl();
 
 		//$frontController->registerPlugin(new Frontend_Plugin_AdvertiserAccessCheck());
@@ -266,11 +289,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // switch on HTTP Digest Authentication for the admin module
         // only if we're live
         if (APPLICATION_ENV != 'beta')
-		    $frontController->registerPlugin($adminAuthPlugin);
+		    $frontController->registerPlugin(
+                new Admin_Plugin_Auth()
+            );
 		
-		$frontController->registerPlugin(new Api_Plugin_RestAuth());
-
-		$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
+		$frontController->registerPlugin(
+            new Api_Plugin_RestAuth()
+        );
 	}
 
 	protected function _initActionHelpers()
@@ -280,15 +305,26 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 		//Zend_Controller_Action_HelperBroker::addPrefix('Frontend_Helper');
 		Zend_Controller_Action_HelperBroker::addPath(
-			APPLICATION_PATH . '/modules/frontend/helpers','Frontend_Helper');
+			APPLICATION_PATH . '/modules/frontend/helpers', 'Frontend_Helper'
+        );
+        
         Zend_Controller_Action_HelperBroker::addPath(
-			APPLICATION_PATH . '/modules/api/helpers','Api_Helper');
+            APPLICATION_PATH . '/modules/controlpanel/helpers', 'Controlpanel_Helper'
+        );
+        
+        Zend_Controller_Action_HelperBroker::addPath(
+			APPLICATION_PATH . '/modules/api/helpers', 'Api_Helper'
+        );
         
 		//Zend_Controller_Action_HelperBroker::addPath(
 		//    APPLICATION_PATH . '/modules/admin/helpers', 'Admin_Helper');
 		//Zend_Controller_Action_HelperBroker::addPrefix('Admin_Helper');
 		
-		Zend_Controller_Action_HelperBroker::addHelper(new Vfr_Controller_Helper_Acl());
+		//Zend_Controller_Action_HelperBroker::addHelper(
+        //    new Vfr_Controller_Helper_Acl()
+        //);
+        //die();
+        
 		//Zend_Controller_Action_HelperBroker::addHelper(new Admin_Helper_Auth());
 
 		$this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);

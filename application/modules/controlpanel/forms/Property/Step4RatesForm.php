@@ -1,8 +1,7 @@
 <?php
-class Frontend_Form_Step4RatesForm extends Zend_Form
+class Controlpanel_Form_Property_Step4RatesForm extends Zend_Form
 {
 	protected $_idProperty;
-	
 	protected $_digestKey = null;
 	
     public function __construct($options = null)
@@ -23,7 +22,7 @@ class Frontend_Form_Step4RatesForm extends Zend_Form
 	public function init()
 	{ 
 		$this->setMethod('post');
-		$this->setAction('/advertiser-property/step4-rates');
+		$this->setAction('/controlpanel/property/step4-rates');
         
         $this->addPrefixPath('Vfr_Form', 'Vfr/Form');
         $this->addElementPrefixPath('Vfr_Validate', 'Vfr/Validate', 'validate');

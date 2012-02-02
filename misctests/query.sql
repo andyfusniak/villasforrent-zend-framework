@@ -1,7 +1,7 @@
-SELECT ancestor.idLocation, ancestor.url, ancestor.rowname
-FROM Locations child, Locations ancestor
-WHERE child.lt BETWEEN ancestor.lt AND ancestor.rt
+SELECT parent.lt, parent.rt, parent.url, parent.rowname, parent.idLocation
+FROM Locations child, Locations parent
+WHERE child.lt > parent.lt AND
+      child.lt < parent.rt
 AND child.idLocation = 274
-AND ancestor.url != '/'
-GROUP BY ancestor.idLocation
-
+ORDER BY parent.lt DESC
+LIMIT 1

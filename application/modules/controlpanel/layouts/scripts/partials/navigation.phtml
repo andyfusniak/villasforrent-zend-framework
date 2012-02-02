@@ -1,0 +1,28 @@
+<ul id="projects" class="clearfix">
+<?php foreach ($this->container as $page) {
+    //var_dump($page->_module . ' ' . $page->_controller . ' ' . $page->_action . ' ' . $this->navigation()->accept($page));
+    
+    if ($page->isVisible() && $this->navigation()->accept($page)) {
+        $isActive = $page->isActive(true);
+        $liClass = $isActive ? ' class="selected"' : '';
+        echo '<li' . $liClass .'>' . $this->menu()->htmlify($page) . '</li>', PHP_EOL;
+    
+        if ($isActive)
+            $parent = $page;
+    }
+}
+?>
+</ul>
+
+<div id="sections" class="clearfix">
+<?php  
+    foreach ($parent->getPages() as $page) {
+        //var_dump($page);
+        
+        // check if it is active (recursive)
+        $isActive = $page->isActive(true);
+        $liClass = $isActive ? ' class="active"' : '';
+        echo '<li ' . $liClass . '>' . $this->menu()->htmlify($page) . '</li>', PHP_EOL;
+    }
+?>
+</div>

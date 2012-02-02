@@ -207,6 +207,23 @@ class Common_Resource_Property
 		return $paginator;
 	}
     
+    public function getPropertiesInLocationCount($idLocation)
+    {
+        $query = $this->select()
+                      ->from($this->_name, 'COUNT(1) AS cnt')
+                      ->where('idLocation = ?', $idLocation);
+        try {
+            $row = $this->fetchRow($query);
+            
+            if ($row->cnt > 0)
+                return true;
+            
+            return false;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
     /**
 	 * Get all properties
 	 *

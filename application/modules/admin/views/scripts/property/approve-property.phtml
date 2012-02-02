@@ -11,7 +11,7 @@
         
         <dt>Proposed Location</dt>
         <dd>
-            <?php echo $this->locationBreadcrumb($this->locationRow) ?>
+            <?php echo $this->locationBreadcrumb($this->locationRow->idLocation, array ('delimiter' => '-&gt;', 'makeLinks' => false)) ?>
         </dd>
         
         <dt>Url Name:</dt>

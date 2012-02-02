@@ -8,7 +8,7 @@
 	<?php echo $this->headStyle() ?>
 	<?php
     if ($this->jQuery()->isEnabled()) {
-        $this->jQuery()->setLocalPath('/js/jquery/jquery-1.6.min.js')
+        $this->jQuery()->setLocalPath('/js/jquery/jquery-1.7.1.min.js')
                        ->setUiLocalPath('/js/jquery-ui-1.8.12/ui/jquery-ui.js')
                        ->addStylesheet('/js/jquery-ui-themes-1.8.12/themes/sunny/jquery-ui.css');
         echo $this->jQuery();
@@ -23,51 +23,15 @@
 	<div id="hd">
 	</div>
 	
+	<div id="zf-navbar">
+		
+		<?php //echo $this->navigation()->menu() ?>
+	</div>
+	
 	<div id="navbar">
-		<ul id="projects" class="clearfix">
-			<li><a href="<?php echo $this->url(
-				array (
-					'module' => 'admin',
-					'controller' => 'index',
-					'action' => 'index')) ?>" title="Overview">Overview</a></li>
-			<li><a href="<?php echo $this->url(
-				array (
-					'module' => 'admin',
-					'controller' => 'advertiser',
-					'action' => 'index',
-					'page' => 1)) ?>" title="Advertisers">Advertisers</a></li>
-			<li><a href="<?php echo $this->url(
-				array (
-					'module' => 'admin',
-					'controller' => 'member',
-					'action' => 'index')) ?>" title="Members">Members</a></li>
-			<li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'administrator', 'action' => 'index')) ?>" title="Administrators">Administrators</a></li>
-			<li class="selected"><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'properties', 'action' => 'index')) ?>" title="Properties">Properties</a></li>
-			<li><a href="/projects/yui3/">YUI 3</a></li>
-			<li><a href="/labs/" class="labs">YUI Labs</a></li>
-			<li><a href="/projects/yuicompressor/">YUI Compressor</a></li>
-			<li><a href="/projects" class="more">More</a></li>
-		</ul>
-			
-		<div id="sections" class="clearfix">
-			<ul class="clearfix">
-				<li><a href="<?php echo $this->url(array(
-					'module' 		=> 'admin',
-					'controller'	=> 'property',
-					'action'		=> 'list'
-				)) ?>">List</a></li>
-				<li><a href="<?php echo $this->url(array('module' => 'admin',
-														 'controller' => 'index',
-														 'action' => 'list-awaiting-initial-approval')) ?>">Awaiting Initial Approval</a></li>
-				<li><a href="<?php echo $this->url(array('module' => 'admin',
-														 'controller' => 'property',
-														 'action' => 'list-awaiting-update-approval')) ?>">Awaiting Update Approval</a></li>
-				<li><a href="/forum/recent.php">Recent Posts</a></li>
-			    <li><a href="./search.php?sid=06f251f9f1c4c7123f1f3ffdcc322fdb">Search</a></li>
-				<li><a href="#">Register</a></li>
-				<li><a href="#">Login</a></li>
-			</ul>
-		</div>
+		<?php echo $this->navigation()->menu()->setRenderParents(true)->setPartial('partials/admin-nav.phtml') ?>
+		<?php //echo $this->navigation()->menu()->setMaxDepth(0); ?>
+		<?php //echo $this->navigation()->menu()->setOnlyActiveBranch(true)->setRenderParents(false)->setMinDepth(1)->setMaxDepth(1); ?>
 	</div>
 	
 	<div id="bd">

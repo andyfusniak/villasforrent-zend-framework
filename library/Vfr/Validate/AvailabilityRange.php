@@ -1,6 +1,8 @@
 <?php
 class Vfr_Validate_AvailabilityRange extends Zend_Validate_Abstract
 {
+    const version = '1.0.0';
+
     const REVERSE           = 'dateReverse';
     const BOTH_MISSING      = 'bothMissing';
     const START_MISSING     = 'startMissing';

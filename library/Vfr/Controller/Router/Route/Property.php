@@ -13,12 +13,21 @@ class Vfr_Controller_Router_Route_Property
     
     public function match($path)
     {
-        //var_dump('property route');
-        
         if ($path instanceof Zend_Controller_Request_Http) {
             $path = $path->getPathInfo();
             $path = trim($path, self::URI_DELIMITER);
         }
+		
+        $path = trim($path, self::URI_DELIMITER);
+            
+		// the home page isn't a match for this router
+		if ($path == '')
+			return false;
+    
+        $urlExceptionChecker = new Vfr_Controller_Router_UrlExcemptionChecker();
+        if ($urlExceptionChecker->isExcempt($path))
+            return false;
+
         
         $propertyModel = new Common_Model_Property();
         $propertyRow = $propertyModel->getPropertyByUrl($path);

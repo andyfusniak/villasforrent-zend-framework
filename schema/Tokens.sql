@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Tokens (
   token varchar(60) CHARACTER SET ascii DEFAULT NULL,
   expires datetime DEFAULT NULL,
   added datetime DEFAULT NULL,
-  PRIMARY KEY (idAdvertiserReset),
+  PRIMARY KEY (idToken),
   UNIQUE KEY token (token),
   KEY idAdvertiser (idAdvertiser),
   KEY type (type),

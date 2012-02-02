@@ -1,6 +1,8 @@
 <?php
 class Vfr_Validate_RatesRange extends Zend_Validate_Abstract
 {
+    const version = '1.0.0';
+
     // dates
     const NOT_DATE_RANGE     = 'notDateRange';
     const DATE_REVERSE       = 'dateReverse';

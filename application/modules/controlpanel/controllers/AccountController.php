@@ -1,5 +1,6 @@
 <?php
-class AdvertiserAccountController extends Zend_Controller_Action
+class Controlpanel_AccountController extends Zend_Controller_Action
+    implements Zend_Acl_Resource_Interface
 {
 	const version = '4.0.2';
 	
@@ -7,6 +8,11 @@ class AdvertiserAccountController extends Zend_Controller_Action
 	
     protected $_advertiserModel;
 	protected $_propertyModel;
+
+    public function getResourceId()
+    {
+        return 'Controlpanel_AccountController';
+    }
 
     public function init()
     {
@@ -22,11 +28,15 @@ class AdvertiserAccountController extends Zend_Controller_Action
 
     public function homeAction()
     {
+        //if (!$this->_helper->acl('Advertiser')) {
+        //if (!$this->_advertiserModel->checkAcl('listAccount')) {
+        //    throw new Vfr_Exception('Access Denied');
+        //}
+        
         if (Zend_Auth::getInstance()->hasIdentity()) {
             $advertiserRow = Zend_Auth::getInstance()->getIdentity();
             $idAdvertiser = $advertiserRow->idAdvertiser;
 
-			//var_dump($idAdvertiser);die();
             // get a list of properties belonging to this advertiser
             $propertyRowset = $this->_propertyModel->getPropertiesByAdvertiserId($idAdvertiser);
 
@@ -40,18 +50,16 @@ class AdvertiserAccountController extends Zend_Controller_Action
 			
 		    // setup the view
 			$this->view->assign(
-				array(
+				array (
 					'propertyRowset'    => $propertyRowset,
 					'name'			    => $advertiserRow->firstname . ' ' . $advertiserRow->lastname,
+                    'emailAddress'      => $advertiserRow->emailAddress,
 					'photoRowsetLookup'	=> null
 				)
 			);
         }
 
-		//if (!$this->_helper->acl('Advertiser')) {
-        if (!$this->_advertiserModel->checkAcl('listAccount')) {
-            throw new Vfr_Exception('Access Denied');
-        }
+
     }
 	
 	public function digestKeyFailAction() {}

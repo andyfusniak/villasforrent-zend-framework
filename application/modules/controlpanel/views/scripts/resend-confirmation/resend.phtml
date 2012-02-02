@@ -1,5 +1,33 @@
-<h2>Account Activation Required</h2>
+<h2>Email Confirmation Required</h2>
 
-<p>After registering with the website, we sent you an email with a email confirmation link.</p>
+<p>After registering with the website, we sent you an email to <?php echo $this->escape($this->advertiserRow->emailAddress) ?> with a confirmation link.</p>
+
+<form method="post" action="/controlpanel/resend-confirmation/sent">
+    <input type="hidden" name="process" value="resend" />
+    <input type="submit" name="submit" id="submit" value="Resend" />
+</form>
+<?php echo $this->resendSuccessXhtml ?>
 
 <p>You must follow this email first before you can login to the website.</p>
+
+<p>If you wish to change your account email address, you can do so now</p>
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+    <input type="hidden" name="process" value="change-email-address" />
+    <fieldset>
+        <dl>
+            <dt>
+                <label for="emailAddress">New email address</label>
+            </dt>
+            
+            <dd>
+                <input type="text" name="emailAddress" value="<?php echo $this->escape($this->form->getValue('emailAddress')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('emailAddress')) ?>
+            </dd>
+            
+            <input type="submit" name="submit" id="submit" value="Change" />
+    </fieldset>
+</form>
+
+<?php echo $this->changeSuccessXhtml ?>
+
+<?php //var_dump($this->advertiserRow) ?>

@@ -1,10 +1,10 @@
 <?php
-class Frontend_Form_Advertiser_PasswordResetForm extends Zend_Form
+class Controlpanel_Form_PasswordResetForm extends Zend_Form
 {
     public function init()
     {
         $this->setMethod('post');
-        $this->setAction('/advertiser-password-reset');
+        $this->setAction('/controlpanel/password-reset');
 
         $this->addElement('text', 'emailAddress', array (
             'required'   => true,

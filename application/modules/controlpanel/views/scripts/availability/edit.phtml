@@ -28,8 +28,8 @@
             <td><input id="start" type="text" name="availability[start]" value="<?php echo $this->availabilityPicker($this->form->getValue('availability'), 'start') ?>" /></td>
             <td><input id="end" type="text" name="availability[end]" value="<?php echo $this->availabilityPicker($this->form->getValue('availability'), 'end') ?>" /></td>
             <td><input type="submit" name="submit" value="Update" /></td>
-			<td><a href="<?php echo $this->url(array('module'     => 'frontend',
-													 'controller' => 'advertiser-property',
+			<td><a href="<?php echo $this->url(array('module'     => 'controlpanel',
+													 'controller' => 'property',
 													 'action'     => 'step5-availability',
 													 'idProperty' => $this->propertyRow->idProperty,
 													 'digestKey'  => Vfr_DigestKey::generate(array(
@@ -41,8 +41,8 @@
         <tr>
             <td><?php echo $this->prettyDate($row->startDate) ?></td>
             <td><?php echo $this->prettyDate($row->endDate) ?></td>
-            <td><a href="<?php echo $this->url(array('module'    	 => 'frontend',
-                                                    'controller'	 => 'advertiser-availability',
+            <td><a href="<?php echo $this->url(array('module'    	 => 'controlpanel',
+                                                    'controller'	 => 'availability',
                                                     'action'		 => 'edit',
                                                     'idProperty' 	 => $this->propertyRow->idProperty,
                                                     'idAvailability' => $row->idAvailability,
@@ -51,8 +51,8 @@
 														$row->idAvailability
 													))),
 												    null, true) ?>">[edit]</a></td>
-            <td><a href="<?php echo $this->url(array('module'         => 'frontend',
-                                                     'controller' 	  => 'advertiser-availability',
+            <td><a href="<?php echo $this->url(array('module'         => 'controlpanel',
+                                                     'controller' 	  => 'availability',
                                                      'action'     	  => 'delete-confirm',
                                                      'idProperty' 	  => $this->propertyRow->idProperty,
                                                      'idAvailability' => $row->idAvailability,

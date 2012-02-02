@@ -1,18 +1,69 @@
-<h1>List Properties</h1>
 <?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml') ?>
-<p class="clearfix" />
-<table>
+<table id="property-list">
     <tr>
-       <th><a href="<?php echo $this->url(array('order'=>'idProperty', 'direction'=>$this->toggleDirection($this->direction))) ?>">Property Id</a></th>
-       <th><a href="<?php echo $this->url(array('order'=>'idPropertyType', 'direction'=>$this->toggleDirection($this->direction))) ?>">Type</a></th>
-       <th><a href="<?php echo $this->url(array('order'=>'shortName', 'direction'=>$this->toggleDirection($this->direction))) ?>">Name</a></th>
+        <th><a href="<?php echo $this->url(
+            array (
+                'order'     => 'idProperty',
+                'direction' => $this->toggleDirection($this->direction)
+            )) ?>">Property ID</a> <?php echo $this->directionArrow('idProperty', $this->order, $this->direction) ?></th>
+       
+        <th><a href="<?php echo $this->url(
+            array (
+                'order'     => 'idPropertyType',
+                'direction' => $this->toggleDirection($this->direction)
+            )) ?>">Type</a> <?php echo $this->directionArrow('idPropertyType', $this->order, $this->direction) ?></th>
+
+        <th><a href="<?php echo $this->url(
+            array (
+                'order'     => 'numBeds',
+                'direction' => $this->toggleDirection($this->direction)
+            )) ?>">Beds</a> <?php echo $this->directionArrow('numBeds', $this->order, $this->direction) ?></th>
+    
+        <th><a href="<?php echo $this->url(
+            array (
+                'order'     => 'numSleeps',
+                'direction' => $this->toggleDirection($this->direction)
+            )) ?>">Sleeps</a> <?php echo $this->directionArrow('numSleeps', $this->order, $this->direction) ?></th>
+        
+        <th><a href="<?php echo $this->url(
+            array (
+                'order'     => 'idAdvertiser',
+                'direction' => $this->toggleDirection($this->direction)
+            )) ?>">Advertiser</a> <?php echo $this->directionArrow('idAdvertiser', $this->order, $this->direction) ?></th>
+       
+        <th style="width: 200px"><a href="<?php echo $this->url(
+            array (
+                'order'     => 'shortName',
+                'direction' => $this->toggleDirection($this->direction)
+            )) ?>">Name</a> <?php echo $this->directionArrow('shortName', $this->order, $this->direction) ?></th>
+        <th><a href="<?php echo $this->url(
+            array (
+                'order'     => 'idLocation',
+                'direction' => $this->toggleDirection($this->direction)
+            )) ?>">Location ID</a> <?php echo $this->directionArrow('idLocation', $this->order, $this->direction) ?></th>
+        <th><a href="<?php echo $this->url(
+            array (
+                'order'     => 'status',
+                'direction' => $this->toggleDirection($this->direction)
+            )) ?>">Initial Status</a> <?php echo $this->directionArrow('status', $this->order, $this->direction) ?></th>
+        <th><a href="<?php echo $this->url(
+            array (
+                'order'     => 'approved',
+                'direction' => $this->toggleDirection($this->direction)
+            )) ?>">App</a> <?php echo $this->directionArrow('approved', $this->order, $this->direction) ?></th>
     </tr>
     
     <?php foreach ($this->paginator as $property) : ?>
-    <tr>
+    <tr class="<?php echo $this->cycle(array("odd", "even"))->next() ?>">
         <td><?php echo $property->idProperty ?></td>
-        <td><?php echo $this->bytes($property->idPropertyType) ?></td>
+        <td><?php echo $this->propertyType($property->idPropertyType) ?></td>
+        <td><?php echo $property->numBeds ?></td>
+        <td><?php echo $property->numSleeps ?></td>
+        <td><?php echo $this->advertiserIdToName($property->idAdvertiser) ?></td>
         <td><?php echo $this->escape($property->shortName) ?></td>
+        <td><?php echo $this->locationIdToName($property->idLocation) ?></td>
+        <td><?php echo $this->propertyStatus($property->status, $property->approved) ?></td>
+        <td><?php echo $this->tickOrCross($property->approved) ?></td>
     </tr>
     <?php endforeach ?>
 </table>

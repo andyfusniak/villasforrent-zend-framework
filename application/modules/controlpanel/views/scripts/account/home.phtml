@@ -4,9 +4,15 @@ panel. Within the control panel you can add, edit property details including upl
 <p>If this is your first visit, we suggest you begin by clicking "Add a new property" from the form below.</p>
 
 <p>Use the link below if you wish to add a new property to your account.</p>
-<a href="<?php echo $this->url(array('controller' => 'advertiser-property',
+
+<p>Or change your <a href="<?php echo $this->url(array (
+    'module'     => 'controlpanel',
+    'controller' => 'account-settings',
+    'action'     => 'list')) ?>">[account settings]</a></p>
+
+<a href="<?php echo $this->url(array('controller' => 'property',
                                      'action'     => 'step1-location',
-                                     'module'     => 'frontend')) ?>">[add a new property]</a>
+                                     'module'     => 'controlpanel')) ?>">[add a new property]</a>
 
 <table cellpadding="0" cellspacing="0" border="1">
 <?php foreach ($this->propertyRowset as $row) : ?>

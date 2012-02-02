@@ -1,11 +1,13 @@
 <?php
 class Vfr_View_Helper_ImageConfirmDeleteButton extends Zend_View_Helper_Abstract
 {
+    const version = '1.0.0';
+
     public function imageConfirmDeleteButton($idProperty, $idPhoto)
     {
         $url = $this->view->url(array(
-            'module'     => 'frontend',
-            'controller' => 'advertiser-image-manager',
+            'module'     => 'controlpanel',
+            'controller' => 'image-manager',
             'action'     => 'confirm',
             'idProperty' => $idProperty,
             'idPhoto'    => $idPhoto,

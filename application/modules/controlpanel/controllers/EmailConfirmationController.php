@@ -1,5 +1,5 @@
 <?php
-class AdvertiserEmailConfirmationController extends Zend_Controller_Action
+class Controlpanel_EmailConfirmationController extends Zend_Controller_Action
 {
     public function preDispatch()
 	{
@@ -16,8 +16,11 @@ class AdvertiserEmailConfirmationController extends Zend_Controller_Action
         $tokenRow = $advertiserModel->getAdvertiserEmailConfirmationDetailsByToken($token);
         
         if ($tokenRow == null) {
-            $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-email-confirmation/token-expired-or-invalid');
-            return;
+            $this->_helper->redirector->gotoSimple(
+                'token-expired-or-invalid',
+                'email-confirmation',
+                'controlpanel'
+            );
         }
         
         $idAdvertiser = $tokenRow->idAdvertiser;
@@ -26,7 +29,11 @@ class AdvertiserEmailConfirmationController extends Zend_Controller_Action
         // and remove the old token
         $advertiserModel->activate($idAdvertiser, $token);
      
-        $this->_redirect(Zend_Controller_Front::getInstance()->getBaseUrl() . '/advertiser-email-confirmation/activated');   
+        $this->_helper->redirector->gotoSimple(
+            'activated',
+            'email-confirmation',
+            'controlpanel'
+        );
     }
     
     public function activatedAction() {}

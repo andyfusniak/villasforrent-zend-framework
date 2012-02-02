@@ -124,12 +124,16 @@ class ImageCacheController extends Zend_Controller_Action
 		//die();
 		
         // write the newly generated each to the file cache
-        //$cacheTopLevel      = $this->_modelPhoto->topLevelDirByPropertyId($photoRow->idProperty);
-        //$cacheSecondLevel   = $this->_modelPhoto->generateDirectoryStructure($photoRow->idProperty, $idPhoto, $this->_vfrConfig['photo']['images_dynamic_dir']);
-        //$newFileFullPath    = $cacheSecondLevel . DIRECTORY_SEPARATOR . $idPhoto . '_' . $width . 'x' . $height . '.' . $ext;
+        $cacheTopLevel      = $this->_modelPhoto->topLevelDirByPropertyId($photoRow->idProperty);
+        $cacheSecondLevel   = $this->_modelPhoto->generateDirectoryStructure($photoRow->idProperty, $idPhoto, $this->_vfrConfig['photo']['images_dynamic_dir']);
+        $newFileFullPath    = $cacheSecondLevel . DIRECTORY_SEPARATOR . $idPhoto . '_' . $width . 'x' . $height . '.' . $ext;
                        
         // write the new image
-        //imagejpeg($destGdImage, $newFileFullPath, $this->_vfrConfig['photo']['gd_quality']);
+        imagejpeg(
+            $destGdImage,
+            $newFileFullPath,
+            $this->_vfrConfig['photo']['gd_quality']
+        );
         
         //var_dump($originalImageFullPath);
         //var_dump($destGdImage);

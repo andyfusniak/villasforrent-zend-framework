@@ -1,6 +1,8 @@
 <?php
 class Vfr_BlowfishHasher
 {
+    const version = '1.0.0';
+
     private $_iterationCountLog2;
     private $_randomState;
     

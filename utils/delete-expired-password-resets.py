@@ -7,7 +7,7 @@ import MySQLdb.cursors
 import sys
 
 from utils import parse_mysql_datetime
-from model import get_all_advertisers_reset, delete_advertiser_reset
+from model import get_all_tokens, delete_token
 
 logging.basicConfig(filename=config.applogs['delete-expired-password-resets'],
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -43,7 +43,7 @@ def main():
         # if this reset link has expired, remove it from the DB
         # to prevent security risks
         if now > row['expires']:
-            delete_advertiser_reset(cursor, row['idAdvertiserReset'])
+            delete_token(cursor, row['idToken'])
             
     sys.exit(0)
         

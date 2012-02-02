@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configdata>
+    <nav>
+        <overview>
+            <label>Overview</label>
+            <module>admin</module>
+            <controller>index</controller>
+            <action>index</action>
+            
+            <pages>
+                <o1>
+                    <label>overview one</label>
+                    <module>admin</module>
+                </o1>
+                
+                <o2>
+                    <label>overview two</label>
+                    <module>admin</module>
+                </o2>
+            </pages>
+        </overview>
+        
+        <advertisers>
+            <label>Advertisers</label>
+            <module>admin</module>
+            <controller>advertiser</controller>
+            <action>index</action>
+            <pages>
+                <view>
+                    <label>View</label>
+                    <module>admin</module>
+                    <controller>advertiser</controller>
+                    <action>index</action>
+                </view>
+            </pages>
+        </advertisers>
+        
+        <properties>
+            <label>Properties</label>
+            <module>admin</module>
+            <controller>property</controller>
+            <action>list</action>
+            
+            <pages>
+                <listProperties>
+                    <label>List</label>
+                    <module>admin</module>
+                    <controller>property</controller>
+                    <action>list</action>
+                </listProperties>
+                
+                <awaitingInitialApproval>
+                    <label>Awaiting Initial Approval</label>
+                    <module>admin</module>
+                    <controller>index</controller>
+                    <action>list-awaiting-initial-approval</action>
+                    <pages>
+                        <set-url-name>
+                            <label>Set URL Name</label>
+                            <module>admin</module>
+                            <controller>property</controller>
+                            <action>set-url-name</action>
+                        </set-url-name>
+                        
+                        <set-location>
+                            <label>Set Property Location</label>
+                            <module>admin</module>
+                            <controller>property</controller>
+                            <action>set-location</action>
+                        </set-location>
+                        
+                        <set-expiry>
+                            <label>Set Property Expiration</label>
+                            <module>admin</module>
+                            <controller>property</controller>
+                            <action>set-expiry</action>
+                        </set-expiry>
+                        
+                        <approve-property>
+                            <label>Initial Property Approval</label>
+                            <module>admin</module>
+                            <controller>property</controller>
+                            <action>approve-property</action>
+                        </approve-property>
+                    </pages>
+                </awaitingInitialApproval>
+                
+                <awaitingUpdateApproval>
+                    <label>Awaiting Update Approval</label>
+                    <module>admin</module>
+                    <controller>property</controller>
+                    <action>list-awaiting-update-approval</action>
+                    <pages>
+                        <view-update-approval>
+                            <label>View Update Approval</label>
+                            <module>admin</module>
+                            <controller>property</controller>
+                            <action>view-update-approval</action>
+                        </view-update-approval>
+                    </pages>
+                </awaitingUpdateApproval>
+            </pages>
+        </properties>
+        
+        <featured>
+            <label>Featured</label>
+            <module>admin</module>
+            <controller>featured</controller>
+            <action>list-by-property</action>
+            
+            <pages>
+                <show-by-property>
+                    <label>List by Property</label>
+                    <module>admin</module>
+                    <controller>featured</controller>
+                    <action>list-by-property</action>
+                </show-by-property>
+                
+                <show-by-location>
+                    <label>List by Location</label>
+                    <module>admin</module>
+                    <controller>featured</controller>
+                    <action>list-by-location</action>
+                </show-by-location>
+            </pages>
+        </featured>
+        
+        <locations>
+            <label>Locations</label>
+            <module>admin</module>
+            <controller>location</controller>
+            <action>tree-view</action>
+            
+            <pages>
+                <tree-view>    
+                    <label>Tree View</label>
+                    <module>admin</module>
+                    <controller>location</controller>
+                    <action>tree-view</action>
+                </tree-view>
+            </pages>
+        </locations>
+        
+        <system>
+            <label>System</label>
+            <module>admin</module>
+            <controller>system-check</controller>
+            <action>do-checks</action>
+            
+            <pages>
+                <system-check>
+                    <label>System Checks</label>
+                    <module>admin</module>
+                    <controller>system-check</controller>
+                    <action>do-checks</action>
+                </system-check>
+                
+                <php-info>
+                    <label>PHP Info</label>
+                    <module>admin</module>
+                    <controller>system-check</controller>
+                    <action>php-info</action>
+                </php-info>
+                
+                <component-version-numbers>
+                    <label>Component Versions</label>
+                    <module>admin</module>
+                    <controller>system-versions</controller>
+                    <action>list</action>
+                </component-version-numbers>
+
+                <location-tree-check>
+                    <label>Location Tree Check</label>
+                    <module>admin</module>
+                    <controller>location-tree-check</controller>
+                    <action>check</action>
+                    <pages>
+                        <test-move>
+                            <label>Test Move</label>
+                            <module>admin</module>
+                            <controller>location-tree-check</controller>
+                            <action>test-move</action>
+                        </test-move>
+                        
+                        <test-delete>
+                            <label>Test Delete</label>
+                            <module>admin</module>
+                            <controller>location-tree-check</controller>
+                            <action>test-delete</action>
+                        </test-delete>
+                        
+                        <test-add>
+                            <label>Test Add</label>
+                            <module>admin</module>
+                            <controller>location-tree-check</controller>
+                            <action>test-add</action>
+                        </test-add>
+                        
+                        <build-locations>
+                            <label>Rebuild Nested Set</label>
+                            <module>admin</module>
+                            <controller>build-locations</controller>
+                            <action>rebuild-tree</action>
+                        </build-locations>
+                    </pages>
+                </location-tree-check>
+            </pages>
+        </system>
+    </nav>
+</configdata>

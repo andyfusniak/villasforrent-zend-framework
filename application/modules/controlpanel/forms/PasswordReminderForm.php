@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_Advertiser_PasswordReminderForm extends Zend_Form
+class Frontend_Form_PasswordReminderForm extends Zend_Form
 {
     public function __construct($options = null)
     {
@@ -9,7 +9,7 @@ class Frontend_Form_Advertiser_PasswordReminderForm extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-        $this->setAction('/advertiser-password-reminder');
+        $this->setAction('/controlpanel/password-reminder');
         
         $this->addElement('text', 'emailAddress', array(
 			'required' => true,

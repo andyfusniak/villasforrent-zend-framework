@@ -1,0 +1,20 @@
+<h1>Andy Controller - indexAction()</h1>
+
+<div id="container"></div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var response = null;
+        $.ajax({
+            type: 'GET',
+            url:'http://mars.zendvfr/andy/list',
+            data: {'format': 'json'},
+            dataType: 'json',
+            success: function(data) {
+                alert('success');
+                response = data;
+                console.log(response);
+            }
+        });
+    });
+</script>

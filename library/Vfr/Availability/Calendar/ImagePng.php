@@ -6,7 +6,9 @@ require_once 'Vfr/Availability/Calendar/Exception.php';
 require_once 'Vfr/Availability/Calendar/Object.php';
 
 class Vfr_Availability_Calendar_ImagePng
-{   
+{
+    const version = '1.0.0';
+       
 	const RENDER_NORMAL = 1;
 	const RENDER_MIDDLE = 2;
 	const RENDER_END = 3;

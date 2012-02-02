@@ -121,7 +121,7 @@ def update_property_content_by_pk(cursor, pk, checksum):
 def update_property_location_id(cursor, id_prop, id_loc):
     sql = """
     UPDATE Properties
-    SET idLocation = {id_loc}
+    SET idLocation = {id_loc}, updated=now()
     WHERE idProperty = {id_prop}
     """.format(id_prop=id_prop, id_loc=id_loc)
     

@@ -1,5 +1,5 @@
 <?php
-class AdvertiserAvailabilityController extends Zend_Controller_Action
+class Controlpanel_AvailabilityController extends Zend_Controller_Action
 {
 	public function preDispatch()
 	{
@@ -13,10 +13,14 @@ class AdvertiserAvailabilityController extends Zend_Controller_Action
 		$digestKey      = $this->getRequest()->getParam('digestKey');
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idAvailability))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 		
-        $form = new Frontend_Form_Step5AvailabilityDeleteConfirmForm(array(
+        $form = new Controlpanel_Form_Property_Step5AvailabilityDeleteConfirmForm(array(
 			'idProperty'     => $idProperty,
 			'idAvailability' => $idAvailability,
 			'digestKey'		 => $digestKey
@@ -29,9 +33,15 @@ class AdvertiserAvailabilityController extends Zend_Controller_Action
 			if ($form->isValid($this->getRequest()->getPost())) {
                 
                 if ($this->getRequest()->getParam('do') == 'cancel') {
-					$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend',
-														   array('idProperty' => $idProperty,
-																 'digestKey'  => Vfr_DigestKey::generate(array($idProperty))));
+					$this->_helper->redirector->gotoSimple(
+                        'step5-availability',
+                        'property',
+                        'controlpanel',
+						array (
+                            'idProperty' => $idProperty,
+							'digestKey'  => Vfr_DigestKey::generate(array($idProperty))
+                        )
+                    );
 				}
                 
                 $propertyModel = new Common_Model_Property();
@@ -40,32 +50,40 @@ class AdvertiserAvailabilityController extends Zend_Controller_Action
 				
                 
 				$availabilityRow->delete();
-				$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend',
-													   array('idProperty' => $idProperty,
-															 'digestKey'  => Vfr_DigestKey::generate(array(
-																$idProperty
-															))));
+				$this->_helper->redirector->gotoSimple(
+                    'step5-availability',
+                    'property',
+                    'controlpanel',
+					array (
+                        'idProperty' => $idProperty,
+						'digestKey'  => Vfr_DigestKey::generate(array($idProperty))
+                    )
+                );
 			}
 		}
         
-		
-		
-        $this->view->assign(array(
-           'form'            => $form,
-           'idProperty'      => $idProperty,
-           'idAvailability'  => $idAvailability,
-		   'availabilityRow' => $availabilityRow
-        ));
+        $this->view->assign(
+            array (
+                'form'            => $form,
+                'idProperty'      => $idProperty,
+                'idAvailability'  => $idAvailability,
+                'availabilityRow' => $availabilityRow
+            )
+        );
     }
 	
 	public function editAction()
 	{
 		$idProperty 	= $this->getRequest()->getParam('idProperty');
 		$idAvailability = $this->getRequest()->getParam('idAvailability');
-		$digestKey  = $this->getRequest()->getParam('digestKey');
+		$digestKey      = $this->getRequest()->getParam('digestKey');
 		
 		if (! $this->_helper->digestKey->isValid($digestKey, array($idProperty, $idAvailability))) {
-			$this->_helper->redirector->gotoSimple('digest-key-fail', 'advertiser-account', 'frontend');
+			$this->_helper->redirector->gotoSimple(
+                'digest-key-fail',
+                'account',
+                'controlpanel'
+            );
 		}
 		
 		$propertyModel = new Common_Model_Property();
@@ -79,30 +97,40 @@ class AdvertiserAvailabilityController extends Zend_Controller_Action
 		
 		$request = $this->getRequest();
 		if ($request->isPost()) {
-			$form = new Frontend_Form_Step5AvailabilityEditForm(array(
-				'idProperty'  	 => $idProperty,
-				'idAvailability' => $availabilityRow->idAvailability,
-				'availability'	 => $request->getParam('availability'),
-				'digestKey'		 => Vfr_DigestKey::generate(array($idProperty, $idAvailability))));
+			$form = new Controlpanel_Form_Property_Step5AvailabilityEditForm(
+                array (
+                    'idProperty'  	 => $idProperty,
+                    'idAvailability' => $availabilityRow->idAvailability,
+                    'availability'	 => $request->getParam('availability'),
+                    'digestKey'		 => Vfr_DigestKey::generate(array($idProperty, $idAvailability))
+                )
+            );
 			
 			if ($form->isValid($request->getPost())) {
                 $calendarModel->updateAvailabilityByPk($availabilityRow->idAvailability, $form->getValues());
-				$this->_helper->redirector->gotoSimple('step5-availability', 'advertiser-property', 'frontend',
-													   array('idProperty' => $form->getValue('idProperty'),
-															 'digestKey'  => Vfr_DigestKey::generate(array(
-																$idProperty
-															))));
+                
+				$this->_helper->redirector->gotoSimple(
+                    'step5-availability',
+                    'property',
+                    'controlpanel',
+					array (
+                        'idProperty' => $form->getValue('idProperty'),
+						'digestKey'  => Vfr_DigestKey::generate(array($idProperty))
+                    )
+                );
             }
 		} else {
-			$form = new Frontend_Form_Step5AvailabilityEditForm(array(
-				'idProperty'		=> $idProperty,
-				'idAvailability'	=> $availabilityRow->idAvailability,
-				'availability'		=> array ('start'	=> $availabilityRow->startDate,
-											  'end'		=> $availabilityRow->endDate),
-				'digestKey'			=> Vfr_DigestKey::generate(array(
-									      $idProperty, $idAvailability
-									   ))
-			));
+			$form = new Controlpanel_Form_Property_Step5AvailabilityEditForm(
+                array (
+                    'idProperty'		=> $idProperty,
+                    'idAvailability'	=> $availabilityRow->idAvailability,
+                    'availability'		=> array (
+                                               'start' => $availabilityRow->startDate,
+											   'end'   => $availabilityRow->endDate
+                                           ),
+                    'digestKey'			=> Vfr_DigestKey::generate(array($idProperty, $idAvailability))
+                )
+            );
 		}
 		
 		// Enable jQuery to pickup the headers etc

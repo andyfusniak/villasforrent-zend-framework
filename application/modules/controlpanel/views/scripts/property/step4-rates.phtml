@@ -13,18 +13,18 @@
 	<dl>
 		<dt><label for="rental_basis">Rental Basis</label></dt>
 		<dd><input readonly="Y" name="rentalBasis" value="<?php echo $this->escape($this->rentalBasis($this->rentalBasis)) ?>" /> <?php echo $this->rentalBasisLink ?>
-		<a href="<?php echo $this->url(array('module'       => 'frontend',
-												'controller'   => 'advertiser-rates',
-												'action'       => 'rental-basis',
-												'idProperty'   => $this->propertyRow->idProperty,
-												'digestKey'	=> Vfr_DigestKey::generate(array($this->propertyRow->idProperty))), null, true) ?>">[edit]</a></dd>
+		<a href="<?php echo $this->url(array('module'       => 'controlpanel',
+											 'controller'   => 'rates',
+											 'action'       => 'rental-basis',
+											 'idProperty'   => $this->propertyRow->idProperty,
+											 'digestKey'	=> Vfr_DigestKey::generate(array($this->propertyRow->idProperty))), null, true) ?>">[edit]</a></dd>
 	</dl>
 		
 	<dl>
 		<dt><label for="base_currency">Base Currency</label></dt>
 		<dd><input readonly="Y" name="base_currency" value="<?php echo $this->escape($this->baseCurrency($this->baseCurrency)) ?>" />  <?php echo $this->baseCurrencyLink ?>
-		<a href="<?php echo $this->url(array('module'       => 'frontend',
-											 'controller'   => 'advertiser-rates',
+		<a href="<?php echo $this->url(array('module'       => 'controlpanel',
+											 'controller'   => 'rates',
 											 'action'       => 'base-currency',
 											 'idProperty'   => $this->propertyRow->idProperty,
 											 'digestKey'	=> Vfr_DigestKey::generate(array($this->propertyRow->idProperty))), null, true) ?>">[edit]</a></dd>
@@ -36,15 +36,15 @@
 <input type="hidden" name="digestKey" value="<?php echo $this->form->getValue('digestKey') ?>" />
 <table style="width:100%;" cellpadding="0" cellspacing="0" border="1">
 <tr>
-	<td>Name of Period</td>
-	<td>Start Date</td>
-	<td>End Date</td>
-	<td>Weekly<br />Rate</td>
-	<td>Weekend<br />Nightly<br />Rate</td>
-	<td>Midweek<br />Nightly<br />Rate</td>
-	<td>Minimum<br />Stay</td>
-	<td>Update</td>
-	<td>Del</td>
+	<th>Name of Period</th>
+	<th>Start Date</th>
+	<th>End Date</th>
+	<th>Weekly<br />Rate</th>
+	<th>Weekend<br />Nightly<br />Rate</th>
+	<th>Midweek<br />Nightly<br />Rate</th>
+	<th>Minimum<br />Stay</th>
+	<th>Update</th>
+	<th>Del</th>
 </tr>
 <?php
 if ($this->ratesRowset) {
@@ -59,8 +59,8 @@ if ($this->ratesRowset) {
 			<td class="<?php echo $line_style ?>"><?php echo $this->rateCurrency($row->weekendNightlyRate, $this->baseCurrency) ?></td>
 			<td class="<?php echo $line_style ?>"><?php echo $this->rateCurrency($row->midweekNightlyRate, $this->baseCurrency) ?></td>
 			<td class="<?php echo $line_style ?>"><?php echo $this->minStayDuration($row->minStayDays) ?></td>
-			<td class="<?php echo $line_style ?>"><a href="<?php echo $this->url(array('module'     => 'frontend',
-																					   'controller' => 'advertiser-rates',
+			<td class="<?php echo $line_style ?>"><a href="<?php echo $this->url(array('module'     => 'controlpanel',
+																					   'controller' => 'rates',
 																					   'action'     => 'edit',
 																					   'idProperty' => $this->propertyRow->idProperty,
 																					   'idRate'     => $row->idRate,
@@ -68,8 +68,8 @@ if ($this->ratesRowset) {
 																							$this->propertyRow->idProperty,
 																							$row->idRate))
 																					   ), null, true) ?>">[edit]</a></td>
-			<td class="<?php echo $line_style ?>"><a href="<?php echo $this->url(array('module'     => 'frontend',
-																					   'controller' => 'advertiser-rates',
+			<td class="<?php echo $line_style ?>"><a href="<?php echo $this->url(array('module'     => 'controlpanel',
+																					   'controller' => 'rates',
 																					   'action'     => 'delete-confirm',
 																					   'idProperty' => $this->propertyRow->idProperty,
 																					   'idRate'  	=> $row->idRate,
