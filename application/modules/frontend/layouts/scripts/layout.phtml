@@ -11,10 +11,11 @@
         if ($this->jQuery()->isEnabled()) {
             if ('live' != APPLICATION_ENV) {
                 $this->jQuery()->setLocalPath('/js/jquery/jquery-1.7.1.min.js');
-                $this->jQuery()->setUiLocalPath('/js/jquery-ui-1.8.12/ui/jquery-ui.js');    
+                $this->jQuery()->setUiLocalPath('/js/jquery-ui-1.8.17/ui/jquery-ui.js');
+                $this->jQuery()->addStylesheet('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/cupertino/jquery-ui.css');
+            } else {
+                $this->jQuery()->addStylesheet('/js/jquery-ui-themes-1.8.17/themes/cupertino/jquery-ui.css');
             }
-            
-            $this->jQuery()->addStylesheet('/js/jquery-ui-themes-1.8.12/themes/sunny/jquery-ui.css');
         }
     ?>
     <?php echo $this->jQuery() ?>

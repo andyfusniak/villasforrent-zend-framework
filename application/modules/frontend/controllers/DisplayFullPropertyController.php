@@ -45,6 +45,11 @@ class DisplayFullPropertyController extends Zend_Controller_Action
 		//var_dump($locationRow);
 		//die();
 		
+        // enable jQuery Core Library
+        ZendX_JQuery::enableView($this->view);
+        $jquery = $this->view->jQuery();
+        $jquery->enable();
+        
 		$this->view->assign(
 			array (
 				'propertyRow'		=> $propertyRow,
