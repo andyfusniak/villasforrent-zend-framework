@@ -274,6 +274,15 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
 		$advertiserResource->updateLastLogin($idAdvertiser);
 	}
 	
+	public function addEmailConfirmation($idAdvertiser, $token)
+	{
+		$tokenResource = $this->getResource('Token');
+		$tokenResource->addEmailConfirmation(
+			$idAdvertiser,
+			$token
+		);
+	}
+	
 	public function changeEmailAddress($idAdvertiser, $newEmailAddress)
 	{
 		$advertiserRow = $this->getAdvertiserByEmail(

@@ -119,6 +119,20 @@ class Controlpanel_ResendConfirmationController extends Zend_Controller_Action
             $this->_advertiserRow->idAdvertiser
         );
         
+        if (null == $tokenRow) {
+			// create a confirmation token
+			// first, generate a new random token
+			$tokenObj = new Vfr_Token();
+			$token = $tokenObj->generateUniqueToken();
+			
+			$this->_advertiserModel->addEmailConfirmation(
+				$this->_advertiserRow->idAdvertiser,
+				$token
+			);
+		} else {
+            $token = $tokenRow->token;
+        }
+        
         $vfrMail = new Vfr_Mail(
             '/modules/controlpanel/views/emails',
             'register-confirm-email' // no extensions required
@@ -132,7 +146,7 @@ class Controlpanel_ResendConfirmationController extends Zend_Controller_Action
                 'firstname'     => $this->_advertiserRow->firstname,
                 'lastname'      => $this->_advertiserRow->lastname,
                 'emailAddress'  => $this->_advertiserRow->emailAddress,
-                'token'         => $tokenRow->token
+                'token'         => $token
             ),
             Vfr_Mail::MODE_ONLY_TXT
         );
