@@ -92,7 +92,6 @@ class Common_Plugin_Layout extends Zend_Controller_Plugin_Abstract
                 
                 // Controller based ACL for advertiser controlpanel
                 $advertiserControlpanelAcl = new Controlpanel_Model_Acl_Controlpanel();
-        
                 
                 // setup the navigation bar for the advertiser controlpanel
                 //$advertiserCpNav = new Zend_Navigation($config);
@@ -101,9 +100,9 @@ class Common_Plugin_Layout extends Zend_Controller_Plugin_Abstract
                 
                 $view->headMeta()->appendHttpEquiv('robots', 'NOINDEX, NOFOLLOW');
                 $view->headMeta()->appendHttpEquiv('description', 'Control Panel');
-                $view->headLink()->appendStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
-                $view->headLink()->appendStylesheet('/css/villastorent.css');
-				$view->headLink()->appendStylesheet('/css/advertisercp/control-panel.css');
+                $view->headTitle(
+                    'Control Panel'  
+                );
             break;
 
 			case 'frontend':
@@ -112,14 +111,31 @@ class Common_Plugin_Layout extends Zend_Controller_Plugin_Abstract
                 
 				// inject the top level locations into the view
                 $locationModel	= new Common_Model_Location();
-                $view->locationRowset = $locationModel->getAllLocationsIn(Common_Resource_Location::ROOT_NODE_ID);
-				//var_dump($view->locationRowset);
+                $view->locationRowset = $locationModel->getAllLocationsIn(
+                    Common_Resource_Location::ROOT_NODE_ID
+                );
+				
+                //var_dump($view->locationRowset);
                 
 				//$this->_logger->log(__METHOD__ . ' Setting view helpers for frontend module', Zend_Log::DEBUG);
-				$view->headMeta()->appendHttpEquiv('description', 'Villas to rent across the world direct from the owner.');
+				$view->headMeta()->appendHttpEquiv(
+                    'description',
+                    'Villas to rent across the world direct from the owner.'
+                );
+                
+                $view->headTitle(
+                    'Property to Rent across the world'  
+                );
+                
 				$view->headMeta()->appendHttpEquiv('robots', 'ALL');
-				$view->headLink()->prependStylesheet('/css/villastorent.css');
-				$view->headLink()->prependStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
+                //$view->headLink()->appendStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
+				
+                if ('live' == APPLICATION_ENV) {
+                    $view->headLink()->prependStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
+                } else {
+                    $view->headLink()->appendStylesheet('http://yui.yahooapis.com/2.9.0/build/reset-fonts-grids/reset-fonts-grids.css');
+                }
+               
                 //$view->addHelperPath('/Vfr/View/Helper', 'Vfr_View_Helper');
 			break;
 		}

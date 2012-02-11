@@ -13,9 +13,6 @@ read -e INC_IMAGES
 #read -e INC_YUI2
 INC_YUI2=y
 
-echo -n "Include jQuery, jQuery UI/Plugins/Themess (y) or (n) :"
-read -e INC_JQUERY
-
 if [ "$DEPLOY" = "l" ]; then
 	DEPLOY_SCRIPT=gohpwlive
 	DEPLOY_DIR=/var/www/www.holidaypropertyworldwide.com
@@ -42,6 +39,7 @@ public/.htaccess \
 public/.htaccess-beta \
 public/googleae3066b83fcfab45.html \
 public/css/admin/controlpanel.css \
+public/css/advertisercp/control-panel.css \
 public/css/villastorent.css \
 public/index.php \
 public/robots.txt \
@@ -54,6 +52,7 @@ public/js/dynatree/skin/icons.gif \
 public/js/dynatree/skin/loading.gif \
 public/js/dynatree/skin/ui.dynatree.css \
 public/js/dynatree/skin/vline.gif \
+public/js/jquery-ui-1.8.17/development-bundle/demos/images/calendar.gif \
 public/js/vfr/admin/seturl.js \
 public/js/vfr/step4-rates.js \
 public/js/vfr/step5-availability.js \
@@ -400,10 +399,12 @@ utils/hpw/property_content.py \
 utils/hpw/status.py \
 utils/migrate-featured.py \
 utils/migrate-separate-props.py \
+utils/property_content.py \
 utils/property_count_update.py \
 utils/remove-unapproved-property.py \
 utils/repair-prop-content-checksums.py \
 utils/repair-prop-location-ids.py \
+utils/show-prop-content-checksums.py \
 utils/update-property-count.py \
 utils/updatechecksums
 
@@ -524,15 +525,6 @@ if [ "$INC_YUI2" = "y" ]; then
 	echo -e "\E[32mAppending YUI2 to archive\E[37m"
 	tar rfhp app.tar public/js/yui2/reset-fonts-grids
 fi
-
-if [ "$INC_JQUERY" = "y" ]; then
-	echo -e "\E[32mAppending jQuery/UI/Theme to archive\E[37m"
-    tar rfhp app.tar \
-    public/js/jquery/jquery-1.7.1.min.js \
-    public/js/jquery-ui-1.8.12 \
-    public/js/jquery-ui-themes-1.8.12
-fi
-
 
 echo -e "\E[32mCompressing archive\E[37m"
 gzip -9 -f app.tar

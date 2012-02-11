@@ -48,7 +48,8 @@ class DisplayFullPropertyController extends Zend_Controller_Action
         // enable jQuery Core Library
         ZendX_JQuery::enableView($this->view);
         $jquery = $this->view->jQuery();
-        $jquery->enable();
+        $jquery->enable()
+               ->uiEnable();
         
 		$this->view->assign(
 			array (

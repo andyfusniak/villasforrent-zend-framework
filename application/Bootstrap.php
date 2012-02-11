@@ -283,6 +283,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 				
 		//$acl = new Frontend_Model_AdvertiserAcl();
 
+        // codemagician: all you need to do in bootstrap is: $layoutModulePlugin= new Zend_View_Plugin_Layout();
+        // $layoutModulePlugin->registerModuleLayout("mymodule", APPLICATION_PATH . "/modules/mymodule/layouts/scripts", "layout");
+
 		//$frontController->registerPlugin(new Frontend_Plugin_AdvertiserAccessCheck());
 		$frontController->registerPlugin($layoutModulePlugin);
 
