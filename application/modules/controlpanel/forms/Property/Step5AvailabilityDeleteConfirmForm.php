@@ -1,5 +1,5 @@
 <?php
-class Frontend_Form_Property_Step5AvailabilityDeleteConfirmForm extends Zend_Form
+class Controlpanel_Form_Property_Step5AvailabilityDeleteConfirmForm extends Zend_Form
 {
 	protected $_idProperty;
 	protected $_idAvailability;
