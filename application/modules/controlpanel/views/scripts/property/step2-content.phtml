@@ -1,10 +1,10 @@
 <h1>Step 2 - Enter the content for property <?php echo $this->form->getValue('idProperty') ?></h1>
 <ul id="property_progress_header">
-	<li id="location_orange"></li>
-	<li id="content_grey"></li>
-	<li id="pictures_grey"></li>
-	<li id="rates_grey"></li>
-	<li id="availability_grey"></li>
+    <li id="location_orange"></li>
+    <li id="content_grey"></li>
+    <li id="pictures_grey"></li>
+    <li id="rates_grey"></li>
+    <li id="availability_grey"></li>
 </ul>
 <p class="clearfix" />
 <p>Describe the details of your rental property using the form below. Make sure you click the 'save' button at the bottom of the form to ensure your changes are stored.</p>
@@ -13,189 +13,189 @@
 <input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
 <input type="hidden" name="mode" value="<?php echo $this->form->getValue('mode') ?>" />
 <input type="hidden" name="digestKey" value="<?php echo $this->form->getValue('digestKey') ?>" />
-	<fieldset>
+    <fieldset>
     <legend>Content</legend>
-	<dl>
-		<dt><label for="summary">Brief summary:</label></dt>
-		<dd>
-			<textarea name="summary" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('summary')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('summary')) ?>
-			<p>A short descriptive summary of your property including its key features.</p>
-		</dd>
-		
-		<dt><label for="headline1">Headline 1:</label></dt>
-		<dd>
-			<input type="text" name="headline1" value="<?php echo $this->escape($this->form->getValue('headline1')) ?>" />
-			<?php echo $this->displayErrors($this->form->getMessages('headline1')) ?>
-			<p>eg 'Villa with Private Pool and Sea Views'</p>
-		</dd>
-		
-		<dt><label for="headline2">Headline 2:</label></dt>
-		<dd>
-			<input type="text" name="headline2" value="<?php echo $this->escape($this->form->getValue('headline2')) ?>" />
-			<?php echo $this->displayErrors($this->form->getMessages('headline2')) ?>
-			<p>eg 'Peaceful Location, 10 Minutes Walk to the Beach'</p>
-		</dd>
-	
-		<dt><label for="description">Opening Paragraph:</label></dt>
-		<dd>
-			<textarea name="description" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('description')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('description')) ?>
-			<p>Brief description of the bathrooms, eg En-suite bathroom to bedroom 1 with bath, wc<br />Bathroom with bath/shower over, wc, bidet<br />Separate wc</p>
-		</dd>
-	
-		<dt><label for="bedroomDesc">Bedrooms:</label></dt>
-		<dd>
-			<textarea name="bedroomDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('bedroomDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('bedroomDesc')) ?>
-			<p class="description">Brief description of the bathrooms, eg;<br />En-suite bathroom to bedroom 1 with bath, wc<br />Bathroom with bath/shower over, wc, bidet<br />Separate wc</p>
-		</dd>
-	
-		<dt><label for="bathroomDesc">Bathroom(s):</label></dt>
-		<dd>
-			<textarea name="bathroomDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('bathroomDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('bathroomDesc')) ?>
-		</dd>
-		
-		<dt><label for="kitchenDesc">Kitchen:</label></dt>
-		<dd>
-			<textarea name="kitchenDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('kitchenDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('kitchenDesc')) ?>
-			<p>Include the main kitchen equipment, eg cooker, hob, fridge, freezer, washing machine, microwave etc</p>
-		</dd>
-		
-		<dt><label for="utilityDesc">Utility Room:</label></dt>
-		<dd>
-			<textarea name="utilityDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('utilityDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('utilityDesc')) ?>
-			<p>Include equipment</p>
-		</dd>
-		
-		<dt><label for="livingDesc">Living Rooms:</label></dt>
-		<dd>
-			<textarea name="livingDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('livingDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('livingDesc')) ?>
-			<p>Brief description of living rooms (eg lounge, dining room, etc) and equipment, eg TV, video, etc. Include sofa beds if applicable and state whether they are double or single</p>
-		</dd>
-		
-		<dt><label for="otherDesc">Other:</label></dt>
-		<dd>
-			<textarea name="otherDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('otherDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('otherDesc')) ?>
-		</dd>
-		
-		<dt><label for="serviceDesc">Cleaning/towels/linen/maid service:</label></dt>
-		<dd>
-			<textarea name="serviceDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('serviceDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('serviceDesc')) ?>
-			<p>Please state whether towels and linen are included, how often the property is cleaned and how often towels and linen are changed etc</p>
-		</dd>
-		
-		<!--<dt><label for="facilities">Type of Area:</label></dt>
-		<dd>
-			<?php //echo $this->form->getElement('facilities') ?>
-		</dd>-->
-	
-		<dt><label for="notesDesc">Notes on accommodation:</label></dt>
-		<dd>
-			<textarea name="notesDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('notesDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('notesDesc')) ?>
-			<p class="description">Any further information you would like to include about the accommodation, eg heating, air-conditioning, suitability for children etc</p>
-		</dd>
-	
-		<?php if ($this->form->getIdHolidayType() == Common_Resource_HolidayType::HOLIDAY_TYPE_ACCESS) : ?>
-		<dt><label for="accessDesc">Wheelchair access:</label></dt>
-		<dd>
-			<textarea name="accessDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('accessDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('accessDesc')) ?>
-		</dd>
-		<?php endif ?>
-		
-		<dt><label for="outsideDesc">Outside the property:</label></dt>
-		<dd>
-			<textarea name="outsideDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('outsideDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('outsideDesc')) ?>
-			<p>Include gardens, patios, barbecue, outdoor furniture, etc. If you have a swimming pool please give the size if possible and state whether it is private or shared. If it can be heated, please include this</p>
-		</dd>
-		
-		<?php if ($this->form->getIdHolidayType() == Common_Resource_HolidayType::HOLIDAY_TYPE_GOLF) : ?>
-		<dt><label for="golf">Golf:</label></dt>
-			<dd>
-				<textarea name="golfDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('golfDesc')) ?></textarea>
-				<?php echo $this->displayErrors($this->form->getMessages('golfDesc')) ?>
-				<p class="description">Distance and description of local golf courses, if applicable</p>
-		</dd>
-		<?php endif ?>
-		
-		<?php if ($this->form->getIdHolidayType() == Common_Resource_HolidayType::HOLIDAY_TYPE_SKIING) : ?>
-		<dt><label for="skiingDesc">Skiing</label></dt>
-		<dd>
-			<textarea name="skiingDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('skiingDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('skiingDesc')) ?>
-			<p class="description">For properties close to ski resorts. Please give details of easily accessible skiing facilities. Full details should be provided of the area and skiing opportunities</p>
-		</dd>
-		<?php endif ?>
-		
-		<?php if ($this->form->getIdHolidayType() == Common_Resource_HolidayType::HOLIDAY_TYPE_INTEREST) : ?>
-		<dt><label for="specialDesc">Special Interest Holidays:</label></dt>
-		<dd>
-			<textarea name="specialDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('specialDesc')) ?></textarea>
-			<p class="description">If you provide special interest holidays for your guests, eg painting or cookery courses, please describe this here. Please note that this section should not be used to describe locally available facilities, which can be listed in the 'Further details' section</p>
-		</dd>
-		<?php endif ?>
-		
-		<dt><label for="beachDesc">Coastline and Beach:</label></dt>
-		<dd>
-			<textarea name="beachDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('beachDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('beachDesc')) ?>
-			<p>Please give distance to coast or beaches. (If a time is given, please state whether walking or driving). A description of the beach or beaches can also be included</p>
-		</dd>
-		
-		<dt><label for="travelDesc">Travel:</label></dt>
-		<dd>
-			<textarea name="travelDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('travelDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('travelDesc')) ?>
-			<p>Include the name and distance of nearest airport(s) or, if appropriate, driving distances from channel ports etc. Please also state if car hire (or use of car) is essential or recommended</p>
-		</dd>
-		
-		<dt><label for="bookingDesc">Booking Notes:</label></dt>
-		<dd>
-			<textarea name="bookingDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('bookingDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('bookingDesc')) ?>
-			<p>Brief details of booking procedure, deposits, timing of payments, etc</p>
-		</dd>
-	
-		<dt><label for="changeoverDesc">Changeover:</label></dt>
-		<dd>
-			<textarea name="changeoverDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('changeoverDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('changeoverDesc')) ?>
-			<p>Please state if you have a preferred changeover day or if this is flexible. Arrival and departure times may also be given here</p>
-		</dd>
-		
-		<dt><label for="contactDesc">Contact Details</label></dt>
-		<dd>
-			<textarea name="contactDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('contactDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('contactDesc')) ?>
-			<p>Please list your contact details as you wish them to appear on your advertisement, eg<br />John Smith<br />Tel: (UK) + 44 (0)1234 567890<br />Fax: (UK) + 44 (0)1234 567890<br />Mobile: (UK) + 44 (0)7777 123456<br />Please do not include email addresses here - use the two email address boxes instead</p>
-		</dd>
-		
-		<dt><label for="testimonialsDesc">Testimonials:</label></dt>
-		<dd>
-			<textarea name="testimonialsDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('testimonialsDesc')) ?></textarea>
-			<?php echo $this->displayErrors($this->form->getMessages('testimonialsDesc')) ?>
-			<p>Please use this section to provide any testimonials or feedback that you have received from your guests. We suggest a maximum of 3 guest comments</p>
-		</dd>
-		
-		<dt><label for="website">Personal website link:</label></dt>
-		<dd>
-			<input type="text" name="website" value="<?php echo $this->escape($this->form->getValue('website')) ?>" />
-			<?php echo $this->displayErrors($this->form->getMessages('website')) ?>
-			<p>If you have a personal website and would like us to include a link to this, please provide your URL. Note that we do not accept links to web sites which advertise other properties or to commercial/business sites. We reserve the right to refuse or remove these links at our discretion.</p>
-		</dd>
-		
-		<dd id="form-submit">
-			<input type="submit" name="submit" id="submit" value="submit" />
-		</dd>
-	</dl>
-	</fieldset>
+    <dl>
+        <dt><label for="summary">Brief summary:</label></dt>
+        <dd>
+            <textarea name="summary" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('summary')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('summary')) ?>
+            <p>A short descriptive summary of your property including its key features.</p>
+        </dd>
+
+        <dt><label for="headline1">Headline 1:</label></dt>
+        <dd>
+            <input type="text" name="headline1" value="<?php echo $this->escape($this->form->getValue('headline1')) ?>" />
+            <?php echo $this->displayErrors($this->form->getMessages('headline1')) ?>
+            <p>eg 'Villa with Private Pool and Sea Views'</p>
+        </dd>
+
+        <dt><label for="headline2">Headline 2:</label></dt>
+        <dd>
+            <input type="text" name="headline2" value="<?php echo $this->escape($this->form->getValue('headline2')) ?>" />
+            <?php echo $this->displayErrors($this->form->getMessages('headline2')) ?>
+            <p>eg 'Peaceful Location, 10 Minutes Walk to the Beach'</p>
+        </dd>
+
+        <dt><label for="description">Opening Paragraph:</label></dt>
+        <dd>
+            <textarea name="description" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('description')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('description')) ?>
+            <p>Brief description of the bathrooms, eg En-suite bathroom to bedroom 1 with bath, wc<br />Bathroom with bath/shower over, wc, bidet<br />Separate wc</p>
+        </dd>
+
+        <dt><label for="bedroomDesc">Bedrooms:</label></dt>
+        <dd>
+            <textarea name="bedroomDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('bedroomDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('bedroomDesc')) ?>
+            <p class="description">Brief description of the bathrooms, eg;<br />En-suite bathroom to bedroom 1 with bath, wc<br />Bathroom with bath/shower over, wc, bidet<br />Separate wc</p>
+        </dd>
+
+        <dt><label for="bathroomDesc">Bathroom(s):</label></dt>
+        <dd>
+            <textarea name="bathroomDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('bathroomDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('bathroomDesc')) ?>
+        </dd>
+
+        <dt><label for="kitchenDesc">Kitchen:</label></dt>
+        <dd>
+            <textarea name="kitchenDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('kitchenDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('kitchenDesc')) ?>
+            <p>Include the main kitchen equipment, eg cooker, hob, fridge, freezer, washing machine, microwave etc</p>
+        </dd>
+
+        <dt><label for="utilityDesc">Utility Room:</label></dt>
+        <dd>
+            <textarea name="utilityDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('utilityDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('utilityDesc')) ?>
+            <p>Include equipment</p>
+        </dd>
+
+        <dt><label for="livingDesc">Living Rooms:</label></dt>
+        <dd>
+            <textarea name="livingDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('livingDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('livingDesc')) ?>
+            <p>Brief description of living rooms (eg lounge, dining room, etc) and equipment, eg TV, video, etc. Include sofa beds if applicable and state whether they are double or single</p>
+        </dd>
+
+        <dt><label for="otherDesc">Other:</label></dt>
+        <dd>
+            <textarea name="otherDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('otherDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('otherDesc')) ?>
+        </dd>
+
+        <dt><label for="serviceDesc">Cleaning/towels/linen/maid service:</label></dt>
+        <dd>
+            <textarea name="serviceDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('serviceDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('serviceDesc')) ?>
+            <p>Please state whether towels and linen are included, how often the property is cleaned and how often towels and linen are changed etc</p>
+        </dd>
+
+        <!--<dt><label for="facilities">Type of Area:</label></dt>
+        <dd>
+            <?php //echo $this->form->getElement('facilities') ?>
+        </dd>-->
+
+        <dt><label for="notesDesc">Notes on accommodation:</label></dt>
+        <dd>
+            <textarea name="notesDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('notesDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('notesDesc')) ?>
+            <p class="description">Any further information you would like to include about the accommodation, eg heating, air-conditioning, suitability for children etc</p>
+        </dd>
+
+        <?php if ($this->form->getIdHolidayType() == Common_Resource_HolidayType::HOLIDAY_TYPE_ACCESS) : ?>
+        <dt><label for="accessDesc">Wheelchair access:</label></dt>
+        <dd>
+            <textarea name="accessDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('accessDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('accessDesc')) ?>
+        </dd>
+        <?php endif ?>
+
+        <dt><label for="outsideDesc">Outside the property:</label></dt>
+        <dd>
+            <textarea name="outsideDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('outsideDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('outsideDesc')) ?>
+            <p>Include gardens, patios, barbecue, outdoor furniture, etc. If you have a swimming pool please give the size if possible and state whether it is private or shared. If it can be heated, please include this</p>
+        </dd>
+
+        <?php if ($this->form->getIdHolidayType() == Common_Resource_HolidayType::HOLIDAY_TYPE_GOLF) : ?>
+        <dt><label for="golf">Golf:</label></dt>
+            <dd>
+                <textarea name="golfDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('golfDesc')) ?></textarea>
+                <?php echo $this->displayErrors($this->form->getMessages('golfDesc')) ?>
+                <p class="description">Distance and description of local golf courses, if applicable</p>
+        </dd>
+        <?php endif ?>
+
+        <?php if ($this->form->getIdHolidayType() == Common_Resource_HolidayType::HOLIDAY_TYPE_SKIING) : ?>
+        <dt><label for="skiingDesc">Skiing</label></dt>
+        <dd>
+            <textarea name="skiingDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('skiingDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('skiingDesc')) ?>
+            <p class="description">For properties close to ski resorts. Please give details of easily accessible skiing facilities. Full details should be provided of the area and skiing opportunities</p>
+        </dd>
+        <?php endif ?>
+
+        <?php if ($this->form->getIdHolidayType() == Common_Resource_HolidayType::HOLIDAY_TYPE_INTEREST) : ?>
+        <dt><label for="specialDesc">Special Interest Holidays:</label></dt>
+        <dd>
+            <textarea name="specialDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('specialDesc')) ?></textarea>
+            <p class="description">If you provide special interest holidays for your guests, eg painting or cookery courses, please describe this here. Please note that this section should not be used to describe locally available facilities, which can be listed in the 'Further details' section</p>
+        </dd>
+        <?php endif ?>
+
+        <dt><label for="beachDesc">Coastline and Beach:</label></dt>
+        <dd>
+            <textarea name="beachDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('beachDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('beachDesc')) ?>
+            <p>Please give distance to coast or beaches. (If a time is given, please state whether walking or driving). A description of the beach or beaches can also be included</p>
+        </dd>
+
+        <dt><label for="travelDesc">Travel:</label></dt>
+        <dd>
+            <textarea name="travelDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('travelDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('travelDesc')) ?>
+            <p>Include the name and distance of nearest airport(s) or, if appropriate, driving distances from channel ports etc. Please also state if car hire (or use of car) is essential or recommended</p>
+        </dd>
+
+        <dt><label for="bookingDesc">Booking Notes:</label></dt>
+        <dd>
+            <textarea name="bookingDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('bookingDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('bookingDesc')) ?>
+            <p>Brief details of booking procedure, deposits, timing of payments, etc</p>
+        </dd>
+
+        <dt><label for="changeoverDesc">Changeover:</label></dt>
+        <dd>
+            <textarea name="changeoverDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('changeoverDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('changeoverDesc')) ?>
+            <p>Please state if you have a preferred changeover day or if this is flexible. Arrival and departure times may also be given here</p>
+        </dd>
+
+        <dt><label for="contactDesc">Contact Details</label></dt>
+        <dd>
+            <textarea name="contactDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('contactDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('contactDesc')) ?>
+            <p>Please list your contact details as you wish them to appear on your advertisement, eg<br />John Smith<br />Tel: (UK) + 44 (0)1234 567890<br />Fax: (UK) + 44 (0)1234 567890<br />Mobile: (UK) + 44 (0)7777 123456<br />Please do not include email addresses here - use the two email address boxes instead</p>
+        </dd>
+
+        <dt><label for="testimonialsDesc">Testimonials:</label></dt>
+        <dd>
+            <textarea name="testimonialsDesc" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('testimonialsDesc')) ?></textarea>
+            <?php echo $this->displayErrors($this->form->getMessages('testimonialsDesc')) ?>
+            <p>Please use this section to provide any testimonials or feedback that you have received from your guests. We suggest a maximum of 3 guest comments</p>
+        </dd>
+
+        <dt><label for="website">Personal website link:</label></dt>
+        <dd>
+            <input type="text" name="website" value="<?php echo $this->escape($this->form->getValue('website')) ?>" />
+            <?php echo $this->displayErrors($this->form->getMessages('website')) ?>
+            <p>If you have a personal website and would like us to include a link to this, please provide your URL. Note that we do not accept links to web sites which advertise other properties or to commercial/business sites. We reserve the right to refuse or remove these links at our discretion.</p>
+        </dd>
+
+        <dd id="form-submit">
+            <input type="submit" name="submit" id="submit" value="submit" />
+        </dd>
+    </dl>
+    </fieldset>
 </form>

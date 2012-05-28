@@ -1,10 +1,9 @@
 <?php
-class Admin_ChecksumsController
-    extends Zend_Controller_Action
+class Admin_ChecksumsController extends Zend_Controller_Action
 {
     public function repairAction() {
         $propertyModel = new Common_Model_Property();
-      
+
         // first repair the property content lines
         //$propertyModel->repairPropertyBatchChecksums();
 
@@ -13,16 +12,16 @@ class Admin_ChecksumsController
         // property content checksums
         $propertyRowset = $propertyModel->getAllProperties();
 
-        $repairedList = array ();
+        $repairedList = array();
 
         foreach ($propertyRowset as $propertyRow) {
-            
+
             $checksumMaster = $propertyModel->checksumTotal(
                 $propertyRow->idProperty,
                 Common_Resource_PropertyContent::VERSION_MAIN,
                 'EN'
             );
-            
+
             $checksumUpdate = $propertyModel->checksumTotal(
                 $propertyRow->idProperty,
                 Common_Resource_PropertyContent::VERSION_UPDATE,
@@ -42,10 +41,9 @@ class Admin_ChecksumsController
         }
 
         $this->view->assign(
-            array (
+            array(
                 'repairedList' => $repairedList
             )
         );
     }
-
 }

@@ -11,11 +11,11 @@ $(function(){
 
                 if (node.childList != null)
                     return false;
-                
+
                 $("input#idLocation").val(node.data.idLocation);
             }
         }
     });
-    
+
     $("form").submit(function() {});
 });

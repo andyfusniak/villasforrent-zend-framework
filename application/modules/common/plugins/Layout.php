@@ -1,19 +1,19 @@
 <?php
 class Common_Plugin_Layout extends Zend_Controller_Plugin_Abstract
 {
-	private $_logger;
-	
-	/**
+    private $_logger;
+
+    /**
      * Array of layout paths associating modules with layouts
      */
     protected $_moduleLayouts;
-	
-	public function __construct()
-	{
-		$this->_logger = Zend_Registry::get('logger');
-	}
-	
-	/**
+
+    public function __construct()
+    {
+        $this->_logger = Zend_Registry::get('logger');
+    }
+
+    /**
      * Registers a module layout.
      * This layout will be rendered when the specified module is called.
      * If there is no layout registered for the current module, the default layout as specified
@@ -24,134 +24,125 @@ class Common_Plugin_Layout extends Zend_Controller_Plugin_Abstract
      * @param String $layout        The name of the layout to render
      */
     public function registerModuleLayout($module, $layoutPath, $layout=null)
-	{
-		$this->_moduleLayouts[$module] = array('layoutPath' => $layoutPath,
-											   'layout' 	=> $layout);
+    {
+        $this->_moduleLayouts[$module] = array('layoutPath' => $layoutPath,
+                                               'layout'     => $layout);
     }
 
-	public function routeStartup(Zend_Controller_Request_Abstract $request)
-	{
-		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
-		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
-	}
-	
-	public function routeShutdown(Zend_Controller_Request_Abstract $request)
-	{
-		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
-		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
-	}
-	
-	public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
-	{
-		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
-		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
-	}
-	
-	public function preDispatch(Zend_Controller_Request_Abstract $request)
-	{
-		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
-		$moduleName = $request->getModuleName();
-		
-		$this->_logger->log(__METHOD__ . ' getModuleName()=' . $moduleName, Zend_Log::DEBUG);	
-		if (isset($this->_moduleLayouts[$moduleName])) {
-			$config = $this->_moduleLayouts[$moduleName];
-			$layout = Zend_Layout::getMvcInstance();
-			if ($layout->getMvcEnabled()) {
-				$this->_logger->log('Setting layout path to ' . $config['layoutPath'], Zend_Log::DEBUG);
+    public function routeStartup(Zend_Controller_Request_Abstract $request)
+    {
+        //$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
+        //$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
+    }
+
+    public function routeShutdown(Zend_Controller_Request_Abstract $request)
+    {
+        //$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
+        //$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
+    }
+
+    public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
+    {
+        //$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
+        //$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
+    }
+
+    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    {
+        //$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
+        $moduleName = $request->getModuleName();
+
+        $this->_logger->log(__METHOD__ . ' getModuleName()=' . $moduleName, Zend_Log::DEBUG);
+        if (isset($this->_moduleLayouts[$moduleName])) {
+            $config = $this->_moduleLayouts[$moduleName];
+            $layout = Zend_Layout::getMvcInstance();
+            if ($layout->getMvcEnabled()) {
+                $this->_logger->log('Setting layout path to ' . $config['layoutPath'], Zend_Log::DEBUG);
                 $layout->setLayoutPath($config['layoutPath']);
-               
+
                 if (null !== $config['layout']){
                     $layout->setLayout($config['layout']);
                 }
             }
-		}
-		
-		
+        }
 
-		switch($moduleName) {
-			case 'admin':
-				$view = $layout->getView();
-				
-				//$this->_logger->log(__METHOD__ . ' Setting view helpers for admin module', Zend_Log::DEBUG);
-				//$view->headLink()->prependStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
-				$config = new Zend_Config_Xml(APPLICATION_PATH . '/configs/admin-navigation.xml', 'nav');
-				
-				$adminNav = new Zend_Navigation($config);
-				$view->navigation($adminNav);
-				//$view->navigation()->menu()->setPartial(array('nav1.phtml','default'));
-			break;
-			
-			case 'controlpanel':
+
+
+        switch($moduleName) {
+            case 'admin':
+                $view = $layout->getView();
+
+                //$this->_logger->log(__METHOD__ . ' Setting view helpers for admin module', Zend_Log::DEBUG);
+                //$view->headLink()->prependStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
+                $config = new Zend_Config_Xml(APPLICATION_PATH . '/configs/admin-navigation.xml', 'nav');
+
+                $adminNav = new Zend_Navigation($config);
+                $view->navigation($adminNav);
+                //$view->navigation()->menu()->setPartial(array('nav1.phtml','default'));
+            break;
+
+            case 'controlpanel':
                 $front = Zend_Controller_Front::getInstance();
-				$view = $layout->getView();
-                
+                $view = $layout->getView();
+
                 //$config = new Zend_Config_Xml(
                 //    APPLICATION_PATH . '/configs/advertisercp-navigation.xml',
                 //    'nav'
                 //);
-                
+
                 // Controller based ACL for advertiser controlpanel
                 $advertiserControlpanelAcl = new Controlpanel_Model_Acl_Controlpanel();
-                
+
                 // setup the navigation bar for the advertiser controlpanel
                 //$advertiserCpNav = new Zend_Navigation($config);
                 //$view->navigation($advertiserCpNav)
                 //     ->setAcl($advertiserControlpanelAcl);
-                
+
                 $view->headMeta()->appendHttpEquiv('robots', 'NOINDEX, NOFOLLOW');
                 $view->headMeta()->appendHttpEquiv('description', 'Control Panel');
                 $view->headTitle(
-                    'Control Panel'  
+                    'Control Panel'
                 );
             break;
 
-			case 'frontend':
-				$front = Zend_Controller_Front::getInstance();
-				$view = $layout->getView();
-                
-				// inject the top level locations into the view
-                $locationModel	= new Common_Model_Location();
+            case 'frontend':
+                $front = Zend_Controller_Front::getInstance();
+                $view = $layout->getView();
+
+                // inject the top level locations into the view
+                $locationModel  = new Common_Model_Location();
                 $view->locationRowset = $locationModel->getAllLocationsIn(
                     Common_Resource_Location::ROOT_NODE_ID
                 );
-				
+
                 //var_dump($view->locationRowset);
-                
-				//$this->_logger->log(__METHOD__ . ' Setting view helpers for frontend module', Zend_Log::DEBUG);
-				$view->headMeta()->appendHttpEquiv(
+
+                //$this->_logger->log(__METHOD__ . ' Setting view helpers for frontend module', Zend_Log::DEBUG);
+                $view->headMeta()->appendHttpEquiv(
                     'description',
                     'Villas to rent across the world direct from the owner.'
                 );
-                
+
                 $view->headTitle(
-                    'Property to Rent across the world'  
+                    'Property to Rent across the world'
                 );
-                
-				$view->headMeta()->appendHttpEquiv('robots', 'ALL');
-                //$view->headLink()->appendStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
-				
-                if ('live' == APPLICATION_ENV) {
-                    $view->headLink()->prependStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
-                } else {
-                    $view->headLink()->appendStylesheet('http://yui.yahooapis.com/2.9.0/build/reset-fonts-grids/reset-fonts-grids.css');
-                }
-               
+
                 //$view->addHelperPath('/Vfr/View/Helper', 'Vfr_View_Helper');
-			break;
-		}
+            break;
+        }
 
 
-		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
-	}
-	
-	public function postDispatch(Zend_Controller_Request_Abstract $request)
-	{
-		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
-	}
-	
-	public function dispatchLoopShutdown()
-	{
-		//$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
-		//$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
-	}
+        //$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
+    }
+
+    public function postDispatch(Zend_Controller_Request_Abstract $request)
+    {
+        //$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
+    }
+
+    public function dispatchLoopShutdown()
+    {
+        //$this->_logger->log(__METHOD__ . ' Start', Zend_Log::DEBUG);
+        //$this->_logger->log(__METHOD__ . ' End', Zend_Log::DEBUG);
+    }
 }

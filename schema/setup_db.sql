@@ -290,4 +290,3 @@ INSERT INTO PropertyTypes (idPropertyType, name, displayPriority, inUse, added, 
 INSERT INTO PropertyTypes (idPropertyType, name, displayPriority, inUse, added, updated, lastModifiedBy) VALUES(9, 'Townhouse', 9, 1, now(), now(), 'system');
 INSERT INTO PropertyTypes (idPropertyType, name, displayPriority, inUse, added, updated, lastModifiedBy) VALUES(10, 'Mill House', 10, 1, now(), now(), 'system');
 
- 

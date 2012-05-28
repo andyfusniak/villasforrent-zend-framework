@@ -2,7 +2,7 @@
 class Admin_View_Helper_PropertyStatus extends Zend_View_Helper_Abstract
 {
     const version = '1.0.0';
-    
+
     private $_statusList = array (
           Common_Resource_Property::STEP_1_LOCATION => 'S1 Location',
           Common_Resource_Property::STEP_2_CONTENT  => 'S2 Content',
@@ -11,12 +11,12 @@ class Admin_View_Helper_PropertyStatus extends Zend_View_Helper_Abstract
           Common_Resource_Property::STEP_5_AVAILABILITY => 'S5 Availability',
           Common_Resource_Property::COMPLETE => 'Complete'
     );
-    
+
     private function wrapWithSpan($className, $name)
     {
         return '<span class="' . $className . '">' . $name . '</span>';
     }
-    
+
     public function propertyStatus($status, $approved)
     {
         switch ($status) {
@@ -32,8 +32,8 @@ class Admin_View_Helper_PropertyStatus extends Zend_View_Helper_Abstract
                     );
                 else
                     return $this->_statusList[$status];
-            break;
-        
+                break;
+
             case Common_Resource_Property::COMPLETE:
                 if ($approved)
                     return $this->wrapWithSpan(
@@ -42,8 +42,8 @@ class Admin_View_Helper_PropertyStatus extends Zend_View_Helper_Abstract
                     );
                 else
                     return $this->_statusList[$status];;
-            break;
-        
+                break;
+
             default:
                 return 'Unknown';
         }

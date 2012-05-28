@@ -7,10 +7,6 @@ class Common_Resource_Currency extends Vfr_Model_Resource_Db_Table_Abstract
     protected $_rowsetClass = 'Common_Resource_Currency_Rowset';
     protected $_dependentTables = array('Calendars');
 
-    //
-    // CREATE
-    //
- 
     public function getAllCurrencies($visible, $inUse)
     {
         $query = $this->select()
@@ -25,4 +21,3 @@ class Common_Resource_Currency extends Vfr_Model_Resource_Db_Table_Abstract
         }
     }
 }
-

@@ -3,7 +3,7 @@ class AndyController extends Zend_Controller_Action
 {
     public function init()
     {
-        
+
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('list', 'json')
                     ->addActionContext('modify', 'html')
@@ -13,7 +13,7 @@ class AndyController extends Zend_Controller_Action
     public function listAction()
     {
         // pretend this is a sophisticated DB query
-        $data = array (
+        $data = array(
             'red',
             'green',
             'blue',
@@ -22,9 +22,9 @@ class AndyController extends Zend_Controller_Action
 
         $request = $this->getRequest();
         $acceptHeader = $request->getHeader('Accept');
-        
+
         $this->view->assign(
-            array (
+            array(
                 'data' => $data
             )
         );
@@ -35,6 +35,6 @@ class AndyController extends Zend_Controller_Action
         ZendX_JQuery::enableView($this->view);
         $jquery = $this->view->jQuery();
         $jquery->enable();
-			   //->uiEnable();
+               //->uiEnable();
     }
 }

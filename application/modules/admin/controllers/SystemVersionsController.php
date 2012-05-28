@@ -2,13 +2,13 @@
 class Admin_SystemVersionsController extends Zend_Controller_Action
 {
     const version = '1.0.0';
-    
+
     public function listAction()
     {
         //
         // frontend
         //
-        
+
         $frontendControllerList = array (
             'AdvertiserAccountController',
             'AdvertiserAuthenticationController',
@@ -28,28 +28,28 @@ class Admin_SystemVersionsController extends Zend_Controller_Action
             'IndexController',
             'LevelController'
         );
-        
+
         $frontendActionHelperList = array (
             'DigestKey',
             'EnsureSecure'.
             'FeaturedProperty',
             'LevelSummary'
         );
-        
+
         $frontendViewHelperList = array (
             'GroupSectionTitle',
             'PhotoGrid',
             'SectionTitle'
         );
-        
+
         //
         // common
         //
-        
+
         //
         // admin
         //
-        
+
         $adminControllerList = array (
             'AdvertiserController',
             'AuthFailController',
@@ -60,20 +60,20 @@ class Admin_SystemVersionsController extends Zend_Controller_Action
             'SystemCheckController',
             'SystemVersionsController'
         );
-        
-        $pathList = array (    
+
+        $pathList = array (
         );
-        
+
         //
         // Vfr core
         //
-        
+
         $versions = array (
             'Vfr_Availability_Calendar_ImagePng' => Vfr_Availability_Calendar_ImagePng::version,
             'Vfr_Availability_Calendar_Object'   => Vfr_Availability_Calendar_Object::version,
             'Vfr_BlowfishHasher'                 => Vfr_BlowfishHasher::version,
             'Vfr_Property_Converter'             => Vfr_Property_Converter::version,
-            
+
             // Vfr core valdiators
             'Vfr_Validate_AvailabilityRange'     => Vfr_Validate_AvailabilityRange::version,
             'Vfr_Validate_EmailCheck'            => Vfr_Validate_EmailCheck::version,
@@ -81,7 +81,7 @@ class Admin_SystemVersionsController extends Zend_Controller_Action
             'Vfr_Validate_PropertyUrl'           => Vfr_Validate_PropertyUrl::version,
             'Vfr_Validate_RatesRange'            => Vfr_Validate_RatesRange::version,
             'Vfr_Validate_UniqueAdvertiserEmail' => Vfr_Validate_UniqueAdvertiserEmail::version,
-            
+
             // Vfr core view helpers
             'Vfr_View_Helper_AdvertiserControlPanelStatus' => Vfr_View_Helper_AdvertiserControlPanelStatus::version,
             'Vfr_View_Helper_AspectRatio'                  => Vfr_View_Helper_AspectRatio::version,
@@ -109,18 +109,18 @@ class Admin_SystemVersionsController extends Zend_Controller_Action
             'Vfr_View_Helper_TinyThumb' => Vfr_View_Helper_TinyThumb::version,
             'Vfr_View_Helper_WebsiteUrl' => Vfr_View_Helper_WebsiteUrl::version
         );
-        
+
         $this->view->assign(
             array (
                 'versions' => $versions
             )
         );
-        
+
         //var_dump(Frontend_Helper_DigestKey::version);
-        
+
         var_dump(Vfr_Availability_Calendar_ImagePng::version);
-        
+
         //var_dump(Admin_AuthFailController::version);
-        
+
     }
 }

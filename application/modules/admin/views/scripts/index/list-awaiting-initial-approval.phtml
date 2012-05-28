@@ -2,30 +2,31 @@
 <p>There are currently no properties awaiting initial approval.</p>
 <?php endif ?>
 
-
 <?php if ($this->propertyRowset) : ?>
 <table id="property-list">
     <tr>
         <th>Property Id</th>
-		<th>Advertiser ID</th>
+        <th>Advertiser ID</th>
         <th>Type</th>
-		<th>URL</th>
+        <th>URL</th>
         <th>Created On</th>
+        <th>Updated</th>
         <th>Location</th>
-		<th>Expiry date</th>
+        <th>Expiry date</th>
         <th>Approve Property</th>
     </tr>
     <?php foreach ($this->propertyRowset as $row) : ?>
-	<tr class="<?php echo $this->cycle(array("odd", "even"))->next() ?>">
-		<td><?php echo $row->idProperty ?></td>
-		<td><?php echo $this->advertiserIdToName($row->idAdvertiser) ?></td>
-		<td><?php echo $this->propertyType($row->idPropertyType) ?></td>
-		<td><?php echo $this->locationUrl($row) ?></td>
-		<td><?php echo $this->prettyDate($row->added) ?></td>
-		<td><?php echo $this->approvalLocation($row) ?></td>
-		<td><?php echo $this->propertyExpiry($row->idProperty, $row->expiry) ?></td>
-		<td><?php echo $this->approveProperty($row) ?></td>
-	</tr>
+    <tr class="<?php echo $this->cycle(array("odd", "even"))->next() ?>">
+        <td><?php echo $row->idProperty ?></td>
+        <td><?php echo $this->advertiserIdToName($row->idAdvertiser) ?></td>
+        <td><?php echo $this->propertyType($row->idPropertyType) ?></td>
+        <td><?php echo $this->locationUrl($row) ?></td>
+        <td><?php echo $this->prettyDate($row->added) ?></td>
+        <td><?php echo $this->prettyDate($row->updated) ?></td>
+        <td><?php echo $this->approvalLocation($row) ?></td>
+        <td><?php echo $this->propertyExpiry($row->idProperty, $row->expiry) ?></td>
+        <td><?php echo $this->approveProperty($row) ?></td>
+    </tr>
     <?php endforeach ?>
 </table>
 <?php endif ?>

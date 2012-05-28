@@ -7,13 +7,13 @@
             $this->jQuery()->setCdnSsl(true);
             $this->jQuery()->setVersion('1.7.1');
         }
-        
+
         if ($this->jQuery()->uiIsEnabled()) {
             $this->jQuery()->setUiVersion('1.8.17');
-            
+
             $this->jQuery()->addStylesheet('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/sunny/jquery-ui.css');
         }
-        
+
         // YDN doesn't support SSL yet
         $this->headLink()->appendStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
     } else {
@@ -22,13 +22,13 @@
             $this->jQuery()->setUiLocalPath('/js/jquery-ui-1.8.17/js/jquery-ui-1.8.17.custom.min.js');
             $this->jQuery()->addStylesheet('/js/jquery-ui-1.8.17/development-bundle/themes/sunny/jquery-ui.css');
         }
-        
+
         $this->headLink()->appendStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
     }
-    
+
     $this->headLink()->appendStylesheet('/css/admin/controlpanel.css');
     ?>
-    
+
     <?php echo $this->headTitle() . PHP_EOL ?>
     <?php echo $this->headMeta() . PHP_EOL ?>
     <?php echo $this->headLink() . PHP_EOL ?>
@@ -38,31 +38,30 @@
 </head>
 <body>
 <div id="doc4">
-	<div id="hd">
-	</div>
-	
-	<div id="zf-navbar">
-		
-		<?php //echo $this->navigation()->menu() ?>
-	</div>
-	
-	<div id="navbar">
-		<?php echo $this->navigation()->menu()->setRenderParents(true)->setPartial('partials/admin-nav.phtml') ?>
-		<?php //echo $this->navigation()->menu()->setMaxDepth(0); ?>
-		<?php //echo $this->navigation()->menu()->setOnlyActiveBranch(true)->setRenderParents(false)->setMinDepth(1)->setMaxDepth(1); ?>
-	</div>
-	
-	<div id="bd">
-		<div id="yui-main">
-			<div class="yui-b"><?php echo $this->layout()->content ?></div>
-		</div>
-		
-		<div class="yui-b">
-		</div>
-	</div>
-		
-	<div id="ft">
-	</div>
+    <div id="hd">
+    </div>
+
+    <div id="zf-navbar">
+        <?php //echo $this->navigation()->menu() ?>
+    </div>
+
+    <div id="navbar">
+        <?php echo $this->navigation()->menu()->setRenderParents(true)->setPartial('partials/admin-nav.phtml') ?>
+        <?php //echo $this->navigation()->menu()->setMaxDepth(0); ?>
+        <?php //echo $this->navigation()->menu()->setOnlyActiveBranch(true)->setRenderParents(false)->setMinDepth(1)->setMaxDepth(1); ?>
+    </div>
+
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b"><?php echo $this->layout()->content ?></div>
+        </div>
+
+        <div class="yui-b">
+        </div>
+</div>
+
+    <div id="ft">
+    </div>
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS PhotoApprovals (
     description text NOT NULL,
     added datetime NOT NULL,
     updated datetime NOT NULL,
-	lastModifiedBy varchar(32) CHARACTER SET ascii NOT NULL DEFAULT 'system',
+    lastModifiedBy varchar(32) CHARACTER SET ascii NOT NULL DEFAULT 'system',
     PRIMARY KEY (idPhotoApproval),
     KEY displayPriority (displayPriority),
     KEY inUse (inUse)

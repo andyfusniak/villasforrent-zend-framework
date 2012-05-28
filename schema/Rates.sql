@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Rates (
-	idRate int(10) unsigned NOT NULL AUTO_INCREMENT,
+    idRate int(10) unsigned NOT NULL AUTO_INCREMENT,
     idCalendar int(10) unsigned NOT NULL,
     startDate date NOT NULL,
     endDate date NOT NULL,
@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS Rates (
     midweekNightlyRate decimal(8,2) DEFAULT '0.00',
     added datetime NOT NULL,
     updated datetime NOT NULL,
-    PRIMARY KEY (idRate), 
-	UNIQUE KEY (idCalendar, startDate, endDate),
+    PRIMARY KEY (idRate),
+    UNIQUE KEY (idCalendar, startDate, endDate),
     KEY minStayDays (minStayDays),
     KEY weeklyRate (weeklyRate),
     KEY weekendNightlyRate (weekendNightlyRate),

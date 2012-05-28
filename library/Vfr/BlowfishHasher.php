@@ -5,19 +5,19 @@ class Vfr_BlowfishHasher
 
     private $_iterationCountLog2;
     private $_randomState;
-    
+
     public function __construct($iterationCountLog2)
     {
         if ($iterationCountLog2 < 4 || $iterationCountLog2 > 31)
             $iterationCountLog2 = 8;
-            
+
         $this->_iterationCountLog2 = $iterationCountLog2;
-        
+
         $this->_randomState = microtime();
         if (function_exists('getmypid'))
             $this->_randomState .= getmypid();
     }
-    
+
     private function getRandomBytes($count)
     {
         $output = '';
@@ -34,10 +34,10 @@ class Vfr_BlowfishHasher
             }
             $output = substr($output, 0, $count);
         }
-        
+
         return $output;
     }
-    
+
     private function generateBlowfishSalt($input)
     {
         $itoa64 = './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -70,24 +70,24 @@ class Vfr_BlowfishHasher
 
         return $output;
     }
-    
+
     public function hash($passwd)
     {
         if (CRYPT_BLOWFISH != 1) {
             require_once 'Vfr/Exception/BlowfishUnsupported.php';
             throw new Vfr_Exception_BlowfishUnsupported();
         }
-        $random = $this->getRandomBytes(16);    
-        
+        $random = $this->getRandomBytes(16);
+
         $hash = crypt($passwd, $this->generateBlowfishSalt($random));
-        
+
         if (strlen($hash) != 60) {
             require_once 'Vfr/Exception/BlowfishInvalidHash.php';
             throw Vfr_Exception_BlowfishInvalidHash();
         }
         return $hash;
     }
-    
+
     public function checkPassword($passwd, $hash)
     {
         if (strlen($hash) != 60) {
@@ -96,7 +96,7 @@ class Vfr_BlowfishHasher
         }
 
         $checkHash = crypt($passwd, $hash);
-       
+
         return ($checkHash == $hash);
     }
 }

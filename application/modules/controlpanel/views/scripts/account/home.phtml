@@ -19,11 +19,11 @@ panel. Within the control panel you can add, edit property details including upl
 <tr>
     <td><?php echo $this->propertyTinyThumb($row->idProperty, $this->photoRowsetLookup) ?></td>
     <td>
-		<p>Ref: <?php echo $row->idProperty ?> <?php echo $this->propertyType($row->idPropertyType) ?>  <?php echo $this->escape($row->shortName) ?>
-		<?php echo $row->numBeds ?> beds. Sleeps <?php echo $row->numSleeps ?>
-		<?php echo $this->holidayType($row->idHolidayType) ?>
-		(Expires: <?php echo $this->prettyDate($row->expiry) ?>)</p><?php echo $this->summaryBar($row) ?>
-	</td>
+        <p>Ref: <?php echo $row->idProperty ?> <?php echo $this->propertyType($row->idPropertyType) ?>  <?php echo $this->escape($row->shortName) ?>
+        <?php echo $row->numBeds ?> beds. Sleeps <?php echo $row->numSleeps ?>
+        <?php echo $this->holidayType($row->idHolidayType) ?>
+        (Expires: <?php echo $this->prettyDate($row->expiry) ?>)</p><?php echo $this->summaryBar($row) ?>
+    </td>
     <td><?php echo $this->advertiserControlPanelStatus($row) ?></td>
 </tr>
 <?php endforeach ?>

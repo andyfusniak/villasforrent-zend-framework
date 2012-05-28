@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS PropertyTypes (
     inUse int(1) NOT NULL,
     added datetime NOT NULL,
     updated datetime NOT NULL,
-	lastModifiedBy varchar(32) CHARACTER SET ascii NOT NULL DEFAULT 'system',
+    lastModifiedBy varchar(32) CHARACTER SET ascii NOT NULL DEFAULT 'system',
     PRIMARY KEY (idPropertyType),
     KEY name (name),
     KEY added (added),

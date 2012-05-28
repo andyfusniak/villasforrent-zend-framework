@@ -2,57 +2,57 @@
 <table id="property-list">
     <tr>
         <th><a href="<?php echo $this->url(
-            array (
+            array(
                 'order'     => 'idProperty',
                 'direction' => $this->toggleDirection($this->direction)
             )) ?>">Property ID</a> <?php echo $this->directionArrow('idProperty', $this->order, $this->direction) ?></th>
-       
+
         <th><a href="<?php echo $this->url(
-            array (
+            array(
                 'order'     => 'idPropertyType',
                 'direction' => $this->toggleDirection($this->direction)
             )) ?>">Type</a> <?php echo $this->directionArrow('idPropertyType', $this->order, $this->direction) ?></th>
 
         <th><a href="<?php echo $this->url(
-            array (
+            array(
                 'order'     => 'numBeds',
                 'direction' => $this->toggleDirection($this->direction)
             )) ?>">Beds</a> <?php echo $this->directionArrow('numBeds', $this->order, $this->direction) ?></th>
-    
+
         <th><a href="<?php echo $this->url(
-            array (
+            array(
                 'order'     => 'numSleeps',
                 'direction' => $this->toggleDirection($this->direction)
             )) ?>">Sleeps</a> <?php echo $this->directionArrow('numSleeps', $this->order, $this->direction) ?></th>
-        
+
         <th><a href="<?php echo $this->url(
-            array (
+            array(
                 'order'     => 'idAdvertiser',
                 'direction' => $this->toggleDirection($this->direction)
             )) ?>">Advertiser</a> <?php echo $this->directionArrow('idAdvertiser', $this->order, $this->direction) ?></th>
-       
+
         <th style="width: 200px"><a href="<?php echo $this->url(
-            array (
+            array(
                 'order'     => 'shortName',
                 'direction' => $this->toggleDirection($this->direction)
             )) ?>">Name</a> <?php echo $this->directionArrow('shortName', $this->order, $this->direction) ?></th>
         <th><a href="<?php echo $this->url(
-            array (
+            array(
                 'order'     => 'idLocation',
                 'direction' => $this->toggleDirection($this->direction)
             )) ?>">Location ID</a> <?php echo $this->directionArrow('idLocation', $this->order, $this->direction) ?></th>
         <th><a href="<?php echo $this->url(
-            array (
+            array(
                 'order'     => 'status',
                 'direction' => $this->toggleDirection($this->direction)
             )) ?>">Initial Status</a> <?php echo $this->directionArrow('status', $this->order, $this->direction) ?></th>
         <th><a href="<?php echo $this->url(
-            array (
+            array(
                 'order'     => 'approved',
                 'direction' => $this->toggleDirection($this->direction)
             )) ?>">App</a> <?php echo $this->directionArrow('approved', $this->order, $this->direction) ?></th>
     </tr>
-    
+
     <?php foreach ($this->paginator as $property) : ?>
     <tr class="<?php echo $this->cycle(array("odd", "even"))->next() ?>">
         <td><?php echo $property->idProperty ?></td>

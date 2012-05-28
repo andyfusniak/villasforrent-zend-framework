@@ -2,14 +2,14 @@
 class Controlpanel_Helper_EnsureSecure extends Zend_Controller_Action_Helper_Abstract
 {
     public function init() {}
-    
+
     public function redirectOnNonSecure()
     {
         if (APPLICATION_ENV == 'beta')
             return;
-		
+
         $request = $this->getActionController()->getRequest();
-		
+
         $server   = $request->getServer();
         $hostname = $server['HTTP_HOST'];
 
@@ -22,7 +22,7 @@ class Controlpanel_Helper_EnsureSecure extends Zend_Controller_Action_Helper_Abs
             $redirector->redirectAndExit();
         }
     }
-    
+
     public function direct()
     {
         $this->redirectOnNonSecure();

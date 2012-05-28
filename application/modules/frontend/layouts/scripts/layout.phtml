@@ -7,25 +7,25 @@ if ('live' == APPLICATION_ENV) {
         $this->jQuery()->setCdnSsl(true);
         $this->jQuery()->setVersion('1.7.1');
     }
-    
+
     if ($this->jQuery()->uiIsEnabled()) {
         $this->jQuery()->setUiVersion('1.8.17');
         $this->jQuery()->addStylesheet('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/cupertino/jquery-ui.css');
     }
-    
-    $this->headLink()->appendStylesheet('http://yui.yahooapis.com/2.9.0/build/reset-fonts-grids/reset-fonts-grids.css');
+
+    //$this->headLink()->appendStylesheet('http://yui.yahooapis.com/2.9.0/build/reset-fonts-grids/reset-fonts-grids.css');
+    $this->headLink()->appendStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
 } else {
     if ($this->jQuery()->isEnabled()) {
         $this->jQuery()->setLocalPath('/js/jquery/jquery-1.7.1.min.js');
         $this->jQuery()->setUiLocalPath('/js/jquery-ui-1.8.17/ui/jquery-ui.js');
         $this->jQuery()->addStylesheet('/js/jquery-ui-1.8.17/development-bundle/themes/cupertino/jquery-ui.css');
     }
-    
+
     $this->headLink()->appendStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
 }
-
 $this->headLink()->appendStylesheet('/css/villastorent.css');
-
+$this->headMeta()->appendHttpEquiv('robots', 'ALL');
 ?>
 <?php echo $this->headTitle() . PHP_EOL ?>
 <?php echo $this->headMeta() . PHP_EOL ?>
@@ -49,36 +49,36 @@ $this->headLink()->appendStylesheet('/css/villastorent.css');
 </head>
 <body>
 <div id="doc4" class="yui-t2">
-	<div id="hd">
-		<h1>Villas to rent in Greece, Portugal, Spain, France, Florida and many other holiday destinations around the world including skiing holidays</h1>
-		<p id="strapline">Dedicated to bringing you the best rental properties from around the world. Book from the owner direct, or advertiser YOUR property</p>
-		<p id="topnav"><a href="/">HOME</a></p>
-	</div>
-	<div id="bd">
-		<div id="yui-main">
-			<div class="yui-b"><?php echo $this->layout()->content ?></div>
-		</div>
-		
-		<div class="yui-b">
-			<?php if (!Zend_Auth::getInstance()->hasIdentity()) : ?>
-			<h1>New Advertisers</h1>
-			<ul class="menu">
-				<li id="nav-register"><a tabindex="1" accesskey="R" href="/controlpanel/registration/register/">register now</a></li>
-			</ul>
-			<?php endif ?>
-			
-			<h1>Existing Advertisers</h1>
-			<ul class="menu">
-				<?php if (!Zend_Auth::getInstance()->hasIdentity()) : ?>
-				<li id="nav-advertiser-login"><a tabindex="2" accesskey="L" href="/controlpanel/authentication/login/">login</a></li>
-				<?php endif ?>
-				
-				<?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
-				<li id="nav-advertiser-home"><a tabindex="3" accesskey="H" href="/controlpanel/account/home/">account home</a></li>
-				<li id="nav-advertiser-logout"><a tabindex="4" accesskey="O" href="/controlpanel/authentication/logout/">logout</a></li>
-				<?php endif ?>
-			</ul>
-            
+    <div id="hd">
+        <h1>Villas to rent in Greece, Portugal, Spain, France, Florida and many other holiday destinations around the world including skiing holidays</h1>
+        <p id="strapline">Dedicated to bringing you the best rental properties from around the world. Book from the owner direct, or advertiser YOUR property</p>
+        <p id="topnav"><a href="/">HOME</a></p>
+    </div>
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b"><?php echo $this->layout()->content ?></div>
+        </div>
+
+        <div class="yui-b">
+            <?php if (!Zend_Auth::getInstance()->hasIdentity()) : ?>
+            <h1>New Advertisers</h1>
+            <ul class="menu">
+                <li id="nav-register"><a tabindex="1" accesskey="R" href="/controlpanel/registration/register/">register now</a></li>
+            </ul>
+            <?php endif ?>
+
+            <h1>Existing Advertisers</h1>
+            <ul class="menu">
+                <?php if (!Zend_Auth::getInstance()->hasIdentity()) : ?>
+                <li id="nav-advertiser-login"><a tabindex="2" accesskey="L" href="/controlpanel/authentication/login/">login</a></li>
+                <?php endif ?>
+
+                <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
+                <li id="nav-advertiser-home"><a tabindex="3" accesskey="H" href="/controlpanel/account/home/">account home</a></li>
+                <li id="nav-advertiser-logout"><a tabindex="4" accesskey="O" href="/controlpanel/authentication/logout/">logout</a></li>
+                <?php endif ?>
+            </ul>
+
             <div>
                 <h1>Browse World Locations</h1>
                 <ul>
@@ -87,13 +87,13 @@ $this->headLink()->appendStylesheet('/css/villastorent.css');
                     <?php endforeach ?>
                 </ul>
             </div>
-		</div>
-	</div>
-		
-	<div id="ft">
-		<span class="left">holidaypropertyworldwide.com &copy; 2011</span><span class="right"><a href="#">About</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#">Terms</a
-		<p><a href="http://validator.w3.org/check?uri=referer"><img src="/images/other/valid-xhtml10-blue.png" alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a><img alt="All cards accepted" src="/images/cards.gif" /><a href="http://framework.zend.com/about/casestudies"><img alt="Powered by Zend Framework" src="/images/other/zend-framework.png" /></a></p>
-	</div>
+        </div>
+    </div>
+
+    <div id="ft">
+        <span class="left">holidaypropertyworldwide.com &copy; 2011</span><span class="right"><a href="#">About</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#">Terms</a
+        <p><a href="http://validator.w3.org/check?uri=referer"><img src="/images/other/valid-xhtml10-blue.png" alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a><img alt="All cards accepted" src="/images/cards.gif" /><a href="http://framework.zend.com/about/casestudies"><img alt="Powered by Zend Framework" src="/images/other/zend-framework.png" /></a></p>
+    </div>
 </div>
 </body>
 </html>

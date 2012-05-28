@@ -12,7 +12,7 @@ class Zend_View_Helper_SectionTitle extends Zend_View_Helper_Abstract
         $xhtml = '';
 
         $sectionHasContent = false;
-        
+
         if ($content) {
             foreach ($content as $c) {
                 if (mb_strlen($c) > 0) {
@@ -21,11 +21,11 @@ class Zend_View_Helper_SectionTitle extends Zend_View_Helper_Abstract
                 }
             }
         }
-        
+
         if ($sectionHasContent) {
             $xhtml = '<h3>' . $this->view->escape($title) . '</h3>' . $xhtml;
         }
-        
+
         return $xhtml;
     }
 }

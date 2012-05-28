@@ -36,7 +36,7 @@ cat PropertyTypes.sql | $CMD
 echo "Create DB Table Facilities"
 cat Facilities.sql  | $CMD
 echo "Create DB Table Properties"
-cat Properties.sql	| $CMD
+cat Properties.sql  | $CMD
 echo "Create DB Table PropertiesFacilities"
 cat PropertiesFacilities.sql | $CMD
 
@@ -44,7 +44,7 @@ echo "Create DB Table PropertiesContent"
 cat PropertiesContent.sql | $CMD
 
 echo "Create DB Table Calendars"
-cat Calendars.sql	| $CMD
+cat Calendars.sql   | $CMD
 echo "Create DB Table Availability"
 cat Availability.sql| $CMD
 

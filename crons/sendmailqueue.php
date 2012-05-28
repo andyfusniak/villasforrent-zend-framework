@@ -60,23 +60,23 @@ foreach($messages as $msg) {
     $mail = new Zend_Mail('utf-8');
 
     $params = unserialize($msg->body);
-    
-	// set the receipt
-	$mail->addTo($params['to']);
-	$mail->setSubject($params['subject']);
-    
+
+    // set the receipt
+    $mail->addTo($params['to']);
+    $mail->setSubject($params['subject']);
+
     // set the HTML and TXT bodies and send
-	$mail->setBodyText($params['bodyText']);
+    $mail->setBodyText($params['bodyText']);
     if ($params['bodyHtml'])
         $mail->setBodyHtml($params['bodyHtml']);
-	
+
     // send this email
     try {
         $mail->send();
-        
+
         // remove the message from the queue
         $queue->deleteMessage($msg);
-        
+
         unset($mail);
     } catch (Exception $e) {
         throw $e;

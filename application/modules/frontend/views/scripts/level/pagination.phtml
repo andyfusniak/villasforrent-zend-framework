@@ -1,0 +1,10 @@
+<p>Showing properties <?php echo $this->firstItemNumber ?> to <?php echo $this->lastItemNumber ?> of <?php echo $this->totalItemCount ?></p>
+<ul>
+    <?php foreach ($this->pagesInRange as $page) : ?>
+    <?php if (1 == $page) : ?>
+    <li><a href="<?php echo $this->url() ?>"><?php echo $page ?></a></li>    
+    <?php else: ?>
+    <li><a href="<?php echo $this->url(array('page' => $page)) ?>"><?php echo $page ?></a></li>
+    <?php endif ?>
+    <?php endforeach ?>
+</ul>

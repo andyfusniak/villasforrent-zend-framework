@@ -1,7 +1,7 @@
 <?php
 class Common_Model_DbTable_PropertyTypes extends Zend_Db_Table_Abstract
 {
-	protected $_name = 'property_types';
+    protected $_name = 'property_types';
     protected $_primary = 'idPropertyType';
 
     public function getPropertyTypesInUseLookup()

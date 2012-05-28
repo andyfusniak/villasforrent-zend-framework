@@ -1,74 +1,77 @@
 <?php
 class Vfr_Controller_Router_Route_Location
-	extends Zend_Controller_Router_Route_Abstract
+    extends Zend_Controller_Router_Route_Abstract
 {
+    protected $_path = null;
+
     /**
      * URI delimiter
      */
     const URI_DELIMITER = '/';
-    
+
     public static function getInstance(Zend_Config $config)
     {
-        return;   
+        return;
     }
-    
-    public function __construct($route, $defaults = array())
+
+    public function __construct($route, $defaults = array(), $map = array(), $reverse = null)
     {
+        $this->_regex = trim($route, self::URI_DELIMITER);
+        $this->_reverse = $reverse;
+
         //var_dump($route);
        // var_dump($defaults);
     }
-    
+
     public function match($path)
     {
-		//var_dump("location route");
         if ($path instanceof Zend_Controller_Request_Http) {
             $path = $path->getPathInfo();
         }
-		
+
         $path = trim($path, self::URI_DELIMITER);
-	
-		// the home page isn't a match for this router
-		if ($path == '')
-			return false;
-		
-		$urlExceptionChecker = new Vfr_Controller_Router_UrlExcemptionChecker();
+
+        // keep a copy to assembling the route later
+        $this->_path = $path;
+
+        // the home page isn't a match for this router
+        if ($path == '')
+            return false;
+
+        $urlExceptionChecker = new Vfr_Controller_Router_UrlExcemptionChecker();
         if ($urlExceptionChecker->isExcempt($path))
             return false;
-		
+
         $locationModel = new Common_Model_Location();
         $locationRow = $locationModel->lookup($path);
-		
-		if (null == $locationRow)
+
+        if (null == $locationRow)
             return false;
 
-        
-        $params = array (
-			'module'		=> 'frontend',
-			'controller'	=> 'level',
-			'uri'			=> $path
-		);
-		    
-        switch ($locationRow->depth) {
-            case 1:
-                $params['action'] = 'country';
-            break;
-            
-			case 2:
-                $params['action'] = 'region';
-            break;
-            
-			case 3:
-                $params['action'] = 'destination';
-            break;
-            default:
-                $params['action'] = 'location';
-        }
-	    
-		return $params;
+        $params = array(
+            'module'     => 'frontend',
+            'controller' => 'level',
+            'action'     => 'country',
+            'uri'        => $path,
+            'depth'      => $locationRow->depth
+        );
+
+        return $params;
     }
 
-    public function assemble($data = array(), $reset = false, $encode = false)
+    public function assemble($data=array(), $reset = false, $encode = false)
     {
-        var_dump("assemble.......");
+
+        $queryString = '';
+
+        if (!empty($data)) {
+            foreach ($data as $name => $value) {
+                $queryString .= $name . '=' . urlencode($value) . '&';
+            }
+            $queryString = rtrim($queryString, '&');
+            $queryString = '?' . $queryString;
+        }
+
+        return $this->_path . $queryString;
     }
 }

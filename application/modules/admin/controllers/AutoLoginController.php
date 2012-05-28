@@ -10,7 +10,7 @@ class Admin_AutoLoginController extends Zend_Controller_Action
         Zend_Auth::getInstance()->clearIdentity();
 
         $advertiserModel = new Common_Model_Advertiser();
-        
+
         $advertiserRow = $advertiserModel->getAdvertiserById(
             $idAdvertiser
         );

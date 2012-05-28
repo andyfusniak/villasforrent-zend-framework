@@ -13,7 +13,7 @@ class Frontend_Plugin_Cron_TouchFile implements Frontend_Plugin_Cron_CronInterfa
 
     public function run()
     {
-		var_dump("running this cron job task");
+        var_dump("running this cron job task");
         $result = touch($this->_filename);
         if (!$result) {
             throw new Plugin_Cron_Exception('The file timestamp could not be updated.');

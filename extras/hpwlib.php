@@ -1,18 +1,16 @@
 <?php
 class HpwApi {
     const SERVICE_BASE_URL  = 'http://www.holidaypropertyworldwide.com/api';
-    const SERVICE_BASE_URL_DEV = 'http://rd.zendvfr/api';
-    const DEFAULT_SERVICE_RESOURCE  = 'property/%1/calendar/%2';
     const ADDITIONAL_PASSWD = 'v1ll454r3nt.!';
     
     private $_apiKey = null;
     private $_idProperty = null;
-    private $_resource = null;
+    private $_serviceUri = null;
         
-    public function __construct($apiKey=null, $resource=self::DEFAULT_SERVICE_RESOURCE)
+    public function __construct($apiKey=null, $serviceUri=self::SERVICE_BASE_URL)
     {
-        $this->_apiKey   = $apiKey;
-        $this->_resource = $resource;
+        $this->_apiKey     = $apiKey;
+        $this->_serviceUri = $serviceUri;
     }
      
     public function setApiKey($apiKey)
@@ -26,10 +24,43 @@ class HpwApi {
         return $this->_apiKey;
     }
     
-    public function setResource($name)
+    public function setServiceUri($uri)
     {
-        $this->_resource = $name;
+        $this->_serviceUri = $uri;
+
         return $this;
+    }
+
+    public function getAllPhotos($idProperty)
+    {
+        $s = $this->_apiKey
+           . $idProperty
+           . self::ADDITIONAL_PASSWD;
+        $digestKey = sha1($s);
+
+        $serviceUri = $this->_serviceUri . '/' . 'property/%1/photos';
+        $serviceUri = str_replace('%1', $idProperty, $serviceUri);
+
+        $headers = array (
+            'x-apikey: ' . $this->_apiKey,
+            'x-digestkey: ' . $digestKey,
+            'Accept: application/vnd.hpw.photo+json; version: 1.0;'
+        );
+
+        $ch = curl_init($serviceUri);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+
+        // wait for the RESTful response
+        $curl_response = curl_exec($ch);
+
+        // close the connection
+        curl_close($ch);
+
+        return $curl_response;
     }
 
     public function getCalendar($idProperty, $idCalendar)
@@ -39,7 +70,7 @@ class HpwApi {
            . $idCalendar
            . self::ADDITIONAL_PASSWD;
         $digestKey = sha1($s); 
-        $serviceUri = self::SERVICE_BASE_URL . '/' . 'property/%1/calendar/%2';
+        $serviceUri = $this->_serviceUri . '/' . 'property/%1/calendar/%2';
         $serviceUri = str_replace('%1', $idProperty, $serviceUri);
         $serviceUri = str_replace('%2', $idCalendar, $serviceUri);
         //var_dump($serviceUri);
@@ -78,7 +109,7 @@ class HpwApi {
                           . $idProperty
                           . self::ADDITIONAL_PASSWD);
         
-        $serviceUri = self::SERVICE_BASE_URL . '/' . $this->_resource . '/' . $idProperty . '/' . 'availability';
+        $serviceUri = $this->serviceUri . '/' . $this->_resource . '/' . $idProperty . '/' . 'availability';
         var_dump($serviceUri);
         
         $headers = array (
@@ -116,7 +147,7 @@ class HpwApi {
                           . $idProperty
                           . self::ADDITIONAL_PASSWD);
         
-        $serviceUri = self::SERVICE_BASE_URL_DEV . '/' . $this->_resource . '/' . $idProperty . '/rates';
+        $serviceUri = $this->_serviceU . '/' . $this->_resource . '/' . $idProperty . '/rates';
  
         $headers = array (
             'x-apikey: ' . $this->_apiKey,
@@ -147,7 +178,7 @@ class HpwApi {
     
     public function getVersion()
     {
-        return "1.00";
+        return "1.1.0";
     }
 }
 

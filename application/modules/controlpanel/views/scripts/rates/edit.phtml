@@ -1,42 +1,42 @@
 <div class="form">
 <h1>Step 4 - Property Edit Rate : <?php echo $this->propertyType($this->propertyRow->idPropertyType) ?> <?php echo $this->escape($this->propertyRow->shortName) ?> - Ref <?php echo $this->propertyRow->idProperty ?></h1>
 <ul id="property_progress_header">
-	<li id="location_orange"></li>
-	<li id="content_orange"></li>
-	<li id="pictures_orange"></li>
-	<li id="rates_grey"></li>
-	<li id="availability_grey"></li>
+    <li id="location_orange"></li>
+    <li id="content_orange"></li>
+    <li id="pictures_orange"></li>
+    <li id="rates_grey"></li>
+    <li id="availability_grey"></li>
 </ul>
 <p class="clearfix" />
 <?php echo $this->ratesNotifier($this->propertyRow) ?>
 <fieldset>
-	<dl>
-		<dt><label for="rental_basis">Rental Basis</label></dt>
-		<dd><input readonly="Y" name="rentalBasis" value="<?php echo $this->escape($this->rentalBasis($this->rentalBasis)) ?>" /> <?php echo $this->rentalBasisLink ?>
-		<a href="<?php echo $this->url(array('module'       => 'controlpanel',
-											 'controller'   => 'rates',
-											 'action'       => 'rental-basis',
-											 'idProperty'   => $this->propertyRow->idProperty,
-											 'digestKey'    => Vfr_DigestKey::generate(array(
-												$this->propertyRow->idProperty
-											 )))) ?>">[edit]</a></dd>
-	</dl>
-		
-	<dl>
-		<dt><label for="base_currency">Base Currency</label></dt>
-		<dd><input readonly="Y" name="base_currency" value="<?php echo $this->escape($this->baseCurrency($this->baseCurrency)) ?>" />  <?php echo $this->baseCurrencyLink ?>
-		<a href="<?php echo $this->url(
-			array (
-				'module'     => 'controlpanel',
-				'controller' => 'rates',
-				'action'     => 'base-currency',
-				'idProperty' => $this->propertyRow->idProperty,
-				'digestKey'  => Vfr_DigestKey::generate(array (
-					$this->propertyRow->idProperty
-				))
-			)
-		) ?>">[edit]</a></dd>
-	</dl>
+    <dl>
+        <dt><label for="rental_basis">Rental Basis</label></dt>
+        <dd><input readonly="Y" name="rentalBasis" value="<?php echo $this->escape($this->rentalBasis($this->rentalBasis)) ?>" /> <?php echo $this->rentalBasisLink ?>
+        <a href="<?php echo $this->url(array('module'       => 'controlpanel',
+                                             'controller'   => 'rates',
+                                             'action'       => 'rental-basis',
+                                             'idProperty'   => $this->propertyRow->idProperty,
+                                             'digestKey'    => Vfr_DigestKey::generate(array(
+                                                $this->propertyRow->idProperty
+                                             )))) ?>">[edit]</a></dd>
+    </dl>
+
+    <dl>
+        <dt><label for="base_currency">Base Currency</label></dt>
+        <dd><input readonly="Y" name="base_currency" value="<?php echo $this->escape($this->baseCurrency($this->baseCurrency)) ?>" />  <?php echo $this->baseCurrencyLink ?>
+        <a href="<?php echo $this->url(
+            array (
+                'module'     => 'controlpanel',
+                'controller' => 'rates',
+                'action'     => 'base-currency',
+                'idProperty' => $this->propertyRow->idProperty,
+                'digestKey'  => Vfr_DigestKey::generate(array (
+                    $this->propertyRow->idProperty
+                ))
+            )
+        ) ?>">[edit]</a></dd>
+    </dl>
 </fieldset>
 
 <form id="step4" enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>" />
@@ -45,101 +45,101 @@
 <input type="hidden" name="digestKey" value="<?php echo $this->form->getValue('digestKey') ?>" />
 <table style="width:100%;" cellpadding="0" cellspacing="0" border="1">
 <tr>
-	<td>Name of Period</td>
-	<td>Start Date</td>
-	<td>End Date</td>
-	<td>Weekly<br />Rate</td>
-	<td>Weekend<br />Nightly<br />Rate</td>
-	<td>Midweek<br />Nightly<br />Rate</td>
-	<td>Minimum<br />Stay</td>
+    <td>Name of Period</td>
+    <td>Start Date</td>
+    <td>End Date</td>
+    <td>Weekly<br />Rate</td>
+    <td>Weekend<br />Nightly<br />Rate</td>
+    <td>Midweek<br />Nightly<br />Rate</td>
+    <td>Minimum<br />Stay</td>
     <td>Update</td>
-	<td>Del</td>
+    <td>Del</td>
 </tr>
 <?php
 if ($this->ratesRowset) {
-	$i = 0;
-	foreach ($this->ratesRowset as $row) {
-		$line_style = "tbd" . strval($i % 2);
-		
-		if ($row->idRate == $this->form->getValue('idRate')) : ?>
-		<tr>
-			<td><input type="text" name="name" value="<?php echo $this->escape($this->form->getValue('name')) ?>" /></td>
-			<td><input id="start" type="text" name="rates[start]" value="<?php echo $this->ratesPicker($this->form->getValue('rates'), 'start') ?>" /></td>
-			<td><input id="end" type="text" name="rates[end]" value="<?php echo $this->ratesPicker($this->form->getValue('rates'), 'end') ?>" /></td>
-			<td><input id="weeklyRate" type="text" name="rates[weeklyRate]" value="<?php echo $this->ratesPicker($this->form->getValue('rates'), 'weeklyRate') ?>" /></td>
-			<td><input id="weekendNightlyRate" type="text" name="rates[weekendNightlyRate]" value="<?php echo $this->ratesPicker($this->form->getValue('rates'), 'weekendNightlyRate') ?>" /></td>
-			<td><input id="midweekNightlyRate" type="text" name="rates[midweekNightlyRate]" value="<?php echo $this->ratesPicker($this->form->getValue('rates'), 'midweekNightlyRate') ?>" /></td>
-			<td><?php echo $this->formSelect('rates[minStayDays]', $this->ratesPicker($this->form->getValue('rates'), 'minStayDays'), null, $this->form->getElement('minStayDays')->getMultiOptions()) ?></td>
-			<td><input type="submit" name="submit" value="update" /></td>
-			<td><a href="<?php echo $this->url(
-				array (
-					'module'     => 'controlpanel',
-					'controller' => 'property',
-					'action'     => 'step4-rates',
-					'idProperty' => $this->propertyRow->idProperty,
-					'digestKey'  => Vfr_DigestKey::generate(array (
-						$this->propertyRow->idProperty
-					))
-				),
-				null,
-				true
-			) ?>">[cancel]</a></td>
-			<div>
-	<?php echo $this->displayErrors($this->form->getMessages('name')) ?>
+    $i = 0;
+    foreach ($this->ratesRowset as $row) {
+        $line_style = "tbd" . strval($i % 2);
+
+        if ($row->idRate == $this->form->getValue('idRate')) : ?>
+        <tr>
+            <td><input type="text" name="name" value="<?php echo $this->escape($this->form->getValue('name')) ?>" /></td>
+            <td><input id="start" type="text" name="rates[start]" value="<?php echo $this->ratesPicker($this->form->getValue('rates'), 'start') ?>" /></td>
+            <td><input id="end" type="text" name="rates[end]" value="<?php echo $this->ratesPicker($this->form->getValue('rates'), 'end') ?>" /></td>
+            <td><input id="weeklyRate" type="text" name="rates[weeklyRate]" value="<?php echo $this->ratesPicker($this->form->getValue('rates'), 'weeklyRate') ?>" /></td>
+            <td><input id="weekendNightlyRate" type="text" name="rates[weekendNightlyRate]" value="<?php echo $this->ratesPicker($this->form->getValue('rates'), 'weekendNightlyRate') ?>" /></td>
+            <td><input id="midweekNightlyRate" type="text" name="rates[midweekNightlyRate]" value="<?php echo $this->ratesPicker($this->form->getValue('rates'), 'midweekNightlyRate') ?>" /></td>
+            <td><?php echo $this->formSelect('rates[minStayDays]', $this->ratesPicker($this->form->getValue('rates'), 'minStayDays'), null, $this->form->getElement('minStayDays')->getMultiOptions()) ?></td>
+            <td><input type="submit" name="submit" value="update" /></td>
+            <td><a href="<?php echo $this->url(
+                array (
+                    'module'     => 'controlpanel',
+                    'controller' => 'property',
+                    'action'     => 'step4-rates',
+                    'idProperty' => $this->propertyRow->idProperty,
+                    'digestKey'  => Vfr_DigestKey::generate(array (
+                        $this->propertyRow->idProperty
+                    ))
+                ),
+                null,
+                true
+            ) ?>">[cancel]</a></td>
+            <div>
+    <?php echo $this->displayErrors($this->form->getMessages('name')) ?>
     <?php echo $this->displayErrors($this->form->getMessages('rates')) ?>
 </div>
-		</tr>
-		
-		<?php else : ?>
-		<tr>
-			<td class="<?php echo $line_style ?>"><?php echo $row->name ?></td>
-			<td class="<?php echo $line_style ?>"><?php echo $this->prettyDate($row->startDate) ?></td>
-			<td class="<?php echo $line_style ?>"><?php echo $this->prettyDate($row->endDate) ?></td>
-			<td class="<?php echo $line_style ?>"><?php echo $this->rateCurrency($row->weeklyRate, $this->baseCurrency) ?></td>
-			<td class="<?php echo $line_style ?>"><?php echo $this->rateCurrency($row->weekendNightlyRate, $this->baseCurrency) ?></td>
-			<td class="<?php echo $line_style ?>"><?php echo $this->rateCurrency($row->midweekNightlyRate, $this->baseCurrency) ?></td>
-			<td class="<?php echo $line_style ?>"><?php echo $this->minStayDuration($row->minStayDays) ?></td>
-			<td class="<?php echo $line_style ?>"><a href="<?php echo $this->url(
-				array (
-					'module'     => 'controlpanel',
-				    'controller' => 'rates',
-					'action'     => 'edit',
-					'idProperty' => $this->propertyRow->idProperty,
-					'idRate'     => $row->idRate,
-					'digestKey'  => Vfr_DigestKey::generate(array (
-						$this->propertyRow->idProperty,
-						$row->idRate
-					))
-				),
-				null,
-				true
-			) ?>">[edit]</a></td>
-			<td class="<?php echo $line_style ?>"><a href="<?php echo $this->url(
-				array (
-					'module'     => 'controlpanel',
-				    'controller' => 'rates',
-					'action'     => 'delete-confirm',
-					'idProperty' => $this->propertyRow->idProperty,
-					'idRate'	 => $row->idRate,
-					'digestKey'  => Vfr_DigestKey::generate( array (
-						$this->propertyRow->idProperty,
-						$row->idRate
-					))
-				),
-				null,
-				true
-			) ?>">[delete]</a></td>
-		</tr>
-		<?php endif ?>
-		<?php
-		$i++;
-	}
+        </tr>
+
+        <?php else : ?>
+        <tr>
+            <td class="<?php echo $line_style ?>"><?php echo $row->name ?></td>
+            <td class="<?php echo $line_style ?>"><?php echo $this->prettyDate($row->startDate) ?></td>
+            <td class="<?php echo $line_style ?>"><?php echo $this->prettyDate($row->endDate) ?></td>
+            <td class="<?php echo $line_style ?>"><?php echo $this->rateCurrency($row->weeklyRate, $this->baseCurrency) ?></td>
+            <td class="<?php echo $line_style ?>"><?php echo $this->rateCurrency($row->weekendNightlyRate, $this->baseCurrency) ?></td>
+            <td class="<?php echo $line_style ?>"><?php echo $this->rateCurrency($row->midweekNightlyRate, $this->baseCurrency) ?></td>
+            <td class="<?php echo $line_style ?>"><?php echo $this->minStayDuration($row->minStayDays) ?></td>
+            <td class="<?php echo $line_style ?>"><a href="<?php echo $this->url(
+                array (
+                    'module'     => 'controlpanel',
+                    'controller' => 'rates',
+                    'action'     => 'edit',
+                    'idProperty' => $this->propertyRow->idProperty,
+                    'idRate'     => $row->idRate,
+                    'digestKey'  => Vfr_DigestKey::generate(array (
+                        $this->propertyRow->idProperty,
+                        $row->idRate
+                    ))
+                ),
+                null,
+                true
+            ) ?>">[edit]</a></td>
+            <td class="<?php echo $line_style ?>"><a href="<?php echo $this->url(
+                array (
+                    'module'     => 'controlpanel',
+                    'controller' => 'rates',
+                    'action'     => 'delete-confirm',
+                    'idProperty' => $this->propertyRow->idProperty,
+                    'idRate'     => $row->idRate,
+                    'digestKey'  => Vfr_DigestKey::generate( array (
+                        $this->propertyRow->idProperty,
+                        $row->idRate
+                    ))
+                ),
+                null,
+                true
+            ) ?>">[delete]</a></td>
+        </tr>
+        <?php endif ?>
+        <?php
+        $i++;
+    }
 }
 ?>
 
 </table>
 <div>
-	<?php echo $this->displayErrors($this->form->getMessages('name')) ?>
+    <?php echo $this->displayErrors($this->form->getMessages('name')) ?>
     <?php echo $this->displayErrors($this->form->getMessages('rates')) ?>
 </div>
 

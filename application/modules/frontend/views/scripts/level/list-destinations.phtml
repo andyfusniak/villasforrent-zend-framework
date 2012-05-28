@@ -3,19 +3,19 @@
 <?php
 $propertyTypes = $this->propertyTypes;
 foreach($this->property_list as $id=>$property) {
-	$photo_list = $property['photo_list'];
-	//var_dump($photo_list);
-	//var_dump($property);
-	if(sizeof($photo_list) > 0) {
-		$idPhotos = key($photo_list);
-	} else {
-		$idPhotos = null;
-	}
+    $photo_list = $property['photo_list'];
+    //var_dump($photo_list);
+    //var_dump($property);
+    if(sizeof($photo_list) > 0) {
+        $idPhotos = key($photo_list);
+    } else {
+        $idPhotos = null;
+    }
 ?><h1><?php echo htmlentities($propertyTypes[$property['idPropertyTypes']]) ?> Ref: <?php echo $id ?> - <?php echo $property['numBeds'] ?> Bedrooms (Sleeps <?php echo $property['numSleeps'] ?>)</h1>
 <ul>
-	<li><a href="<?php echo $property['locationURL'] ?>/<?php echo htmlentities(utf8_decode($property['urlName'])) ?>"><img alt="<?php echo htmlentities($propertyTypes[$property['idPropertyTypes']]) ?> <?php echo $property['numBeds'] ?> Bedrooms (Sleeps <?php echo $property['numSleeps'] ?>)" src="/imagerescale.php?s=150&amp;idProperties=<?php echo $id ?>&amp;idPhotos=<?php echo $idPhotos ?>" /></a></li>
-	<li><strong>Specific location:</strong> <?php echo htmlentities(utf8_decode($property['content_list'][PropertiesContentDAO::DB_FIELD_LOCATION])) ?></li>
-	<li><strong>Summary: </strong><?php echo nl2br(htmlentities(utf8_decode($property['content_list'][PropertiesContentDAO::DB_FIELD_SUMMARY]))) ?></li>
-	<li><a href="<?php echo $property['locationURL'] ?>/<?php echo htmlentities($property['urlName']) ?>">show full details</a></li>
+    <li><a href="<?php echo $property['locationURL'] ?>/<?php echo htmlentities(utf8_decode($property['urlName'])) ?>"><img alt="<?php echo htmlentities($propertyTypes[$property['idPropertyTypes']]) ?> <?php echo $property['numBeds'] ?> Bedrooms (Sleeps <?php echo $property['numSleeps'] ?>)" src="/imagerescale.php?s=150&amp;idProperties=<?php echo $id ?>&amp;idPhotos=<?php echo $idPhotos ?>" /></a></li>
+    <li><strong>Specific location:</strong> <?php echo htmlentities(utf8_decode($property['content_list'][PropertiesContentDAO::DB_FIELD_LOCATION])) ?></li>
+    <li><strong>Summary: </strong><?php echo nl2br(htmlentities(utf8_decode($property['content_list'][PropertiesContentDAO::DB_FIELD_SUMMARY]))) ?></li>
+    <li><a href="<?php echo $property['locationURL'] ?>/<?php echo htmlentities($property['urlName']) ?>">show full details</a></li>
 </ul><?php
 }

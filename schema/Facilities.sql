@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Facilities (
     inUse int(1) NOT NULL DEFAULT '1',
     added datetime NOT NULL,
     updated datetime NOT NULL,
-	lastModifiedBy varchar(32) CHARACTER SET ascii NOT NULL DEFAULT 'system',
+    lastModifiedBy varchar(32) CHARACTER SET ascii NOT NULL DEFAULT 'system',
     PRIMARY KEY (facilityCode),
     KEY added (added),
     KEY updated (updated),

@@ -78,23 +78,23 @@
 <?php echo $this->rentalBasis($this->calendarRow->rentalBasis) ?> rental basis)</h3>
 <table style="width:100%">
 <tr>
-	<th>Period name</th>
-	<th>From</th>
-	<th>To</th>
-	<th>Weekend nightly rate</th>
-	<th>Midweek nightly rate</th>
-	<th>Weekly rate</th>
-	<th>Minimal stay</th>
+    <th>Period name</th>
+    <th>From</th>
+    <th>To</th>
+    <th>Weekend nightly rate</th>
+    <th>Midweek nightly rate</th>
+    <th>Weekly rate</th>
+    <th>Minimal stay</th>
 </tr>
 <?php foreach($this->rateRowset as $row): ?>
 <tr>
-	<td><?php echo $this->escape($row->name) ?></td>
-	<td><?php echo $this->prettyDate($row->startDate) ?></td>
-	<td><?php echo $this->prettyDate($row->endDate) ?></td>
-	<td><?php echo $this->formatCurrency($row->weekendNightlyRate) ?></td>
-	<td><?php echo $this->formatCurrency($row->midweekNightlyRate) ?></td>
-	<td><?php echo $this->formatCurrency($row->weeklyRate) ?></td>
-	<td><?php echo $this->minStayDuration($row->minStayDays) ?></td>
+    <td><?php echo $this->escape($row->name) ?></td>
+    <td><?php echo $this->prettyDate($row->startDate) ?></td>
+    <td><?php echo $this->prettyDate($row->endDate) ?></td>
+    <td><?php echo $this->formatCurrency($row->weekendNightlyRate) ?></td>
+    <td><?php echo $this->formatCurrency($row->midweekNightlyRate) ?></td>
+    <td><?php echo $this->formatCurrency($row->weeklyRate) ?></td>
+    <td><?php echo $this->minStayDuration($row->minStayDays) ?></td>
 </tr>
 <?php endforeach; ?>
 </table>

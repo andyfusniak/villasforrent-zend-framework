@@ -1,8 +1,9 @@
-<?php if ($this->propertyRowset == null) : ?>
+<?php $numberAwaitingApproval = count($this->propertyRowset) ?>
+<?php if (0 === $numberAwaitingApproval) : ?>
 <p>There are no properties awaiting update approval.</p>
 <?php endif ?>
 
-<?php if ($this->propertyRowset) : ?>
+<?php if ($numberAwaitingApproval > 0) : ?>
 <table id="advertiser-list">
     <tr>
         <th>Property Id</th>

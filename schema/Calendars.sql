@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Calendars (
-	idCalendar int(10) unsigned NOT NULL AUTO_INCREMENT,
+    idCalendar int(10) unsigned NOT NULL AUTO_INCREMENT,
     idProperty int(10) unsigned NOT NULL,
     calendarName varchar(255) NOT NULL,
     visible int(1) NOT NULL DEFAULT '1',
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS Calendars (
     added datetime NOT NULL,
     updated datetime NOT NULL,
     PRIMARY KEY (idCalendar),
-	KEY (idProperty),
+    KEY (idProperty),
     KEY added (added),
     KEY updated (updated),
     KEY visible (visible),

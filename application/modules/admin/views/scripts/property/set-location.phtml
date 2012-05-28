@@ -4,10 +4,10 @@
 <fieldset>
     <dt>Country</dt>
     <dd><?php echo $this->escape($this->propertyContentRowset['country']) ?></dd>
-    
+
     <dt>Region</dt>
     <dd><?php echo $this->escape($this->propertyContentRowset['region']) ?></dd>
-    
+
     <dt>Location</dt>
     <dd><?php echo $this->escape($this->propertyContentRowset['location']) ?></dd>
 </fieldset>
@@ -21,9 +21,9 @@
 <input type="hidden" name="idProperty" value="<?php echo $this->form->getValue('idProperty') ?>" />
 
 <!-- The name attribute is used by tree.serializeArray()  -->
-
+<?php //var_dump($this->locationRowset) ?>
 <?php echo $this->locationTree($this->locationRowset) ?>
-    
+
 <?php echo $this->hierarchy ?>
 
 <?php echo $this->displayErrors($this->form->getMessages('idLocation')) ?>

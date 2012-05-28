@@ -7,27 +7,29 @@ can <a href="<?php echo $this->url(array('module'     => 'controlpanel',
                                          'action'     => 'register')) ?>">register now</a> for an account.</p>
 
 <form id="advertiser_id" enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
-<fieldset>
-    <legend>Advertiser Login</legend>
-    <dl>
-        <dt>
-            <label for="emailAddress">Email address:</label>
-        </dt>
-        <dd>
-            <input type="text" name="emailAddress" value="<?php echo $this->escape($this->form->getValue('emailAddress')) ?>" />
-            <?php echo $this->displayErrors($this->form->getMessages('emailAddress')) ?>
-        </dd>
-        
-        <dt id="passwd-label">
-            <label for="passwd">Password:</label>
-        </dt>
-        <dd>
-            <input type="password" name="passwd" value="<?php echo $this->escape($this->form->getValue('passwd')) ?>" />
-            <?php echo $this->displayErrors($this->form->getMessages('passwd')) ?>
-        </dd>
-    </dl>
-    <input type="submit" name="submit" value="Login" />
-</fieldset>
+    <input type="hidden" name="disable_layout" value="<?php echo $this->form->getValue('disable_layout') ?>" />
+    <input type="hidden" name="redirect_uri" value="<?php echo $this->form->getValue('redirect_uri') ?>" />
+    <fieldset>
+        <legend>Advertiser Login</legend>
+        <dl>
+            <dt>
+                <label for="emailAddress">Email address:</label>
+            </dt>
+            <dd>
+                <input type="text" name="emailAddress" value="<?php echo $this->escape($this->form->getValue('emailAddress')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('emailAddress')) ?>
+            </dd>
+            
+            <dt id="passwd-label">
+                <label for="passwd">Password:</label>
+            </dt>
+            <dd>
+                <input type="password" name="passwd" value="<?php echo $this->escape($this->form->getValue('passwd')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('passwd')) ?>
+            </dd>
+        </dl>
+        <input type="submit" name="submit" value="Login" />
+    </fieldset>
 </form>
 
 <?php echo $this->errorMessage ?>

@@ -5,74 +5,74 @@ class Controlpanel_Form_Property_Step4RateEditForm extends Zend_Form
     protected $_idRate;
     protected $_name;
     protected $_rates;
-	
-	protected $_digestKey = null;
-    
+
+    protected $_digestKey = null;
+
     public function __construct($options = null)
     {
         parent::__construct($options);
     }
-    
+
     public function setIdProperty($idProperty)
     {
-		$this->_idProperty = $idProperty;
+        $this->_idProperty = $idProperty;
     }
-    
+
     public function setIdRate($idRate)
     {
         $this->_idRate = $idRate;
     }
-    
+
     public function setName($name)
     {
         $this->_name = $name;
     }
-    
+
     public function setRates($rates)
     {
         $this->_rates = $rates;
     }
-	
-	public function setDigestKey($digestKey)
-	{
-		$this->_digestKey = $digestKey;
-	}
-    
+
+    public function setDigestKey($digestKey)
+    {
+        $this->_digestKey = $digestKey;
+    }
+
     public function init()
     {
         $this->setMethod('post');
         $this->setAction('/controlpanel/rates/edit');
-        
+
         $this->addPrefixPath('Vfr_Form', 'Vfr/Form');
         $this->addElementPrefixPath('Vfr_Validate', 'Vfr/Validate', 'validate');
-        
-        $this->addElement('hidden', 'idProperty', array (
-			'value'	=> $this->_idProperty	
-		));
-        
-		$this->addElement('hidden', 'idRate', array (
-			'value'	=> $this->_idRate
-		));
-		
-		$this->addElement('hidden', 'digestKey', array (
-			'value'	=> $this->_digestKey	
-		));
 
-        $this->addElement('text', 'name', array (
-			'required'	=> false,
+        $this->addElement('hidden', 'idProperty', array(
+            'value' => $this->_idProperty
+        ));
+
+        $this->addElement('hidden', 'idRate', array(
+            'value' => $this->_idRate
+        ));
+
+        $this->addElement('hidden', 'digestKey', array(
+            'value' => $this->_digestKey
+        ));
+
+        $this->addElement('text', 'name', array(
+            'required'  => false,
             'value'     => $this->_name
-		));
-        
-        $this->addElement('ratesRangePicker', 'rates', array (
-            'validators' => array (
-				array('RatesRange', true, array('mode'   => 'update',
+        ));
+
+        $this->addElement('ratesRangePicker', 'rates', array(
+            'validators' => array(
+                array('RatesRange', true, array('mode'   => 'update',
                                                 'idRate' => $this->_idRate) )
             ),
             'value' => $this->_rates
         ));
-        
+
         $items = array (
-			'0' => 'n/a',
+            '0' => 'n/a',
             '1' => '1 night',
             '2' => '2 nights',
             '3' => '3 nights',
@@ -83,15 +83,14 @@ class Controlpanel_Form_Property_Step4RateEditForm extends Zend_Form
             '21' => '3 weeks',
             '30' => '1 month',
             '60' => '2 months',
-			'90' => '3 months'
-		);
-		$this->addElement('select', 'minStayDays', array (
-			//'required'		=> true,
-			'multiOptions'	=> $items,
-			//'validators'	=> array (
-			//	array('NotEmpty', true, array ('messages' => array ('isEmpty' => 'Required')))
-			//)
-		));
-        
+            '90' => '3 months'
+        );
+        $this->addElement('select', 'minStayDays', array(
+            //'required'        => true,
+            'multiOptions'  => $items,
+            //'validators'  => array(
+            //  array('NotEmpty', true, array('messages' => array('isEmpty' => 'Required')))
+            //)
+        ));
     }
 }

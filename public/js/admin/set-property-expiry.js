@@ -5,10 +5,10 @@ $(function() {
        dateFormat: 'd-M-yy',
        minDate: 1
     });
-    
+
     $("#expiry").keydown(function(event) {
-		if (event.which == 8 || event.which == 46) {
-			$(this).val("");
-		}
-	});
+        if (event.which == 8 || event.which == 46) {
+            $(this).val("");
+        }
+    });
 });

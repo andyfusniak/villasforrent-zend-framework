@@ -63,7 +63,6 @@ if not check:
 print "Check wrong: %r (should be False)" % check
 
 if ok == 6:
-	print "All tests have PASSED"
+    print "All tests have PASSED"
 else:
-	print "Some tests have FAILED"
-
+    print "Some tests have FAILED"

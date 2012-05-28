@@ -9,21 +9,19 @@ class Vfr_View_Helper_AvailabilityNotifier extends Zend_View_Helper_Abstract
         // no need to provide work-flow
         if ($propertyRow->approved)
             return '';
-        
+
         $sendForApprovalUrl = $this->view->url(
-            array (
-                'module' 	 => 'controlpanel',
+            array(
+                'module'     => 'controlpanel',
                 'controller' => 'property',
-                'action'	 => 'send-for-initial-approval',
+                'action'     => 'send-for-initial-approval',
                 'idProperty' => $propertyRow->idProperty,
                 'digestKey'  => Vfr_DigestKey::generate(array($propertyRow->idProperty))
             ),
             null,
             true
         );
-        
-        
-        
+
         return '<div class="complete">After adding of all of your bookings, <a href="' . $sendForApprovalUrl . '">send your property for initial approval</a></div>';
     }
 }

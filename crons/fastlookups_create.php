@@ -20,9 +20,9 @@ $application = new Zend_Application(
            'bootstrap' => array(
            'class' => 'Cron',
            'path' => APPLICATION_PATH . '/Cron.php',
-	     ),
-     'config' => APPLICATION_PATH . '/configs/application.ini',
-	)
+         ),
+    'config' => APPLICATION_PATH . '/configs/application.ini',
+    )
 );
 $application->bootstrap()
             ->run();

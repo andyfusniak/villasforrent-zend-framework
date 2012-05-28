@@ -10,24 +10,24 @@ chmod g+rwx /var/www/beta.holidaypropertyworldwide.com/data/session
 
 # data directory and files
 if [ ! -d "./data" ]; then
-	mkdir data
+    mkdir data
     chmod ug+rwx data
-    
+
     mkdir cache
     chmod ug+rwx cache
-    
+
     mkdir images_originals
     chmod ug+rwx images_originals
-    
-	mkdir data/logs
+
+    mkdir data/logs
     chmod ug+rwx data/logs
-    
-	touch data/logs/application.log
+
+    touch data/logs/application.log
     chmod ug+rw data/logs/application.log
-    
+
     mkdir data/session
-	chmod ug+rwx data/session
-    
+    chmod ug+rwx data/session
+
     mkdir data/uploads
     chmod ug+rwx data/uploads
 else
@@ -35,25 +35,25 @@ else
         mkdir data/cache
         chmod ug+rwx data/cache
     fi
-    
+
     if [ ! -d "./data/images_originals" ]; then
         mkdir data/images_originals
         chmod ug+rwx data/images_originals
     fi
-    
-	if [ ! -d "./data/logs" ]; then
-		mkdir data/logs
+
+    if [ ! -d "./data/logs" ]; then
+        mkdir data/logs
         chmod ug+rwx data/logs
-        
+
         touch data/logs/application.log
-		chmod ug+rw data/logs/application.log
-	fi
-    
+        chmod ug+rw data/logs/application.log
+    fi
+
     if [ ! -d "./data/session" ]; then
         mkdir data/session
         chmod ug+rwx data/session
     fi
-    
+
     if [ ! -d "./data/uploads" ]; then
         mkdir data/uploads
         chmod ug+rwx data/uploads
@@ -74,4 +74,3 @@ fi
 if [ ! -e ZendX ]; then
     ln -s /var/www/ZendFramework-1.11.11/extras/library/ZendX/ ZendX
 fi
-

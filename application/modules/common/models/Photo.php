@@ -5,7 +5,7 @@ class Common_Model_Photo extends Vfr_Model_Abstract
     {
         $width  = (int) $width;
         $height = (int) $height;
-        
+
         $details = array();
         if ($width > $height) {
             $details['orientation'] = 'landscape';
@@ -17,18 +17,18 @@ class Common_Model_Photo extends Vfr_Model_Abstract
             $details['orientation'] = 'portrait';
             $aspect = (float) $width / $height;
         }
-        
+
         $details['aspect'] = $aspect;
-        $details['aspectString'] = $this->aspectRatioToString($aspect); 
-        
+        $details['aspectString'] = $this->aspectRatioToString($aspect);
+
         return $details;
     }
-    
-    
+
+
     public function aspectRatioToString($aspect)
     {
         $aspect = (float) round($aspect, 2);
-        
+
         if ($aspect == 1.00) {
             return '1:1';
         } elseif (($aspect == 1.33) || ($aspect == 1.34)) {
@@ -41,80 +41,108 @@ class Common_Model_Photo extends Vfr_Model_Abstract
             return strval(round($aspect, 3));
         }
     }
-    
-    //
-    // CREATE
-    //
-    
+
     public function addPhotoByPropertyId($idProperty, $params)
     {
         $idProperty = (int) $idProperty;
-        
+
         $photoResource = $this->getResource('Photo');
-		return $photoResource->addPhotoByPropertyId($idProperty, $params);
+        $idPhoto = $photoResource->addPhotoByPropertyId($idProperty, $params);
+
+        //
+        // notify the administrator that a new photo has been uploaded
+        // only if the application.ini says
+        // vfr.mail.sendAdminTransactionalEmails = Yes
+        //
+
+        // get the admin email from the application.ini config file via the bootstrap
+        $config = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
+
+        // this converts "Yes", "On", "True", 1 to PHP boolean true
+        $filter = new Zend_Filter_Boolean();
+        $notifyAdmin = $filter->filter($config['vfr']['mail']['sendAdminTransactionalEmails']);
+
+        // only notify is the config file says so
+        if ($notifyAdmin) {
+            $vfrMail = new Vfr_Mail(
+                '/modules/controlpanel/views/emails',
+                'photo-upload-notify-admin' // no extensions required
+            );
+
+            $adminEmail = $config['resources']['mail']['defaultFrom']['email'];
+
+            $vfrMail->send(
+                $adminEmail,
+                "HolidayPropertyWorldwide.com Property Photo Uploaded",
+                array (
+                    'idProperty'       => $idProperty,
+                    'idPhoto'          => $idPhoto,
+                    'originalFileName' => $params['originalFilename'],
+                    'fileType'         => $params['fileType'],
+                    'widthPixels'      => $params['widthPixels'],
+                    'heightPixels'     => $params['heightPixels'],
+                    'sizeK'            => $params['sizeK'],
+                    'caption'          => $params['caption']
+                ),
+                Vfr_Mail::MODE_ONLY_TXT
+            );
+        }
+
+        return $idPhoto;
     }
-    
-    //
-    // UPDATE
-    //
-    
+
     public function updateMovePosition($idProperty, $idPhoto, $moveDirection)
     {
         $idProperty     = (int) $idProperty;
         $idPhoto        = (int) $idPhoto;
-        
+
         $photoResource = $this->getResource('Photo');
         return $photoResource->updateMovePosition($idProperty, $idPhoto, $moveDirection);
     }
-    
-    
-    //
-    // READ
-    //
-    
+
     public function getAllPhotos()
     {
         $photoResource = $this->getResource('Photo');
         return $photoResource->getAllPhotos();
     }
-    
+
     public function getPhotoByPhotoId($idPhoto)
     {
         $idPhoto = (int) $idPhoto;
-        
+
         $photoResource = $this->getResource('Photo');
         return $photoResource->getPhotoByPhotoId($idPhoto);
     }
-    
+
     public static function topLevelDirByPropertyId($idProperty, $interval=50)
-    {   
+    {
         if (!$idProperty) throw new Vfr_Exception("Bad value passed as idProperty");
         if ($idProperty < 10000) throw Vfr_Exception("idProperty value below 10000");
-        
+
         $range = $idProperty - 10000;
         $value = 10000 + (floor($range / $interval) * $interval);
-        
+
         return (int) $value;
     }
-    
+
     public function generateDirectoryStructure($idProperty, $idPhoto, $rootPath)
     {
         $idProperty = (int) $idProperty;
         $idPhoto    = (int) $idPhoto;
-        
+
         if (!$idProperty) throw new Vfr_Exception("Illegal value passed to idProperty parameter");
         if ($idProperty < 10000) throw new Vfr_Exception("idProperty below 10000");
-        
+
         $topLevelId     = $this->topLevelDirByPropertyId($idProperty);
         $topLevelDir    = $rootPath . DIRECTORY_SEPARATOR . $topLevelId;
         $secondLevelDir = $topLevelDir . DIRECTORY_SEPARATOR . $idProperty;
-        
+
         if (!file_exists($topLevelDir)) {
             // assumes the web-server is running as www-data
             // and sets user + group wrx bits (not other for added security)
             mkdir($topLevelDir);
             chmod($topLevelDir, 0770);
-            
+
             // create the sub-dir (we know it doesn't exist because
             // we just made the top level dir)
             mkdir($secondLevelDir);
@@ -124,54 +152,50 @@ class Common_Model_Photo extends Vfr_Model_Abstract
             mkdir($secondLevelDir);
             chmod($secondLevelDir, 0770);
         }
-        
+
         return $secondLevelDir;
     }
-    
+
     //
     // UPDATE
     //
-    
+
     public function fixBrokenDisplayPriorities($idProperty)
     {
         $idProperty = (int) $idProperty;
-        
+
         $photoResource = $this->getResource('Photo');
         return $photoResource->fixBrokenDisplayPriorities($idProperty);
     }
-    
-    //
-    // DELETE
-    //
-    
+
     public function deletePhotoByPhotoId($idProperty, $idPhoto)
     {
         $idProperty = (int) $idProperty;
         $idPhoto    = (int) $idPhoto;
-        
+
         if (!$idProperty) throw new Vfr_Exception("Illegal value passed to idProperty parameter");
         if ($idProperty < 10000) throw new Vfr_Exception("idProperty below 10000");
-     
+
         // get the vfr config from the configuration
-		$bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
-		$vfrConfig = $bootstrap['vfr'];
-        
+        $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
+        $vfrConfig = $bootstrap['vfr'];
+
         // get the group dir
         $topLevelDir = $this->topLevelDirByPropertyId($idProperty);
-        
-        $photoResource 	= $this->getResource('Photo');
+
+        $photoResource  = $this->getResource('Photo');
         $photoRow = $photoResource->getPhotoByPhotoIdAndPropertyID($idProperty, $idPhoto);
-                
+
         // destroy the dynamically cache generated images
         $fileWildcard   = $vfrConfig['photo']['images_dynamic_dir']
                         . DIRECTORY_SEPARATOR . $topLevelDir
                         . DIRECTORY_SEPARATOR . $idProperty
                         . DIRECTORY_SEPARATOR . $idPhoto . '_*.jpg';
-        foreach (glob($fileWildcard) as $filename) {    
+        foreach (glob($fileWildcard) as $filename) {
             if (file_exists($filename))
                 unlink($filename);
         }
-        
+
         // destroy the original
         $original = $vfrConfig['photo']['images_original_dir']
                   . DIRECTORY_SEPARATOR . $topLevelDir
@@ -179,7 +203,7 @@ class Common_Model_Photo extends Vfr_Model_Abstract
                   . DIRECTORY_SEPARATOR . $idPhoto . '.' . strtolower($photoRow->fileType);
         if (file_exists($original))
             unlink($original);
-        
+
         if ($photoRow)
             $photoRow->delete();
         return $photoRow;

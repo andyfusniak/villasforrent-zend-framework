@@ -5,11 +5,11 @@ class Api_Plugin_RestAuth extends Zend_Controller_Plugin_Abstract
     {
         if ($request->getModuleName() !== 'api')
             return;
-       
+
         $request = $this->getRequest();
         //var_dump($request);
         //echo "APIKEY:$apiKey";
-        
+
         //var_dump("preDispatch");
     }
 }

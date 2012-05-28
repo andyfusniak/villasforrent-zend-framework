@@ -6,16 +6,16 @@ class Admin_View_Helper_FeaturedBoxLabel extends Zend_View_Helper_Abstract
         switch ($id) {
             case 1:
                 return 'Box A';
-            break;
-        
+                break;
+
             case 2:
                 return 'Box B';
-            break;
-        
+                break;
+
             case 3:
                 return 'Box C';
-            break;
-        
+                break;
+
             default:
                 return $id;
         }

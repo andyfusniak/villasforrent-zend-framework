@@ -1,11 +1,11 @@
 <div class="form">
 <h1>Step 5 - Property Availability : <?php echo $this->propertyType($this->propertyRow->idPropertyType) ?> <?php echo $this->escape($this->propertyRow->shortName) ?> - Ref <?php echo $this->propertyRow->idProperty ?></h1>
 <ul id="property_progress_header">
-	<li id="location_orange"></li>
-	<li id="content_orange"></li>
-	<li id="pictures_orange"></li>
-	<li id="rates_orange"></li>
-	<li id="availability_grey"></li>
+    <li id="location_orange"></li>
+    <li id="content_orange"></li>
+    <li id="pictures_orange"></li>
+    <li id="rates_orange"></li>
+    <li id="availability_grey"></li>
 </ul>
 <p class="clearfix" />
 
@@ -15,59 +15,59 @@
 <input type="hidden" name="digestKey" value="<?php echo $this->form->getValue('digestKey') ?>" />
 <table>
 <tr>
-	<th>Start Date</th>
-	<th>End Date</th>
-	<th>Update</th>
-	<th>Delete</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+    <th>Update</th>
+    <th>Delete</th>
 </tr>
 
 <?php if ($this->availabilityRowset) : ?>
-	<?php foreach ($this->availabilityRowset as $row) : ?>
+    <?php foreach ($this->availabilityRowset as $row) : ?>
         <?php if ($row->idAvailability == $this->form->getValue('idAvailability')) : ?>
         <tr>
             <td><input id="start" type="text" name="availability[start]" value="<?php echo $this->availabilityPicker($this->form->getValue('availability'), 'start') ?>" /></td>
             <td><input id="end" type="text" name="availability[end]" value="<?php echo $this->availabilityPicker($this->form->getValue('availability'), 'end') ?>" /></td>
             <td><input type="submit" name="submit" value="Update" /></td>
-			<td><a href="<?php echo $this->url(array('module'     => 'controlpanel',
-													 'controller' => 'property',
-													 'action'     => 'step5-availability',
-													 'idProperty' => $this->propertyRow->idProperty,
-													 'digestKey'  => Vfr_DigestKey::generate(array(
-														$this->propertyRow->idProperty
-													 ))),
-													 null, true) ?>">[cancel]</a></td>
+            <td><a href="<?php echo $this->url(array('module'     => 'controlpanel',
+                                                     'controller' => 'property',
+                                                     'action'     => 'step5-availability',
+                                                     'idProperty' => $this->propertyRow->idProperty,
+                                                     'digestKey'  => Vfr_DigestKey::generate(array(
+                                                        $this->propertyRow->idProperty
+                                                     ))),
+                                                     null, true) ?>">[cancel]</a></td>
         </tr>
         <?php else : ?>
         <tr>
             <td><?php echo $this->prettyDate($row->startDate) ?></td>
             <td><?php echo $this->prettyDate($row->endDate) ?></td>
-            <td><a href="<?php echo $this->url(array('module'    	 => 'controlpanel',
-                                                    'controller'	 => 'availability',
-                                                    'action'		 => 'edit',
-                                                    'idProperty' 	 => $this->propertyRow->idProperty,
+            <td><a href="<?php echo $this->url(array('module'        => 'controlpanel',
+                                                    'controller'     => 'availability',
+                                                    'action'         => 'edit',
+                                                    'idProperty'     => $this->propertyRow->idProperty,
                                                     'idAvailability' => $row->idAvailability,
-													'digestKey'		 => Vfr_DigestKey::generate(array(
-														$this->propertyRow->idProperty,
-														$row->idAvailability
-													))),
-												    null, true) ?>">[edit]</a></td>
+                                                    'digestKey'      => Vfr_DigestKey::generate(array(
+                                                        $this->propertyRow->idProperty,
+                                                        $row->idAvailability
+                                                    ))),
+                                                    null, true) ?>">[edit]</a></td>
             <td><a href="<?php echo $this->url(array('module'         => 'controlpanel',
-                                                     'controller' 	  => 'availability',
-                                                     'action'     	  => 'delete-confirm',
-                                                     'idProperty' 	  => $this->propertyRow->idProperty,
+                                                     'controller'     => 'availability',
+                                                     'action'         => 'delete-confirm',
+                                                     'idProperty'     => $this->propertyRow->idProperty,
                                                      'idAvailability' => $row->idAvailability,
                                                      'digestKey'      => Vfr_DigestKey::generate(array(
-														$this->propertyRow->idProperty,
-														$row->idAvailability
-													 ))),
-												 	 null, true) ?>">[delete]</a></td>
+                                                        $this->propertyRow->idProperty,
+                                                        $row->idAvailability
+                                                     ))),
+                                                     null, true) ?>">[delete]</a></td>
         </tr>
         <?php endif ?>
-	<?php endforeach ?>
+    <?php endforeach ?>
 <?php endif ?>
 </table>
 <div>
-	<?php echo $this->displayErrors($this->form->getMessages('availability')) ?>
+    <?php echo $this->displayErrors($this->form->getMessages('availability')) ?>
 </div>
 </form>
 

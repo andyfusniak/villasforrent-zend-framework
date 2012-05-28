@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS Members (
     lastname varchar(255) NOT NULL,
     added datetime NOT NULL,
     updated datetime NOT NULL,
-	lastModifiedBy varchar(32) CHARACTER SET ascii NOT NULL DEFAULT 'system',
+    lastModifiedBy varchar(32) CHARACTER SET ascii NOT NULL DEFAULT 'system',
     PRIMARY KEY (idMember),
     UNIQUE KEY username (username),
     KEY passwd (passwd),

@@ -29,10 +29,10 @@ class Vfr_Application_Service_Cron
     public function run()
     {
         foreach ($this->_actions as $key => $action) {
-			var_dump($this->getLoader());
+            var_dump($this->getLoader());
             $class = $this->getLoader()->load($action);
-    		var_dump($class);
-			if (null !== $this->_actionsArgs[$key]) {
+            var_dump($class);
+            if (null !== $this->_actionsArgs[$key]) {
                 $action = new $class($this->_actionsArgs[$key]);
             } else {
                 $action = new $class;

@@ -2,9 +2,10 @@
 /**
  * Acl action helper used for when we went to control access to a resource
  * that does not have a Model
- * @category Vfr
  * @package Vfr_Controller_Helper
- * @copyright Copyright (c) 2011 Andy Fusniak
+ * @author Andrew Fusniak <andy@greycatmedia.co.uk>
+ * @copyright Copyright (c) 2011, Andrew Fusniak
+ * @version 1.0.0
  */
 class Vfr_Controller_Helper_Acl extends Zend_Controller_Action_Helper_Abstract
 {
@@ -20,14 +21,14 @@ class Vfr_Controller_Helper_Acl extends Zend_Controller_Action_Helper_Abstract
 
 
     public function init()
-	{
-		$module = ucfirst($this->getRequest()->getModuleName());
-		$acl = $module . '_Model_Acl_' . $module;
-        
+    {
+        $module = ucfirst($this->getRequest()->getModuleName());
+        $acl = $module . '_Model_Acl_' . $module;
+
         if (class_exists($acl)) {
             $this->_acl = new $acl;
         }
-	}
+    }
 
     public function getAcl()
     {
@@ -41,7 +42,7 @@ class Vfr_Controller_Helper_Acl extends Zend_Controller_Action_Helper_Abstract
      */
     public function setIdentity($identity)
     {
-        
+
         if ($identity instanceof Common_Resource_Advertiser_Row) {
             $this->_identity = new Common_Model_Acl_Role_Advertiser();
         } else {
@@ -50,12 +51,12 @@ class Vfr_Controller_Helper_Acl extends Zend_Controller_Action_Helper_Abstract
 
         #var_dump($this->_identity);
         #die();
-        
+
         return $this;
     }
 
 
-    
+
     public function isAllowed($resource=null, $privilege=null)
     {
         if (null === $this->_acl) {
@@ -88,7 +89,7 @@ class Vfr_Controller_Helper_Acl extends Zend_Controller_Action_Helper_Abstract
 
         return $this->_identity;
     }
-    
+
     /**
      * Proxy to the isAllowed method
      */
@@ -99,5 +100,4 @@ class Vfr_Controller_Helper_Acl extends Zend_Controller_Action_Helper_Abstract
         #die();
         return $this->isAllowed($resource, $privilege);
     }
-
 }

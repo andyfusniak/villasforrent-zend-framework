@@ -1,13 +1,18 @@
 <div id="browse_country">
     <?php //var_dump($this->locationRow) ?>
-    <h1>Regions in <?php echo $this->escape($this->locationRow->name) ?></h1>
+    <?php //echo $this->escape($this->locationRow->name) ?></h1>
+    <h1><?php echo $this->locationBreadcrumb(
+                                        $this->locationRow->idLocation,
+                                        array (
+                                            'totalsMode' => Vfr_View_Helper_LocationBreadcrumb::TOTALS_ALL_NODES
+                                        )) ?></h1>
     <?php if ($this->locationRowset) : ?>
     <ul>
-        <?php foreach ($this->locationRowset as $row): ?>
-            <?php if ($row->totalVisible > 0) : ?>
-            <li><a href="<?php echo $row->url ?>"><?php echo $this->escape($row->rowname) ?> (<?php echo $row->totalVisible ?>)</a></li>
-            <?php endif ?>
-        <?php endforeach ?>
+    <?php foreach ($this->locationRowset as $row): ?>
+        <?php if ($row->totalVisible > 0) : ?>
+        <li><a href="/<?php echo $row->url ?>"><?php echo $this->escape($row->rowname) ?> (<?php echo $row->totalVisible ?>)</a></li>
+        <?php endif ?>
+    <?php endforeach ?>
     </ul>
     <?php else : ?>
     <p>There are currently no properties in <?php echo $this->escape($this->countryName) ?>.</p>
@@ -32,3 +37,20 @@
     </ul>
 </div>
 <?php endif ?>
+
+
+<?php echo $this->paginationControl($this->propertyPaginator, 'Sliding', 'level/pagination.phtml') ?>
+<ul>
+    <?php //var_dump($this->locationModel) ?>
+    <?php foreach ($this->propertyPaginator as $propertyRow): ?>
+    <?php $propertyContent = $this->propertyModel->getPropertyContentArrayById($propertyRow->idProperty) ?>                                             
+    <li><?php echo $this->partial('partials/property-summary.phtml',
+         array (
+            'locationRow'      => $this->locationModel->lookup($propertyRow->locationUrl . '/' . $propertyRow->urlName),
+            'photoRow'         => $this->propertyModel->getPrimaryPhotoByPropertyId($propertyRow->idProperty),
+            'propertyRow'      => $propertyRow,
+            'propertyContent'  => $propertyContent
+        )) ?>
+         </li>
+    <?php endforeach ?>
+</ul>

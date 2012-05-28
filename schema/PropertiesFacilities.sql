@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS PropertiesFacilities (
-	idPropertyFacility int(10) unsigned NOT NULL AUTO_INCREMENT,
+    idPropertyFacility int(10) unsigned NOT NULL AUTO_INCREMENT,
     idProperty int(10) unsigned NOT NULL,
     facilityCode char(3) CHARACTER SET ascii NOT NULL,
     isOn int(1) NOT NULL DEFAULT '0',
-	PRIMARY KEY (idPropertyFacility),
+    PRIMARY KEY (idPropertyFacility),
     KEY (idProperty, facilityCode),
     KEY isOn (isOn),
     KEY facilityCode (facilityCode),

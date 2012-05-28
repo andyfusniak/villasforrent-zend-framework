@@ -7,19 +7,19 @@ class Common_Resource_FeaturedProperty
     protected $_primary = 'idFeaturedProperty';
     protected $_rowClass = 'Common_Resource_FeaturedProperty_Row';
     protected $_rowsetClass = 'Common_Resource_FeaturedProperty_Rowset';
-    
-    protected $_referenceMap = array (
-        'Property' => array (
-            'columns' => array ('idProperty'),
+
+    protected $_referenceMap = array(
+        'Property' => array(
+            'columns' => array('idProperty'),
             'refTableClass' => 'Common_Resource_Property'
         ),
-        
-        'Location' => array (
-            'columns' => array ('idLocation'),
+
+        'Location' => array(
+            'columns' => array('idLocation'),
             'refTableClass' => 'Common_Resource_Location'
         )
     );
-    
+
     //
     // CREATE
     //
@@ -27,8 +27,8 @@ class Common_Resource_FeaturedProperty
     {
         $nullExpr = new Zend_Db_Expr('NULL');
         $nowExpr  = new Zend_Db_Expr('NOW()');
-        
-        $data = array (
+
+        $data = array(
             'idFeatured'     => $nullExpr,
             'idProperty'     => $idProperty,
             'idLocation'     => $idLocation,
@@ -39,44 +39,43 @@ class Common_Resource_FeaturedProperty
             'updated'        => $nowExpr,
             'lastModifiedBy' => 'system'
         );
-        
+
         try {
             $this->insert($data);
         } catch (Exception $e) {
             throw $e;
         }
     }
-    
+
     //
     // READ
     //
-    
+
     public function getFeaturedProperties($idLocation)
     {
         $bootstrapOptions = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
         $vfrConfig = $bootstrapOptions['vfr'];
-        
         try {
             $query = $this->select()
                           ->where('idLocation = ?', $idLocation)
                           ->order('position ASC')
                           ->limit($vfrConfig['featured']['limit_per_page']);
             $featuredPropertyRowset = $this->fetchAll($query);
-            
+
             return $featuredPropertyRowset;
         } catch (Exception $e) {
             throw $e;
         }
     }
-    
+
     public function getAllFeaturedPropertiesPaginator($page, $interval, $order, $direction)
     {
         $query = $this->select($this::SELECT_WITHOUT_FROM_PART)
                       ->reset(Zend_Db_Select::COLUMNS)
                       ->setIntegrityCheck(false)
                       ->from(
-                          array ('F' => $this->_name),
-                          array (
+                          array('F' => $this->_name),
+                          array(
                               'F.idProperty',
                               'F.position',
                               'F.startDate',
@@ -84,21 +83,19 @@ class Common_Resource_FeaturedProperty
                           )
                       )
                       ->join(
-                          array ('L' => 'Locations'),
+                          array('L' => 'Locations'),
                           'F.idLocation = L.idLocation',
-                          array (
+                          array(
                               'L.name'
                           )
                       )
                       ->limit($interval);
-                      
+
         $adapter = new Zend_Paginator_Adapter_DbTableSelect($query);
-		$paginator = new Zend_Paginator($adapter);
+        $paginator = new Zend_Paginator($adapter);
         $paginator->setItemCountPerPage($interval)
-				  ->setCurrentPageNumber($page);
-				  
-		return $paginator;
+                  ->setCurrentPageNumber($page);
+
+        return $paginator;
     }
-    
-    
 }

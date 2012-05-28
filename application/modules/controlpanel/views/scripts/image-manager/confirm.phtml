@@ -8,10 +8,10 @@
         <li id="availability_grey"></li>
     </ul>
     <p class="clearfix" />
-    
-    
+
+
     <img alt="" src="<?php echo $this->image ?>" />
-    
+
     <form accept-charset="utf-8" method="post" action="/controlpanel/image-manager/delete">
         <input type="hidden" name="action" value="remove" />
         <input type="hidden" name="idProperty" value="<?php echo $this->idProperty ?>" />
@@ -19,7 +19,7 @@
         <input type="hidden" name="digestKey" value="<?php echo $this->digestKey ?>" />
         <input type="submit" name="buttonaction" value="Delete" />
     </form>
-    
+
     <form accept-charset="utf-8" method="post" action="/controlpanel/image-manager/cancel">
         <input type="hidden" name="idProperty" value="<?php echo $this->idProperty ?>" />
         <input type="hidden" name="idPhoto" value="<?php echo $this->idPhoto ?>" />
