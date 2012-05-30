@@ -1,0 +1,38 @@
+<form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+    <fieldset>
+        <dl>
+            <dt>
+                <label for="incomingUrl">Incoming URL</label>
+            </dt>
+            <dd>
+                <input type="text" name="incomingUrl" value="<?php echo $this->escape($this->form->getValue('incomingUrl')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('incomingUrl')) ?>
+            </dd>
+
+            <dt>
+                <label for="redirectUrl">Redirect URL</label>
+            </dt>
+            <dd>
+                <input type="text" name="redirectUrl" value="<?php echo $this->escape($this->form->getValue('redirectUrl')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('redirectUrl')) ?>
+            </dd>
+
+            <dt>
+                <label for="responseCode">Redirect Code</label>
+            </dt>
+            <dd>
+                <?php echo $this->formSelect('responseCode', $this->form->getValue('responseCode'), null, $this->form->getElement('responseCode')->getMultiOptions()) ?>
+            </dd>
+
+            <dt>
+                <label for="groupName">Group Name</label>
+            </dt>
+            <dd>
+                <input type="text" name="groupName" value="<?php echo $this->form->getValue('groupName') ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('groupName')) ?>
+            </dd>
+
+            <input type="submit" name="submit" id="submit" value="Create" />
+        </dl>
+    </fieldset>
+</form>

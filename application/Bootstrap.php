@@ -246,18 +246,24 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $routeRestApi = new Zend_Rest_Route($front, array (), array ('api'));
 
-        $location = new Vfr_Controller_Router_Route_Location(
+        $locationRouter = new Vfr_Controller_Router_Route_Location(
             '([a-z0-9-/]*)'
         );
 
         //  /^(.(?!foo).(?!wobble))*$/
         // /^((?!admin).(?!login).)*$/
-        $property = new Vfr_Controller_Router_Route_Property(
+        $propertyRouter = new Vfr_Controller_Router_Route_Property(
             '([a-z0-9-/]*)'
         );
 
-        $router->addroute('location', $location)
-               ->addroute('property', $property)
+        $urlRedirectRouter = new Vfr_Controller_Router_Route_UrlRedirect(
+            '([a-z0-9-/]*)'
+        );
+
+        // these trigger in reverse order i.e. property check first, then location
+        $router->addroute('location', $locationRouter)
+               ->addroute('property', $propertyRouter)
+               ->addroute('urlRedirect', $urlRedirectRouter)
                ->addroute('imageCache', $routeImageCache)
                ->addRoute('restPropertyCalendar', $restPropertyCalendar)
                ->addRoute('ratePropertiesRatesB', $restPropertiesRatesB)

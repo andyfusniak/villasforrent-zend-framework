@@ -1,0 +1,69 @@
+<?php echo $this->paginationControl($this->urlRedirectPaginator, 'Sliding', 'pagination.phtml') ?>
+
+<div style="clear:both" />
+<table id="list">
+    <tr>
+        <th><a href="<?php echo $this->url(
+            array(
+                'order' => 'idUrlRedirect',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">ID <?php echo $this->directionArrow('idUrlRedirect', $this->order, $this->direction) ?></a></th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order' => 'incomingUrl',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Incoming URL <?php echo $this->directionArrow('incomingUrl', $this->order, $this->direction) ?></a></th>
+        <th><a href="<?php echo $this->url(
+            array(
+                'order' => 'redirectUrl',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Redirect URL <?php echo $this->directionArrow('redirectUrl', $this->order, $this->direction) ?></a></th>
+        <th><a href="<?php echo $this->url(
+            array(
+                'order' => 'responseCode',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">HTTP Response Code <?php echo $this->directionArrow('responseCode', $this->order, $this->direction) ?></a></th>
+        <th><a href="<?php echo $this->url(
+            array(
+                'order' => 'groupName',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Group Name <?php echo $this->directionArrow('groupName', $this->order, $this->direction) ?></a></th>
+        <th><a href="<?php echo $this->url(
+            array(
+                'order' => 'added',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Date Added <?php echo $this->directionArrow('added', $this->order, $this->direction) ?></a></th>
+        <th><a href="<?php echo $this->url(
+            array(
+                'order' => 'updated',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Date Updated <?php echo $this->directionArrow('updated', $this->order, $this->direction) ?></a></th>
+    </tr>
+
+    <?php foreach ($this->urlRedirectPaginator as $urlRedirectRow) : ?>
+    <?php //var_dump($urlRedirectRow); ?>
+    <tr class="<?php echo $this->cycle(array("odd", "even"))->next() ?>">
+        <td><?php echo $urlRedirectRow->idUrlRedirect ?></td>
+        <td><?php echo $this->escape($urlRedirectRow->incomingUrl) ?></td>
+        <td><?php echo $this->escape($urlRedirectRow->redirectUrl) ?></td>
+        <td><?php echo $this->escape($urlRedirectRow->responseCode) ?></td>
+        <td><?php echo $this->escape($urlRedirectRow->groupName) ?></td>
+        <td><?php echo $this->prettyDate(
+                $urlRedirectRow->added,
+                Vfr_View_Helper_PrettyDate::STYLE_DD_MMM_YY
+        ) ?></td>
+        <td><?php echo $this->prettyDate(
+                $urlRedirectRow->updated,
+                Vfr_View_Helper_PrettyDate::STYLE_DD_MMM_YY
+        ) ?></td>
+    </tr>
+    <?php endforeach ?>
+</table>
