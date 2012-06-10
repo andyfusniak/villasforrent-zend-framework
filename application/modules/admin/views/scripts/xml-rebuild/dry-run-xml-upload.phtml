@@ -1,0 +1,34 @@
+<?php //print_r($this->nestedSet) ?>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>PID</th>
+        <th>URL</th>
+        <th>NAME</th>
+        <th>LT</th>
+        <th>RT</th>
+        <th>DEPTH</th>
+        <th>ROWURL</th>
+        <th>ROWNAME</th>
+        <th>PROPERTIES</th>
+        <th>FEATURED</th>
+    </tr>
+
+    <?php for($i=1; $i <= sizeof($this->nestedSet); $i++) : ?>
+    <?php $row = $this->nestedSet[$i] ?>
+    <tr>
+        <td><?php echo $i ?></td>
+        <td><?php echo $row['pid'] ?></td>
+        <td><?php echo $row['url'] ?></td>
+        <td><?php echo $this->escape($row['name']) ?></td>
+        <td><?php echo $row['lt'] ?></td>
+        <td><?php echo $row['rt'] ?></td>
+        <td><?php echo $row['depth'] ?></td>
+        <td><?php echo $row['rowurl'] ?></td>
+        <td><?php echo $this->escape($row['rowname']) ?></td>
+        <td><?php echo sizeof($row['properties']) ?><?php print_r($row['properties']) ?></td>
+        <td><?php echo sizeof($row['featured']) ?><?php print_r($row['featured']) ?></td>
+    </tr>
+    <?php endfor ?>
+</table>

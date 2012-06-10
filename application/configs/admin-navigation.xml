@@ -138,6 +138,57 @@
                     <controller>location</controller>
                     <action>tree-view</action>
                 </tree-view>
+
+                <xml-overview>
+                    <label>XML File Overview</label>
+                    <module>admin</module>
+                    <controller>xml-rebuild</controller>
+                    <action>overview</action>
+                    <pages>
+                        <xml>
+                            <label>XML Download</label>
+                            <module>admin</module>
+                            <controller>location</controller>
+                            <action>xml</action>
+                        </xml>
+
+                        <xml-upload>
+                            <label>XML Upload</label>
+                            <module>admin</module>
+                            <controller>xml-upload</controller>
+                            <action>file-upload</action>
+                            <pages>
+                                <upload-confirm>
+                                    <label>Upload Confirm</label>
+                                    <module>admin</module>
+                                    <controller>xml-upload</controller>
+                                    <action>upload-confirm</action>
+                                </upload-confirm>
+                            </pages>
+                        </xml-upload>
+
+                        <parse-xml-upload>
+                            <label>Parse XML Upload File</label>
+                            <module>admin</module>
+                            <controller>xml-rebuild</controller>
+                            <action>parse-xml-upload</action>
+                        </parse-xml-upload>
+
+                        <dry-run-xml-upload>
+                            <label>Dry Run XML Upload</label>
+                            <module>admin</module>
+                            <controller>xml-rebuild</controller>
+                            <action>dry-run-xml-upload</action>
+                        </dry-run-xml-upload>
+
+                        <db-rebuild>
+                            <label>Rebuild Database Using XML Upload</label>
+                            <module>admin</module>
+                            <controller>xml-rebuild</controller>
+                            <action>db-rebuild</action>
+                        </db-rebuild>
+                    </pages>
+                </xml-overview>
             </pages>
         </locations>
 

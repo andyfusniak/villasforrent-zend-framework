@@ -1,0 +1,9 @@
+<?php if ($this->message) : ?>
+<h3>FAILED</h3>
+<p style="background-color: pink;"><?php echo $this->escape($this->message) ?></p>
+<?php else : ?>
+<h3>Parsed Successfully</h3>
+<p style="background-color: #99FFCC;">Your XML Document Parsed Successfully.  Note, this does not necessarily mean that it's well formed, just that it is valid XML.</p>
+<?php endif ?>
+
+<p><a href="/admin/xml-rebuild/overview">Return to the overview</a></p>

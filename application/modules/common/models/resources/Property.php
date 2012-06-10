@@ -225,6 +225,19 @@ class Common_Resource_Property
         }
     }
 
+    public function getPropertiesInLocation($idLocation)
+    {
+        $query = $this->select()
+                      ->where("idLocation = ?", $idLocation);
+        try {
+            $propertyRowset = $this->fetchAll($query);
+
+            return $propertyRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     /**
      * Get all properties
      *

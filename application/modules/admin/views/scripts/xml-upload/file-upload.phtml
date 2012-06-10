@@ -1,0 +1,16 @@
+<?php if ($this->form) : ?>
+<form enctype="multipart/form-data" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+    <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $this->form->getValue('MAX_FILE_SIZE') ?>" />
+    <input type="hidden" name="<?php echo ini_get('apc.rfc1867_name') ?>" value="<?php echo $this->form->getValue(ini_get('apc.rfc1867_name')) ?>" id="progress_key" />
+    <fieldset>
+        <legend>XML Tree Structure Upload</legend>
+
+        <dl>
+            <dt><label for="filename">Browse for the XML file</label></dt>
+            <dd><input type="file" name="filename" /></dd>
+        </dl>
+
+        <input type="submit" name="submit" id="submit" value="Send" />
+    </fieldset>
+</form>
+<?php endif ?>

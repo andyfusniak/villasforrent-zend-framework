@@ -1,6 +1,8 @@
 <?php
 class Admin_LocationController extends Zend_Controller_Action
 {
+    protected $_vfrConfig = null;
+
     public function treeViewAction()
     {
         $locationModel = new Common_Model_Location();
@@ -26,6 +28,28 @@ class Admin_LocationController extends Zend_Controller_Action
             array(
                 'locationRowset' => $locationsRowset
             )
+        );
+    }
+
+    public function xmlAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $locationModel = new Common_Model_Location();
+        $domDocument = $locationModel->xmlDomTree();
+
+        header("Content-Type: text/plain");
+        // (?!name|content)
+        $xml = preg_replace("/(\s+)\<([a-zA-Z-]+)\>/", "\n$1<$2>", $domDocument->saveXML());
+        $xml = preg_replace("/( ){2}/", "    ", $xml);
+
+        $locationModel->dumpXmlToServer($xml);
+
+        $this->_helper->redirector->gotoSimple(
+            'overview',
+            'xml-rebuild',
+            'admin'
         );
     }
 }

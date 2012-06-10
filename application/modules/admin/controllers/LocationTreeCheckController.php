@@ -35,7 +35,9 @@ class Admin_LocationTreeCheckController extends Zend_Controller_Action
         $turkey = 145;
         $greece = 170;
 
-        $idLocationParent = $locationModel->getParentIdByChildId(321);
+        $idLocationParent = $locationModel->getParentIdByChildId(
+            Common_Resource_Location::ROOT_NODE_ID
+        );
 
         $locationModel->moveLocation(
             327,
@@ -44,8 +46,8 @@ class Admin_LocationTreeCheckController extends Zend_Controller_Action
         );
 
         $this->view->assign(
-            array (
-                'idLocationParent'  => $idLocationParent
+            array(
+                'idLocationParent' => $idLocationParent
             )
         );
     }

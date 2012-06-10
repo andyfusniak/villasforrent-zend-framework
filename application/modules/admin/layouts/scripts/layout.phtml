@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <?php
-    if ('live' == APPLICATION_ENV) {
+    if (("live" === APPLICATION_ENV) || ("beta" === APPLICATION_ENV)){
         if ($this->jQuery()->isEnabled()) {
             $this->jQuery()->setCdnSsl(true);
             $this->jQuery()->setVersion('1.7.1');

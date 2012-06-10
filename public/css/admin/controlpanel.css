@@ -15,7 +15,7 @@ body {
 	padding:0
 }
 #navcontainer ul {
-	
+
 	margin: 0;
 	padding: 0;
 	list-style: none outside none;
@@ -261,16 +261,16 @@ h3 {
 
 
 /* Advertisers and properties */
-table#advertiser-list, table#property-list {
+table#list, table#property-list {
 	width: 100%;
 }
-table#advertiser-list tr, table#property-list tr {
+table#list tr, table#property-list tr {
 	height: 2.5em
 }
-table#advertiser-list tr.odd, table#property-list tr.odd {
+table#list tr.odd, table#property-list tr.odd {
 	background-color: #eee
 }
-table#advertiser-list tr.even, table#property-list tr.even {
+table#list tr.even, table#property-list tr.even {
 	background-color: #fff
 }
 
@@ -313,3 +313,27 @@ table#featured-property-list tr.expired {
 	background-color: red;
 }
 
+/* XML File Overview */
+#dump-file-table .missing, #upload-file-table .missing {
+    background-color: pink;
+}
+
+.xml-content {
+    margin: 0;
+    padding: 0;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 95%;
+    height: 480px;
+    background-color: black;
+    font-family: "Courier New";
+    font-size: 10px;
+}
+
+.xml-dump {
+    color: pink;
+}
+
+.xml-upload {
+    color: #99FFCC;
+}

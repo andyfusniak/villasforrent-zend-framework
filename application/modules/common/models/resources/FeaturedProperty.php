@@ -25,11 +25,10 @@ class Common_Resource_FeaturedProperty
     //
     public function featureProperty($idProperty, $idLocation, $startDate, $expiryDate, $position)
     {
-        $nullExpr = new Zend_Db_Expr('NULL');
         $nowExpr  = new Zend_Db_Expr('NOW()');
 
         $data = array(
-            'idFeatured'     => $nullExpr,
+            'idFeaturedProperty' => new Zend_Db_Expr('NULL'),
             'idProperty'     => $idProperty,
             'idLocation'     => $idLocation,
             'startDate'      => $startDate,
@@ -60,6 +59,20 @@ class Common_Resource_FeaturedProperty
                           ->where('idLocation = ?', $idLocation)
                           ->order('position ASC')
                           ->limit($vfrConfig['featured']['limit_per_page']);
+            $featuredPropertyRowset = $this->fetchAll($query);
+
+            return $featuredPropertyRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function getAllFeaturedPropertiesByLocationId($idLocation)
+    {
+        try {
+            $query = $this->select()
+                          ->where('idLocation = ?', $idLocation)
+                          ->order('position ASC');
             $featuredPropertyRowset = $this->fetchAll($query);
 
             return $featuredPropertyRowset;

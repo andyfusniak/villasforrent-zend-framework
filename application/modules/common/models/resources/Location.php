@@ -8,7 +8,7 @@ class Common_Resource_Location
     protected $_rowClass = 'Common_Resource_Location_Row';
     protected $_rowsetClass = 'Common_Resource_Location_Rowset';
 
-    const ROOT_NODE_ID = 321;
+    const ROOT_NODE_ID = 1;
 
     const NODE_BEFORE = 1;
     const NODE_AFTER  = 2;
@@ -16,6 +16,151 @@ class Common_Resource_Location
     //
     // CREATE
     //
+
+    public function addLocation($params)
+    {
+        $nullExpr = new Zend_Db_Expr('NULL');
+        $nowExpr  = new Zend_Db_Expr('NOW()');
+;
+        $data = array(
+            'idLocation'      => $nullExpr,
+            'idParent'        => (($params['idParent'] !== 0) ? $params['idParent'] : null),
+            'url'             => $params['url'],
+            'lt'              => $params['lt'],
+            'rt'              => $params['rt'],
+            'depth'           => $params['depth'],
+            'rowurl'          => $params['rowurl'],
+            'displayPriority' => 1,
+            'totalVisible'    => null,
+            'total'           => null,
+            'name'            => $params['name'],
+            'rowname'         => $params['rowname'],
+            'prefix'          => '',
+            'postfix'         => '',
+            'visible'         => 1,
+            'added'           => $nowExpr,
+            'updated'         => $nowExpr
+        );
+
+        try {
+            $this->insert($data);
+            return $this->_db->lastInsertId();
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function purgeLocationsTable()
+    {
+        $adapter = $this->getAdapter();
+
+        $query1 = $adapter->quoteInto("
+            DELETE FROM Locations WHERE 1",
+            null
+        );
+
+        $query2 = $adapter->quoteInto("
+            ALTER TABLE Locations AUTO_INCREMENT = 1",
+            null
+        );
+
+        try {
+           $this->_db->query($query1);
+           $this->_db->query($query2);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function rebuildDbFromNestedSet($nestedSet, $featuredPropertyResource)
+    {
+        try {
+            $adapter = $this->getAdapter();
+
+            // lock the database down whilst we rebuidl the hierarchy and associations
+            $this->_db->getConnection()->query("
+                LOCK TABLES Locations WRITE, FeaturedProperties WRITE, Properties WRITE;
+            ");
+
+            // begin transaction
+            $this->_db->beginTransaction();
+
+            foreach ($nestedSet as $row) {
+                // add the new location
+                $idLocation = $this->addLocation(
+                    array(
+                        'idParent' => (int) $row['pid'],
+                        'url'      => $row['url'],
+                        'lt'       => $row['lt'],
+                        'rt'       => $row['rt'],
+                        'depth'    => $row['depth'],
+                        'rowurl'   => $row['rowurl'],
+                        'name'     => $row['name'],
+                        'rowname'  => $row['rowname']
+                    )
+                );
+                //var_dump($row);
+
+                // link the associated properties to this location
+                $total = 0;
+                $totalVisible = 0;
+                foreach($row['properties'] as $property) {
+                    if ((isset($property['visible'])) && (false === $property['visible'])) {
+                        $invisibleClause = $adapter->quoteInto(
+                            ", visible = 0 ",
+                            null
+                        );
+                    } else {
+                        $invisibleClause = ' ';
+                        $totalVisible++;
+                    }
+
+                    $updateProperty = $adapter->quoteInto("
+                        UPDATE Properties
+                        SET idLocation = ?, ",
+                        $idLocation
+                    )
+                    . $adapter->quoteInto(
+                        "locationUrl = ?",
+                        $row['url']
+                    )
+                    . $invisibleClause
+                    . $adapter->quoteInto(
+                        "WHERE idProperty = ?",
+                        $property['idProperty']
+                    );
+                    $this->_db->query($updateProperty);
+
+                    $total++;
+                }
+
+
+
+                // featured the properties in this location
+                foreach($row['featured'] as $featured) {
+                    $featuredPropertyResource->featureProperty(
+                        $featured['idProperty'],
+                        $idLocation,
+                        $featured['startDate'],
+                        $featured['expiryDate'],
+                        $featured['position']
+                    );
+                }
+            }
+
+            // commit all the tranactions
+            $this->_db->commit();
+
+            // release the locks
+            $this->_db->getConnection()->query("UNLOCK TABLES");
+        } catch (Exception $e) {
+            // roll back the transaction
+            $this->_db->rollBack();
+
+            $this->_db->getConnection()->query('UNLOCK TABLES');
+            throw $e;
+        }
+    }
 
     //public function addLocation($idParent=null, $url, $totalVisible=null, $total=null)
     //{
@@ -205,7 +350,7 @@ class Common_Resource_Location
     {
         try {
             $query = $this->select()
-                      ->where('idLocation IN (?)', $locationList);
+                          ->where('idLocation IN (?)', $locationList);
 
             $locationRowset = $this->fetchAll($query);
 
