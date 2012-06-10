@@ -269,6 +269,24 @@ class Common_Resource_Property
         }
     }
 
+    public function getPropertiesCountByGeoUri($uri, $visible = false)
+    {
+        $query = $this->select()
+                      ->from($this->_name, 'COUNT(1) AS cnt')
+                      ->where("locationUrl LIKE CONCAT(?, '%')", $uri);
+
+        if (true === $visible)
+            $query->where("visible = ?", (int) 1);
+
+        try {
+            $row = $this->fetchRow($query);
+
+            return $row->cnt;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     public function getPropertiesByGeoUri($uri, $page, $itemCountPerPage, $order, $direction)
     {
         $query = $this->select()

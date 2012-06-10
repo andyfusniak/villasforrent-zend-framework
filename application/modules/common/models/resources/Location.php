@@ -1,6 +1,5 @@
 <?php
-class Common_Resource_Location
-    extends Vfr_Model_Resource_Db_Table_Abstract
+class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract
     implements Common_Resource_Location_Interface
 {
     protected $_name = 'Locations';
@@ -21,18 +20,18 @@ class Common_Resource_Location
     {
         $nullExpr = new Zend_Db_Expr('NULL');
         $nowExpr  = new Zend_Db_Expr('NOW()');
-;
+
         $data = array(
             'idLocation'      => $nullExpr,
-            'idParent'        => (($params['idParent'] !== 0) ? $params['idParent'] : null),
+            'idParent'        => (($params['idParent'] !== 0) ? (int) $params['idParent'] : null),
             'url'             => $params['url'],
             'lt'              => $params['lt'],
             'rt'              => $params['rt'],
             'depth'           => $params['depth'],
             'rowurl'          => $params['rowurl'],
             'displayPriority' => 1,
-            'totalVisible'    => null,
-            'total'           => null,
+            'totalVisible'    => (int) $params['totalVisible'],
+            'total'           => (int) $params['total'],
             'name'            => $params['name'],
             'rowname'         => $params['rowname'],
             'prefix'          => '',
@@ -86,17 +85,30 @@ class Common_Resource_Location
             $this->_db->beginTransaction();
 
             foreach ($nestedSet as $row) {
+                $rowProperties = $row['properties'];
+                $totalVisible = 0;
+                $total = 0;
+                foreach($rowProperties as $property) {
+                    if ((isset($property['visible'])) && (false === $property['visible'])) {
+                    } else {
+                        $totalVisible++;
+                    }
+                    $total++;
+                }
+
                 // add the new location
                 $idLocation = $this->addLocation(
                     array(
-                        'idParent' => (int) $row['pid'],
-                        'url'      => $row['url'],
-                        'lt'       => $row['lt'],
-                        'rt'       => $row['rt'],
-                        'depth'    => $row['depth'],
-                        'rowurl'   => $row['rowurl'],
-                        'name'     => $row['name'],
-                        'rowname'  => $row['rowname']
+                        'idParent'     => (int) $row['pid'],
+                        'url'          => $row['url'],
+                        'lt'           => $row['lt'],
+                        'rt'           => $row['rt'],
+                        'depth'        => $row['depth'],
+                        'rowurl'       => $row['rowurl'],
+                        'totalVisible' => $totalVisible,
+                        'total'        => $total,
+                        'name'         => $row['name'],
+                        'rowname'      => $row['rowname']
                     )
                 );
                 //var_dump($row);
@@ -104,7 +116,7 @@ class Common_Resource_Location
                 // link the associated properties to this location
                 $total = 0;
                 $totalVisible = 0;
-                foreach($row['properties'] as $property) {
+                foreach($rowProperties as $property) {
                     if ((isset($property['visible'])) && (false === $property['visible'])) {
                         $invisibleClause = $adapter->quoteInto(
                             ", visible = 0 ",
@@ -409,9 +421,32 @@ class Common_Resource_Location
     //
     // UPDATE
     //
+
+    /**
+     * Updates the totals for a given location
+     * @param int $idLocation the location row
+     * @param int $totalVisible the total number of visible properties in this location
+     * @param int $total the total number of properties in this location
+     */
+    public function updateTotals($idLocation, $totalVisible, $total)
+    {
+        $params = array(
+            'totalVisible' => (int) $totalVisible,
+            'total'        => (int) $total
+        );
+
+        $where = $this->getAdapter()->quoteInto('idLocation = ?', $idLocation);
+        
+        try {
+            $query = $this->update($params, $where);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     public function updateLeftRightOnNode($idLocation, $lt, $rt)
     {
-        $params = array (
+        $params = array(
             'lt' => (int) $lt,
             'rt' => (int) $rt
         );

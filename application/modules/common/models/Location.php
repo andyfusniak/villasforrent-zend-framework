@@ -51,7 +51,6 @@ class Common_Model_Location extends Vfr_Model_Abstract
         }
 
         $this->_domDocument = new DOMDocument("1.0", "utf-8");
-        //$this->_domDocument
         $this->_domDocument->formatOutput = true;
         $this->_domDocument->preserveWhiteSpace = false;
 
@@ -61,7 +60,6 @@ class Common_Model_Location extends Vfr_Model_Abstract
 
         $currentDepth = 0;
         $currentElement = $rootElement;
-
 
         for ($i = 1; $i < sizeof($locationsRowset); $i++) {
             $locationRow = $locationsRowset[$i];
@@ -94,6 +92,7 @@ class Common_Model_Location extends Vfr_Model_Abstract
                 $element = $this->_domDocument->createElement($locationRow->rowurl);
                 $this->_attachNameElement($element, $locationRow->rowname);
                 $currentElement->parentNode->appendChild($element);
+                $currentElement = $element;
             }
 
 
@@ -446,6 +445,8 @@ class Common_Model_Location extends Vfr_Model_Abstract
             $nestedSet,
             $featuredPropertyResource
         );
+
+        $this->updateLocationPropertyTotals();
      }
 
     public function nestedSetFromTaggedXmlTree($root, $options = null)
@@ -477,7 +478,7 @@ class Common_Model_Location extends Vfr_Model_Abstract
             }
 
             if ($this->_treeStructureElement($current)) {
-                $this->_nodeDump($current);
+                //$this->_nodeDump($current);
 
                 $idx = $current->getAttribute("nest-id");
 
@@ -787,6 +788,32 @@ class Common_Model_Location extends Vfr_Model_Abstract
             $destLocationRow,
             $position
         );
+    }
+
+    public function updateLocationPropertyTotals()
+    {
+        $locationResource = $this->getResource("Location");
+        $propertyResource = $this->getResource("Property");
+
+        $locationRowset = $this->getAllLocations();
+
+        foreach($locationRowset as $locationRow) {
+            $totalVisible = $propertyResource->getPropertiesCountByGeoUri(
+                $locationRow->url,
+                true
+            );
+
+            $total = $propertyResource->getPropertiesCountByGeoUri(
+                $locationRow->url,
+                false
+            );
+
+            $locationResource->updateTotals(
+                $locationRow->idLocation,
+                $totalVisible,
+                $total
+            );
+        }
     }
 
     //
