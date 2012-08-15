@@ -4,7 +4,7 @@ class Controlpanel_ImageManagerController extends Zend_Controller_Action
     public function init()
     {
         // ensure the advertiser is logged in
-        if (!Zend_Auth::getInstance()->hasIdentity()) {
+        if (!Vfr_Auth_Advertiser::getInstance()->hasIdentity()) {
             $this->_helper->redirector->gotoSimple(
                 'login',
                 'account',
@@ -12,7 +12,7 @@ class Controlpanel_ImageManagerController extends Zend_Controller_Action
             );
         }
 
-        $this->identity = Zend_Auth::getInstance()->getIdentity();
+        $this->identity = Vfr_Auth_Advertiser::getInstance()->getIdentity();
     }
 
     public function preDispatch()

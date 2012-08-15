@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <?php
-    if ('live' == APPLICATION_ENV) {
+    if (("live" === APPLICATION_ENV) || ("beta" === APPLICATION_ENV)) {
         if ($this->jQuery()->isEnabled()) {
             $this->jQuery()->setCdnSsl(true);
             $this->jQuery()->setVersion('1.7.1');
@@ -20,7 +20,7 @@
         if ($this->jQuery()->isEnabled()) {
             $this->jQuery()->setLocalPath('/js/jquery/jquery-1.7.1.min.js');
             $this->jQuery()->setUiLocalPath('/js/jquery-ui-1.8.17/js/jquery-ui-1.8.17.custom.min.js');
-            $this->jQuery()->addStylesheet('/js/jquery-ui-1.8.17/development-bundle/themes/sunny/jquery-ui.css');
+            $this->jQuery()->addStylesheet('/js/jquery-ui-1.8.17/development-bundle/themes/cupertino/jquery-ui.css');
         }
         //die('blah');
         $this->headLink()->appendStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
@@ -53,8 +53,11 @@
 <div id="doc4" class="yui-t2">
     <div id="hd">
         <h1>Villas to rent in Greece, Portugal, Spain, France, Florida and many other holiday destinations around the world including skiing holidays</h1>
-        <p id="strapline">Dedicated to bringing you the best rental properties from around the world. Book from the owner direct, or advertiser YOUR property</p>
-        <p id="topnav"><a href="/">HOME</a></p>
+        <p id="strapline">Dedicated to bringing you the best rental properties from around the world. Book from the owner direct, or advertise YOUR property</p>
+        <p id="topnav">
+            <a href="/">HOME</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="/advertisers/advertise-with-us">ADVERTISE WITH US</a>
+        </p>
     </div>
     <div id="bd">
         <div id="yui-main">
@@ -62,7 +65,7 @@
         </div>
 
         <div class="yui-b">
-            <?php if (!Zend_Auth::getInstance()->hasIdentity()) : ?>
+            <?php if (!Vfr_Auth_Advertiser::getInstance()->hasIdentity()) : ?>
             <h1>New Advertisers</h1>
             <ul class="menu">
                 <li id="nav-register"><a tabindex="1" accesskey="R" href="/controlpanel/registration/register/">register now</a></li>
@@ -71,11 +74,11 @@
 
             <h1>Existing Advertisers</h1>
             <ul class="menu">
-                <?php if (!Zend_Auth::getInstance()->hasIdentity()) : ?>
+                <?php if (!Vfr_Auth_Advertiser::getInstance()->hasIdentity()) : ?>
                 <li id="nav-advertiser-login"><a tabindex="2" accesskey="L" href="/controlpanel/authentication/login/">login</a></li>
                 <?php endif ?>
 
-                <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
+                <?php if (Vfr_Auth_Advertiser::getInstance()->hasIdentity()) : ?>
                 <li id="nav-advertiser-home"><a tabindex="3" accesskey="H" href="/controlpanel/account/home/">account home</a></li>
                 <li id="nav-advertiser-logout"><a tabindex="4" accesskey="O" href="/controlpanel/authentication/logout/">logout</a></li>
                 <?php endif ?>

@@ -1,0 +1,12 @@
+Hi <?php echo $this->firstname ?>,
+
+Please click the link below to confirm your email address:
+
+<?php echo $this->secureUrl ?>/email-confirmation/confirm/token/<?php echo $this->token ?>
+
+If clicking doesn't seem to work, you can copy and paste the link into your browser's address window, or retype it there.
+
+If you are not <?php echo $this->firstname ?>, it is possible that somebody mistyped their email address during the registration process, and you can safely delete this email.
+
+
+

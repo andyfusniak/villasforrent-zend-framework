@@ -125,7 +125,7 @@ class Common_Resource_Property
 
         $nullExpr = new Zend_Db_Expr('NULL');
         $nowExpr  = new Zend_Db_Expr('NOW()');
-        $data = array (
+        $data = array(
             'idProperty'        => $nullExpr,
             'idPropertyType'    => $options['params']['idPropertyType'],
             'idAdvertiser'      => $options['params']['idAdvertiser'],
@@ -139,8 +139,6 @@ class Common_Resource_Property
             'approved'          => 0,
             'visible'           => 0,
             'expiry'            => $nullExpr,
-            'featureMask'       => 0,
-            'featureExpiry'     => $nullExpr,
             'emailAddress'      => $options['params']['emailAddress'],
             'photoLimit'        => $vfrConfig['photo']['max_limit_per_property'],
             'added'             => $nowExpr,
@@ -171,7 +169,6 @@ class Common_Resource_Property
     public function getAllProperties()
     {
         $query = $this->select();
-
         try {
             $propertyRowset = $this->fetchAll($query);
 
@@ -184,8 +181,8 @@ class Common_Resource_Property
     public function getAllPropertyIds()
     {
         $query = $this->select()
-                      ->from($this->_name, 'idProperty');
-
+                      ->from($this->_name, 'idProperty')
+                      ->order('idProperty');
         try {
             $propertyRowset = $this->fetchAll($query);
 
@@ -329,8 +326,6 @@ class Common_Resource_Property
 
     public function getPropertyById($idProperty)
     {
-        $this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
-
         $query = $this->select();
         $query->from(array('P' => 'Properties'), array('*'));
 
@@ -342,18 +337,38 @@ class Common_Resource_Property
 
             return $result;
         } catch (Exception $e) {
-            echo $query;
-            exit;
-            if ($this->_profiler->getEnabled()) {
-                $profilerQuery = $this->_profiler->getLastQueryProfile();
-                Zend_Debug::dump($profilerQuery->getQuery(), 'Profiler: ');
-                Zend_Debug::dump($profilerQuery->getQueryParams(), 'Profiler: ');
-                exit;
-            }
+            //echo $query;
+            //exit;
+            //if ($this->_profiler->getEnabled()) {
+            //    $profilerQuery = $this->_profiler->getLastQueryProfile();
+            //    Zend_Debug::dump($profilerQuery->getQuery(), 'Profiler: ');
+            //    Zend_Debug::dump($profilerQuery->getQueryParams(), 'Profiler: ');
+            //    exit;
+            //}
             throw $e;
         }
+    }
 
-        //$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
+    /**
+     * Retrieves a collection of property rows for the give list
+     *
+     * @param array $properties the list of properties
+     * @return Common_Resource_PropertyRowset
+     */
+    public function getPropertiesByPropertyList($properties)
+    {
+        if (!is_array($properties))
+            throw new Exception("Unsupport type - expects array");
+
+        $query = $this->select()
+                      ->where('idProperty IN (?)', $properties);
+        try {
+            $propertyRowset = $this->fetchAll($query);
+
+            return $propertyRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     public function getPropertiesByAdvertiserId($idAdvertiser)
@@ -444,22 +459,6 @@ class Common_Resource_Property
                 return true;
 
             return false;
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-
-    public function getFeaturedProperties($mask, $limit, $uri)
-    {
-        $query = $this->select()
-                      ->where('featureMask >> ? & 0x01', $mask)
-                      ->where('locationUrl LIKE ?', $uri . "%")
-                      ->order('featurePriority')
-                      ->limit($limit);
-        try {
-            $propertyRowset = $this->fetchAll($query);
-
-            return $propertyRowset;
         } catch (Exception $e) {
             throw $e;
         }

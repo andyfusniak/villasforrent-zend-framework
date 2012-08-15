@@ -15,7 +15,7 @@ class Controlpanel_AuthenticationController extends Zend_Controller_Action
     public function loginAction()
     {
         // check to see if the advertiser is already logged in
-        if (Zend_Auth::getInstance()->hasIdentity()) {
+        if (Vfr_Auth_Advertiser::getInstance()->hasIdentity()) {
             $this->_helper->redirector->gotoSimple(
                 'home',
                 'account',
@@ -28,7 +28,7 @@ class Controlpanel_AuthenticationController extends Zend_Controller_Action
         $disableLayout = $request->getParam('disable_layout', false);
 
         // convert string yes, true, 1 etc to PHP boolean type
-        $booleanFilter = new Zend_Filter_Boolean();
+        $booleanFilter = new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL);
         $disableLayout = $booleanFilter->filter($disableLayout);
 
         // disable the MVC layout if required
@@ -52,10 +52,10 @@ class Controlpanel_AuthenticationController extends Zend_Controller_Action
                         $form->getValue('passwd')
                     );
 
-                    $auth = Zend_Auth::getInstance();
-                    $auth->getStorage()->write($advertiserRow);
+                    $advertiserAuth = Vfr_Auth_Advertiser::getInstance();
+                    $advertiserAuth->getStorage()->write($advertiserRow);
 
-                    if (null !== $redirectUri) {
+                    if (strlen($redirectUri) > 0) {
                         $this->_helper->redirector->gotoUrl(
                             urldecode($redirectUri)
                         );
@@ -88,6 +88,6 @@ class Controlpanel_AuthenticationController extends Zend_Controller_Action
 
     public function logoutAction()
     {
-        Zend_Auth::getInstance()->clearIdentity();
+        Vfr_Auth_Advertiser::getInstance()->clearIdentity();
     }
 }

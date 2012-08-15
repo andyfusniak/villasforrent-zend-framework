@@ -10,8 +10,8 @@ class Controlpanel_ResendConfirmationController extends Zend_Controller_Action
         $this->_form = new Controlpanel_Form_ChangeEmailAddress();
         $this->_form->setAction('/controlpanel/resend-confirmation/resend');
 
-        if (Zend_Auth::getInstance()->hasIdentity()) {
-            $this->_advertiserRow = Zend_Auth::getInstance()->getIdentity();
+        if (Vfr_Auth_Advertiser::getInstance()->hasIdentity()) {
+            $this->_advertiserRow = Vfr_Auth_Advertiser::getInstance()->getIdentity();
         }
 
         // see if the advertiser has clicked the email confirmation link in the meantime
@@ -25,7 +25,7 @@ class Controlpanel_ResendConfirmationController extends Zend_Controller_Action
         if ($dbAdvertiserRow) {
             if ($dbAdvertiserRow->emailLastConfirmed != null) {
                 // update the current login session
-                $auth = Zend_Auth::getInstance();
+                $auth = Vfr_Auth_Advertiser::getInstance();
                 $auth->getStorage()->write($dbAdvertiserRow);
 
                 $this->_redirect(
@@ -59,7 +59,7 @@ class Controlpanel_ResendConfirmationController extends Zend_Controller_Action
                     );
 
                     // retrieve the email confirmation token associated to this advertiser
-                    $tokenRow = $this->_advertiserModel->getEmailConfirmatinTokenByIdAdvertiser(
+                    $tokenRow = $this->_advertiserModel->getEmailConfirmationTokenByAdvertiserId(
                         $this->_advertiserRow->idAdvertiser
                     );
 
@@ -82,10 +82,8 @@ class Controlpanel_ResendConfirmationController extends Zend_Controller_Action
                     );
 
                     // update the current login session
-                    $auth = Zend_Auth::getInstance();
-                    $auth->getStorage()->write(
-                        $this->_advertiserRow
-                    );
+                    $auth = Vfr_Auth_Advertiser::getInstance();
+                    $auth->getStorage()->write($this->_advertiserRow);
 
                     $this->_form->clearElements();
 
@@ -116,7 +114,7 @@ class Controlpanel_ResendConfirmationController extends Zend_Controller_Action
             $this->_advertiserModel = new Common_Model_Advertiser();
 
         // retrieve the email confirmation token associated to this advertiser
-        $tokenRow = $this->_advertiserModel->getEmailConfirmatinTokenByIdAdvertiser(
+        $tokenRow = $this->_advertiserModel->getEmailConfirmationTokenByAdvertiserId(
             $this->_advertiserRow->idAdvertiser
         );
 

@@ -1,0 +1,85 @@
+<?php //var_dump($this->messageThreadObj) ?>
+
+<style>
+.inbox-overview-image {
+    width: 700px;
+    border-bottom: 1px solid #e9e9e9;
+    padding: 10px 0;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+}
+
+.inbox-overview-image {
+    float: left;
+    width: 100px;
+    margin-right: 12px;
+}
+
+.inbox-overview-body {
+    float: left;
+    width: 500px;
+}
+.inbox-overview-body .inbox-overview-body-header {
+}
+
+.inbox-overview-actions {
+    float: left;
+}
+
+.cross {
+    background-image: url('/images/frontend/inbox/cross.png');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    cursor: pointer;
+}
+.cross:hover {
+    background-position: 0 -24px;
+}
+.cross:active {
+    background-position: 0 -36px;
+}
+
+.read {
+    background-image: url('/images/frontend/inbox/circle.png');
+    background-repeat: no-repeat;
+    background-position: -11px 0;
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    cursor: pointer;
+}
+.read:hover {
+    background-position: 0 0;
+}
+.read:active {
+   background-position: 24px 0;
+}
+
+</style>
+
+
+<form action="/inbox/archive" method="post">
+<input type="hidden" name="action"
+<div class="inbox-overview">
+    <div class="inbox-overview-image">
+        <a href="/inbox/view?tid=<?php echo $this->messageThreadObj->getMessageThreadId() ?>"><img src="https://secure.gravatar.com/avatar/02b5939ce50939e58dac8090b9aa5236?s=80&d=wavatar&r=pg"></a>
+    </div>
+
+    <div class="inbox-overview-body">
+        <div class="inbox-overview-body-header"><?php echo $this->messageName(Common_Resource_Message::SENT_BY_ADVERTISER, null, $this->messageThreadObj->getAdvertiserId()) ?><span><?php //echo $this->prettyDate($this->messageObj->getAdded(), Vfr_View_Helper_PrettyDate::STYLE_DD_MMM_YY_HH_MM_AMPM) ?></span></div>
+
+        <div class="inbox-overview-body-summary">
+            <?php echo $this->escape($this->messageThreadObj->getSummary()) ?>
+        </div>
+    </div>
+
+    <div class="inbox-overview-actions">
+        about an our ago
+        <a href="/inbox/archive?tid=<?php echo $this->messageThreadObj->getMessageThreadId() ?>"><span class="cross"></span></a>
+    </div>
+
+    <div style="clear: both"></div>
+</div>
+</form>

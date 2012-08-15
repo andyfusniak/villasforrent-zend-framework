@@ -1,0 +1,20 @@
+<p>View: <a href="#">Inbox</a> · <a href="#">Unread</a> · <a href="#">Archived</a></p>
+
+<?php if ($this->threads) : ?>
+<?php foreach ($this->threads as $messageThreadObj) : ?>
+    <?php echo $this->partial('inbox/partials/inbox-overview.phtml', array('messageThreadObj' => $messageThreadObj)) ?>
+    <?php endforeach ?>
+
+    <!--
+    <?php $tid = $messageThreadObj->getAdvertiserId(); ?>
+    <table >
+        <tr class="<?php echo (($messageThreadObj->getAdvertierThreadStatus() === Frontend_Model_MessageThread::UNREAD) ? 'message-unread' : 'message-read') ?>">
+            <td><?php echo $tid ?></td>
+            <td><a href="/inbox/view?tid=<?php echo $messageThreadObj->getMessageThreadId() ?>"><?php echo $this->escape($messageThreadObj->getSummary()) ?></a></td>
+            <td><?php echo $messageThreadObj->getLastMessage() ?></td>
+            <td><a href="/inbox/archive?tid=<?php echo $tid ?>">Archive</a></td>
+        </tr>
+        <?php //var_dump($messageThreadObj) ?>
+    </table>
+    -->
+<?php endif ?>

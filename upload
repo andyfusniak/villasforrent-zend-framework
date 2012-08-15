@@ -1,61 +1,46 @@
 #!/bin/bash
-echo -n "Deploy LIVE (l), BETA (b), RELEASE-4 (4) :"
+echo -n "Deploy LIVE (l), BETA (b), RELEASE-5 (5) :"
 read -e DEPLOY
 
 #echo -n "Include DB Schema (y) or (n) :"
 #read -e INC_SCHEMA
 INC_SCHEMA=y
 
-echo -n "Include images (y) or (n) :"
+echo -n "Include MVC Views (y) or (n) :"
+read -e INC_MVC_VIEWS
+
+echo -n "Include application images (y) or (n) :"
 read -e INC_IMAGES
 
 #echo -n "Include YUI2 Reset-Fonts-Grids (y) or (n) :"
 #read -e INC_YUI2
 INC_YUI2=y
 
+DEPLOY_SCRIPT=goscript
+
 if [ "$DEPLOY" = "l" ]; then
-    DEPLOY_SCRIPT=gohpwlive
     DEPLOY_DIR=/var/www/www.holidaypropertyworldwide.com
 elif [ "$DEPLOY" = "b" ]; then
     echo "BETA Selected"
-    DEPLOY_SCRIPT=gohpwbeta
     DEPLOY_DIR=/var/www/beta.holidaypropertyworldwide.com
-elif [ "$DEPLOY" = "4" ]; then
-    echo "RELEASE-4 Selected"
-    DEPLOY_SCRIPT=gohpw-release4
-    DEPLOY_DIR=/var/www/release4.holidaypropertyworldwide.com
+elif [ "$DEPLOY" = "5" ]; then
+    echo "RELEASE-5 Selected"
+    DEPLOY_DIR=/var/www/release5.holidaypropertyworldwide.com
 else
-    echo "You must specify LIVE or BETA mode"
+    echo "You must specify an upload mode"
     exit;
 fi
 
-echo -e "\E[32mCleaning up temp files\E[37m"
+echo -e "Cleaning up temp files"
 rm -f app.tar
 rm -f app.tar.gz
 
-echo -e "\E[32mCreating code archive\E[37m"
+echo -e "Creating code archive"
 tar cfp app.tar \
 public/.htaccess \
 public/.htaccess-beta \
-public/googleae3066b83fcfab45.html \
-public/css/admin/controlpanel.css \
-public/css/advertisercp/control-panel.css \
-public/css/villastorent.css \
 public/index.php \
 public/robots.txt \
-public/js/admin/location-tree.js \
-public/js/admin/set-location-tree.js \
-public/js/admin/set-location.js \
-public/js/admin/set-property-expiry.js \
-public/js/dynatree/jquery.dynatree.min.js \
-public/js/dynatree/skin/icons.gif \
-public/js/dynatree/skin/loading.gif \
-public/js/dynatree/skin/ui.dynatree.css \
-public/js/dynatree/skin/vline.gif \
-public/js/jquery-ui-1.8.17/development-bundle/demos/images/calendar.gif \
-public/js/vfr/admin/seturl.js \
-public/js/vfr/step4-rates.js \
-public/js/vfr/step5-availability.js \
 application/Bootstrap.php \
 application/Command.php \
 application/configs/admin-navigation.xml \
@@ -72,20 +57,37 @@ application/modules/admin/controllers/BuildLocationsController.php \
 application/modules/admin/controllers/ChecksumsController.php \
 application/modules/admin/controllers/ErrorController.php \
 application/modules/admin/controllers/FeaturedController.php \
-application/modules/admin/controllers/LocationController.php \
+application/modules/admin/controllers/FeaturedPropertyController.php \
+application/modules/admin/controllers/FinanceController.php \
+application/modules/admin/controllers/FinanceCreditNoteController.php \
+application/modules/admin/controllers/FinanceInvoiceController.php \
+application/modules/admin/controllers/FinancePaymentController.php \
+application/modules/admin/controllers/FinancePdfController.php \
+application/modules/admin/controllers/FinanceRefundController.php \
 application/modules/admin/controllers/IndexController.php \
+application/modules/admin/controllers/LocationController.php \
 application/modules/admin/controllers/LocationTreeCheckController.php \
+application/modules/admin/controllers/MemberController.php \
 application/modules/admin/controllers/MigratePhotosController.php \
 application/modules/admin/controllers/PropertyController.php \
+application/modules/admin/controllers/PropertyExportXmlController.php \
 application/modules/admin/controllers/SystemCheckController.php \
 application/modules/admin/controllers/SystemVersionsController.php \
-application/modules/admin/layouts/scripts/layout.phtml \
-application/modules/admin/layouts/scripts/partials/admin-nav.phtml \
+application/modules/admin/controllers/UrlRedirectController.php \
+application/modules/admin/controllers/XmlLocationContentController.php \
+application/modules/admin/controllers/XmlLocationContentUploadController.php \
+application/modules/admin/controllers/XmlParseLocationContentController.php \
+application/modules/admin/controllers/XmlRebuildController.php \
+application/modules/admin/controllers/XmlUploadController.php \
+application/modules/admin/forms/Featured/FeaturedPropertyForm.php \
+application/modules/admin/forms/Finance/ReceivePaymentForm.php \
 application/modules/admin/forms/LocationSelectForm.php \
 application/modules/admin/forms/PropertyApprovalForm.php \
 application/modules/admin/forms/PropertyExpiryForm.php \
 application/modules/admin/forms/PropertyUpdateApprovalForm.php \
 application/modules/admin/forms/UrlNameForm.php \
+application/modules/admin/forms/UrlRedirectForm.php \
+application/modules/admin/forms/XmlUploadForm.php \
 application/modules/admin/plugins/Auth.php \
 application/modules/admin/views/helpers/AdvertiserIdToName.php \
 application/modules/admin/views/helpers/ApprovalLocation.php \
@@ -93,6 +95,9 @@ application/modules/admin/views/helpers/ApproveProperty.php \
 application/modules/admin/views/helpers/DirectionArrow.php \
 application/modules/admin/views/helpers/FeaturedBoxLabel.php \
 application/modules/admin/views/helpers/FeaturedStatusClass.php \
+application/modules/admin/views/helpers/InvoiceDate.php \
+application/modules/admin/views/helpers/InvoiceDateDdMmYyyy.php \
+application/modules/admin/views/helpers/InvoiceIdPadded.php \
 application/modules/admin/views/helpers/LocationIdToName.php \
 application/modules/admin/views/helpers/LocationTree.php \
 application/modules/admin/views/helpers/LocationUrl.php \
@@ -102,18 +107,30 @@ application/modules/admin/views/helpers/SecurePassword.php \
 application/modules/admin/views/helpers/ShowOnceForGroup.php \
 application/modules/admin/views/helpers/TickOrCross.php \
 application/modules/admin/views/helpers/ToggleDirection.php \
+application/modules/admin/layouts/scripts/layout.phtml \
+application/modules/admin/layouts/scripts/partials/admin-nav.phtml \
 application/modules/admin/views/scripts/advertiser/index.phtml \
 application/modules/admin/views/scripts/auth-fail/auth-fail.phtml \
 application/modules/admin/views/scripts/build-locations/rebuild-tree.phtml \
+application/modules/admin/views/scripts/featured/feature.phtml \
 application/modules/admin/views/scripts/featured/list-by-location.phtml \
 application/modules/admin/views/scripts/featured/list-by-property.phtml \
+application/modules/admin/views/scripts/finance/dashboard.phtml \
+application/modules/admin/views/scripts/finance-credit-note/list.phtml \
+application/modules/admin/views/scripts/finance-credit-note/view-credit-note.phtml \
+application/modules/admin/views/scripts/finance-invoice/list.phtml \
+application/modules/admin/views/scripts/finance-invoice/view-invoice.phtml \
+application/modules/admin/views/scripts/finance-payment/list.phtml \
+application/modules/admin/views/scripts/finance-payment/receive.phtml \
+application/modules/admin/views/scripts/finance-refund/list.phtml \
+application/modules/admin/views/scripts/index/index.phtml \
+application/modules/admin/views/scripts/index/list-awaiting-initial-approval.phtml \
 application/modules/admin/views/scripts/location/tree-view.phtml \
 application/modules/admin/views/scripts/location-tree-check/check.phtml \
 application/modules/admin/views/scripts/location-tree-check/test-add.phtml \
 application/modules/admin/views/scripts/location-tree-check/test-delete.phtml \
 application/modules/admin/views/scripts/location-tree-check/test-move.phtml \
-application/modules/admin/views/scripts/index/index.phtml \
-application/modules/admin/views/scripts/index/list-awaiting-initial-approval.phtml \
+application/modules/admin/views/scripts/member/list.phtml \
 application/modules/admin/views/scripts/pagination.phtml \
 application/modules/admin/views/scripts/partials/admin-nav.phtml \
 application/modules/admin/views/scripts/property/approve-property.phtml \
@@ -126,6 +143,19 @@ application/modules/admin/views/scripts/property/view-update-approval.phtml \
 application/modules/admin/views/scripts/system-check/do-checks.phtml \
 application/modules/admin/views/scripts/system-check/php-info.phtml \
 application/modules/admin/views/scripts/system-versions/list.phtml \
+application/modules/admin/views/scripts/url-redirect/create.phtml \
+application/modules/admin/views/scripts/url-redirect/list.phtml \
+application/modules/admin/views/scripts/xml-location-content/list.phtml \
+application/modules/admin/views/scripts/xml-location-content-upload/file-upload.phtml \
+application/modules/admin/views/scripts/xml-location-content-upload/upload-confirm.phtml \
+application/modules/admin/views/scripts/xml-parse-location-content/file-not-found.phtml \
+application/modules/admin/views/scripts/xml-parse-location-content/reload.phtml \
+application/modules/admin/views/scripts/xml-rebuild/db-rebuild.phtml \
+application/modules/admin/views/scripts/xml-rebuild/dry-run-xml-upload.phtml \
+application/modules/admin/views/scripts/xml-rebuild/overview.phtml \
+application/modules/admin/views/scripts/xml-rebuild/parse-xml-upload.phtml \
+application/modules/admin/views/scripts/xml-upload/file-upload.phtml \
+application/modules/admin/views/scripts/xml-upload/upload-confirm.phtml \
 application/modules/api/controllers/PropertyCalendarController.php \
 application/modules/api/helpers/RestfulApi.php \
 application/modules/api/plugins/RestAuth.php \
@@ -141,12 +171,19 @@ application/modules/common/models/Calendar.php \
 application/modules/common/models/CountryList.php \
 application/modules/common/models/Currency.php \
 application/modules/common/models/DisapprovalStandardComments.php \
+application/modules/common/models/Finance.php \
 application/modules/common/models/IsoLanguageCodes.php \
 application/modules/common/models/Location.php \
-application/modules/common/models/Messages.php \
+application/modules/common/models/Member.php \
+application/modules/common/models/Message.php \
 application/modules/common/models/Photo.php \
 application/modules/common/models/Property.php \
 application/modules/common/models/System.php \
+application/modules/common/models/UrlRedirect.php \
+application/modules/common/models/resources/Address/Interface.php \
+application/modules/common/models/resources/Address/Row.php \
+application/modules/common/models/resources/Address/Rowset.php \
+application/modules/common/models/resources/Address.php \
 application/modules/common/models/resources/Administrator/Interface.php \
 application/modules/common/models/resources/Administrator/Row.php \
 application/modules/common/models/resources/Administrator/Rowset.php \
@@ -171,6 +208,22 @@ application/modules/common/models/resources/Calendar/Interface.php \
 application/modules/common/models/resources/Calendar/Row.php \
 application/modules/common/models/resources/Calendar/Rowset.php \
 application/modules/common/models/resources/Calendar.php \
+application/modules/common/models/resources/CreditNote/Interface.php \
+application/modules/common/models/resources/CreditNote/Row.php \
+application/modules/common/models/resources/CreditNote/Rowset.php \
+application/modules/common/models/resources/CreditNote.php \
+application/modules/common/models/resources/CreditNoteItem/Interface.php \
+application/modules/common/models/resources/CreditNoteItem/Row.php \
+application/modules/common/models/resources/CreditNoteItem/Rowset.php \
+application/modules/common/models/resources/CreditNoteItem.php \
+application/modules/common/models/resources/CreditNoteListView/Interface.php \
+application/modules/common/models/resources/CreditNoteListView/Row.php \
+application/modules/common/models/resources/CreditNoteListView/Rowset.php \
+application/modules/common/models/resources/CreditNoteListView.php \
+application/modules/common/models/resources/CreditNoteRefund/Interface.php \
+application/modules/common/models/resources/CreditNoteRefund/Row.php \
+application/modules/common/models/resources/CreditNoteRefund/Rowset.php \
+application/modules/common/models/resources/CreditNoteRefund.php \
 application/modules/common/models/resources/Currency/Interface.php \
 application/modules/common/models/resources/Currency/Row.php \
 application/modules/common/models/resources/Currency/Rowset.php \
@@ -185,10 +238,78 @@ application/modules/common/models/resources/FeaturedProperty/Rowset.php \
 application/modules/common/models/resources/FeaturedProperty.php \
 application/modules/common/models/resources/HolidayType/Interface.php \
 application/modules/common/models/resources/HolidayType.php \
+application/modules/common/models/resources/Invoice/Interface.php \
+application/modules/common/models/resources/Invoice/Row.php \
+application/modules/common/models/resources/Invoice/Rowset.php \
+application/modules/common/models/resources/Invoice.php \
+application/modules/common/models/resources/InvoiceCreditNoteView/Interface.php \
+application/modules/common/models/resources/InvoiceCreditNoteView/Row.php \
+application/modules/common/models/resources/InvoiceCreditNoteView/Rowset.php \
+application/modules/common/models/resources/InvoiceCreditNoteView.php \
+application/modules/common/models/resources/InvoiceItem/Interface.php \
+application/modules/common/models/resources/InvoiceItem/Row.php \
+application/modules/common/models/resources/InvoiceItem/Rowset.php \
+application/modules/common/models/resources/InvoiceItem.php \
+application/modules/common/models/resources/InvoiceListView/Interface.php \
+application/modules/common/models/resources/InvoiceListView/Row.php \
+application/modules/common/models/resources/InvoiceListView/Rowset.php \
+application/modules/common/models/resources/InvoiceListView.php \
+application/modules/common/models/resources/InvoicePayment/Interface.php \
+application/modules/common/models/resources/InvoicePayment/Row.php \
+application/modules/common/models/resources/InvoicePayment/Rowset.php \
+application/modules/common/models/resources/InvoicePayment.php \
+application/modules/common/models/resources/InvoicePaymentView/Interface.php \
+application/modules/common/models/resources/InvoicePaymentView/Row.php \
+application/modules/common/models/resources/InvoicePaymentView/Rowset.php \
+application/modules/common/models/resources/InvoicePaymentView.php \
 application/modules/common/models/resources/Location/Interface.php \
 application/modules/common/models/resources/Location/Row.php \
 application/modules/common/models/resources/Location/Rowset.php \
 application/modules/common/models/resources/Location.php \
+application/modules/common/models/resources/LocationContent/Interface.php \
+application/modules/common/models/resources/LocationContent/Row.php \
+application/modules/common/models/resources/LocationContent/Rowset.php \
+application/modules/common/models/resources/LocationContent.php \
+application/modules/common/models/resources/Member/Interface.php \
+application/modules/common/models/resources/Member/Row.php \
+application/modules/common/models/resources/Member/Rowset.php \
+application/modules/common/models/resources/Member.php \
+application/modules/common/models/resources/MemberFavourite/Interface.php \
+application/modules/common/models/resources/MemberFavourite/Row.php \
+application/modules/common/models/resources/MemberFavourite/Rowset.php \
+application/modules/common/models/resources/MemberFavourite.php \
+application/modules/common/models/resources/Message/Interface.php \
+application/modules/common/models/resources/Message/Row.php \
+application/modules/common/models/resources/Message/Rowset.php \
+application/modules/common/models/resources/Message.php \
+application/modules/common/models/resources/MessageThread/Interface.php \
+application/modules/common/models/resources/MessageThread/Row.php \
+application/modules/common/models/resources/MessageThread/Rowset.php \
+application/modules/common/models/resources/MessageThread.php \
+application/modules/common/models/resources/OAuthAccessTokens/Interface.php \
+application/modules/common/models/resources/OAuthAccessTokens/Row.php \
+application/modules/common/models/resources/OAuthAccessTokens/Rowset.php \
+application/modules/common/models/resources/OAuthAccessTokens.php \
+application/modules/common/models/resources/OAuthApps/Interface.php \
+application/modules/common/models/resources/OAuthApps/Row.php \
+application/modules/common/models/resources/OAuthApps/Rowset.php \
+application/modules/common/models/resources/OAuthApps.php \
+application/modules/common/models/resources/OAuthGrants/Interface.php \
+application/modules/common/models/resources/OAuthGrants/Row.php \
+application/modules/common/models/resources/OAuthGrants/Rowset.php \
+application/modules/common/models/resources/OAuthGrants.php \
+application/modules/common/models/resources/Payment/Interface.php \
+application/modules/common/models/resources/Payment/Row.php \
+application/modules/common/models/resources/Payment/Rowset.php \
+application/modules/common/models/resources/Payment.php \
+application/modules/common/models/resources/PaymentInvoicePaymentView/Interface.php \
+application/modules/common/models/resources/PaymentInvoicePaymentView/Row.php \
+application/modules/common/models/resources/PaymentInvoicePaymentView/Rowset.php \
+application/modules/common/models/resources/PaymentInvoicePaymentView.php \
+application/modules/common/models/resources/PaymentUnappliedView/Interface.php \
+application/modules/common/models/resources/PaymentUnappliedView/Row.php \
+application/modules/common/models/resources/PaymentUnappliedView/Rowset.php \
+application/modules/common/models/resources/PaymentUnappliedView.php \
 application/modules/common/models/resources/Photo/Interface.php \
 application/modules/common/models/resources/Photo/Row.php \
 application/modules/common/models/resources/Photo/Rowset.php \
@@ -215,6 +336,14 @@ application/modules/common/models/resources/Rate/Interface.php \
 application/modules/common/models/resources/Rate/Row.php \
 application/modules/common/models/resources/Rate/Rowset.php \
 application/modules/common/models/resources/Rate.php \
+application/modules/common/models/resources/Refund/Interface.php \
+application/modules/common/models/resources/Refund/Row.php \
+application/modules/common/models/resources/Refund/Rowset.php \
+application/modules/common/models/resources/Refund.php \
+application/modules/common/models/resources/Secpay/Interface.php \
+application/modules/common/models/resources/Secpay/Row.php \
+application/modules/common/models/resources/Secpay/Rowset.php \
+application/modules/common/models/resources/Secpay.php \
 application/modules/common/models/resources/Token/Interface.php \
 application/modules/common/models/resources/Token/Row.php \
 application/modules/common/models/resources/Token/Rowset.php \
@@ -223,8 +352,26 @@ application/modules/common/models/resources/Trigger/Interface.php \
 application/modules/common/models/resources/Trigger/Row.php \
 application/modules/common/models/resources/Trigger/Rowset.php \
 application/modules/common/models/resources/Trigger.php \
+application/modules/common/models/resources/UrlRedirect/Interface.php \
+application/modules/common/models/resources/UrlRedirect/Row.php \
+application/modules/common/models/resources/UrlRedirect/Rowset.php \
+application/modules/common/models/resources/UrlRedirect.php \
+application/modules/common/models/resources/WebProduct/Interface.php \
+application/modules/common/models/resources/WebProduct/Row.php \
+application/modules/common/models/resources/WebProduct/Rowset.php \
+application/modules/common/models/resources/WebProduct.php \
+application/modules/common/models/resources/WebService/Interface.php \
+application/modules/common/models/resources/WebService/Row.php \
+application/modules/common/models/resources/WebService/Rowset.php \
+application/modules/common/models/resources/WebService.php \
 application/modules/common/plugins/Layout.php \
+application/modules/common/services/Currency.php \
 application/modules/common/services/Location.php \
+application/modules/common/services/LocationContent.php \
+application/modules/common/services/Photo.php \
+application/modules/common/services/Property.php \
+application/modules/common/services/PropertyContent.php \
+application/modules/common/services/WebProductsMap.php \
 application/modules/controlpanel/controllers/AccountController.php \
 application/modules/controlpanel/controllers/AccountSettingsController.php \
 application/modules/controlpanel/controllers/AuthenticationController.php \
@@ -233,11 +380,14 @@ application/modules/controlpanel/controllers/ChangeEmailAddressController.php \
 application/modules/controlpanel/controllers/ContinueController.php \
 application/modules/controlpanel/controllers/EmailConfirmationController.php \
 application/modules/controlpanel/controllers/ImageManagerController.php \
+application/modules/controlpanel/controllers/OauthController.php \
 application/modules/controlpanel/controllers/PasswordResetController.php \
 application/modules/controlpanel/controllers/PropertyController.php \
 application/modules/controlpanel/controllers/RatesController.php \
 application/modules/controlpanel/controllers/RegistrationController.php \
 application/modules/controlpanel/controllers/ResendConfirmationController.php \
+application/modules/controlpanel/controllers/SecpayController.php \
+application/modules/controlpanel/forms/OAuth/Authorise.php \
 application/modules/controlpanel/forms/ChangeEmailAddress.php \
 application/modules/controlpanel/forms/ChooseNewPasswordForm.php \
 application/modules/controlpanel/forms/LoginForm.php \
@@ -256,87 +406,98 @@ application/modules/controlpanel/forms/Property/Step5AvailabilityEditForm.php \
 application/modules/controlpanel/forms/Property/Step5AvailablityForm.php \
 application/modules/controlpanel/helpers/DigestKey.php \
 application/modules/controlpanel/helpers/EnsureAccountEmailConfirmed.php \
+application/modules/controlpanel/helpers/EnsureLoggedIn.php \
 application/modules/controlpanel/helpers/EnsureSecure.php \
-application/modules/controlpanel/layouts/scripts/layout.phtml \
 application/modules/controlpanel/models/Acl/Controlpanel.php \
-application/modules/controlpanel/views/emails/email-address-change-request-txt.phtml \
-application/modules/controlpanel/views/emails/password-reset-confirmation-txt.phtml \
-application/modules/controlpanel/views/emails/password-reset-txt.phtml \
-application/modules/controlpanel/views/emails/register-confirm-email-txt.phtml \
-application/modules/controlpanel/views/emails/register-notify-admin-txt.phtml \
-application/modules/controlpanel/views/scripts/account/digest-key-fail.phtml \
-application/modules/controlpanel/views/scripts/account/home.phtml \
-application/modules/controlpanel/views/scripts/account-settings/list.phtml \
-application/modules/controlpanel/views/scripts/authentication/login.phtml \
-application/modules/controlpanel/views/scripts/authentication/logout.phtml \
-application/modules/controlpanel/views/scripts/availability/delete-confirm.phtml \
-application/modules/controlpanel/views/scripts/availability/edit.phtml \
-application/modules/controlpanel/views/scripts/change-email-address/changed.phtml \
-application/modules/controlpanel/views/scripts/change-email-address/email-exists.phtml \
-application/modules/controlpanel/views/scripts/change-email-address/token-expired-or-invalid.phtml \
-application/modules/controlpanel/views/scripts/email-confirmation/activated.phtml \
-application/modules/controlpanel/views/scripts/email-confirmation/token-expired-or-invalid.phtml \
-application/modules/controlpanel/views/scripts/image-manager/confirm.phtml \
-application/modules/controlpanel/views/scripts/password-reset/expired.phtml \
-application/modules/controlpanel/views/scripts/password-reset/index.phtml \
-application/modules/controlpanel/views/scripts/password-reset/reset.phtml \
-application/modules/controlpanel/views/scripts/password-reset/sent.phtml \
-application/modules/controlpanel/views/scripts/password-reset/successfully-updated.phtml \
-application/modules/controlpanel/views/scripts/property/complete-confirmation.phtml \
-application/modules/controlpanel/views/scripts/property/step1-location.phtml \
-application/modules/controlpanel/views/scripts/property/step2-content.phtml \
-application/modules/controlpanel/views/scripts/property/step3-pictures.phtml \
-application/modules/controlpanel/views/scripts/property/step4-rates.phtml \
-application/modules/controlpanel/views/scripts/property/step5-availability.phtml \
-application/modules/controlpanel/views/scripts/property/update-send-confirmation.phtml \
-application/modules/controlpanel/views/scripts/rates/base-currency.phtml \
-application/modules/controlpanel/views/scripts/rates/delete-confirm.phtml \
-application/modules/controlpanel/views/scripts/rates/edit.phtml \
-application/modules/controlpanel/views/scripts/rates/rental-basis.phtml \
-application/modules/controlpanel/views/scripts/registration/continue.phtml \
-application/modules/controlpanel/views/scripts/registration/register.phtml \
-application/modules/controlpanel/views/scripts/resend-confirmation/resend.phtml \
 application/modules/frontend/Bootstrap.php \
+application/modules/frontend/controllers/AdvertisersController.php \
 application/modules/frontend/controllers/AvailabilityImageController.php \
+application/modules/frontend/controllers/AuthenticationController.php \
+application/modules/frontend/controllers/DashboardController.php \
 application/modules/frontend/controllers/DisplayFullPropertyController.php \
+application/modules/frontend/controllers/EmailConfirmationController.php \
 application/modules/frontend/controllers/ErrorController.php \
+application/modules/frontend/controllers/FavouritesController.php \
 application/modules/frontend/controllers/ImageCacheController.php \
+application/modules/frontend/controllers/InboxController.php \
+application/modules/frontend/controllers/InboxReplyController.php \
 application/modules/frontend/controllers/IndexController.php \
 application/modules/frontend/controllers/LevelController.php \
-application/modules/frontend/helpers/LevelSummary.php \
+application/modules/frontend/controllers/SecpayCallbackController.php \
+application/modules/frontend/controllers/SignupController.php \
+application/modules/frontend/forms/Inbox/ReplyForm.php \
+application/modules/frontend/forms/Member/LoginForm.php \
+application/modules/frontend/forms/Member/RegistrationForm.php \
+application/modules/frontend/helpers/EnsureMemberLoggedIn.php \
 application/modules/frontend/helpers/FeaturedProperty.php \
-application/modules/frontend/layouts/scripts/fullscreen.phtml \
-application/modules/frontend/layouts/scripts/layout.phtml \
+application/modules/frontend/helpers/LevelSummary.php \
+application/modules/frontend/models/Address.php \
+application/modules/frontend/models/Availability.php \
+application/modules/frontend/models/Calendar.php \
+application/modules/frontend/models/CreditNote.php \
+application/modules/frontend/models/CreditNoteItem.php \
+application/modules/frontend/models/CreditNoteMapper.php \
+application/modules/frontend/models/Featured.php \
+application/modules/frontend/models/FeaturedMapper.php \
+application/modules/frontend/models/FinanceMapperAbstract.php \
+application/modules/frontend/models/Invoice.php \
+application/modules/frontend/models/InvoiceItem.php \
+application/modules/frontend/models/InvoiceMapper.php \
+application/modules/frontend/models/Location.php \
+application/modules/frontend/models/LocationContent.php \
+application/modules/frontend/models/LocationContentBody.php \
+application/modules/frontend/models/LocationContentImage.php \
+application/modules/frontend/models/LocationContentMapper.php \
+application/modules/frontend/models/LocationMapper.php \
+application/modules/frontend/models/MapperAbstract.php \
+application/modules/frontend/models/MemberFavourite.php \
+application/modules/frontend/models/MemberFavouriteMapper.php \
+application/modules/frontend/models/Message.php \
+application/modules/frontend/models/MessageMapper.php \
+application/modules/frontend/models/MessageThread.php \
+application/modules/frontend/models/Payment.php \
+application/modules/frontend/models/PaymentMapper.php \
+application/modules/frontend/models/Photo.php \
+application/modules/frontend/models/Property.php \
+application/modules/frontend/models/PropertyMapper.php \
+application/modules/frontend/models/Rate.php \
+application/modules/frontend/models/Refund.php \
+application/modules/frontend/models/Secpay.php \
+application/modules/frontend/models/SecpayMapper.php \
+application/modules/frontend/models/WebProduct.php \
+application/modules/frontend/models/WebService.php \
+application/modules/frontend/services/Property.php \
 application/modules/frontend/plugins/AdvertiserAccessCheck.php \
-application/modules/frontend/views/helpers/PhotoGrid.php \
-application/modules/frontend/views/helpers/SectionTitle.php \
-application/modules/frontend/views/scripts/display-full-property/index.phtml \
-application/modules/frontend/views/scripts/error/error.phtml \
-application/modules/frontend/views/scripts/index/index.phtml \
-application/modules/frontend/views/scripts/level/country.phtml \
-application/modules/frontend/views/scripts/level/region.phtml \
-application/modules/frontend/views/scripts/level/destination.phtml \
-application/modules/frontend/views/scripts/partials/featured-property.phtml \
-application/modules/frontend/views/scripts/partials/property-summary.phtml \
+library/purify \
 library/Vfr/Acl/Interface.php \
 library/Vfr/Availability/Calendar/Exception.php \
 library/Vfr/Availability/Calendar/ImagePng.php \
 library/Vfr/Availability/Calendar/Object.php \
+library/Vfr/Auth/Advertiser.php \
+library/Vfr/Auth/Member.php \
 library/Vfr/BlowfishHasher.php \
 library/Vfr/Checksum.php \
 library/Vfr/Controller/Helper/Acl.php \
 library/Vfr/Controller/Router/UrlExcemptionChecker.php \
 library/Vfr/Controller/Router/Route/Location.php \
 library/Vfr/Controller/Router/Route/Property.php \
+library/Vfr/Controller/Router/Route/UrlRedirect.php \
 library/Vfr/DigestKey.php \
 library/Vfr/Exception/Advertiser/Db/DuplicateEntry.php \
 library/Vfr/Exception/Advertiser/EmailAlreadyExists.php \
+library/Vfr/Exception/Location/LeafNodeHasProperties.php \
+library/Vfr/Exception/Location/NodeNotFound.php \
+library/Vfr/Exception/Location/NotALeafNode.php \
+library/Vfr/Exception/Member/Db/DuplicateEntry.php \
 library/Vfr/Exception/AdvertiserEmailNotConfirmed.php \
 library/Vfr/Exception/AdvertiserNotFound.php \
 library/Vfr/Exception/AdvertiserPasswordFail.php \
 library/Vfr/Exception/BlowfishInvalidHash.php \
 library/Vfr/Exception/BlowfishUnsupport.php \
+library/Vfr/Exception/MemberNotFound.php \
+library/Vfr/Exception/MemberPasswordFail.php \
 library/Vfr/Exception.php \
+library/Vfr/Finance/Invoice.php \
 library/Vfr/Form/Element/AvailabilityRangePicker.php \
 library/Vfr/Form/Element/RatesRangePicker.php \
 library/Vfr/Image/Processor.php \
@@ -350,14 +511,22 @@ library/Vfr/Model/Resource/Db/Table/Abstract.php \
 library/Vfr/Model/Resource/Db/Table/Row/Abstract.php \
 library/Vfr/Model/Resource/Db/Table/Rowset/Abstract.php \
 library/Vfr/Model/Exception.php \
+library/Vfr/OAuth/InvalidRequest/Exception.php \
+library/Vfr/OAuth/OAuth.php \
 library/Vfr/Property/Converter.php \
 library/Vfr/Token.php \
 library/Vfr/Validate/AvailabilityRange.php \
+library/Vfr/Validate/DateInput.php \
 library/Vfr/Validate/RatesRange.php \
 library/Vfr/Validate/EmailCheck.php \
+library/Vfr/Validate/InvoicePayment.php \
+library/Vfr/Validate/MoneyInput.php \
 library/Vfr/Validate/PasswordConfirmation.php \
 library/Vfr/Validate/PropertyUrl.php \
+library/Vfr/Validate/RatesRange.php \
 library/Vfr/Validate/UniqueAdvertiserEmail.php \
+library/Vfr/Validate/UniqueMemberEmail.php \
+library/Vfr/View/DisplayUtils.php \
 library/Vfr/View/Helper/AdvertiserControlPanelStatus.php \
 library/Vfr/View/Helper/AspectRatio.php \
 library/Vfr/View/Helper/AvailabilityNotifier.php \
@@ -372,6 +541,7 @@ library/Vfr/View/Helper/ImageConfirmDeleteButton.php \
 library/Vfr/View/Helper/ImageMoveButtons.php \
 library/Vfr/View/Helper/ImageUploadNotifier.php \
 library/Vfr/View/Helper/LocationBreadcrumb.php \
+library/Vfr/View/Helper/MessageName.php \
 library/Vfr/View/Helper/MinStayDuration.php \
 library/Vfr/View/Helper/Photo.php \
 library/Vfr/View/Helper/PrettyDate.php \
@@ -384,6 +554,9 @@ library/Vfr/View/Helper/RentalBasis.php \
 library/Vfr/View/Helper/SummaryBar.php \
 library/Vfr/View/Helper/TinyThumb.php \
 library/Vfr/View/Helper/WebsiteUrl.php \
+library/Vfr/Xml/LocationContentParser.php \
+library/Vfr/Xml/ParserAbstract.php \
+library/Vfr/Xml/PropertyParser.php \
 utils/config.py \
 utils/hpw/__init__.py \
 utils/hpw/exceptions/__init__.py \
@@ -408,31 +581,158 @@ utils/show-prop-content-checksums.py \
 utils/update-property-count.py \
 utils/updatechecksums
 
+if [ "$INC_MVC_VIEWS" = "y" ]; then
+echo -e "Appending MVC Views to archive"
+tar rfp app.tar \
+public/googleae3066b83fcfab45.html \
+public/css/admin/controlpanel.css \
+public/css/advertisercp/control-panel.css \
+public/css/villastorent.css \
+public/css/vfr/frontend/inbox.css \
+public/js/admin/featured/featured-property.js \
+public/js/admin/finance/finance-payment-recieve.js \
+public/js/admin/finance/invoice-payment-filter.js \
+public/js/admin/location-tree.js \
+public/js/admin/set-location-tree.js \
+public/js/admin/set-location.js \
+public/js/admin/set-property-expiry.js \
+public/js/dynatree/jquery.dynatree.min.js \
+public/js/dynatree/skin/icons.gif \
+public/js/dynatree/skin/loading.gif \
+public/js/dynatree/skin/ui.dynatree.css \
+public/js/dynatree/skin/vline.gif \
+public/js/jquery-ui-1.8.17/development-bundle/demos/images/calendar.gif \
+public/js/vfr/admin/seturl.js \
+public/js/vfr/frontend/inbox.js \
+public/js/vfr/frontend/member-favourites.js \
+public/js/display-full-property.js \
+public/js/vfr/step4-rates.js \
+public/js/vfr/step5-availability.js \
+application/modules/controlpanel/layouts/scripts/layout.phtml \
+application/modules/controlpanel/views/emails/advertiser-property-approved-txt.phtml \
+application/modules/controlpanel/views/emails/advertiser-property-update-approved-txt.phtml \
+application/modules/controlpanel/views/emails/email-address-change-request-txt.phtml \
+application/modules/controlpanel/views/emails/initial-approval-notify-admin-txt.phtml \
+application/modules/controlpanel/views/emails/password-reset-confirmation-txt.phtml \
+application/modules/controlpanel/views/emails/password-reset-txt.phtml \
+application/modules/controlpanel/views/emails/photo-upload-notify-admin-txt.phtml \
+application/modules/controlpanel/views/emails/register-confirm-email-txt.phtml \
+application/modules/controlpanel/views/emails/register-notify-admin-txt.phtml \
+application/modules/controlpanel/views/emails/update-approval-notify-admin-txt.phtml \
+application/modules/controlpanel/views/scripts/account/digest-key-fail.phtml \
+application/modules/controlpanel/views/scripts/account/home.phtml \
+application/modules/controlpanel/views/scripts/account-settings/list.phtml \
+application/modules/controlpanel/views/scripts/authentication/login.phtml \
+application/modules/controlpanel/views/scripts/authentication/logout.phtml \
+application/modules/controlpanel/views/scripts/availability/delete-confirm.phtml \
+application/modules/controlpanel/views/scripts/availability/edit.phtml \
+application/modules/controlpanel/views/scripts/change-email-address/changed.phtml \
+application/modules/controlpanel/views/scripts/change-email-address/email-exists.phtml \
+application/modules/controlpanel/views/scripts/change-email-address/token-expired-or-invalid.phtml \
+application/modules/controlpanel/views/scripts/email-confirmation/activated.phtml \
+application/modules/controlpanel/views/scripts/email-confirmation/token-expired-or-invalid.phtml \
+application/modules/controlpanel/views/scripts/image-manager/confirm.phtml \
+application/modules/controlpanel/views/scripts/oauth/auth.phtml \
+application/modules/controlpanel/views/scripts/password-reset/expired.phtml \
+application/modules/controlpanel/views/scripts/password-reset/index.phtml \
+application/modules/controlpanel/views/scripts/password-reset/reset.phtml \
+application/modules/controlpanel/views/scripts/password-reset/sent.phtml \
+application/modules/controlpanel/views/scripts/password-reset/successfully-updated.phtml \
+application/modules/controlpanel/views/scripts/property/complete-confirmation.phtml \
+application/modules/controlpanel/views/scripts/property/step1-location.phtml \
+application/modules/controlpanel/views/scripts/property/step2-content.phtml \
+application/modules/controlpanel/views/scripts/property/step3-pictures.phtml \
+application/modules/controlpanel/views/scripts/property/step4-rates.phtml \
+application/modules/controlpanel/views/scripts/property/step5-availability.phtml \
+application/modules/controlpanel/views/scripts/property/update-send-confirmation.phtml \
+application/modules/controlpanel/views/scripts/rates/base-currency.phtml \
+application/modules/controlpanel/views/scripts/rates/delete-confirm.phtml \
+application/modules/controlpanel/views/scripts/rates/edit.phtml \
+application/modules/controlpanel/views/scripts/rates/rental-basis.phtml \
+application/modules/controlpanel/views/scripts/registration/continue.phtml \
+application/modules/controlpanel/views/scripts/registration/register.phtml \
+application/modules/controlpanel/views/scripts/resend-confirmation/resend.phtml \
+application/modules/controlpanel/views/scripts/secpay/test.phtml \
+application/modules/frontend/layouts/scripts/fullscreen.phtml \
+application/modules/frontend/layouts/scripts/layout.phtml \
+application/modules/frontend/views/emails/member-signup-confirm-email-txt.phtml \
+application/modules/frontend/views/helpers/GroupSectionTitle.php \
+application/modules/frontend/views/helpers/MemberName.php \
+application/modules/frontend/views/helpers/PhotoGrid.php \
+application/modules/frontend/views/helpers/SectionTitle.php \
+application/modules/frontend/views/scripts/advertisers/advertise-with-us.phtml \
+application/modules/frontend/views/scripts/authentication/login.phtml \
+application/modules/frontend/views/scripts/authentication/logout.phtml \
+application/modules/frontend/views/scripts/dashboard/partials/member-favourite.phtml \
+application/modules/frontend/views/scripts/dashboard/favourites.phtml \
+application/modules/frontend/views/scripts/dashboard/home.phtml \
+application/modules/frontend/views/scripts/display-full-property/index.phtml \
+application/modules/frontend/views/scripts/error/error.phtml \
+application/modules/frontend/views/scripts/inbox/partials/inbox-overview.phtml \
+application/modules/frontend/views/scripts/inbox/partials/message.phtml \
+application/modules/frontend/views/scripts/inbox/archive.phtml \
+application/modules/frontend/views/scripts/inbox/index.phtml \
+application/modules/frontend/views/scripts/inbox/send.phtml \
+application/modules/frontend/views/scripts/inbox/view.phtml \
+application/modules/frontend/views/scripts/index/index.phtml \
+application/modules/frontend/views/scripts/level/destination.phtml \
+application/modules/frontend/views/scripts/level/list.phtml \
+application/modules/frontend/views/scripts/level/pagination.phtml \
+application/modules/frontend/views/scripts/level/region.phtml \
+application/modules/frontend/views/scripts/partials/featured-property.phtml \
+application/modules/frontend/views/scripts/partials/location-columns-3.phtml \
+application/modules/frontend/views/scripts/partials/location-columns-4.phtml \
+application/modules/frontend/views/scripts/partials/location-columns-6.phtml \
+application/modules/frontend/views/scripts/partials/location-description.phtml \
+application/modules/frontend/views/scripts/partials/property-summary.phtml \
+application/modules/frontend/views/scripts/secpay-callback/callback.phtml \
+application/modules/frontend/views/scripts/signup/join.phtml
+fi
+
 if [ "$INC_SCHEMA" = "y" ]; then
-    echo -e "\E[32mAppending Schema to archive\E[37m"
+    echo -e "Appending Schema to archive"
     tar rfp app.tar \
+    schema/Addresses.sql \
     schema/Administrators.sql \
     schema/AdvertiserApiAccounts.sql \
     schema/Advertisers.sql \
+    schema/AdvertisersReset.sql \
     schema/ApiAccounts.sql \
     schema/Availability.sql \
     schema/Calendars.sql \
     schema/CountryList.sql \
+    schema/CreditNoteListView.sql \
+    schema/CreditNoteItems.sql \
+    schema/CreditNotes.sql \
+    schema/CreditNoteRefunds.sql \
     schema/Currencies.sql \
     schema/CurrencyConversions.sql \
     schema/DisapprovalStandardComments.sql \
     schema/Enquiries.sql \
     schema/Facilities.sql \
     schema/FeaturedProperties.sql \
+    schema/Invoices.sql \
+    schema/InvoiceCreditNotes.sql \
+    schema/InvoiceCreditNotesView.sql \
+    schema/InvoiceItems.sql \
+    schema/InvoiceListView.sql \
+    schema/InvoicePayments.sql \
+    schema/InvoicePaymentsView.sql \
     schema/IsoLanguageCodes.sql \
     schema/Locations.sql \
-    schema/MembersFavoriteProperties.sql \
+    schema/LocationsContent.sql \
     schema/Members.sql \
+    schema/MemberFavourites.sql \
     schema/Messages.sql \
     schema/MessageThreads.sql \
-    schema/OrdersServices.sql \
+    schema/OAuthAccessTokens.sql \
+    schema/OAuthApps.sql \
+    schema/OAuthGrants.sql \
     schema/Orders.sql \
+    schema/OrdersServices.sql \
     schema/Payments.sql \
+    schema/PaymentsInvoicePaymentsView.sql \
+    schema/PaymentsUnappliedView.sql \
     schema/PhotoApprovals.sql \
     schema/Photos.sql \
     schema/PropertiesContent.sql \
@@ -441,17 +741,25 @@ if [ "$INC_SCHEMA" = "y" ]; then
     schema/PropertiesStatistics.sql \
     schema/PropertyTypes.sql \
     schema/Rates.sql \
+    schema/RefundInvoiceItems.sql \
+    schema/Refunds.sql \
     schema/Services.sql \
     schema/setup_db.sql \
     schema/TaxCodes.sql \
     schema/Tokens.sql \
     schema/trigger.sql \
+    schema/UrlRedirects.sql \
+    schema/WebProducts.sql \
+    schema/WebServices.sql \
+    schema/create-financial-tables.sh \
+    schema/drop-financial-tables.sh \
+    schema/invoice-test.sql \
     setup/purge_all_db.sh \
     setup/setup_mysql_db.sh
 fi
 
 if [ "$INC_IMAGES" = "y" ]; then
-    echo -e "\E[32mAppending Images to archive\E[37m"
+    echo -e "Appending Images to archive"
     tar rfp app.tar \
     public/images/accountsummary/availability_green.png \
     public/images/accountsummary/availability_grey.png \
@@ -498,8 +806,11 @@ if [ "$INC_IMAGES" = "y" ]; then
     public/images/admin/tablenav/n_skip_first_inactive.gif \
     public/images/admin/tablenav/n_skip_next.gif \
     public/images/admin/tablenav/n_skip_previous_inactive.gif \
+    public/images/frontend/inbox/circle.png \
+    public/images/frontend/inbox/cross.png \
     public/images/cards.gif \
     public/images/header.jpg \
+    public/images/icons/favourite-sprite.png \
     public/images/progressheader/availability_green.png \
     public/images/progressheader/availability_grey.png \
     public/images/progressheader/availability_orange.png \
@@ -516,31 +827,36 @@ if [ "$INC_IMAGES" = "y" ]; then
     public/images/progressheader/rates_grey.png \
     public/images/progressheader/rates_orange.png \
     public/images/homepage/special_offer.gif \
+    public/images/greycat_logo_600.png \
     public/images/tile.gif \
     public/images/other/valid-xhtml10-blue.png \
     public/images/other/zend-framework.png
 fi
 
 if [ "$INC_YUI2" = "y" ]; then
-    echo -e "\E[32mAppending YUI2 to archive\E[37m"
+    echo -e "Appending YUI2 reset-fonts-grids directory to archive"
     tar rfhp app.tar public/js/yui2/reset-fonts-grids
 fi
 
-echo -e "\E[32mCompressing archive\E[37m"
+echo -e "Compressing archive"
 gzip -9 -f app.tar
 
-echo -e "\E[32mSending to server...\E[37m"
+echo -e "Sending to server..."
 #
 # upload the archive to the beta server
 #
-scp -P22 -p -C app.tar.gz andy@mrgrey.holidaypropertyworldwide.com:$DEPLOY_DIR
+scp -P22 -p app.tar.gz andy@mrgrey.holidaypropertyworldwide.com:$DEPLOY_DIR
 
-echo -e "\E[32mRunning remote process to unbundle the package\E[37m"
+echo -e "Running remote process to unbundle the package"
 scp -P22 -p -C $DEPLOY_SCRIPT andy@mrgrey.holidaypropertyworldwide.com:$DEPLOY_DIR
 
-ssh -p22 andy@mrgrey.holidaypropertyworldwide.com $DEPLOY_DIR/$DEPLOY_SCRIPT
+echo -e "Running the goscript"
+ssh -p22 andy@mrgrey.holidaypropertyworldwide.com $DEPLOY_DIR/$DEPLOY_SCRIPT $DEPLOY_DIR
 
-echo -e "\E[32mCleaning up local files\E[37m"
+echo -e "Removing the goscript"
+ssh -p22 andy@mrgrey.holidaypropertyworldwide.com rm $DEPLOY_DIR/$DEPLOY_SCRIPT
+
+echo -e "Cleaning up local files"
 rm -f app.tar.gz
 
-echo -e "\E[35mCompleted\E[37m"
+echo -e "Completed"

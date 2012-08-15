@@ -1,0 +1,11 @@
+<?php if ($this->idPropertyList) : ?>
+<table>
+<?php foreach ($this->idPropertyList as $idProperty) : ?>
+<?php echo $this->partial('dashboard/partials/member-favourite.phtml',array(
+                'photoRow'   => $this->photoLookup[$idProperty],
+                'propertyRow' => $this->propertyLookup[$idProperty],
+                'propertyContentRow' => $this->propertyContentLookup[$idProperty],
+                'idProperty' => $idProperty)) ?>
+<?php endforeach ?>
+</table>
+<?php endif ?>

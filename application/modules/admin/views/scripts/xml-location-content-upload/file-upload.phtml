@@ -1,0 +1,14 @@
+<?php if ($this->form) : ?>
+<form enctype="multipart/form-data" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+    <fieldset>
+        <legend>XML Content Upload</legend>
+
+        <dl>
+            <dt><label for="filename">Browse for the Content XML file</label></dt>
+            <dd><input type="file" name="filename" /></dd>
+        </dl>
+
+        <input type="submit" name="submit" id="submit" value="Send" />
+    </fieldset>
+</form>
+<?php endif ?>

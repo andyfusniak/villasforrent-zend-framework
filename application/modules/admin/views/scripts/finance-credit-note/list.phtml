@@ -1,0 +1,87 @@
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml') ?>
+<div style="clear:both" />
+<table id="list">
+    <tr>
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'idCreditNote',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Credit-Note ID</a> <?php echo $this->directionArrow('idCredit', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'creditNoteDate',
+                'direction' =>  $this->toggleDirection($this->direction)
+            )
+        ) ?>">Date</a> <?php echo $this->directionArrow('creditNoteDate', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'name',
+                'direction' =>  $this->toggleDirection($this->direction)
+            )
+        ) ?>">Name</a> <?php echo $this->directionArrow('name', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'total',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Total</a> <?php echo $this->directionArrow('total', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'currency',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Currency</a> <?php echo $this->directionArrow('currency', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'refunded',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Refuned</a> <?php echo $this->directionArrow('refunded', $this->order, $this->direction) ?>
+        </th>
+
+<!--
+        <th><a href="<?php echo $this->url(
+            array (
+                'order'     => 'added',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Added</a> <?php echo $this->directionArrow('added', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'updated',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Updated</a> <?php echo $this->directionArrow('updated', $this->order, $this->direction) ?>
+        </th>
+-->
+        <th>Action</th>
+    </tr>
+    <?php foreach ($this->paginator as $creditNoteRow): ?>
+    <?php //var_dump($creditNoteRow) ?>
+    <tr class="<?php echo (($creditNoteRow->refunded == 0) ? 'no' : 'refunded') ?> <?php echo $this->cycle(array("odd", "even"))->next() ?>">
+        <td><?php echo $creditNoteRow->idCreditNote ?></td>
+        <td><?php echo $this->prettyDate(
+                $creditNoteRow->creditNoteDate,
+                Vfr_View_Helper_PrettyDate::STYLE_DD_MMM_YY
+        ) ?></td>
+        <td><?php echo $this->escape($creditNoteRow->name) ?></td>
+        <td><?php echo $creditNoteRow->total ?></td>
+        <td><?php echo $creditNoteRow->currency ?></td>
+        <td><?php echo $creditNoteRow->refunded ?></td>
+        <td><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'finance-credit-note', 'action' => 'view-credit-note', 'idCreditNote' => $creditNoteRow->idCreditNote), null, true) ?>">view credit-note</a></td>
+    </tr>
+<?php endforeach ?>
+</table>

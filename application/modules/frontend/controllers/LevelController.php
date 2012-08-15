@@ -17,42 +17,12 @@ class LevelController extends Zend_Controller_Action
         $this->_featuredConfig = $bootstrap['vfr']['featured'];
     }
 
-    /*
-    public function locationAction()
-    {
-        var_dump($this->getRequest()->getParams());
-        $url = $this->getRequest()->getParam('1');
-        $locationRow = $this->_locationModel->lookup($url);
-        var_dump($locationRow);
-        die();
-
-        if ($locationRow === null) {
-            $this->getResponse()->setHttpResponseCode(404);
-            die("missing page");
-            return;
-        }
-
-        if ($locationRow->idProperty === null) {
-
-        }
-
-        $parts = explode('/', $url);
-
-        var_dump($parts);
-
-        var_dump($locationRow);
-        die();
-    }
-    */
-
-    public function countryAction()
+    public function listAction()
     {
         $request = $this->getRequest();
 
         $uri = $request->getParam('uri');
-
         $locationRow = $this->_locationModel->lookup($uri);
-
         if (!$locationRow) {
             $this->getResponse()->setHttpResponseCode(404);
             return;
@@ -63,11 +33,16 @@ class LevelController extends Zend_Controller_Action
             $locationRow->idLocation
         );
 
-        $propertyPaginator = $this->_propertyModel->getPropertiesByGeoUri($uri, $request->getParam('page', 1));
+        $propertyPaginator = $this->_propertyModel->getPropertiesByGeoUri(
+            $uri,
+            $request->getParam('page', 1)
+        );
 
-
-        //var_dump($locationRowset);
-        //die();
+        $locationContentMapper = new Frontend_Model_LocationContentMapper();
+        $locationContentObj = $locationContentMapper->getLocationContentByLocationId(
+            $locationRow->idLocation,
+            'EN'
+        );
 
         // get the summary for this level
         //$this->_helper->levelSummary($locationRow->url, $page=1);
@@ -75,81 +50,27 @@ class LevelController extends Zend_Controller_Action
         // get the featured properties
         $this->_helper->featuredProperty($locationRow->idLocation);
 
+        // Set the title of the page
+        $this->view->headTitle(
+            $locationRow->name,
+            Zend_View_Helper_Placeholder_Container_Abstract::SET
+        );
+
+        // Set the description of the page
+        $this->view->headMeta("Villas, chalets and apartments to rent in "
+            . $locationRow->name, 'description'
+        );
+
         // pass results to the view
         $this->view->assign(
             array(
-                'locationRow'       => $locationRow,
-                'locationRowset'    => $locationRowset,
-                'locationModel'     => $this->_locationModel,
-                'propertyModel'     => $this->_propertyModel,
-                'propertyPaginator' => $propertyPaginator
+                'locationRow'        => $locationRow,
+                'locationRowset'     => $locationRowset,
+                'locationContentObj' => $locationContentObj,
+                'locationModel'      => $this->_locationModel,
+                'propertyModel'      => $this->_propertyModel,
+                'propertyPaginator'  => $propertyPaginator
             )
         );
     }
-
-    /*
-    public function regionAction()
-    {
-        $uri = $this->getRequest()->getParam('uri');
-        $locationRow = $this->_locationModel->lookup($uri);
-
-        if (!$locationRow) {
-            $this->getResponse()->setHttpResponseCode(404);
-            return;
-        }
-
-        // get the list of destinations within this region
-        $idLocation = $locationRow->idLocation;
-        $locationRowset = $this->_locationModel->getAllLocationsIn($idLocation);
-
-        // get the summary for this level
-        $this->_helper->levelSummary($locationRow->url);
-
-        // get the featured properties
-        $this->_helper->featuredProperty($locationRow->idLocation);
-
-        // pass results to the view
-        $this->view->assign(
-            array (
-                'locationRow'     => $locationRow,
-                'locationRowset'  => $locationRowset
-            )
-        );
-    }
-
-    public function destinationAction()
-    {
-        $uri = $this->getRequest()->getParam('uri');
-        $locationRow = $this->_locationModel->lookup($uri);
-
-        if (!$locationRow) {
-            $this->getResponse()->setHttpResponseCode(404);
-            return;
-        }
-
-        // get the summary for this level
-        $this->_helper->levelSummary($locationRow->url);
-
-        // get the featured properties
-        $this->_helper->featuredProperty($locationRow->idLocation);
-
-        // pass results to the view
-        $this->view->assign(
-            array (
-                'locationRow' => $locationRow
-            )
-        );
-    }
-
-    public function listDestinationsAction()
-    {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $propertyTypesTbl = new Common_Model_DbTable_PropertyTypes();
-        $property_types = $propertyTypesTbl->getPropertyTypesInUseLookup();
-
-        // create a fastlookup engine instance
-        $lookupEngine = new Vfr_Fastlookups();
-        $lookupEngine->loadFastTable();
-    }
-    */
 }

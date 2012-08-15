@@ -9,16 +9,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 include_once $classFileIncCache;
             }
 
-            Zend_Loader_PluginLoader::setIncludeFileCache(
-                $classFileIncCache
-            );
+            Zend_Loader_PluginLoader::setIncludeFileCache($classFileIncCache);
         }
     }
 
     protected function _initDbCaches()
     {
-        if ('live' == $this->getEnvironment()) {
-            $frontendOptions = array (
+        if ('live' === $this->getEnvironment()) {
+            $frontendOptions = array(
                 'automatic_serialization' => true
             );
 
@@ -41,7 +39,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $autoLoader = new Zend_Application_Module_Autoloader(
             array(
                 'namespace' => 'Common',
-                'basePath' => APPLICATION_PATH . '/modules/common'));
+                'basePath' => APPLICATION_PATH . '/modules/common'
+            )
+        );
 
         $autoLoader->addResourceTypes(
             array(
@@ -53,28 +53,28 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
 
         $autoLoader = new Zend_Application_Module_Autoloader(
-            array (
+            array(
                 'namespace' => 'Admin',
                 'basePath'  => APPLICATION_PATH . '/modules/admin'
             )
         );
 
         $autoLoader = new Zend_Application_Module_Autoloader(
-            array (
+            array(
                 'namespace' => 'Controlpanel',
                 'basePath'  => APPLICATION_PATH . '/modules/controlpanel'
             )
         );
 
         $autoLoader = new Zend_Application_Module_Autoloader(
-            array (
+            array(
                 'namespace' => 'Frontend',
                 'basePath'  => APPLICATION_PATH . '/modules/frontend'
             )
         );
 
         $autoLoader = new Zend_Application_Module_Autoloader(
-            array (
+            array(
                 'namespace' => 'Api',
                 'basePath'  => APPLICATION_PATH . '/modules/api'
             )
@@ -246,19 +246,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $routeRestApi = new Zend_Rest_Route($front, array (), array ('api'));
 
-        $locationRouter = new Vfr_Controller_Router_Route_Location(
-            '([a-z0-9-/]*)'
-        );
+        $locationRouter = new Vfr_Controller_Router_Route_Location('([a-z0-9-/]*)');
 
         //  /^(.(?!foo).(?!wobble))*$/
         // /^((?!admin).(?!login).)*$/
-        $propertyRouter = new Vfr_Controller_Router_Route_Property(
-            '([a-z0-9-/]*)'
-        );
-
-        $urlRedirectRouter = new Vfr_Controller_Router_Route_UrlRedirect(
-            '([a-z0-9-/]*)'
-        );
+        $propertyRouter = new Vfr_Controller_Router_Route_Property('([a-z0-9-/]*)');
+        $urlRedirectRouter = new Vfr_Controller_Router_Route_UrlRedirect('([a-z0-9-/]*)');
 
         // these trigger in reverse order i.e. property check first, then location
         $router->addroute('location', $locationRouter)
@@ -271,7 +264,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                ->addRoute('restPropertyPhotos', $restPropertyPhotos);
                //->addRoute('rest', $routeRestApi);
 
-        $this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
+        //$this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
     }
 
 
@@ -363,10 +356,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view = $layout->getView();
         ZendX_JQuery::enableView($view);
 
-        //$view->doctype('HTML5');
-        $view->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
-        $view->headMeta()->appendHttpEquiv('Content-Language', 'en-GB');
-        $view->headMeta()->appendHttpEquiv('author', 'Andy Fusniak');
+        $view->doctype('HTML5');
+        $view->headMeta()->appendHttpEquiv('content-type', 'text/html;charset=utf-8');
+        $view->headMeta()->appendName('content-language', 'en-GB');
+        $view->headMeta()->appendName('author', 'Andy Fusniak');
 
         //$view->addHelperPath('Vfr/View/Helper', 'Vfr_View_Helper');
         //var_dump($view->min(14));

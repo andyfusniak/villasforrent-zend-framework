@@ -1,0 +1,62 @@
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml') ?>
+<div style="clear:both" />
+<table id="list">
+    <tr>
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'idRefund',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Refund ID</a> <?php echo $this->directionArrow('idRefund', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'dateSent',
+                'direction' =>  $this->toggleDirection($this->direction)
+            )
+        ) ?>">Date Sent</a> <?php echo $this->directionArrow('dateSent', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'amount',
+                'direction' =>  $this->toggleDirection($this->direction)
+            )
+        ) ?>">Amount</a> <?php echo $this->directionArrow('amount', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'currency',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Currency</a> <?php echo $this->directionArrow('currency', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'method',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Method</a> <?php echo $this->directionArrow('method', $this->order, $this->direction) ?>
+        </th>
+
+        <th>Action</th>
+    </tr>
+    <?php foreach ($this->paginator as $refundRow): ?>
+    <?php //var_dump($paymentRow) ?>
+    <tr class="<?php echo $this->cycle(array("odd", "even"))->next() ?>">
+        <td><?php echo $refundRow->idRefund ?></td>
+        <td><?php echo $this->prettyDate(
+                $refundRow->dateSent,
+                Vfr_View_Helper_PrettyDate::STYLE_DD_MMM_YY
+        ) ?></td>
+        <td><?php echo $this->invoiceMoney($refundRow->amount) ?></td>
+        <td><?php echo $refundRow->currency ?></td>
+        <td><?php echo $refundRow->method ?></td>
+        <td><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'finance-refund', 'action' => 'view-refund', 'idRefund' => $refundRow->idRefund), null, true) ?>">view payment</a></td>
+    </tr>
+    <?php // echo $item['idAdvertiser'], $item['iso2char'], $item['username'] ?>
+<?php endforeach ?>
+</table>

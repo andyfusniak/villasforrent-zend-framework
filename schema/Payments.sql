@@ -1,11 +1,18 @@
 CREATE TABLE IF NOT EXISTS Payments (
-    idPayment int(10) unsigned NOT NULL AUTO_INCREMENT,
-    idAdvertiser int(10) unsigned NOT NULL,
-    paymentType char(2) CHARACTER SET ascii NOT NULL DEFAULT 'CC',
-    paymentDate datetime NOT NULL,
-    total decimal(8,2) NOT NULL DEFAULT '0.00',
+    idPayment int(8) unsigned zerofill NOT NULL AUTO_INCREMENT,
+    dateReceived date NOT NULL,
+    amount decimal(8,2) unsigned NOT NULL DEFAULT '0.00',
+    currency char(3) CHARACTER SET ascii NOT NULL,
+    method enum('SECPAY','PAYPAL','BACS','CASH','WIRE') CHARACTER SET ascii NOT NULL,
+    notes text,
+    added datetime NOT NULL,
+    updated datetime NOT NULL,
     PRIMARY KEY (idPayment),
-    KEY paymentType (paymentType),
-    KEY idAdvertiser (idAdvertiser),
-    CONSTRAINT payments_ibfk_1 FOREIGN KEY (idAdvertiser) REFERENCES Advertisers (idAdvertiser) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    KEY dateReceived (dateReceived),
+    KEY amount (amount),
+    KEY currency (currency),
+    KEY method (method),
+    KEY added (added),
+    KEY updated (updated),
+    CONSTRAINT current_ibfk FOREIGN KEY (currency) REFERENCES Currencies (iso3char)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

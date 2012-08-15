@@ -1,0 +1,5 @@
+<tr>
+    <td>Ref: <?php echo $this->idProperty ?></td>
+    <td><a href="<?php echo '/' . $this->propertyRow->locationUrl . '/' . $this->propertyRow->urlName ?>"><?php echo $this->photo($this->photoRow, 90, 60) ?></a></td>
+    <td><?php echo $this->escape($this->propertyContentRow[Common_Resource_PropertyContent::FIELD_SUMMARY]->content) ?></td>
+</tr>

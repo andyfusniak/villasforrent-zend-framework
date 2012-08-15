@@ -1,0 +1,56 @@
+<style>
+td.highlight a {
+    border-color: #000;
+}
+</style>
+
+<div id="feature-form">
+<form method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<input type="hidden" name="idFeaturedProperty" value="<?php echo $this->form->getValue('idFeaturedProperty') ?>">
+<input type="hidden" name="mode" value="<?php echo $this->form->getValue('mode') ?>">
+<fieldset>
+    <dl>
+        <dt><label for="idProperty">Property ID</label></dt>
+        <dd>
+            <?php if ($this->form->getValue('mode') == 'add') : ?>
+            <input id="idProperty" name="idProperty" type="text" value="<?php echo $this->form->getValue('idProperty') ?>">
+            <button id="featured-lookup">LOOKUP</button>
+            <?php else : ?>
+            <input readonly="readonly" id="idProperty" name="idProperty" type="text" value="<?php echo $this->form->getValue('idProperty') ?>">
+            <?php endif ?>
+            <?php echo $this->displayErrors($this->form->getMessages('idProperty')) ?>
+        </dd>
+
+        <dt><label for="method">Location</label></dt>
+        <dd>
+            <?php echo $this->formSelect('idLocation', $this->form->getValue('idLocation'), null, $this->form->getElement('idLocation')->getMultiOptions()) ?>
+            <?php echo $this->displayErrors($this->form->getMessages('idLocation')) ?>
+        </dd>
+
+        <dt><label for="method">Feature Position</label></dt>
+        <dd>
+            <?php echo $this->formSelect('position', $this->form->getValue('position'), null, $this->form->getElement('position')->getMultiOptions()) ?>
+            <?php echo $this->displayErrors($this->form->getMessages('position')) ?>
+        </dd>
+
+        <dt><label for="startDate">Start Date</label></dt>
+        <dd>
+            <input id="start-date" name="startDate" type="text" placeholder="dd/mm/yyyy" value="<?php echo $this->form->getValue('startDate') ?>">
+            <?php echo $this->displayErrors($this->form->getMessages('startDate')) ?>
+        </dd>
+
+        <dt><label for="expiryDate">Expiry Date</label></dt>
+        <dd>
+            <input id="expiry-date" name="expiryDate" type="text" placeholder="dd/mm/yyyy" value="<?php echo $this->form->getValue('expiryDate') ?>">
+            <?php echo $this->displayErrors($this->form->getMessages('expiryDate')) ?>
+        </dd>
+
+        <dd id="form-submit"><input type="submit" value="Save"></dd>
+    </dl>
+</fieldset>
+</form>
+</div>
+
+<div id="featured-details">
+
+</div>

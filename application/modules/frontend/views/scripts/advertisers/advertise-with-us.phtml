@@ -1,0 +1,22 @@
+<div style="width: 50%; float: left">
+    <?php if (!Vfr_Auth_Advertiser::getInstance()->hasIdentity()) : ?>
+    <h1>New Advertisers</h1>
+    <ul class="menu">
+        <li id="nav-register"><a tabindex="1" accesskey="R" href="/controlpanel/registration/register/">register now</a></li>
+    </ul>
+    <?php endif ?>
+</div>
+
+<div style="width:50%; float: right">
+    <h1>Existing Advertisers</h1>
+    <ul class="menu">
+        <?php if (!Vfr_Auth_Advertiser::getInstance()->hasIdentity()) : ?>
+        <li id="nav-advertiser-login"><a tabindex="2" accesskey="L" href="/controlpanel/authentication/login/">login</a></li>
+        <?php endif ?>
+
+        <?php if (Vfr_Auth_Advertiser::getInstance()->hasIdentity()) : ?>
+        <li id="nav-advertiser-home"><a tabindex="3" accesskey="H" href="/controlpanel/account/home/">account home</a></li>
+        <li id="nav-advertiser-logout"><a tabindex="4" accesskey="O" href="/controlpanel/authentication/logout/">logout</a></li>
+        <?php endif ?>
+    </ul>
+</div>

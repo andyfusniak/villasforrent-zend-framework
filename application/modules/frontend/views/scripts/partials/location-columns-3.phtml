@@ -1,0 +1,23 @@
+<div class="yui-gb first">
+	<div class="yui-u first">
+		<ul>
+            <?php foreach ($this->columnItems[0] as $row) : ?>
+            <li><a href="/<?php echo $row->url ?>"><?php echo $this->escape($row->rowname) ?> (<?php echo $row->totalVisible ?>)</a></li>
+            <?php endforeach ?>
+        </ul>
+	</div>
+	<div class="yui-u">
+		<ul>
+            <?php foreach ($this->columnItems[1] as $row) : ?>
+            <li><a href="/<?php echo $row->url ?>"><?php echo $this->escape($row->rowname) ?> (<?php echo $row->totalVisible ?>)</a></li>
+            <?php endforeach ?>
+        </ul>
+	</div>
+	<div class="yui-u">
+        <ul>
+            <?php foreach ($this->columnItems[2] as $row) : ?>
+            <li><a href="/<?php echo $row->url ?>"><?php echo $this->escape($row->rowname) ?> (<?php echo $row->totalVisible ?>)</a></li>
+            <?php endforeach ?>
+        </ul>
+	</div>
+</div>

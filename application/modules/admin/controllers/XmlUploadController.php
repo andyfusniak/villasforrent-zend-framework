@@ -8,7 +8,6 @@ class Admin_XmlUploadController extends Zend_Controller_Action
         // get the destination from the configuration
         $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
         $this->_vfrConfig = $bootstrap['vfr'];
-
     }
 
     public function fileUploadAction()
@@ -16,11 +15,12 @@ class Admin_XmlUploadController extends Zend_Controller_Action
         $request = $this->getRequest();
 
         $form = new Admin_Form_XmlUploadForm();
+        $form->setAction('/admin/xml-upload/file-upload');
 
         if ($request->isPost()) {
             if ($form->isValid($request->getPost())) {
                 try {
-                    $fileElement  = $form->getElement('filename');
+                    $fileElement = $form->getElement('filename');
                     $transferAdapter = $fileElement->getTransferAdapter();
 
                     $transferAdapter->setDestination(

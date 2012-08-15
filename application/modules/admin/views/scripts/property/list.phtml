@@ -51,6 +51,7 @@
                 'order'     => 'approved',
                 'direction' => $this->toggleDirection($this->direction)
             )) ?>">App</a> <?php echo $this->directionArrow('approved', $this->order, $this->direction) ?></th>
+        <th>XML Export</th>
     </tr>
 
     <?php foreach ($this->paginator as $property) : ?>
@@ -64,6 +65,12 @@
         <td><?php echo $this->locationIdToName($property->idLocation) ?></td>
         <td><?php echo $this->propertyStatus($property->status, $property->approved) ?></td>
         <td><?php echo $this->tickOrCross($property->approved) ?></td>
+        <td><a href="<?php echo $this->url(array(
+            'module'     => 'admin',
+            'controller' => 'property-export-xml',
+            'action'     => 'single-property',
+            'idProperty' => $property->idProperty,
+            null, true)) ?>"><button>Export XML</button></a></td>
     </tr>
     <?php endforeach ?>
 </table>

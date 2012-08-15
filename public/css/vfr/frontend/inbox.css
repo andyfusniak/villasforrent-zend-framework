@@ -1,0 +1,52 @@
+.inbox-message {
+    width: 700px;
+    border-bottom: 1px solid #e9e9e9;
+    padding: 10px 0;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+}
+.inbox-message:last-child {
+    border-bottom: 1px solid #ccc;
+}
+
+.inbox-message-image {
+    float: left;
+    width: 100px;
+    margin-right: 12px;
+}
+
+.inbox-message-body {
+    float: left;
+    width: 500px;
+}
+.inbox-message-body div:first-child {
+    color: #3B5998;
+    padding-bottom: 6px;
+}
+
+.inbox-message-body span {
+    float: right;
+    font-size: 13px;
+    color: #b2aaaa;
+}
+
+#inbox-message-reply {
+    width: 588px;
+    padding-left: 112px;
+    padding-top: 8px;
+    padding-bottom: 30px;
+    background-color: #f2f2f2;
+    min-height: 150px;
+}
+
+#inbox-reply-body {
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    font-size: 15px;
+    width: 500px;
+    min-height: 100px;
+    max-width: 500px;
+    border: 1px solid #899bc5;
+}
+
+#inbox-reply-body div:first-child {
+    float: left;
+}

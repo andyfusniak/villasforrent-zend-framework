@@ -436,7 +436,7 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract
         );
 
         $where = $this->getAdapter()->quoteInto('idLocation = ?', $idLocation);
-        
+
         try {
             $query = $this->update($params, $where);
         } catch (Exception $e) {
@@ -528,6 +528,47 @@ class Common_Resource_Location extends Vfr_Model_Resource_Db_Table_Abstract
             $locationRow = $this->fetchRow($query);
 
             return $locationRow;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Returns a set of location rows from the parent of the given node, back up to the root node
+     * a direct path from the node to parent to grandfather to great-grandfather and so on
+     *
+     * @param int $idLocation the location id of the node to start from
+     * @return Common_Resource_LocationRowset|null the result set
+     */
+    public function getAllDirectAncestorsBackToRoot($idLocation, $includeCurrent)
+    {
+        try {
+            if ($includeCurrent) {
+                $subQuery = 'child.lt >= parent.lt AND child.lt <= parent.rt';
+            } else {
+                $subQuery = 'child.lt > parent.lt AND child.lt < parent.rt';
+            }
+            $query = $this->select($this::SELECT_WITHOUT_FROM_PART)
+                          ->reset(Zend_Db_Select::COLUMNS)
+                          ->from(
+                              array ('parent' => $this->_name),
+                              array (
+                                  'parent.idLocation',
+                                  'parent.rowname',
+                                  'parent.name',
+                                  'parent.url'
+                              )
+                          )
+                          ->from(
+                                array ('child' => $this->_name),
+                                array()
+                          )
+                          ->where($subQuery)
+                          ->where('child.idLocation = ?', (int) $idLocation)
+                          ->order('parent.lt DESC');
+            $locationRowset = $this->fetchAll($query);
+
+            return $locationRowset;
         } catch (Exception $e) {
             throw $e;
         }

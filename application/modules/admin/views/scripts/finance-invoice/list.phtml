@@ -1,0 +1,96 @@
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml') ?>
+<div style="clear:both" />
+Filter
+<select id="finance-invoice-list-filter" name="filter">
+    <option <?php echo ($this->filter === '') ? 'selected ' : ''?>value="">All Invoices</option>
+    <option <?php echo ($this->filter === 'open') ? 'selected ' : ''?>value="open">Open Invoices</option>
+    <option <?php echo ($this->filter === 'closed') ? 'selected ' : ''?>value="closed">Closed Invoices</options>
+</select>
+
+<table id="list">
+    <tr>
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'idInvoice',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Invoice ID</a> <?php echo $this->directionArrow('idInvoice', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'invoiceDate',
+                'direction' =>  $this->toggleDirection($this->direction)
+            )
+        ) ?>">Date</a> <?php echo $this->directionArrow('invoiceDate', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'name',
+                'direction' =>  $this->toggleDirection($this->direction)
+            )
+        ) ?>">Name</a> <?php echo $this->directionArrow('name', $this->order, $this->direction) ?>
+        </th>
+
+        <th class="money-td"><a href="<?php echo $this->url(
+            array(
+                'order'     => 'total',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Total</a> <?php echo $this->directionArrow('total', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'currency',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Currency</a> <?php echo $this->directionArrow('currency', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'status',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Status</a> <?php echo $this->directionArrow('status', $this->order, $this->direction) ?>
+        </th>
+
+<!--
+        <th><a href="<?php echo $this->url(
+            array (
+                'order'     => 'added',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Added</a> <?php echo $this->directionArrow('added', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'updated',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Updated</a> <?php echo $this->directionArrow('updated', $this->order, $this->direction) ?>
+        </th>
+-->
+        <th colspan="2">Action</th>
+    </tr>
+    <?php foreach ($this->paginator as $invoiceRow): ?>
+    <?php //var_dump($invoiceRow) ?>
+    <tr class="<?php echo (($invoiceRow->status == 'OPEN') ? 'open' : 'closed') ?> <?php echo $this->cycle(array("odd", "even"))->next() ?>">
+        <td><?php echo $this->invoiceIdPadded($invoiceRow->idInvoice) ?></td>
+        <td><?php echo $this->prettyDate(
+                $invoiceRow->invoiceDate,
+                Vfr_View_Helper_PrettyDate::STYLE_DD_MMM_YY
+        ) ?></td>
+        <td><?php echo $this->escape($invoiceRow->name) ?></td>
+        <td class="money-td"><?php echo $invoiceRow->total ?></td>
+        <td><?php echo $invoiceRow->currency ?></td>
+        <td><?php echo $invoiceRow->status ?></td>
+        <td><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'finance-invoice', 'action' => 'view-invoice', 'idInvoice' => $invoiceRow->idInvoice), null, true) ?>">view details</a></td>
+        <td><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'finance-pdf', 'action' => 'download', 'idInvoice' => $invoiceRow->idInvoice), null, true) ?>">download</a></td>
+    </tr>
+    <?php // echo $item['idAdvertiser'], $item['iso2char'], $item['username'] ?>
+<?php endforeach ?>
+</table>

@@ -3,6 +3,7 @@ class Controlpanel_AvailabilityController extends Zend_Controller_Action
 {
     public function preDispatch()
     {
+        $this->_helper->ensureLoggedIn();
         $this->_helper->ensureSecure();
     }
 

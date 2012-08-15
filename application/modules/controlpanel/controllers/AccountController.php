@@ -17,7 +17,7 @@ class Controlpanel_AccountController extends Zend_Controller_Action
     public function init()
     {
         // ensure the advertiser is logged in
-        if (!Zend_Auth::getInstance()->hasIdentity()) {
+        if (!Vfr_Auth_Advertiser::getInstance()->hasIdentity()) {
             $this->_helper->redirector->gotoSimple(
                 'login',
                 'authentication',
@@ -42,9 +42,9 @@ class Controlpanel_AccountController extends Zend_Controller_Action
         //if (!$this->_advertiserModel->checkAcl('listAccount')) {
         //    throw new Vfr_Exception('Access Denied');
         //}
-
+        
         // retrieve the identity object (an advertiser row)
-        $advertiserRow = Zend_Auth::getInstance()->getIdentity();
+        $advertiserRow = Vfr_Auth_Advertiser::getInstance()->getIdentity();
 
         // get a list of properties belonging to this advertiser
         $propertyRowset = $this->_propertyModel->getPropertiesByAdvertiserId(
@@ -52,12 +52,14 @@ class Controlpanel_AccountController extends Zend_Controller_Action
         );
 
         // create a list of property id's that we need primary photos for
-        $idPropertyList = array ();
+        $idPropertyList = array();
         foreach ($propertyRowset as $propertyRow) {
             array_push($idPropertyList, $propertyRow->idProperty);
         }
 
-        $photoRowsetLookup = $this->_propertyModel->getPrimaryPhotosByPropertyLookup($idPropertyList);
+        $photoRowsetLookup = $this->_propertyModel->getPrimaryPhotosByPropertyLookup(
+            $idPropertyList
+        );
 
         // setup the view
         $this->view->assign(

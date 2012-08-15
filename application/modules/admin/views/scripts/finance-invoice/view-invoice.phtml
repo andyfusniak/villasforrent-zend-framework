@@ -1,0 +1,122 @@
+<?php //var_dump($this->invoiceObj->getAppliedCreditNotes()) ?>
+
+<style>
+#invoice-from-address {
+    float: right;
+}
+#invoice-billing-address {
+    clear: both;
+    float: left;
+}
+#invoice-details {
+    clear: both;
+    float: right;
+}
+#invoice-details table {
+    margin: 0;
+    padding: 0;
+    margin-top: 50px;
+    width: 200px;
+}
+#invoice-details table td.right {
+    text-align: right;
+}
+</style>
+
+<?php $fromAddressObj = $this->invoiceObj->getFromAddress() ?>
+<div id="invoice-from-address">
+    <ul>
+        <li><?php echo $this->escape($fromAddressObj->getName()) ?></li>
+        <li><?php echo $this->escape($fromAddressObj->getLine1()) ?></li>
+        <li><?php echo $this->escape($fromAddressObj->getLine2()) ?></li>
+        <li><?php echo $this->escape($fromAddressObj->getLine3()) ?></li>
+        <li><?php echo $this->escape($fromAddressObj->getTownCity()) ?></li>
+        <li><?php echo $this->escape($fromAddressObj->getCounty()) ?></li>
+        <li><?php echo $this->escape($fromAddressObj->getPostcode()) ?></li>
+        <li><?php echo $this->escape($fromAddressObj->getCountry()) ?></li>
+    </ul>
+</div>
+
+<div id="invoice-details">
+    <table>
+        <tr>
+            <td>Invoice Date</td>
+            <td class="right"><?php echo $this->invoiceDate($this->invoiceObj->getInvoiceDate()) ?><td>
+        </tr>
+        <tr>
+            <td>Invoice No.</td>
+            <td class="right"><?php echo $this->invoiceIdPadded($this->invoiceObj->getInvoiceId()) ?></td>
+        </tr>
+    </table>
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+
+<?php $billingAddressObj = $this->invoiceObj->getBillingAddress() ?>
+<div id="invoice-billing-address">
+    <ul>
+        <li><?php echo $this->escape($billingAddressObj->getName()) ?></li>
+        <li><?php echo $this->escape($billingAddressObj->getLine1()) ?></li>
+        <li><?php echo $this->escape($billingAddressObj->getLine2()) ?></li>
+        <li><?php echo $this->escape($billingAddressObj->getLine3()) ?></li>
+        <li><?php echo $this->escape($billingAddressObj->getTownCity()) ?></li>
+        <li><?php echo $this->escape($billingAddressObj->getCounty()) ?></li>
+        <li><?php echo $this->escape($billingAddressObj->getPostcode()) ?></li>
+        <li><?php echo $this->escape($billingAddressObj->getCountry()) ?></li>
+    </ul>
+</div>
+
+<?php //var_dump($this->invoiceObj->getInvoiceItems()) ?>
+<?php if ($this->invoiceObj->hasInvoiceItems()) : ?>
+<table style="width: 100%">
+    <tr>
+        <th>Qty</th>
+        <th>Unit Amount</th>
+        <th>Description</th>
+        <th>Period</th>
+        <th>Line Total</th>
+    </tr>
+    <?php foreach ($this->invoiceObj->getInvoiceItems() as $invoiceItemObj) : ?>
+    <tr>
+        <td><?php echo $invoiceItemObj->getQty() ?></td>
+        <td><?php echo $this->invoiceMoney($invoiceItemObj->getUnitAmount()) ?></td>
+        <td><?php echo $this->escape($invoiceItemObj->getDescription()) ?></td>
+        <td><?php echo $invoiceItemObj->getStartDate() ?> to <?php echo $invoiceItemObj->getExpiryDate() ?></td>
+        <td><?php echo $this->invoiceMoney($invoiceItemObj->getLineTotal()) ?>
+    </tr>
+    <?php endforeach ?>
+
+    <tr>
+        <td>Total</td>
+        <td colspan="3">&nbsp;</td>
+        <td><?php echo $this->invoiceMoney($this->invoiceObj->getTotal()) ?></td>
+    </tr>
+</table>
+<?php endif ?>
+
+<h2>Payments</h2>
+<?php if ($this->invoiceObj->hasAppliedPayments()) : ?>
+<table style="width: 100%">
+    <tr>
+        <th>Payment ID</th>
+        <th>Date Received</th>
+        <th>Amount</th>
+        <th>Currency</th>
+        <th>Payment Method</th>
+        <th>Notes</th>
+    </tr>
+<?php foreach ($this->invoiceObj->getAppliedPayments() as $paymentObj) : ?>
+<tr>
+    <td><?php echo $this->invoiceIdPadded($paymentObj->getPaymentId(), 5)  ?></td>
+    <td><?php echo $this->invoiceDate($paymentObj->getDateReceived()) ?></td>
+    <td><?php echo $this->invoiceMoney($paymentObj->getAmount()) ?></td>
+    <td><?php echo strtoupper($paymentObj->getCurrency()) ?></td>
+    <td><?php echo $this->escape($paymentObj->getMethod()) ?></td>
+    <td><?php echo $this->escape($paymentObj->getNotes()) ?></td>
+</tr>
+<?php endforeach ?>
+</table>
+<?php endif ?>

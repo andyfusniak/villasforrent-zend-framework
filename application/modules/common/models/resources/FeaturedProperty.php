@@ -41,6 +41,10 @@ class Common_Resource_FeaturedProperty
 
         try {
             $this->insert($data);
+
+            $idFeaturedProperty = $this->_db->lastInsertId();
+
+            return $idFeaturedProperty;
         } catch (Exception $e) {
             throw $e;
         }
@@ -49,6 +53,24 @@ class Common_Resource_FeaturedProperty
     //
     // READ
     //
+
+    /**
+     * Retrievs the featured property row by primary key
+     * @param int $idFeaturedProperty the primary key
+     * @return Common_Resource_FeaturedPropertyRow
+     */
+    public function getFeaturedPropertyByFeaturedPropertyId($idFeaturedProperty)
+    {
+        $query = $this->select()
+                     ->where('idFeaturedProperty = ?', (int) $idFeaturedProperty)
+                     ->limit(1);
+        try {
+            $featuredPropertyRow = $this->fetchRow($query);
+            return $featuredPropertyRow;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 
     public function getFeaturedProperties($idLocation)
     {
@@ -89,6 +111,7 @@ class Common_Resource_FeaturedProperty
                       ->from(
                           array('F' => $this->_name),
                           array(
+                              'F.idFeaturedProperty',
                               'F.idProperty',
                               'F.position',
                               'F.startDate',
@@ -110,5 +133,27 @@ class Common_Resource_FeaturedProperty
                   ->setCurrentPageNumber($page);
 
         return $paginator;
+    }
+
+    public function updateFeaturedProperty($idFeaturedProperty, $idProperty, $idLocation, $startDate, $expiryDate, $position)
+    {
+        $params = array(
+            'idProperty' => (int) $idProperty,
+            'idLocation' => (int) $idLocation,
+            'startDate'  => $startDate,
+            'expiryDate' => $expiryDate,
+            'position'   => $position,
+            'updated'    => new Zend_Db_Expr('NOW()')
+        );
+
+        $adapter = $this->getAdapter();
+        $where = $adapter->quoteInto('idFeaturedProperty = ?', (int) $idFeaturedProperty);
+        try {
+            $query = $this->update($params, $where);
+
+            return $this;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 }

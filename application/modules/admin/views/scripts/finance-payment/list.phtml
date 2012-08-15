@@ -1,0 +1,94 @@
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml') ?>
+<style>
+
+</style>
+<div style="clear:both" />
+Filter
+<select id="finance-payment-filter" name="filter">
+    <option <?php echo ($this->filter === '') ? 'selected ' : ''?>value="">All Payments</option>
+    <option <?php echo ($this->filter === 'applied') ? 'selected ' : ''?>value="applied">Applied To Invoices</option>
+    <option <?php echo ($this->filter === 'unapplied') ? 'selected ' : ''?>value="unapplied">Unapplied To Invoices</options>
+</select>
+
+<a href="/admin/finance-payment/receive"><button>RECEIVE PAYMENT</button></a>
+
+<table id="list">
+    <tr>
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'idPayment',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Payment ID</a> <?php echo $this->directionArrow('idPayment', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'idInvoice',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Invoice ID</a> <?php echo $this->directionArrow('idInvoice', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'dateReceived',
+                'direction' =>  $this->toggleDirection($this->direction)
+            )
+        ) ?>">Date Received</a> <?php echo $this->directionArrow('dateReceived', $this->order, $this->direction) ?>
+        </th>
+
+        <th class="money-td"><a href="<?php echo $this->url(
+            array(
+                'order'     => 'amount',
+                'direction' =>  $this->toggleDirection($this->direction)
+            )
+        ) ?>">Amount</a> <?php echo $this->directionArrow('amount', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'currency',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Currency</a> <?php echo $this->directionArrow('currency', $this->order, $this->direction) ?>
+        </th>
+
+        <th><a href="<?php echo $this->url(
+            array(
+                'order'     => 'method',
+                'direction' => $this->toggleDirection($this->direction)
+            )
+        ) ?>">Method</a> <?php echo $this->directionArrow('method', $this->order, $this->direction) ?>
+        </th>
+
+        <th>Action</th>
+    </tr>
+    <?php foreach ($this->paginator as $paymentRow) : ?>
+    <tr class="<?php echo $this->cycle(array("odd", "even"))->next() ?>">
+        <td><?php echo $this->invoiceIdPadded($paymentRow->idPayment, 6) ?></td>
+        <?php if (isset($paymentRow->idInvoice)) : ?>
+        <td><?php echo $this->invoiceIdPadded($paymentRow->idInvoice) ?></td>
+        <?php else : ?>
+        <td>&nbsp;</td>
+        <?php endif ?>
+        <td><?php echo $this->prettyDate(
+                $paymentRow->dateReceived,
+                Vfr_View_Helper_PrettyDate::STYLE_DD_MMM_YY
+        ) ?></td>
+        <td class="money-td"><?php echo $this->invoiceMoney($paymentRow->amount) ?></td>
+        <td><?php echo $paymentRow->currency ?></td>
+        <td><?php echo $paymentRow->method ?></td>
+        <td><a href="<?php echo $this->url(array('module' => 'admin',
+                                                 'controller' => 'finance-payment',
+                                                 'action' => 'receive',
+                                                 'idPayment' => $paymentRow->idPayment),
+                                                 null, true) ?>"><button>EDIT</button></a></td>
+        <td><a href="<?php echo $this->url(array('module' => 'admin',
+                                                 'controller' => 'finance-payment',
+                                                 'action' => 'view-invoice',
+                                                 'idPayment' => $paymentRow->idPayment),
+                                                 null, true) ?>"><button>VIEW</button></a></td>
+    </tr>
+<?php endforeach ?>
+</table>

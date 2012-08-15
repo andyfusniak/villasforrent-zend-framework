@@ -51,8 +51,8 @@ class Controlpanel_ChangeEmailAddressController extends Zend_Controller_Action
         $advertiserRow = $advertiserModel->getAdvertiserById($idAdvertiser);
 
         // update the current login session with the new record
-        $auth = Zend_Auth::getInstance();
-        $auth->getStorage()->write($advertiserRow);
+        $advertiserAuth = Vfr_Auth_Advertiser::getInstance();
+        $advertiserAuth->getStorage()->write($advertiserRow);
 
         $this->_helper->redirector->gotoSimple(
             'changed',

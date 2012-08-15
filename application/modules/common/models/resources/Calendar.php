@@ -67,7 +67,6 @@ class Common_Resource_Calendar extends Vfr_Model_Resource_Db_Table_Abstract
 
     public function getCalendarIdByPropertyId($idProperty)
     {
-        $this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
         $query = $this->select()
                       ->where('idProperty = ?', $idProperty);
         try {
@@ -76,20 +75,20 @@ class Common_Resource_Calendar extends Vfr_Model_Resource_Db_Table_Abstract
             throw $e;
         }
 
-        $this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
         return $idCalendar;
     }
 
     public function getCalendarById($idCalendar)
     {
-        $this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
+        try {
+            $query = $this->select()
+                          ->where('idCalendar = ?', $idCalendar);
+            $result = $this->fetchRow($query);
 
-        $query = $this->select()
-                      ->where('idCalendar = ?', $idCalendar);
-        $result = $this->fetchRow($query);
-
-        $this->_logger->log(__METHOD__ . ' End', Zend_Log::INFO);
-        return $result;
+            return $result;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     public function getRentalBasis($idCalendar)

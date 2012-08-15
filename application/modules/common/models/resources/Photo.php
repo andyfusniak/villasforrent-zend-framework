@@ -79,6 +79,20 @@ class Common_Resource_Photo extends Vfr_Model_Resource_Db_Table_Abstract impleme
         }
     }
 
+    public function getPhotoByPropertyId($idProperty)
+    {
+        try {
+            $query = $this->select()
+                          ->where('idProperty = ?', (int) $idProperty)
+                          ->order('displayPriority');
+            $photoRowset = $this->fetchAll($query);
+
+            return $photoRowset;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     public function getAllPhotosByPropertyId($idProperty, $visible=true)
     {
         $this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);

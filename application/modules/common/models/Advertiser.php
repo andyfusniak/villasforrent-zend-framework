@@ -175,7 +175,8 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
         );
     }
 
-    public function getAll($page=1, $interval=30, $sort='idAdvertiser', $direction='ASC')
+    public function getAll($page=1, $interval=30, $sort='idAdvertiser',
+                           $direction='ASC')
     {
         return $this->getResource('Advertiser')->getAll(
             $page,
@@ -229,7 +230,10 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
     {
         $this->_logger->log(__METHOD__ . ' Start', Zend_Log::INFO);
 
-        $form = new Frontend_Form_Advertiser_RegistrationForm(array('disableLoadDefaultDecorators' => true));
+        $form = new Frontend_Form_Advertiser_RegistrationForm(
+            array('disableLoadDefaultDecorators' => true)
+        );
+
         if (!$form->isValid($post)) {
             return false;
         }
@@ -272,10 +276,10 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
         );
     }
 
-    public function getEmailConfirmatinTokenByIdAdvertiser($idAdvertiser)
+    public function getEmailConfirmationTokenByAdvertiserId($idAdvertiser)
     {
         return $this->getResource('Token')
-                    ->getEmailConfirmatinTokenByIdAdvertiser($idAdvertiser);
+                    ->getEmailConfirmationTokenByAdvertiserId($idAdvertiser);
     }
 
     public function getAdvertiserChangeEmailAddressConfirmationDetailsByToken($idAdvertiser)
@@ -303,7 +307,10 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
 
     public function updatePassword($idAdvertiser, $passwd)
     {
-        return $this->getResource('Advertiser')->updatePassword($idAdvertiser, $passwd);
+        return $this->getResource('Advertiser')->updatePassword(
+            $idAdvertiser,
+            $passwd
+        );
     }
 
 
@@ -341,7 +348,7 @@ class Common_Model_Advertiser extends Vfr_Model_Acl_Abstract
         // and if not generate a new one
         $tokenResource = $this->getResource('Token');
 
-        $tokenRow = $tokenResource->getEmailConfirmatinTokenByIdAdvertiser(
+        $tokenRow = $tokenResource->getEmailConfirmationTokenByAdvertiserId(
             $idAdvertiser
         );
 

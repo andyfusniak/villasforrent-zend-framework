@@ -1,13 +1,14 @@
 <?php
 class Controlpanel_AccountSettingsController extends Zend_Controller_Action
 {
-    protected $_advertiserRow;
+    protected $_advertiserRow = null;
 
     public function init()
     {
-        if (Zend_Auth::getInstance()->hasIdentity()) {
-            if (null == $this->_advertiserRow)
-                $this->_advertiserRow = Zend_Auth::getInstance()->getIdentity();
+        $instance = Vfr_Auth_Advertiser::getInstance();
+        if ($instance->hasIdentity()) {
+            if (null === $this->_advertiserRow)
+                $this->_advertiserRow = $instance->getIdentity();
         }
     }
 

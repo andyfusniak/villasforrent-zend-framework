@@ -1,0 +1,4 @@
+$(function() {
+    $("#property-tabs").tabs({
+    });
+}();

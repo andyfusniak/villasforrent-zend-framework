@@ -37,7 +37,7 @@ class Frontend_Helper_FeaturedProperty extends Zend_Controller_Action_Helper_Abs
             }
 
             $numFeatured = sizeof($partials);
-            for ($i=$numFeatured; $i < 3; $i++) {
+            for ($i=$numFeatured; $i < 4; $i++) {
                 $partials[$i] = '&nbsp;';
             }
 
@@ -48,7 +48,7 @@ class Frontend_Helper_FeaturedProperty extends Zend_Controller_Action_Helper_Abs
         }
     }
 
-    public function direct($mask=Common_Resource_Property::FEATURE_MASK_HOMEPAGE, $limit=3, $uri='')
+    public function direct($mask=Common_Resource_Property::FEATURE_MASK_HOMEPAGE, $limit=4, $uri='')
     {
         $this->getFeaturedProperties($mask, $limit, $uri);
     }

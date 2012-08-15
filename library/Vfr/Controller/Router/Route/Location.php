@@ -1,6 +1,5 @@
 <?php
-class Vfr_Controller_Router_Route_Location
-    extends Zend_Controller_Router_Route_Abstract
+class Vfr_Controller_Router_Route_Location extends Zend_Controller_Router_Route_Abstract
 {
     protected $_path = null;
 
@@ -51,8 +50,9 @@ class Vfr_Controller_Router_Route_Location
         $params = array(
             'module'     => 'frontend',
             'controller' => 'level',
-            'action'     => 'country',
+            'action'     => 'list',
             'uri'        => $path,
+            'idLocation' => $locationRow->idLocation,
             'depth'      => $locationRow->depth
         );
 

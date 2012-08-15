@@ -26,7 +26,7 @@ class Vfr_View_Helper_PrettyDate extends Zend_View_Helper_Abstract
                 break;
 
             case self::STYLE_DD_MMM_YY_HH_MM_AMPM:
-                return strftime("%d-%b-%y %l:%M %P", $timestamp);
+                return strftime("%e-%b-%y %l:%M %P", $timestamp);
                 break;
 
             case self::STYLE_DD_MMM_YY_HH_MM:

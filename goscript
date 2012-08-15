@@ -1,0 +1,86 @@
+#!/bin/bash
+INSTALL_DIR=$1
+
+cd $INSTALL_DIR
+
+tar zxfp app.tar.gz
+rm $INSTALL_DIR/app.tar.gz
+
+# every in the devteam group
+chgrp devteam -fR *
+
+# read, write and execute for all directories
+find . -type d -exec chmod 770 {} \;
+
+# permissions for files
+find . -type f -exec chmod 660 {} \;
+
+# data directory and files
+if [ ! -d "./data" ]; then
+    mkdir data
+    chgrp devteam data
+    chmod ug+rwx,o-rwx data
+fi
+
+if [ ! -d "./data/cache" ]; then
+    mkdir data/cache
+    chgrp devteam data/cache
+    chmod ug+rwx,o-rwx data/cache
+fi
+
+if [ ! -d "./data/images-originals" ]; then
+    mkdir data/images-originals
+    chgrp devteam data/images-originals
+    chmod ug+rwx,o-rwx data/images-originals
+fi
+
+if [ ! -d "./data/xml-files" ]; then
+    mkdir data/xml-files
+    chgrp devteam data/xml-files
+    chmod ug+rwx,o-rwx data/xml-files
+fi
+
+if [ ! -d "./data/logs" ]; then
+    mkdir data/logs
+    chgrp devteam data/logs
+    chmod ug+rwx,o-rwx data/logs
+
+    touch data/logs/application.log
+    chgrp devteam data/logs/application.log
+    chmod ug+rw,o-rwx data/logs/application.log
+fi
+
+if [ ! -d "./data/session" ]; then
+    mkdir data/session
+    chgrp devteam data/session
+    chmod ug+rwx,o-rwx data/session
+fi
+
+if [ ! -d "./data/uploads" ]; then
+    mkdir data/uploads
+    chgrp devteam data/uploads
+    chmod ug+rwx,o-rwx data/uploads
+fi
+
+if [ ! -d "./public/photos" ]; then
+    mkdir public/photos
+    chgrp devteam public/photos
+    chmod ug+rwx,o-rwx public/photos
+fi
+
+# Symlinks for Zend library components
+cd $INSTALL_DIR/library
+
+if [ ! -e Zend ]; then
+    ln -s /var/www/ZendFramework-1.11.11/library/Zend/ Zend
+fi
+
+if [ ! -e ZendX ]; then
+    ln -s /var/www/ZendFramework-1.11.11/extras/library/ZendX/ ZendX
+fi
+
+if [ "$INSTALL_DIR"="/var/www/beta.holidaypropertyworldwide.com" ]; then
+    mv $INSTALL_DIR/public/.htaccess-beta $INSTALL_DIR/public/.htaccess
+else
+    rm $INSTALL_DIR/public/.htaccess-beta
+fi

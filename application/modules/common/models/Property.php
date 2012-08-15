@@ -223,9 +223,19 @@ class Common_Model_Property extends Vfr_Model_Abstract
         return $holidayTypeResource->getAllHolidayTypesArray();
     }
 
-    public function getPropertyContentByPropertyId($idProperty,
-        $version=Common_Resource_PropertyContent::VERSION_MAIN,
-        $lang='EN', $idPropertyContentFieldList=null)
+    /**
+     * Retrieves a collection of property rows for the give list
+     *
+     * @param array $properties the list of properties
+     * @return Common_Resource_PropertyRowset
+     */
+    public function getPropertiesByPropertyList($properties)
+    {
+        $propertyResource = $this->getResource('Property');
+        return $propertyResource->getPropertiesByPropertyList($properties);
+    }
+
+    public function getPropertyContentByPropertyId($idProperty, $version=Common_Resource_PropertyContent::VERSION_MAIN, $lang='EN', $idPropertyContentFieldList=null)
     {
         $idProperty = (int) $idProperty;
 
@@ -235,9 +245,7 @@ class Common_Model_Property extends Vfr_Model_Abstract
         );
     }
 
-    public function getPropertyContentByPropertyList($properties,
-        $version=Common_Resource_PropertyContent::VERSION_MAIN,
-        $lang='EN', $idPropertyContentFieldList=null)
+    public function getPropertyContentByPropertyList($properties, $version=Common_Resource_PropertyContent::VERSION_MAIN, $lang='EN', $idPropertyContentFieldList=null)
     {
         if ((!$properties instanceof Common_Resource_Property_Rowset)
             && (!$properties instanceof Common_Resource_FeaturedProperty_Rowset)
@@ -451,14 +459,30 @@ class Common_Model_Property extends Vfr_Model_Abstract
         return $propertyResource->isUrlNameTaken($idProperty, $urlName);
     }
 
+    /**
+     * Retrieves a featured property by primary key
+     * @param int $idFeaturedProperty the primary key of the featured property row
+     * @return Common_Resource_FeaturedPropertyRow
+     */
+    public function getFeaturedPropertyByFeaturedPropertyId($idFeaturedProperty)
+    {
+        $featuredPropertyResource = $this->getResource('FeaturedProperty');
+        return $featuredPropertyResource->getFeaturedPropertyByFeaturedPropertyId(
+            $idFeaturedProperty
+        );
+    }
+
     public function getFeaturedProperties($idLocation, $limit=null)
     {
         if ($limit)
             $limit = (int) $limit;
 
-        $propertyResource = $this->getResource('FeaturedProperty');
+        $featuredPropertyResource = $this->getResource('FeaturedProperty');
 
-        return $propertyResource->getFeaturedProperties($idLocation, $limit);
+        return $featuredPropertyResource->getFeaturedProperties(
+            $idLocation,
+            $limit
+        );
     }
 
     //

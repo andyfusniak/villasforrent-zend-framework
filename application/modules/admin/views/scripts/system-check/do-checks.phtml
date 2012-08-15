@@ -7,7 +7,7 @@
         <td class="leftpadding">exec('whoami')</td>
         <td class="leftpadding"><?php echo exec('whoami') ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Hostname</td>
         <td class="leftpadding">gethostname()</td>
@@ -26,7 +26,7 @@
         <td class="leftpadding datavalue"><?php echo $this->phpApcSettings['realpath_cache_size'] ?></td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->phpApcSettings['realpath_cache_size_ok']) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Realpath Cache (Time To Live in seconds)</td>
         <td class="leftpadding datavalue">realpath_cache_ttl</td>
@@ -47,51 +47,51 @@
         <td class="leftpadding datavalue">apc</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->phpApcInstalled) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">GD Library Installed</td>
         <td class="leftpadding datavalue">gd</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->phpGdInstalled) ?></td>
     </tr>
-    
+
     <?php if ($this->gdInfo) : ?>
     <tr>
         <td class="description">&nbsp;</td>
         <td class="leftpadding datavalue">GD Version</td>
         <td class="leftpadding"><?php echo $this->escape($this->gdInfo['GD Version']) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">&nbsp;</td>
         <td class="leftpadding datavalue">GIF Read Support</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->gdInfo['GIF Read Support']) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">&nbsp;</td>
         <td class="leftpadding datavalue">GIF Create Support</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->gdInfo['GIF Create Support']) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">&nbsp;</td>
         <td class="leftpadding datavalue">JPEG Support</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->gdInfo['JPEG Support']) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">&nbsp;</td>
         <td class="leftpadding datavalue">PNG Support</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->gdInfo['PNG Support']) ?></td>
     </tr>
-    <?php endif ?>    
-    
+    <?php endif ?>
+
     <tr>
         <td class="description">Mcrypt Library Installed</td>
         <td class="leftpadding datavalue">mcrypt</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->phpMcryptInstalled) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Mysqli Library Installed</td>
         <td class="leftpadding datavalue">mysqli</td>
@@ -102,31 +102,50 @@
         <td class="leftpadding datavalue">session</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->phpSessionInstalled) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Curl support</td>
         <td class="leftpadding datavalue">curl</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->phpCurlInstalled) ?></td>
     </tr>
-    
+
+    <tr>
+        <td class="description">iconv support</td>
+        <td class="leftpadding datavalue">iconv</td>
+        <td class="leftpadding"><?php echo $this->tickOrCross($this->phpIconvInstalled) ?></td>
+    </tr>
+
+    <tr>
+        <td class="description">Bcmath Library Installed</td>
+        <td class="leftpadding datavalue">bcmath</td>
+        <td class="leftpadding"><?php echo $this->tickOrCross($this->phpBcmathInstalled) ?></td>
+    </tr>
+
+
+    <tr>
+        <td class="description">Tidy Library Installed</td>
+        <td class="leftpadding datavalue">tidy</td>
+        <td class="leftpadding"><?php echo $this->tickOrCross($this->phpTidyInstalled) ?></td>
+    </tr>
+
     <tr>
         <td class="description">Allow HTTP file uploads?</td>
         <td class="leftpadding datavalue">file_uploads</td>
         <td class="leftpadding"><?php echo $this->fileUploadPhpSettings['file_uploads'] == 1 ? 'On' : 'Off' ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">The maximum number of files allowed to be uploaded simultaneously. Starting with PHP 5.3.4, upload fields left blank on submission do not count towards this limit.</td>
         <td class="leftpadding datavalue">max_file_uploads</td>
         <td class="leftpadding"><?php echo $this->fileUploadPhpSettings['max_file_uploads'] ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">The maximum size of an uploaded file. When an integer is used, the value is measured in bytes. Shorthand notation, as described in this FAQ, may also be used.</td>
         <td class="leftpadding datavalue">upload_max_filesize</td>
         <td class="leftpadding"><?php echo $this->fileUploadPhpSettings['upload_max_filesize'] ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">The temporary directory used for storing files when doing file upload. Must be writable by whatever user PHP is running as. If not specified PHP will use the system's default.<br /><br />
 
@@ -134,7 +153,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding datavalue">upload_tmp_dir</td>
         <td class="leftpadding"><?php echo $this->fileUploadPhpSettings['upload_tmp_dir'] ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Default timezone used by all date/time functions in a script. Live server should use UTC.</td>
         <td class="leftpadding datavalue">date.timezone</td>
@@ -143,7 +162,7 @@ If the directory specified here is not writable, PHP falls back to the system de
             <?php echo $this->tickOrCross(date_default_timezone_get() == 'UTC') ?>
         </td>
     </tr>
-    
+
     <tr>
         <td class="description">Short open tags are disabled</td>
         <td class="leftpadding datavalue">short_open_tag</td>
@@ -160,7 +179,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="description">Checksum Insert Trigger</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->triggerChecksumI) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Checksum Update Trigger</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->triggerChecksumU) ?></td>
@@ -175,7 +194,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding">vfr.website.nonSecureUrl</td>
         <td class="leftpadding datavalue"><?php echo $this->vfrConfig['website']['nonSecureUrl'] ?></td>
     </tr>
-    
+
     <tr>
         <td>Secure URL</td>
         <td class="leftpadding">vfr.website.secureUrl</td>
@@ -187,37 +206,37 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding">vfr.photo.min_limit_per_property</td>
         <td class="leftpadding datavalue"><?php echo $this->vfrConfig['photo']['min_limit_per_property'] ?></td>
     </tr>
-    
+
     <tr>
         <td>Maximum number of photos per property</td>
         <td class="leftpadding">vfr.photo.max_limit_per_property</td>
         <td class="leftpadding datavalue"><?php echo $this->vfrConfig['photo']['max_limit_per_property'] ?></td>
     </tr>
-    
+
     <tr>
         <td>Original images directory</td>
         <td class="leftpadding">vfr.photo.images_original_dir</td>
         <td class="leftpadding datavalue"><?php echo $this->vfrConfig['photo']['images_original_dir'] ?></td>
     </tr>
-    
+
     <tr>
         <td>Dynamically generated images directory</td>
         <td class="leftpadding">vfr.photo.images_dynamic_dir</td>
         <td class="leftpadding datavalue"><?php echo $this->vfrConfig['photo']['images_dynamic_dir'] ?></td>
     </tr>
-    
+
     <tr>
         <td>GD library images quality</td>
         <td class="leftpadding">vfr.photo.gd_quality</td>
         <td class="leftpadding datavalue"><?php echo $this->vfrConfig['photo']['gd_quality'] ?></td>
     </tr>
-    
+
     <tr>
         <td>Acceptable image sizes</td>
         <td class="leftpadding">vfr.photo.acceptable_sizes</td>
         <td class="leftpadding datavalue">TDB !! <?php echo $this->vfrConfig['photo']['acceptable_sizes'] ?></td>
     </tr>
-    
+
     <tr>
         <td>Feature limit per page</td>
         <td class="leftpadding">vfr.featured.limit_per_page</td>
@@ -228,7 +247,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td>Digest Password</td>
         <td class="leftpadding">vfr.api.digestpasswd</td>
         <td class="leftpadding datavalue"><?php echo $this->vfrConfig['api']['digestpasswd'] ?></td>
-    </tr>    
+    </tr>
 </table>
 
 <h1>Zend Application</h1>
@@ -240,7 +259,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding datavalue">APPLICATION_ENV</td>
         <td class="leftpadding"><?php echo APPLICATION_ENV ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Application Path</td>
         <td class="leftpadding datavalue">APPLICATION_PATH</td>
@@ -256,43 +275,49 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding datavalue">../data</td>
         <td class="leftpadding"><?php echo $this->tickOrCross(file_exists($this->dataDir)) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Cache directory Exists</td>
         <td class="leftpadding datavalue">../cache</td>
         <td class="leftpadding"><?php echo $this->tickOrCross(file_exists($this->cacheDir)) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Logs directory Exists</td>
         <td class="leftpadding datavalue">../data/logs</td>
         <td class="leftpadding"><?php echo $this->tickOrCross(file_exists($this->logDir)) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Application log file exists</td>
         <td class="leftpadding datavalue">../data/logs/application.log</td>
         <td class="leftpadding"><?php echo $this->tickOrCross(file_exists($this->appLogFile)) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Session directory exists</td>
         <td class="leftpadding datavalue">../data/session</td>
         <td class="leftpadding"><?php echo $this->tickOrCross(file_exists($this->sessionDir)) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Original images directory exists</td>
-        <td class="leftpadding datavalue">../data/images_originals</td>
+        <td class="leftpadding datavalue">../data/images-originals</td>
         <td class="leftpadding"><?php echo $this->tickOrCross(file_exists($this->originalImagesDir)) ?></td>
     </tr>
-    
+
+    <tr>
+        <td class="description">XML Directory</td>
+        <td class="leftpadding datavalue">../data/xml-files</td>
+        <td class="leftpadding"><?php echo $this->tickOrCross(file_exists($this->xmlFilesDir)) ?></td>
+    </tr>
+
     <tr>
         <td class="description">Dynamic images directory exists</td>
         <td class="leftpadding datavalue">public/photos</td>
         <td class="leftpadding"><?php echo $this->tickOrCross(file_exists($this->dynamicImagesDir)) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Temporary upload directory</td>
         <td class="leftpadding datavalue"><?php echo $this->uploadTmpDir ?></td>
@@ -309,7 +334,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding">Write</td>
         <td class="leftpadding">Execute</td>
     </tr>
-    
+
     <tr>
         <td class="description">Data directory</td>
         <td class="leftpadding datavalue">../data</td>
@@ -317,7 +342,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['dataDir']['w']) ?></td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['dataDir']['x']) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Cache directory</td>
         <td class="leftpadding datavalue">../cache</td>
@@ -325,7 +350,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['cacheDir']['w']) ?></td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['cacheDir']['x']) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Logs directory</td>
         <td class="leftpadding datavalue">../data/logs</td>
@@ -333,7 +358,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['logDir']['w']) ?></td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['logDir']['x']) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Application log file</td>
         <td class="leftpadding datavalue">../data/logs/application.log</td>
@@ -341,7 +366,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['appLogFile']['w']) ?></td>
         <td class="leftpadding">&nbsp;</td>
     </tr>
-    
+
     <tr>
         <td class="description">Session directory</td>
         <td class="leftpadding datavalue">../data/session</td>
@@ -349,7 +374,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['sessionDir']['w']) ?></td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['sessionDir']['x']) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Original images directory</td>
         <td class="leftpadding datavalue">../data/images_originals</td>
@@ -357,7 +382,15 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['originalImagesDir']['w']) ?></td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['originalImagesDir']['x']) ?></td>
     </tr>
-    
+
+    <tr>
+        <td class="description">XML files directory</td>
+        <td class="leftpadding datavalue">../data/xml-files</td>
+        <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['xmlFilesDir']['r']) ?></td>
+        <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['xmlFilesDir']['w']) ?></td>
+        <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['xmlFilesDir']['x']) ?></td>
+    </tr>
+
     <tr>
         <td class="description">Dynamic images directory</td>
         <td class="leftpadding datavalue">public/photos</td>
@@ -365,7 +398,7 @@ If the directory specified here is not writable, PHP falls back to the system de
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['dynamicImagesDir']['w']) ?></td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['dynamicImagesDir']['x']) ?></td>
     </tr>
-    
+
     <tr>
         <td class="description">Temporary upload directory</td>
         <td class="leftpadding datavalue"><?php echo $this->uploadTmpDir ?></td>

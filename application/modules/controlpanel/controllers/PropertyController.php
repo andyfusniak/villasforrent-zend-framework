@@ -6,23 +6,14 @@ class Controlpanel_PropertyController extends Zend_Controller_Action
     public function init()
     {
         $this->_logger = Zend_Registry::get('logger');
-        $this->_logger->log(__METHOD__ . ' started method function init()', Zend_Log::DEBUG);
-
-        // ensure the advertiser is logged in
-        if (!Zend_Auth::getInstance()->hasIdentity()) {
-            $this->_helper->redirector->gotoSimple(
-                'login',
-                'account',
-                'controlpanel'
-            );
-        }
-
-        $this->identity = Zend_Auth::getInstance()->getIdentity();
+        $this->identity = Vfr_Auth_Advertiser::getInstance()->getIdentity();
+        //$this->_logger->log(__METHOD__ . ' started method function init()', Zend_Log::DEBUG);
     }
 
     public function preDispatch()
     {
         $this->_helper->ensureSecure();
+        $this->_helper->ensureLoggedIn();
     }
 
     public function step1LocationAction()

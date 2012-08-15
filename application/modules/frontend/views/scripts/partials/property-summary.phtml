@@ -1,4 +1,15 @@
-<div>
+<style>
+div.property-summary {
+    border: 1px solid silver;
+    background-color: #eee;
+    margin-bottom: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 6px;
+}
+</style>
+
+<div class="property-summary">
     <p style="float:right"><a href="/<?php echo $this->propertyRow->locationUrl . '/' . $this->propertyRow->urlName ?>">read more...</a></p>
 
     <h2><?php echo $this->propertyType($this->propertyRow->idPropertyType) ?> <?php echo $this->escape($this->propertyRow->shortName) ?> in <?php echo $this->locationBreadcrumb($this->propertyRow->idLocation) ?></h2>

@@ -1,10 +1,42 @@
+<style>
+ul#property-pagination {
+    padding-bottom: 15px;
+}
+
+ul#property-pagination li
+{
+    font-size: 15px;
+    display: inline-block;
+}
+
+ul#property-pagination li a {
+    border: 1px solid silver;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+
+    border-radius: 6px;
+}
+
+ul#property-pagination li a:hover {
+    border: 1px solid #999;
+    text-decoration: none;
+}
+ul#property-pagination li.active a {
+    background-color: silver;
+}
+
+</style>
+
 <p>Showing properties <?php echo $this->firstItemNumber ?> to <?php echo $this->lastItemNumber ?> of <?php echo $this->totalItemCount ?></p>
-<ul>
+<ul id="property-pagination">
     <?php foreach ($this->pagesInRange as $page) : ?>
+    <?php $class = (($this->current == $page) ? ' class="active"' : '') ?>
     <?php if (1 == $page) : ?>
-    <li><a href="<?php echo $this->url() ?>"><?php echo $page ?></a></li>    
+    <li<?php echo $class ?>><a href="<?php echo $this->url() ?>"><?php echo $page ?></a></li>
     <?php else: ?>
-    <li><a href="<?php echo $this->url(array('page' => $page)) ?>"><?php echo $page ?></a></li>
+    <li<?php echo $class ?>><a href="<?php echo $this->url(array('page' => $page)) ?>"><?php echo $page ?></a></li>
     <?php endif ?>
     <?php endforeach ?>
 </ul>

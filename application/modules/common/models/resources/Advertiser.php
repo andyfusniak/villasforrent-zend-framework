@@ -151,7 +151,7 @@ class Common_Resource_Advertiser extends Vfr_Model_Resource_Db_Table_Abstract
     {
         try {
             $query = $this->select()
-                      ->where('idAdvertiser IN (?)', $advertiserList);
+                          ->where('idAdvertiser IN (?)', $advertiserList);
 
             $advertiserRowset = $this->fetchAll($query);
 

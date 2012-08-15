@@ -16,7 +16,7 @@ elif app_env == 'mars':
     dbhost = 'localhost'
     dbuser = 'root'
     dbpass = 'mrgrey'
-    dbname = 'hpw'
+    dbname = 'r5-mirror'
     
     application_path = '/var/www/zendvfr/application'
 elif app_env == 'beta':

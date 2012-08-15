@@ -32,7 +32,8 @@ class Admin_XmlRebuildController extends Zend_Controller_Action
         } else {
             $dumpFileExists = false;
             $dumpMd5Hash = null;
-            $dumpXmlContents = "";
+            $dumpXmlContent = "";
+            $dumpNumLines = 0;
         }
 
         if (file_exists($this->_xmlUploadFile)) {
@@ -45,6 +46,7 @@ class Admin_XmlRebuildController extends Zend_Controller_Action
             $uploadFileExists = false;
             $uploadMd5Hash = null;
             $uploadXmlContent = "";
+            $uploadNumLines = 0;
         }
 
         // 0    dev     device number

@@ -702,6 +702,11 @@ class Common_Model_Location extends Vfr_Model_Abstract
         return $this->getResource('Location')->getAllLocationsIn($idLocation);
     }
 
+    public function getAllDirectAncestorsBackToRoot($idLocation, $includeCurrent = true)
+    {
+        return $this->getResource('Location')->getAllDirectAncestorsBackToRoot($idLocation, $includeCurrent);
+    }
+
     public function getPathFromRootNode($idLocation)
     {
         $idLocation = (int) $idLocation;

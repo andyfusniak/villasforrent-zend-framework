@@ -1,0 +1,24 @@
+<?php //var_dump($this->messageThreadObj) ?>
+
+<?php if ($this->messageThreadObj->hasMessages()) : ?>
+<?php foreach ($this->messageThreadObj->getMessages() as $messageObj) : ?>
+<?php echo $this->partial('inbox/partials/message.phtml', array(
+            'messageObj'   => $messageObj,
+            'idMember'     => $this->messageThreadObj->getMemberId(),
+            'idAdvertiser' => $this->messageThreadObj->getAdvertiserId(),
+            'purifier'     => $this->purifier)) ?>
+<?php endforeach ?>
+<?php endif ?>
+
+
+<div id="inbox-message-reply">
+    <form enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+    <input type="hidden" name="idMessageThread" value="<?php echo $this->form->getValue('idMessageThread') ?>">
+    <div>
+        <textarea id="inbox-reply-body" name="body"></textarea>
+    </div>
+    <div>
+        <button id="inbox-reply">REPLY</button>
+    </div>
+    </form>
+</div>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Secure Payment Page</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="https://www.secpay.com/users/greyca01/hpw-secpay.css">
+    </head>
+
+    <body>
+
+        <form action="https://www.secpay.com/java-bin/ValCard" method="post" autocomplete="off">
+        <input type="hidden" name="merchant" value="${merchant}">
+        <input type="hidden" name="trans_id" value="${trans_id}">
+        <input type="hidden" name="callback" value="${callback}">
+        <input type="hidden" name="backcallback" value="${backcallback}">
+
+        <input type="hidden" name="template" value="${template}">
+        <input type="hidden" name="amount" value="${amount}">
+
+        <input type="hidden" name="error_table">
+        <input type="hidden" name="error_lists">
+
+        ${branding:=<img src="https://www.secpay.com/secpaylogo.jpg">}
+
+        <div style="border: 1px solid #f00; background-color: pink">
+            ${error_table}
+        </div>
+
+        <div>
+            <input placeholder="Cardholder's Name" type="text" name="customer" value="${customer}" autofocus="autofocus">
+        </div>
+
+        <div>
+            <input placeholder="Card Number" type="text" name="card_no" value="${card_no}">
+        </div>
+
+        <div>
+            <input placeholder="Expiry Date MM/YY" type="text" name="expiry" value="${expiry}">
+        </div>
+
+        <!--
+        <div>
+            <select name="expiry-month">
+                <option value="01">Jan (01)</option>
+                <option value="02">Feb (02)</option>
+                <option value="03">Mar (03)</option>
+                <option value="04">Apr (04)</option>
+                <option value="05">May (05)</option>
+                <option value="06">Jun (06)</option>
+                <option value="07">Jul (07)</option>
+                <option value="08">Aug (08)</option>
+                <option value="09">Sep (09)</option>
+                <option value="10">Oct (10)</option>
+                <option value="11">Nov (11)</option>
+                <option value="12">Dec (12)</option>
+            </select>
+
+            <select name="expiry-year">
+                <option name="2012">2012</option>
+                <option name="2013">2013</option>
+                <option name="2014">2014</option>
+                <option name="2015">2015</option>
+                <option name="2016">2016</option>
+                <option name="2017">2017</option>
+                <option name="2018">2018</option>
+                <option name="2019">2019</option>
+                <option name="2020">2020</option>
+                <option name="2021">2021</option>
+                <option name="2022">2022</option>
+            </select>
+        </div>
+        -->
+
+        <div>
+            <input placeholder="Security Code" type="text" name="cv2" value="${cv2}">
+        </div>
+
+        <div>
+            Amount ${amount} ${currency:=GBP}
+        </div>
+
+        <div>
+            <input type="${show_back:=hidden}" name="back" value="&lt; Back">
+            <input type="submit" name="accept" value="Authorise">
+        </div>
+
+        <div>
+            ${other_pay}
+            ${3ds}
+            <script src="https://siteseal.thawte.com/cgi/server/thawte_seal_generator.exe"></script>
+        </div>
+
+        </form>
+    </body>
+</html>

@@ -337,3 +337,13 @@ table#featured-property-list tr.expired {
 .xml-upload {
     color: #99FFCC;
 }
+
+/* invoicing */
+.open {
+    background-color: #fcf;
+}
+
+.money-td {
+    text-align: right;
+    padding-right: 25px;
+}

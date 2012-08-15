@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS CreditNotes (
+    idCreditNote int(8) unsigned zerofill NOT NULL AUTO_INCREMENT,
+    creditNoteDate date NOT NULL,
+    total decimal(8,2) unsigned NOT NULL DEFAULT '0.00',
+    currency char(3) CHARACTER SET ascii NOT NULL,
+    idCreditAddress int(10) unsigned NOT NULL,
+    itemLastAdded datetime DEFAULT NULL,
+    refunded int(1) unsigned NOT NULL DEFAULT '0',
+    added datetime NOT NULL,
+    updated datetime NOT NULL,
+    PRIMARY KEY (idCreditNote),
+    KEY creditNoteDate (creditNoteDate),
+    KEY total (total),
+    KEY currency (currency),
+    KEY idCreditAddress (idCreditAddress),
+    KEY itemLastAdded (itemLastAdded),
+    KEY refunded (refunded),
+    KEY added (added),
+    KEY updated (updated),
+    CONSTRAINT creditnotes_ibfk_1 FOREIGN KEY (currency) REFERENCES Currencies (iso3char),
+    CONSTRAINT creditnotes_ibfk_2 FOREIGN KEY (idCreditAddress) REFERENCES Addresses (idAddress) ON UPDATE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

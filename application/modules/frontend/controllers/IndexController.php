@@ -12,6 +12,17 @@ class IndexController extends Zend_Controller_Action
 
         $idLocationRow = $locationModel->lookup('');
 
+        // inject the top level locations into the view
+        $this->view->locationRowset = $locationModel->getAllLocationsIn(
+            Common_Resource_Location::ROOT_NODE_ID
+        );
+
         $this->_helper->featuredProperty($idLocationRow->idLocation);
+
+        $this->view->assign(
+            array(
+                'view' => $this->view
+            )
+        );
     }
 }

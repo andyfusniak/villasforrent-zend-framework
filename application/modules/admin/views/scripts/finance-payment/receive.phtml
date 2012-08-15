@@ -1,0 +1,44 @@
+<form method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+<input type="hidden" name="idPayment" value="<?php echo $this->form->getValue('idPayment') ?>">
+<input type="hidden" name="mode" value="<?php echo $this->form->getValue('mode') ?>">
+<fieldset>
+    <dl>
+        <dt><label for="idInvoice">Invoice ID</label></dt>
+        <dd>
+            <input name="idInvoice" type="text" value="<?php echo $this->form->getValue('idInvoice') ?>">
+            <?php echo $this->displayErrors($this->form->getMessages('idInvoice')) ?>
+        </dd>
+
+        <dt><label for="dateReceived">Date Received</label></dt>
+        <dd>
+            <input id="dateReceived" name="dateReceived" type="text" placeholder="dd/mm/yyyy" value="<?php echo $this->form->getValue('dateReceived') ?>">
+            <?php echo $this->displayErrors($this->form->getMessages('dateReceived')) ?>
+        </dd>
+
+        <dt><label for="amount">Amount</label></dt>
+        <dd>
+            <input name="amount" type="text" value="<?php echo $this->form->getValue('amount') ?>">
+            <?php echo $this->displayErrors($this->form->getMessages('amount')) ?>
+        </dd>
+
+        <dt><label for="currency">Currency</dt>
+        <dd>
+            <?php echo $this->formSelect('currency', $this->form->getValue('currency'), null, $this->form->getElement('currency')->getMultiOptions()) ?>
+            <?php echo $this->displayErrors($this->form->getMessages('currency')) ?>
+        </dd>
+
+        <dt><label for="method">Payment Method</label></dt>
+        <dd>
+            <?php echo $this->formSelect('paymentMethod', $this->form->getValue('paymentMethod'), null, $this->form->getElement('paymentMethod')->getMultiOptions()) ?>
+            <?php echo $this->displayErrors($this->form->getMessages('paymentMethod')) ?>
+        </dd>
+
+        <dt><label for="notes">Notes</label></dt>
+        <dd>
+            <textarea name="notes" rows="6" cols="80"><?php echo $this->escape($this->form->getValue('notes')) ?></textarea>
+        </dd>
+        <dd id="form-submit"><input type="submit" value="Save"></dd>
+    </dl>
+
+</fieldset>
+</form>

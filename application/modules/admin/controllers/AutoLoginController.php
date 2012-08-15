@@ -3,20 +3,17 @@ class Admin_AutoLoginController extends Zend_Controller_Action
 {
     public function loginAction()
     {
-        $request = $this->getRequest();
-
-        $idAdvertiser = $request->getParam('idAdvertiser');
-
-        Zend_Auth::getInstance()->clearIdentity();
+        // log this advertiser out
+        Vfr_Auth_Advertiser::getInstance()->clearIdentity();
 
         $advertiserModel = new Common_Model_Advertiser();
 
         $advertiserRow = $advertiserModel->getAdvertiserById(
-            $idAdvertiser
+            $this->getRequest()->getParam('idAdvertiser')
         );
 
-        $auth = Zend_Auth::getInstance();
-        $auth->getStorage()->write($advertiserRow);
+        $advertiserAuth = Vfr_Auth_Advertiser::getInstance();
+        $advertiserAuth->getStorage()->write($advertiserRow);
 
         $this->_helper->redirector->gotoSimple(
             'home',

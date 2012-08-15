@@ -12,7 +12,7 @@ class Controlpanel_PasswordResetController extends Zend_Controller_Action
         $token = $request->getParam('token');
 
         $form = new Controlpanel_Form_ChooseNewPasswordForm(
-            array (
+            array(
                 'token' => $token
             )
         );
