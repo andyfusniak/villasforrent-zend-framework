@@ -167,14 +167,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $router = $front->getRouter();
 
         // image cache router
-        $routeImageCache = new Zend_Controller_Router_Route_Regex (
+        $routeImageCache = new Zend_Controller_Router_Route_Regex(
             'photos/(.+)/(.+)/(.+)_(.+)x(.+)\.(.+)',
-            array (
+            array(
               'module'      => 'frontend',
               'controller'  => 'image-cache',
               'action'      => 'generate'
             ),
-            array (
+            array(
               1 => 'topLevel',
               2 => 'idProperty',
               3 => 'idPhoto',
@@ -187,7 +187,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // RESTful API Interface
         $restPropertiesRatesA = new Zend_Controller_Router_Route(
             '/api/properties/:idProperty/rates',
-            array (
+            array(
                 'module'     => 'api',
                 'controller' => 'property-rates',
                 'action'     => 'test'
@@ -196,7 +196,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $restPropertiesRatesB = new Zend_Controller_Router_Route(
             '/api/properties/:idProperty/rates/:idRate',
-            array (
+            array(
                 'module'     => 'api',
                 'controller' => 'property-rates',
                 'action'     => 'index'
@@ -205,7 +205,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $restPropertyCalendar = new Zend_Controller_Router_Route(
             '/api/property/:idProperty/calendar/:idCalendar',
-            array (
+            array(
                 'module'     => 'api',
                 'controller' => 'property-calendar',
                 'action'     => 'index'
@@ -214,16 +214,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $restPropertyPhotos = new Zend_Controller_Router_Route(
             '/api/property/:idProperty/photos',
-            array (
+            array(
                 'module'     => 'api',
                 'controller' => 'property-photo',
                 'action'     => 'index'
             )
         );
 
-        $routeRegion = new Zend_Controller_Router_Route (
+        $routeRegion = new Zend_Controller_Router_Route(
             '/in/:country/:region',
-            array (
+            array(
                 'module'     => 'frontend',
                 'controller' => 'level',
                 'action'     => 'region'
@@ -244,7 +244,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         //                                                             'controller' => 'level',
         //                                                             'action'     => 'test'));
 
-        $routeRestApi = new Zend_Rest_Route($front, array (), array ('api'));
+        //$routeRestApi = new Zend_Rest_Route($front, array (), array ('api'));
 
         $locationRouter = new Vfr_Controller_Router_Route_Location('([a-z0-9-/]*)');
 

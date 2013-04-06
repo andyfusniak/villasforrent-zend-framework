@@ -1,15 +1,20 @@
 <?php
-class Api_PropertyPhotoController extends Zend_Controller_Action
+class Api_PropertyPhotoController extends Zend_Rest_Controller
 {
     /**
      * ContextSwitch object
      * @var Zend_Controller_Action_Helper_ContextSwitch
      */
-    public $_contextSwitch;
+    protected $_contextSwitch;
+    protected $_request;
 
+    public function preDispatch()
+    {
+        $this->_contextSwitch = $this->_helper->jsonRestfulApi();
+    }
     public function init()
     {
-        $this->_helper->restfulApi();
+        $this->_request = $this->getRequest();
     }
 
     public function indexAction()
@@ -27,14 +32,15 @@ class Api_PropertyPhotoController extends Zend_Controller_Action
         $propertyModel = new Common_Model_Property();
         $photosRowset  = $propertyModel->getAllPhotosByPropertyId($idProperty);
 
-        if ('json' == $this->_contextSwitch->getCurrentContext()) {
-            $this->view->assign(
-                array(
-                    'photosRowset' => $photosRowset
-                )
-            );
+        // 200 OK
+        $this->getResponse()->setHttpResponseCode(200);
 
-            $this->getResponse()->setHttpResponseCode(200);
-        }
+        $json = Zend_Json::encode($photosRowset->toArray());
+
+        $this->_helper->jsonRestfulApi->respond($json);
     }
+
+    public function postAction() {}
+    public function putAction() {}
+    public function deleteAction() {}
 }

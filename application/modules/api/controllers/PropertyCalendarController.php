@@ -1,48 +1,60 @@
 <?php
-class Api_PropertyCalendarController extends Zend_Controller_Action
+class Api_PropertyCalendarController extends Zend_Rest_Controller
 {
     /**
      * ContextSwitch object
      * @var Zend_Controller_Action_Helper_ContextSwitch
      */
-    public $_contextSwitch;
+    protected $_contextSwitch;
+    protected $_request;
+
+    public function preDispatch()
+    {
+        $this->_contextSwitch = $this->_helper->jsonRestfulApi();
+    }
 
     public function init()
     {
-       $this->_helper->restfulApi();
+        $this->_request = $this->getRequest();
     }
 
     public function indexAction()
     {
-        $this->_forward(strtolower($this->getRequest()->getMethod()));
+        $this->_forward(strtolower($this->_request->getMethod()));
     }
 
     public function getAction()
     {
-        $request = $this->getRequest();
-        $idProperty = $request->getParam('idProperty');
-        $idCalendar = $request->getParam('idCalendar');
-        $digestKey  = $request->getParam('digestKey');
+        $response = $this->getResponse();
+
+        $idProperty = $this->_request->getParam('idProperty');
+        $idCalendar = $this->_request->getParam('idCalendar');
+        $digestKey  = $this->_request->getParam('digestKey');
 
         $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOptions();
         $this->_vfrConfig = $bootstrap['vfr'];
 
-        $s = $request->getParam('apiKey', '')
-           . $request->getParam('idProperty', '')
-           . $request->getParam('idCalendar')
+        $s = $this->_request->getParam('apiKey', '')
+           . $this->_request->getParam('idProperty', '')
+           . $this->_request->getParam('idCalendar')
            . $this->_vfrConfig['api']['digestpasswd'];
         $checkKey = sha1($s);
 
         if ($digestKey != $checkKey) {
-            $this->_helper->viewRenderer->setNoRender(true);
-            $this->getResponse()
-                 ->setHttpResponseCode(403);
-            $err = array(
-                'code' => 403,
-                'message' => 'digest keys do not match'
+            // 403 Forbidden
+            $response->setHttpResponseCode(403);
+
+            // encode and output the JSON
+            $json = Zend_Json::encode(
+                array(
+                    'code'    => 403,
+                    'message' => 'digest keys do not match'
+                )
             );
 
-            $this->getResponse()->appendBody(Zend_Json::encode($err));
+            $response->appendBody(Zend_Json::prettyPrint($json,
+                array('indent' => '    ')
+            ));
             return;
         }
 
@@ -50,16 +62,22 @@ class Api_PropertyCalendarController extends Zend_Controller_Action
         $ratesRowset = $calendarModel->getRatesByCalendarId($idCalendar);
         $availabilityRowset = $calendarModel->getAvailabilityByCalendarId($idCalendar);
 
-        if ($this->_contextSwitch->getCurrentContext() == 'json') {
-            $this->view->ratesRowset        = $ratesRowset;
-            $this->view->availabilityRowset = $availabilityRowset;
-            $this->getResponse()->setHttpResponseCode(200);
-        }
+        // 200 OK
+        $response->setHttpResponseCode(200);
 
-        //"availability": {<?php echo Zend_Json_Encoder::encode($this->availabilityRowset->toArray()) }
+        // encode and output the JSON
+        $json = Zend_Json::encode(array(
+            'rates'       => $ratesRowset->toArray(),
+            'availability' => $availabilityRowset->toArray()
+        ));
+
+        $this->_helper->jsonRestfulApi->respond($json);
     }
 
-    public function postAction() {}
+    public function postAction()
+    {
+
+    }
 
     public function putAction() {}
     public function deleteAction() {}

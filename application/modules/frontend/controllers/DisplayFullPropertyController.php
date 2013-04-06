@@ -51,6 +51,7 @@ class DisplayFullPropertyController extends Zend_Controller_Action
         $jquery = $this->view->jQuery();
         $jquery->enable()
                ->uiEnable();
+        $this->view->headScript()->appendFile('/js/galleria/galleria-1.2.8.min.js');
 
         // only include the member favourites javascript if the member is logged in
         if (Vfr_Auth_Member::getInstance()->hasIdentity()) {

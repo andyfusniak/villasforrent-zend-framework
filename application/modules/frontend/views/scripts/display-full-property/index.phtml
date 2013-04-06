@@ -12,6 +12,30 @@
 .favourited {
     background-position: -20px 0px;
 }
+.rates-table{
+    border: 1px solid #D8D8D8;
+}
+.rates-table td, .rates-table th{
+    padding: 7px!important;
+    text-align: center;
+}
+.rates-table td{
+    color: #4A4A4A;
+    background-color:#FCFCFC;
+    border-bottom: 1px solid #e3e3e3;
+}
+.rates-table th{
+    color: #404490;
+    border: 1px solid #D8D8D8;
+    background-color: #B3C3E3;
+    font-weight: bold;
+}
+.rates-table .period-name{
+    font-weight: bold;
+}
+.rates-table-hover{
+    background-color:#d9ecff!important;
+}
 </style>
 
 <?php if (Vfr_Auth_Member::getInstance()->hasIdentity()) : ?>
@@ -26,6 +50,9 @@ $(document).ready(function() {
         changeYear: true,
         numberOfMonths: 1
     });
+    $(".rates-table tr:even td").css("background-color", "#f5faff");
+    $(".rates-table tr").hover(function(){$(this).children('td').addClass("rates-table-hover");},
+                               function(){$(this).children('td').removeClass("rates-table-hover");});
 });
 </script>
 
@@ -122,7 +149,7 @@ $(document).ready(function() {
     <div id="rates-availability">
         <h3>Rental Rates (Rates below in <?php echo $this->calendarRow->currencyCode ?> on a
         <?php echo $this->rentalBasis($this->calendarRow->rentalBasis) ?> rental basis)</h3>
-        <table style="width:100%">
+        <table style="width:100%" class="rates-table">
         <tr>
             <th>Period name</th>
             <th>From</th>
@@ -134,7 +161,7 @@ $(document).ready(function() {
         </tr>
         <?php foreach($this->rateRowset as $row): ?>
         <tr>
-            <td><?php echo $this->escape($row->name) ?></td>
+            <td class="period-name"><?php echo $this->escape($row->name) ?></td>
             <td><?php echo $this->prettyDate($row->startDate) ?></td>
             <td><?php echo $this->prettyDate($row->endDate) ?></td>
             <td><?php echo $this->formatCurrency($row->weekendNightlyRate) ?></td>

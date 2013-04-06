@@ -19,6 +19,14 @@ class DashboardController extends Zend_Controller_Action
 
     public function favouritesAction()
     {
+        // enable jQuery Core Library
+        ZendX_JQuery::enableView($this->view);
+        $jquery = $this->view->jQuery();
+        $jquery->enable()
+               ->uiEnable();
+
+        $this->view->headScript()->appendFile('/js/vfr/frontend/member-favourites.js');
+        
         $propertyService = new Common_Service_Property();
         $propertyContentService = new Common_Service_PropertyContent();
         $photoService = new Common_Service_Photo();

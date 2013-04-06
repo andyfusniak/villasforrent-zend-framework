@@ -4,9 +4,9 @@ require_once 'hpwlib.php';
 $apikey = "f409a10c182a1fb7a8ebaea5cad7af1cc82486ad";
 
 try {
-    $hpwApi = new HpwApi($apikey, $serviceUri="http://mars.zendvfr/api");
+    $hpwApi = new HpwApi($apikey, $serviceUri="http://www.holidaypropertyworldwide.com/api");
 
-    $photos = $hpwApi->getAllPhotos($idProperty=10191);
+    $photos = $hpwApi->getAllPhotos($idProperty=10488);
     echo $photos;
 
     $p = json_decode($photos, false);

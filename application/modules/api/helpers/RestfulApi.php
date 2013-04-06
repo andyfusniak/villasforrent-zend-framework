@@ -10,11 +10,11 @@ class Api_Helper_RestfulApi extends Zend_Controller_Action_Helper_Abstract
         $acceptHeader = $request->getHeader('Accept');
         if ($acceptHeader) {
             switch (true) {
-                case strstr($acceptHeader, "+xml"):
+                case strstr($acceptHeader, "xml"):
                     $request->setParam('format', 'xml');
                     break;
 
-                case strstr($acceptHeader, "+json"):
+                case strstr($acceptHeader, "json"):
                     $request->setParam('format', 'json');
                     break;
             }
