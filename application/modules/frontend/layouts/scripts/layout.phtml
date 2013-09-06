@@ -1,7 +1,6 @@
 <?php echo $this->doctype() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <meta charset="utf-8">
     <?php
     if (("live" === APPLICATION_ENV) || ("beta" === APPLICATION_ENV)) {
         if ($this->jQuery()->isEnabled()) {
@@ -35,7 +34,7 @@
     <?php echo $this->headScript() . PHP_EOL ?>
     <?php echo $this->headStyle() . PHP_EOL ?>
     <?php if ('live' == APPLICATION_ENV): ?>
-        <script>
+        <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-24254189-1']);
         _gaq.push(['_trackPageview']);
@@ -49,20 +48,11 @@
     <?php endif ?>
 </head>
 <body>
-<div id="doc4">
+<div id="doc4" class="yui-t2">
     <div id="hd">
         <h1>Villas to rent in Greece, Portugal, Spain, France, Florida and many other holiday destinations around the world including skiing holidays</h1>
         <p id="strapline">Dedicated to bringing you the best rental properties from around the world. Book from the owner direct, or advertise YOUR property</p>
-        <p id="topnav">
-            <a href="/">Home</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-            <?php if (!Vfr_Auth_Member::getInstance()->hasIdentity()) : ?>
-            <a href="/signup/join">Sign Up</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-            <a href="/authentication/login">Login</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-            <?php else : ?>
-            <a href="/dashboard/home">Hi <?php //echo $this->memberName() ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
-            <?php endif ?>
-            <a href="/advertisers/advertise-with-us">Advertise With Us</a>
-        </p>
+        <p id="topnav"><a href="/">HOME</a></p>
     </div>
     <div id="bd">
         <div id="yui-main">
@@ -70,12 +60,38 @@
         </div>
 
         <div class="yui-b">
+            <?php if (!Vfr_Auth_Advertiser::getInstance()->hasIdentity()) : ?>
+            <h1>New Advertisers</h1>
+            <ul class="menu">
+                <li id="nav-register"><a tabindex="1" accesskey="R" href="/controlpanel/registration/register/">register now</a></li>
+            </ul>
+            <?php endif ?>
 
+            <h1>Existing Advertisers</h1>
+            <ul class="menu">
+                <?php if (!Vfr_Auth_Advertiser::getInstance()->hasIdentity()) : ?>
+                <li id="nav-advertiser-login"><a tabindex="2" accesskey="L" href="/controlpanel/authentication/login/">login</a></li>
+                <?php endif ?>
+
+                <?php if (Vfr_Auth_Advertiser::getInstance()->hasIdentity()) : ?>
+                <li id="nav-advertiser-home"><a tabindex="3" accesskey="H" href="/controlpanel/account/home/">account home</a></li>
+                <li id="nav-advertiser-logout"><a tabindex="4" accesskey="O" href="/controlpanel/authentication/logout/">logout</a></li>
+                <?php endif ?>
+            </ul>
+
+            <div>
+                <h1>Browse World Locations</h1>
+                <ul>
+                    <?php foreach ($this->locationRowset as $row): ?>
+                    <li><a href="/<?php echo $row->url ?>"><?php echo $this->escape($row->name) ?> (<?php echo $row->totalVisible ?>)</a></li>
+                    <?php endforeach ?>
+                </ul>
+            </div>
         </div>
     </div>
 
     <div id="ft">
-        <span class="left">holidaypropertyworldwide.com &copy; 2012</span><span class="right"><a href="#">About</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#">Terms</a
+        <span class="left">holidaypropertyworldwide.com &copy; 2011</span><span class="right"><a href="#">About</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#">Terms</a
         <p><a href="http://validator.w3.org/check?uri=referer"><img src="/images/other/valid-xhtml10-blue.png" alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a><img alt="All cards accepted" src="/images/cards.gif" /><a href="http://framework.zend.com/about/casestudies"><img alt="Powered by Zend Framework" src="/images/other/zend-framework.png" /></a></p>
     </div>
 </div>

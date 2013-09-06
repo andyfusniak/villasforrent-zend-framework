@@ -6,8 +6,8 @@ class Controlpanel_PropertyController extends Zend_Controller_Action
     public function init()
     {
         $this->_logger = Zend_Registry::get('logger');
-        $this->identity = Vfr_Auth_Advertiser::getInstance()->getIdentity();
         //$this->_logger->log(__METHOD__ . ' started method function init()', Zend_Log::DEBUG);
+	$this->identity = Vfr_Auth_Advertiser::getInstance()->getIdentity();
     }
 
     public function preDispatch()

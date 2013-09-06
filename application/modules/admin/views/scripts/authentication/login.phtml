@@ -1,0 +1,24 @@
+<h1>Admin Login</h1>
+<form id="advertiser_id" enctype="application/x-www-form-urlencoded" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+    <fieldset>
+        <legend>Admin Login</legend>
+        <dl>
+            <dt>
+                <label for="username">Username:</label>
+            </dt>
+            <dd>
+                <input type="text" name="username" value="<?php echo $this->escape($this->form->getValue('username')) ?>">
+                <?php echo $this->displayErrors($this->form->getMessages('username')) ?>
+            </dd>
+
+            <dt>
+                <label for="passwd">Password:</label>
+            </dt>
+            <dd>
+                <input type="password" name="passwd" value="<?php echo $this->escape($this->form->getValue('passwd')) ?>" />
+                <?php echo $this->displayErrors($this->form->getMessages('passwd')) ?>
+            </dd>
+        </dl>
+        <button>Submit</button>
+    </fieldset>
+</form>

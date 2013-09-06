@@ -1,5 +1,5 @@
 <?php
-class Frontend_Model_PropertyMapper extends Frontend_Model_MapperAbstract
+class Frontend_Model_PropertyMapper extends Frontend_Model_PropertyMapperAbstract
 {
     public function getAllPropertyIds()
     {

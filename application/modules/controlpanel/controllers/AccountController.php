@@ -42,7 +42,7 @@ class Controlpanel_AccountController extends Zend_Controller_Action
         //if (!$this->_advertiserModel->checkAcl('listAccount')) {
         //    throw new Vfr_Exception('Access Denied');
         //}
-        
+
         // retrieve the identity object (an advertiser row)
         $advertiserRow = Vfr_Auth_Advertiser::getInstance()->getIdentity();
 

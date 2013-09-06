@@ -110,25 +110,6 @@
     </tr>
 
     <tr>
-        <td class="description">iconv support</td>
-        <td class="leftpadding datavalue">iconv</td>
-        <td class="leftpadding"><?php echo $this->tickOrCross($this->phpIconvInstalled) ?></td>
-    </tr>
-
-    <tr>
-        <td class="description">Bcmath Library Installed</td>
-        <td class="leftpadding datavalue">bcmath</td>
-        <td class="leftpadding"><?php echo $this->tickOrCross($this->phpBcmathInstalled) ?></td>
-    </tr>
-
-
-    <tr>
-        <td class="description">Tidy Library Installed</td>
-        <td class="leftpadding datavalue">tidy</td>
-        <td class="leftpadding"><?php echo $this->tickOrCross($this->phpTidyInstalled) ?></td>
-    </tr>
-
-    <tr>
         <td class="description">Allow HTTP file uploads?</td>
         <td class="leftpadding datavalue">file_uploads</td>
         <td class="leftpadding"><?php echo $this->fileUploadPhpSettings['file_uploads'] == 1 ? 'On' : 'Off' ?></td>
@@ -302,13 +283,13 @@ If the directory specified here is not writable, PHP falls back to the system de
 
     <tr>
         <td class="description">Original images directory exists</td>
-        <td class="leftpadding datavalue">../data/images-originals</td>
+        <td class="leftpadding datavalue">../data/images_originals</td>
         <td class="leftpadding"><?php echo $this->tickOrCross(file_exists($this->originalImagesDir)) ?></td>
     </tr>
 
     <tr>
         <td class="description">XML Directory</td>
-        <td class="leftpadding datavalue">../data/xml-files</td>
+        <td class="leftpadding datavalue">../data/xml_files</td>
         <td class="leftpadding"><?php echo $this->tickOrCross(file_exists($this->xmlFilesDir)) ?></td>
     </tr>
 
@@ -385,7 +366,7 @@ If the directory specified here is not writable, PHP falls back to the system de
 
     <tr>
         <td class="description">XML files directory</td>
-        <td class="leftpadding datavalue">../data/xml-files</td>
+        <td class="leftpadding datavalue">../data/xml_files</td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['xmlFilesDir']['r']) ?></td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['xmlFilesDir']['w']) ?></td>
         <td class="leftpadding"><?php echo $this->tickOrCross($this->permissions['xmlFilesDir']['x']) ?></td>

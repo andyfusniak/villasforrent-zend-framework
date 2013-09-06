@@ -1,6 +1,5 @@
 <?php echo $this->paginationControl($this->featuredPropertiesPaginator, 'Sliding', 'pagination.phtml') ?>
 
-<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'featured', 'action' => 'feature')) ?>"><button>FEATURE A PROPERTY</button></a>
 <div style="clear:both" />
 <table id="featured-property-list">
     <tr>
@@ -9,9 +8,8 @@
         <th>Featured Box</th>
         <th>Start Date</th>
         <th>Expiry Date</th>
-        <th>Action</th>
     </tr>
-
+    
     <?php foreach ($this->featuredPropertiesPaginator as $featuredPropertyRow): ?>
     <tr class="<?php echo $this->cycle(array("odd", "even"))->next() ?> <?php echo $this->featuredStatusClass($featuredPropertyRow->startDate, $featuredPropertyRow->expiryDate) ?>">
         <td><?php echo $this->showOnceForGroup($featuredPropertyRow->idProperty) ?></td>
@@ -19,8 +17,7 @@
         <td><?php echo $this->featuredBoxLabel($featuredPropertyRow->position) ?></td>
         <td><?php echo $this->prettyDate($featuredPropertyRow->startDate, Vfr_View_Helper_PrettyDate::STYLE_DD_MMM_YY) ?></td>
         <td><?php echo $this->prettyDate($featuredPropertyRow->expiryDate, Vfr_View_Helper_PrettyDate::STYLE_DD_MMM_YY) ?></td>
-        <td><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'featured', 'action' => 'feature', 'idFeaturedProperty' => $featuredPropertyRow->idFeaturedProperty), null, true) ?>"><button>EDIT</button></a></td>
     </tr>
     <?php endforeach ?>
-
+    
 </table>

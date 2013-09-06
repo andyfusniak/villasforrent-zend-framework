@@ -1,0 +1,56 @@
+<div id="browse_country">
+    <?php //var_dump($this->locationRow) ?>
+    <?php //echo $this->escape($this->locationRow->name) ?></h1>
+    <h1><?php echo $this->locationBreadcrumb(
+                                        $this->locationRow->idLocation,
+                                        array (
+                                            'totalsMode' => Vfr_View_Helper_LocationBreadcrumb::TOTALS_ALL_NODES
+                                        )) ?></h1>
+    <?php if ($this->locationRowset) : ?>
+    <ul>
+    <?php foreach ($this->locationRowset as $row): ?>
+        <?php if ($row->totalVisible > 0) : ?>
+        <li><a href="/<?php echo $row->url ?>"><?php echo $this->escape($row->rowname) ?> (<?php echo $row->totalVisible ?>)</a></li>
+        <?php endif ?>
+    <?php endforeach ?>
+    </ul>
+    <?php else : ?>
+    <p>There are currently no properties in <?php echo $this->escape($this->countryName) ?>.</p>
+    <?php endif ?>
+</div>
+
+<?php if ($this->showFeatured) : ?>
+<div class="yui-gb">
+    <div class="yui-u first"><?php echo $this->featuredPartials[0] ?></div>
+    <div class="yui-u"><?php echo $this->featuredPartials[1] ?></div>
+    <div class="yui-u"><?php echo $this->featuredPartials[2] ?></div>
+</div>
+<?php endif ?>
+
+<?php if ($this->showProperties) : ?>
+<div>
+    <h1>Properties in <?php echo $this->escape($this->locationRow->name) ?> (<?php echo $this->locationRow->totalVisible ?>)</h1>
+    <ul>
+        <?php foreach ($this->partials as $partial): ?>
+        <li><?php echo $partial ?></li>
+        <?php endforeach ?>
+    </ul>
+</div>
+<?php endif ?>
+
+<?php echo $this->paginationControl($this->propertyPaginator, 'Sliding', 'level/pagination.phtml') ?>
+<ul>
+    <?php //var_dump($this->locationModel) ?>
+    <?php foreach ($this->propertyPaginator as $propertyRow): ?>
+    <?php $propertyContent = $this->propertyModel->getPropertyContentArrayById($propertyRow->idProperty) ?>
+    <li><?php echo $this->partial('partials/property-summary.phtml',
+         array (
+            'locationRow'      => $this->locationModel->lookup($propertyRow->locationUrl . '/' . $propertyRow->urlName),
+            'photoRow'         => $this->propertyModel->getPrimaryPhotoByPropertyId($propertyRow->idProperty),
+            'propertyRow'      => $propertyRow,
+            'propertyContent'  => $propertyContent
+        )) ?>
+         </li>
+    <?php endforeach ?>
+</ul>
+<?php echo $this->paginationControl($this->propertyPaginator, 'Sliding', 'level/pagination.phtml') ?>

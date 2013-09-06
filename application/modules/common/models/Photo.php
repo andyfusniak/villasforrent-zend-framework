@@ -114,17 +114,6 @@ class Common_Model_Photo extends Vfr_Model_Abstract
         return $photoResource->getPhotoByPhotoId($idPhoto);
     }
 
-    /**
-     * Get a collection of primary photos for the given list of properties
-     * @param array $idPropertyList list of properties to retrieve primary photos
-     * @return Common_Resource_PhotoRowset
-     */
-    public function getPrimaryPhotosByPropertyList($idPropertyList)
-    {
-        $photoResource = $this->getResource('Photo');
-        return $photoResource->getPrimaryPhotosByPropertyList($idPropertyList);
-    }
-
     public static function topLevelDirByPropertyId($idProperty, $interval=50)
     {
         if (!$idProperty) throw new Vfr_Exception("Bad value passed as idProperty");

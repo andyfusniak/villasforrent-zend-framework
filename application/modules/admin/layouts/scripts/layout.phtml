@@ -5,22 +5,22 @@
     if (("live" === APPLICATION_ENV) || ("beta" === APPLICATION_ENV)) {
         if ($this->jQuery()->isEnabled()) {
             $this->jQuery()->setCdnSsl(true);
-            $this->jQuery()->setVersion('1.7.2');
+            $this->jQuery()->setVersion('1.7.1');
         }
 
         if ($this->jQuery()->uiIsEnabled()) {
-            $this->jQuery()->setUiVersion('1.8.21');
+            $this->jQuery()->setUiVersion('1.8.17');
 
-            $this->jQuery()->addStylesheet('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/sunny/jquery-ui.css');
+            $this->jQuery()->addStylesheet('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/sunny/jquery-ui.css');
         }
 
         // YDN doesn't support SSL yet
         $this->headLink()->appendStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');
     } else {
         if ($this->jQuery()->isEnabled()) {
-            $this->jQuery()->setLocalPath('/js/jquery-ui-1.8.22/js/jquery-1.7.2.min.js');
-            $this->jQuery()->setUiLocalPath('/js/jquery-ui-1.8.22/js/jquery-ui-1.8.22.custom.min.js');
-            $this->jQuery()->addStylesheet('/js/jquery-ui-1.8.22/css/sunny/jquery-ui-1.8.22.custom.css');
+            $this->jQuery()->setLocalPath('/js/jquery/jquery-1.7.1.min.js');
+            $this->jQuery()->setUiLocalPath('/js/jquery-ui-1.8.17/js/jquery-ui-1.8.17.custom.min.js');
+            $this->jQuery()->addStylesheet('/js/jquery-ui-1.8.17/development-bundle/themes/sunny/jquery-ui.css');
         }
 
         $this->headLink()->appendStylesheet('/js/yui2/reset-fonts-grids/reset-fonts-grids.css');

@@ -30,6 +30,7 @@ class DisplayFullPropertyController extends Zend_Controller_Action
         //$availabilityRowset = $calendarModel->getAvailabilityByCalendarId($idCalendar);
         $rateRowset = $calendarModel->getRatesByCalendarId($idCalendar);
 
+
         // fetch the photos for this property
         $photoRowset = $propertyModel->getAllPhotosByPropertyId($propertyRow->idProperty);
         //var_dump($photoRowset);
@@ -40,8 +41,6 @@ class DisplayFullPropertyController extends Zend_Controller_Action
 
         $locationRow = $locationModel->lookup($propertyRow->locationUrl);
 
-
-
         //var_dump($propertyRow);
         //var_dump($locationRow);
         //die();
@@ -51,34 +50,6 @@ class DisplayFullPropertyController extends Zend_Controller_Action
         $jquery = $this->view->jQuery();
         $jquery->enable()
                ->uiEnable();
-        $this->view->headScript()->appendFile('/js/galleria/galleria-1.2.8.min.js');
-
-        // only include the member favourites javascript if the member is logged in
-        if (Vfr_Auth_Member::getInstance()->hasIdentity()) {
-            $identity = Vfr_Auth_Member::getInstance()->getIdentity();
-
-            $this->view->headScript()->appendFile('/js/vfr/frontend/member-favourites.js');
-
-            // check to see if this property has already been added to the member's favourites
-            $memberFavouriteMapper = new Frontend_Model_MemberFavouriteMapper();
-            $memberFavouriteObj = $memberFavouriteMapper->getFavouriteByMemberAndPropertyId(
-                $identity->idMember,
-                $propertyRow->idProperty
-            );
-
-            if ($memberFavouriteObj) {
-                $classFavourited = 'class="favourited"';
-            }
-        }
-
-        // Set the title of the page
-        $this->view->headTitle(
-            $propertyRow->shortName,
-            Zend_View_Helper_Placeholder_Container_Abstract::SET
-        );
-
-        // Set the description of the page
-        $this->view->headMeta($propertyContent['headline1'], 'description');
 
         $this->view->assign(
             array(
@@ -87,8 +58,7 @@ class DisplayFullPropertyController extends Zend_Controller_Action
                 'locationRow'     => $locationRow,
                 'propertyContent' => $propertyContent,
                 'photoRowset'     => $photoRowset,
-                'rateRowset'      => $rateRowset,
-                'classFavourited' => isset($classFavourited) ? $classFavourited : ''
+                'rateRowset'      => $rateRowset
             )
         );
     }

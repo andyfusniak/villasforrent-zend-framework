@@ -4,6 +4,7 @@ class Admin_Form_XmlUploadForm extends Zend_Form
     public function init()
     {
         $this->setMethod('post');
+        $this->setAction('/admin/xml-upload/file-upload');
         $this->setAttrib('enctype', 'multipart/form-data');
         $this->addElement('file', 'filename', array(
             'required'      => true,

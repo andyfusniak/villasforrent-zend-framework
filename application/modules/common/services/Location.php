@@ -8,9 +8,6 @@ class Common_Service_Location
         $this->_locationModel = new Common_Model_Location();
     }
 
-    /**
-     * @return array
-     */
     public function getAllLocationsAssocArrays()
     {
         $locationRowset = $this->_locationModel->getAllLocations();
@@ -32,26 +29,5 @@ class Common_Service_Location
             $leftLookup,
             $rightLookup
         );
-    }
-
-    /**
-     * Returns an indexed hash of loction id's to details for a given location
-     *
-     * @param int $idLocation the start location node
-     * @return array hash map of locations
-     */
-    public function getAllDirectAncestorsBackToRootHashMap($parentIdLocation)
-    {
-        $locationRowset = $this->_locationModel->getAllDirectAncestorsBackToRoot($parentIdLocation);
-
-        $locations = array();
-
-        foreach ($locationRowset as $locationRow) {
-            $idLocation = $locationRow->idLocation;
-
-            $locations[$idLocation] = $locationRow->name . ' (' . $locationRow->url . ')';
-        }
-
-        return $locations;
     }
 }

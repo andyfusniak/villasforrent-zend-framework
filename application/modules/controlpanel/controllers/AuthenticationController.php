@@ -30,8 +30,8 @@ class Controlpanel_AuthenticationController extends Zend_Controller_Action
         // convert string yes, true, 1 etc to PHP boolean type
         $booleanFilter = new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL);
         $disableLayout = $booleanFilter->filter($disableLayout);
-
-        // disable the MVC layout if required
+        
+// disable the MVC layout if required
         if (true === $disableLayout)
             $this->_helper->layout->disableLayout();
 
@@ -54,7 +54,7 @@ class Controlpanel_AuthenticationController extends Zend_Controller_Action
 
                     $advertiserAuth = Vfr_Auth_Advertiser::getInstance();
                     $advertiserAuth->getStorage()->write($advertiserRow);
-
+                    
                     if (strlen($redirectUri) > 0) {
                         $this->_helper->redirector->gotoUrl(
                             urldecode($redirectUri)

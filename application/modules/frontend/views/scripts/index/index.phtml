@@ -1,26 +1,9 @@
-<?php
-$this->view->headMeta()->setName(
-    'description',
-    'Villas to rent across the world direct from the owner'
-);
-
-$this->view->headTitle('Property to Rent across the world');
-?>
 <h1>Welcome to Holiday Property Worldwide, the website dedicated to rental properties from across the world. Book with the owner direct.</h1>
-<?php //echo $this->memberName() ?>
-<h1>Browse World Locations</h1>
-<?php $columnItems = Vfr_View_DisplayUtils::listToColumns($this->locationRowset, 6, Vfr_View_DisplayUtils::TOP_TO_BOTTOM); ?>
-<?php echo $this->partial('partials/location-columns-6.phtml', array('columnItems' => $columnItems)); ?>
 
 <?php if ($this->showFeatured) : ?>
-<div class="yui-g">
-   <div class="yui-g first">
-      <div class="yui-u first"><?php echo $this->featuredPartials[0] ?></div>
-      <div class="yui-u"><?php echo $this->featuredPartials[1] ?></div>
-   </div>
-   <div class="yui-g">
-      <div class="yui-u first"><?php echo $this->featuredPartials[2] ?></div>
-      <div class="yui-u"<?php echo $this->featuredPartials[3] ?>></div>
-   </div>
+<div class="yui-gb">
+    <div class="yui-u first"><?php echo $this->featuredPartials[0] ?></div>
+    <div class="yui-u"><?php echo $this->featuredPartials[1] ?></div>
+    <div class="yui-u"><?php echo $this->featuredPartials[2] ?></div>
 </div>
 <?php endif ?>

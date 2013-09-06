@@ -349,28 +349,6 @@ class Common_Resource_Property
         }
     }
 
-    /**
-     * Retrieves a collection of property rows for the give list
-     *
-     * @param array $properties the list of properties
-     * @return Common_Resource_PropertyRowset
-     */
-    public function getPropertiesByPropertyList($properties)
-    {
-        if (!is_array($properties))
-            throw new Exception("Unsupport type - expects array");
-
-        $query = $this->select()
-                      ->where('idProperty IN (?)', $properties);
-        try {
-            $propertyRowset = $this->fetchAll($query);
-
-            return $propertyRowset;
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-
     public function getPropertiesByAdvertiserId($idAdvertiser)
     {
         $query = $this->select()

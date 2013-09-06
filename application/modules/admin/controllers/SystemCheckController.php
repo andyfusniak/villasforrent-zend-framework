@@ -63,13 +63,13 @@ class Admin_SystemCheckController extends Zend_Controller_Action
             ),
 
             'originalImagesDir' => array(
-                'path' => $dataDir . DIRECTORY_SEPARATOR . 'images-originals',
-                'name' => 'data/images-originals'
+                'path' => $dataDir . DIRECTORY_SEPARATOR . 'images_originals',
+                'name' => 'data/images_originals'
             ),
 
             'xmlFilesDir' => array(
-                'path' => $dataDir . DIRECTORY_SEPARATOR . 'xml-files',
-                'name' => 'data/xml-files'
+                'path' => $dataDir . DIRECTORY_SEPARATOR . 'xml_files',
+                'name' => 'data/xml_files'
             ),
 
             'appLogFile' => array(
@@ -121,15 +121,6 @@ class Admin_SystemCheckController extends Zend_Controller_Action
         // Alternative PHP Cache
         $phpApcInstalled = function_exists('apc_cache_info');
 
-        // iconv
-        $phpIconvInstalled = function_exists('iconv');
-
-        // bcmath library supported?
-        $phpBcmathInstalled = function_exists('bcadd');
-
-        // tidy library support
-        $phpTidyInstalled = function_exists('tidy_get_output');
-
         // Mysql triggers
         $systemModel = new Common_Model_System();
         $triggerRowInsert = $systemModel->getInformationSchemaTriggerByName('content_checksum_insert');
@@ -146,9 +137,6 @@ class Admin_SystemCheckController extends Zend_Controller_Action
                 'phpSessionInstalled' => $phpSessionInstalled,
                 'phpCurlInstalled'    => $phpCurlInstalled,
                 'phpApcInstalled'     => $phpApcInstalled,
-                'phpIconvInstalled'   => $phpIconvInstalled,
-                'phpBcmathInstalled'  => $phpBcmathInstalled,
-                'phpTidyInstalled'    => $phpTidyInstalled,
                 'triggerChecksumI'    => $triggerRowInsert instanceof Common_Resource_Trigger_Row ? true : false,
                 'triggerChecksumU'    => $triggerRowUpdate instanceof Common_Resource_Trigger_Row ? true : false,
                 'gdInfo'              => isset($gdInfo) ? $gdInfo : null,
@@ -171,6 +159,9 @@ class Admin_SystemCheckController extends Zend_Controller_Action
                 'phpApcSettings' => $phpApcSettings
             )
         );
+
+
+
     }
 
     public function phpInfoAction() {}

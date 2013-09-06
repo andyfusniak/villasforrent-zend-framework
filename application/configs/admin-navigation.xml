@@ -20,76 +20,6 @@
             </pages>
         </overview>
 
-        <finances>
-            <label>Finances</label>
-            <module>admin</module>
-            <controller>finance</controller>
-            <action>dashboard</action>
-            <pages>
-                <invoices>
-                    <label>Sales Invoices</label>
-                    <module>admin</module>
-                    <controller>finance-invoice</controller>
-                    <action>list</action>
-
-                    <pages>
-                        <view-invoice>
-                            <label>View Invoice</label>
-                            <module>admin</module>
-                            <controller>finance-invoice</controller>
-                            <action>view-invoice</action>
-                        </view-invoice>
-
-                        <pdf-invoice-download>
-                            <label>PDF Invoice Download</label>
-                            <module>admin</module>
-                            <controller>finance-pdf</controller>
-                            <action>download</action>
-                        </pdf-invoice-download>
-                    </pages>
-                </invoices>
-
-                <payments>
-                    <label>Payments</label>
-                    <module>admin</module>
-                    <controller>finance-payment</controller>
-                    <action>list</action>
-
-                    <pages>
-                        <receive>
-                            <label>Receive A Payment</label>
-                            <module>admin</module>
-                            <controller>finance-payment</controller>
-                            <action>receive</action>
-                        </receive>
-                    </pages>
-                </payments>
-
-                <credit-notes>
-                    <label>Credit Notes</label>
-                    <module>admin</module>
-                    <controller>finance-credit-note</controller>
-                    <action>list</action>
-
-                    <pages>
-                        <view-credit-note>
-                            <label>View Credit-Note</label>
-                            <module>admin</module>
-                            <controller>finance-credit-note</controller>
-                            <action>view-credit-note</action>
-                        </view-credit-note>
-                    </pages>
-                </credit-notes>
-
-                <refunds>
-                    <label>Refunds</label>
-                    <module>admin</module>
-                    <controller>finance-refund</controller>
-                    <action>list</action>
-                </refunds>
-            </pages>
-        </finances>
-
         <advertisers>
             <label>Advertisers</label>
             <module>admin</module>
@@ -105,20 +35,20 @@
             </pages>
         </advertisers>
 
-        <members>
-            <label>Members</label>
+        <users>
+            <label>Users</label>
             <module>admin</module>
-            <controller>member</controller>
+            <controller>user</controller>
             <action>list</action>
             <pages>
                 <view>
                     <label>View</label>
                     <module>admin</module>
-                    <controller>member</controller>
+                    <controller>user</controller>
                     <action>list</action>
                 </view>
             </pages>
-        </members>
+        </users>
 
         <properties>
             <label>Properties</label>
@@ -199,15 +129,6 @@
                     <module>admin</module>
                     <controller>featured</controller>
                     <action>list-by-property</action>
-
-                    <pages>
-                        <feature-property>
-                            <label>Edit Featured Property</label>
-                            <module>admin</module>
-                            <controller>featured</controller>
-                            <action>feature</action>
-                        </feature-property>
-                    </pages>
                 </show-by-property>
 
                 <show-by-location>
@@ -283,46 +204,6 @@
                         </db-rebuild>
                     </pages>
                 </xml-overview>
-
-                <xml-location-content>
-                    <label>List Location Content</label>
-                    <module>admin</module>
-                    <controller>xml-location-content</controller>
-                    <action>list</action>
-
-                    <pages>
-                        <xml-parse-location-content>
-                            <label>Parse Loation Content</label>
-                            <module>admin</module>
-                            <controller>xml-parse-location-content</controller>
-                            <action>reload</action>
-
-                            <pages>
-                                <file-not-found>
-                                    <label>File Not Found</label>
-                                    <module>admin</module>
-                                    <controller>xml-parse-location-content</controller>
-                                    <action>file-not-found</action>
-                                </file-not-found>
-                            </pages>
-                        </xml-parse-location-content>
-                    </pages>
-                </xml-location-content>
-
-                <xml-location-content-upload>
-                    <label>XML Content Upload</label>
-                    <module>admin</module>
-                    <controller>xml-location-content-upload</controller>
-                    <action>file-upload</action>
-                    <pages>
-                        <location-content-upload-confirm>
-                            <label>XML Content Upload Confirmation</label>
-                            <module>admin</module>
-                            <controller>xml-location-content-upload</controller>
-                            <action>upload-confirm</action>
-                        </location-content-upload-confirm>
-                    </pages>
-                </xml-location-content-upload>
             </pages>
         </locations>
 

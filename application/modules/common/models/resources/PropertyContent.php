@@ -108,13 +108,6 @@ class Common_Resource_PropertyContent
         }
     }
 
-    /**
-     * @param array $properties list of properties
-     * @param string|null $version the master, update copy or both
-     * @param string|null $lang the two digit language code
-     * @param array|null a list of fields to retrieve in the query
-     * @return Common_Resource_PropertyContent_Rowset
-     */
     public function getPropertyContentByPropertyList($properties, $version, $lang, $idPropertyContentFieldList)
     {
         if ($properties instanceof Common_Resource_Property_Rowset) {

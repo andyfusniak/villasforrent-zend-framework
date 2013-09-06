@@ -25,7 +25,7 @@ class Common_Resource_Availability extends Vfr_Model_Resource_Db_Table_Abstract 
         $pattern = '/' . Vfr_Form_Element_AvailabilityRangePicker::DELIMITER . '/';
         list ($startDate, $endDate) = preg_split($pattern, $params['availability']);
 
-        //var_dump($startDate, $endDate);
+        var_dump($startDate, $endDate);
         //die();
 
         $nullExpr = new Zend_Db_Expr('NULL');
