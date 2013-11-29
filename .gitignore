@@ -7,5 +7,5 @@ public/photos
 library/Zend
 library/ZendX
 nbproject
-vfr.komodoproject
+*.komodoproject
 *.pyc
