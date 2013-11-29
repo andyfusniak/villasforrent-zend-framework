@@ -33,11 +33,11 @@ def main():
     except MySQLdb.Error, e:
         print "Error %d: %s" % (e.args[0], e.args[1])
         sys.exit(1)
-        
-        
+
+
     cursor = conn.cursor()
-   
-    try: 
+
+    try:
         id_property = sys.argv[1]
     except IndexError:
         #IndexError: list index out of range
@@ -52,8 +52,8 @@ def main():
     except PropertyNotFound:
         print "Couldn't find any data for this property"
         sys.exit(1)
-    
-    
+
+
     # locate the calendar for this property.  If it doesn't
     # exist then a CalendarNotFound exception will be raised
     # and we wont attempt to remove the rates and availability
@@ -62,37 +62,36 @@ def main():
         delete_rates_by_calendar_id(cursor, id_cal)
         delete_avail_by_calendar_id(cursor, id_cal)
         delete_calendar_by_property_id(cursor, id_property)
-        
+
     except CalendarNotFound:
         logging.info("Calendar not found for property " + str(id_property) + " so skipping removal of rates and availability, since these cannot exist without a calendar entry")
-    
+
     # delete all content associated to this property
     delete_property_content_by_property_id(cursor, id_property)
 
-    # delete all facilities tickboxes associated to this property    
+    # delete all facilities tickboxes associated to this property
     delete_property_facilities_by_property_id(cursor, id_property)
-    
+
     # get a list of photos to delete
     photo_list = get_all_photo_ids_by_property_id(cursor, id_property)
-    
+
     # delete the photos from the filesystem, originals and cache
     delete_filesystem_photos(id_property, photo_list)
-    
+
     # delete the photos from the DB
     delete_photos_by_property_id(cursor, id_property)
-    
+
     # finally delete the property from the Properties table
     delete_property_by_pk(cursor, id_property)
-    
+
     #print property_generate_top_dir(10515)
-    
+
     # close the cursor, commit the transactions and
     # close the MySQL connection
     cursor.close()
     conn.commit()
     conn.close()
     sys.exit(0)
-    
+
 if __name__ == '__main__':
     main()
-    

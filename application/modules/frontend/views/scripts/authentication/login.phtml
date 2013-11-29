@@ -4,12 +4,12 @@
     <div class="input-text" id="inputEmail">
         <input id="user_email" name="emailAddress" value="<?php echo $this->escape($this->form->getValue('emailAddress')) ?>" placeholder="Email Address" size="30" type="text" />
         <?php echo $this->displayErrors($this->form->getMessages('emailAddress')) ?>
-	</div>
+    </div>
 
     <div class="input-text" id="inputPassword">
         <input id="user_password" name="passwd" placeholder="Password" size="30" type="password" />
         <?php echo $this->displayErrors($this->form->getMessages('passwd')) ?>
-	</div>
+    </div>
 
     <div class="form-action">
         <input type="submit" id="user-login" class="button" value="Login">

@@ -24,28 +24,28 @@ def main():
             db     = config.dbname,
             cursorclass = MySQLdb.cursors.DictCursor
         )
-        
+
         cursor = conn.cursor()
     except MySQLdb.Error, e:
         print "Error %d: %s" % (e.args[0], e.args[1])
         sys.exit(1)
 
-    
+
     ar_rows = get_all_advertisers_reset(cursor)
-    
+
     logging.info("There are " + str(len(ar_rows)) + " entries in the AdvertisersReset table")
-    
+
     # comparison point
     now = datetime.datetime.today()
-    
+
     # for each token
     for row in ar_rows:
         # if this reset link has expired, remove it from the DB
         # to prevent security risks
         if now > row['expires']:
             delete_token(cursor, row['idToken'])
-            
+
     sys.exit(0)
-        
+
 if __name__ == '__main__':
-    main() 
+    main()

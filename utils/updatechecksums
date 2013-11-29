@@ -32,7 +32,7 @@ def update_checksum(cursor, idProperty, version):
     #print "Number of rows returned: %d" % cursor.rowcount
     # update the masterchecksum
     checksum = hashlib.sha1(propline).hexdigest()
-    
+
     if version == 1:
         fieldName = 'checksumMaster'
     else:
@@ -41,7 +41,7 @@ def update_checksum(cursor, idProperty, version):
     cursor.execute("UPDATE Properties SET " + fieldName + "=%s WHERE idProperty=%s", (checksum, idProperty))
     #print "Number of rows updated: %d" % cursor.rowcount
     #print (idProperty, checksum)
-     
+
 def main():
     print(sys.getdefaultencoding())
 
@@ -57,15 +57,15 @@ def main():
     except MySQLdb.Error as e:
          print("Error %d: %s" % (e.args[0], e.args[1]))
          sys.exit (1)
-                    
+
 
     cursor.execute("SELECT idProperty FROM Properties")
     rowall = cursor.fetchall()
-    
+
     for proprow in rowall:
         update_checksum(cursor, proprow['idProperty'], 1)
         update_checksum(cursor, proprow['idProperty'], 2)
-         
+
     cursor.close()
     conn.commit()
     conn.close()
@@ -93,4 +93,3 @@ if __name__ == '__main__':
 #>>> d
 #{'track_title': 'Here Come the Bastards', 'artist_name': 'Primus', 'artist_uid': 5L, 'track_uid': 1L, 'album_title': 'Sailing the Seas of Cheese', 'album_uid': 1L}
 #>>>
-

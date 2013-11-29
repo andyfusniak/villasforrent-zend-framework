@@ -32,4 +32,3 @@ lookup = [
     'region',
     'location'
 ]
-

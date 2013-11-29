@@ -3,4 +3,3 @@
 from hpw.models import advertiser
 
 advertiser.add_advertiser()
-

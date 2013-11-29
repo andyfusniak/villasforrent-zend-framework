@@ -12,12 +12,10 @@ def get_all_tokens(cursor):
 def delete_token(cursor, id_token):
     sql = """
     DELETE
-    FROM AdvertisersReset 
+    FROM AdvertisersReset
     WHERE idToken={id_token}
     """.format(id_token = id_token)
 
     if not config.debug['sql']:
         cursor.execute(sql)
     logging.debug(sql)
-    
-    

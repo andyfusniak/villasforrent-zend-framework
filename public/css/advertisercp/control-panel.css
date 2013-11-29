@@ -1,68 +1,68 @@
 #projects {
-	padding-left:20px;
-	border-bottom:1px solid #33102f;
-	margin:0
+    padding-left:20px;
+    border-bottom:1px solid #33102f;
+    margin:0
 }
 #projects li a {
-	display:block;
-	padding:6px 16px 2px 16px;
-	*padding-top:4px;
-	border:0 solid #F8F5EA;
-	font-size:14px;
-	color:#472210;
-	text-decoration:none;
-	-moz-border-radius:2px;
-	-webkit-border-radius:2px;
-	border-radius:2px;
-	-webkit-border-bottom-left-radius:0;
-	-webkit-border-bottom-right-radius:0;
-	-moz-border-radius-bottomleft:0;
-	-moz-border-radius-bottomright:0
+    display:block;
+    padding:6px 16px 2px 16px;
+    *padding-top:4px;
+    border:0 solid #F8F5EA;
+    font-size:14px;
+    color:#472210;
+    text-decoration:none;
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    border-radius:2px;
+    -webkit-border-bottom-left-radius:0;
+    -webkit-border-bottom-right-radius:0;
+    -moz-border-radius-bottomleft:0;
+    -moz-border-radius-bottomright:0
 }
 #projects li.selected a {
-	color:#33102f;
-	background-color:#3B5998;
-	font-weight:bold;
-	position:relative;
-	top:1px;
-	padding:4px 16px 4px 16px;
-	border:1px solid #33102f;
-	border-bottom:1px solid #3B5998;
-	*border-top:2px solid #33102f
+    color:#33102f;
+    background-color:#3B5998;
+    font-weight:bold;
+    position:relative;
+    top:1px;
+    padding:4px 16px 4px 16px;
+    border:1px solid #33102f;
+    border-bottom:1px solid #3B5998;
+    *border-top:2px solid #33102f
 }
 #projects li {
-	float:left
+    float:left
 }
 #projects li:last-child {
-	float: right;
+    float: right;
 }
 
 #sections li {
-	float:left
+    float:left
 }
 #sections li.profile img {
-	float:left;
-	margin-top:-2px;
-	margin-right:5px;
-	height:16px;
-	width:16px;
-	border:1px solid #33102F
+    float:left;
+    margin-top:-2px;
+    margin-right:5px;
+    height:16px;
+    width:16px;
+    border:1px solid #33102F
 }
 #sections {
-	background:#f8f5ea url('/images/advertisercp/gradient.png') repeat-x 0 0;
-	padding-left:23px;
+    background:#f8f5ea url('/images/advertisercp/gradient.png') repeat-x 0 0;
+    padding-left:23px;
 }
 #sections li {
-	padding-left:10px
+    padding-left:10px
 }
 #sections li a {
-	font-size:12px;
-	display:block;
-	color:#472210;
-	padding:8px 4px 12px 4px
+    font-size:12px;
+    display:block;
+    color:#472210;
+    padding:8px 4px 12px 4px
 }
 #sections li.active a {
-	color:#33102F;
-	font-weight:bold;
-	text-decoration:none
+    color:#33102F;
+    font-weight:bold;
+    text-decoration:none
 }

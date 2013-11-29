@@ -4,4 +4,4 @@ def expire_oauth_grants(cursor):
     FROM OAuthGrants WHERE expiry <= NOW()
     """
     cursor.execute(sql)
-    
+

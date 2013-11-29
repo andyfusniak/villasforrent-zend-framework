@@ -10,14 +10,14 @@ if app_env == 'development':
     dbuser = 'root'
     dbpass = 'mrgrey'
     dbname = 'hpw'
-    
+
     application_path = '/var/www/zendvfr/application'
 elif app_env == 'mars':
     dbhost = 'localhost'
     dbuser = 'root'
     dbpass = 'mrgrey'
     dbname = 'r5-mirror'
-    
+
     application_path = '/var/www/zendvfr/application'
 elif app_env == 'beta':
     dbhost = 'localhost'
@@ -38,7 +38,7 @@ else:
     dbuser = 'beta'
     dbpass = 'beta4046'
     dbname = 'hpw_live'
-    
+
     application_path = '/var/www/www.holidaypropertyworldwide.com/application'
 
 applogs = {

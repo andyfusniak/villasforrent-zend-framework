@@ -1,11 +1,11 @@
 BODY {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
 }
 
 SELECT {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
 }
 
 INPUT {
@@ -21,10 +21,10 @@ TEXTAREA {
 
 
 .tinyfonterr {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-weight: normal;
-	font-size: 10px;
-	color: #f00;
+TESTfont-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+TESTfont-weight: normal;
+    font-size: 10px;
+    color: #f00;
 }
 
 .successcomplete {
@@ -35,118 +35,118 @@ TEXTAREA {
 }
 
 .greenkeyphrases {
-	color: #090;
-	font-weight: bold;
+    color: #090;
+    font-weight: bold;
 }
 
 .choicegroup {
-	width: 116px;
-	margin-bottom: 6px;
+    width: 116px;
+    margin-bottom: 6px;
 }
 
 .leftHeading {
-	background-color : #576EA9;
-	color : #ffffff;
-	font-size : 12px;
-	font-weight : bold;
-	font-family : verdana, arial, helvetica, sans serif;
-	padding-bottom : 1px;
-	text-align: left;
+    background-color : #576EA9;
+    color : #ffffff;
+    font-size : 12px;
+    font-weight : bold;
+    font-family : verdana, arial, helvetica, sans serif;
+    padding-bottom : 1px;
+    text-align: left;
 }
 
 .leftContent {
-	background-color : #A0B6D8;
-	color : #000000;
-	font-size : 12px;
-	font-weight : normal; font-family : verdana, arial, helvetica, sans serif;
-	height: 18px;
-	padding-left: 12px;
-	border-left: 2px solid #576EA9;
-	border-right: 2px solid #576EA9;
-	border-bottom: 2px solid #E2E4EA;
-	text-align: left;
+    background-color : #A0B6D8;
+    color : #000000;
+    font-size : 12px;
+    font-weight : normal; font-family : verdana, arial, helvetica, sans serif;
+    height: 18px;
+    padding-left: 12px;
+    border-left: 2px solid #576EA9;
+    border-right: 2px solid #576EA9;
+    border-bottom: 2px solid #E2E4EA;
+    text-align: left;
 }
 .leftContentLastItem {
-	background-color : #A0B6D8;
-	color : #000000;
-	font-size : 12px;
-	font-weight : normal; font-family : verdana, arial, helvetica, sans serif;
-	height: 18px;
-	padding-left: 12px;
-	border-left: 2px solid #576EA9;
-	border-right: 2px solid #576EA9;
-	border-bottom: 2px solid #576EA9;
-	text-align: left;
+    background-color : #A0B6D8;
+    color : #000000;
+    font-size : 12px;
+    font-weight : normal; font-family : verdana, arial, helvetica, sans serif;
+    height: 18px;
+    padding-left: 12px;
+    border-left: 2px solid #576EA9;
+    border-right: 2px solid #576EA9;
+    border-bottom: 2px solid #576EA9;
+    text-align: left;
 }
 
 A.navigation { font-weight: normal; text-decoration: underline; }
-A.navigation:active, A.navigation:link, A.navigation:visited { color:#000000;	text-decoration: underline;}
+A.navigation:active, A.navigation:link, A.navigation:visited { color:#000000;    text-decoration: underline;}
 A.navigation:hover {
-	color: #C30;
-	text-decoration: underline;
+    color: #C30;
+    text-decoration: underline;
 }
 
 .propertySummary {
-	width: 450px;
-	margin-bottom: 0px;
-	padding-bottom: 0px;
+    width: 450px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
 }
 
 .propertyDescription {
-	width: 450px;
-	height: 250px;
+    width: 450px;
+    height: 250px;
 }
 
 .lowmidhighbox {
-	width: 50px;
-	margin-right: 10px;
+    width: 50px;
+    margin-right: 10px;
 }
 
 h2 {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: Blue;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: Blue;
 }
 
 .tbh {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	background-color: #A0B6D8;
-	color: #000;
-	padding-left: 5px;
-	padding-right: 5px;
-	
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    background-color: #A0B6D8;
+    color: #000;
+    padding-left: 5px;
+    padding-right: 5px;
+
 }
 .tbd {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	padding-left: 5px;
-	padding-right: 5px;
-	background-color: #fff;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: #fff;
 }
 
 .tbdsuspended {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	padding-left: 5px;
-	padding-right: 5px;
-	background-color: #f66;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: #f66;
 }
 
 .tbdunapproved {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	padding-left: 5px;
-	padding-right: 5px;
-	background-color: #f93;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: #f93;
 }
 
 .removebutton {
-	width: 200px;
+    width: 200px;
 }
 
 .contactbox {
-	width: 300px;
+    width: 300px;
 }
 
 .greyedout {
@@ -154,12 +154,12 @@ h2 {
 }
 
 DIV.errorbox {
-	padding: 1em;
-	border: 1px solid black;
-	background-color: #f99;
+    padding: 1em;
+    border: 1px solid black;
+    background-color: #f99;
 }
 DIV.successbox {
-	padding: 1em;
-	border: 1px solid black;
-	background-color: #9f9;
+    padding: 1em;
+    border: 1px solid black;
+    background-color: #9f9;
 }
