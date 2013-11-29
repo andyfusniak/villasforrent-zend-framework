@@ -1,8 +1,0 @@
-#!/bin/bash
-umount /home/vee/vee/public
-umount /home/vee/vee/application/modules/controlpanel/views
-umount /home/vee/vee/application/modules/frontend/views
-
-mount /var/www/beta.holidaypropertyworldwide.com/public /home/vee/vee/public
-mount /var/www/beta.holidaypropertyworldwide.com/application/modules/controlpanel/views /home/vee/vee/application/modules/controlpanel/views
-mount /var/www/beta.holidaypropertyworldwide.com/application/modules/frontend/views /home/vee/vee/application/modules/frontend/views
