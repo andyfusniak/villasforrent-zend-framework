@@ -22,7 +22,7 @@ def main():
             passwd = config.dbpass,
             db     = config.dbname,
             cursorclass = MySQLdb.cursors.DictCursor
-        ) 
+        )
         cursor = conn.cursor()
     except MySQLdb.Error, e:
         print "Error %d: %s" % (e.args[0], e.args[1])
@@ -34,9 +34,9 @@ def main():
     rows_master = property.get_property_content_by_property_id(cursor, id_prop, 1)
     rows_update = property.get_property_content_by_property_id(cursor, id_prop, 2)
 
-   
+
     master_total_cs = ''
-    update_total_cs = '' 
+    update_total_cs = ''
     for master_item in rows_master:
         id_prop_content_field = master_item['idPropertyContentField']
 
@@ -51,10 +51,10 @@ def main():
 
         if master_checksum == None:
             master_checksum = 'null'
-            
+
         if update_checksum == None:
-            update_checksum = 'null' 
-        
+            update_checksum = 'null'
+
         print str(id_prop_content_field).ljust(4), property_content.lookup[id_prop_content_field-1].ljust(18), master_checksum[:6].ljust(8), update_checksum[:6].ljust(8), 'Match' if master_checksum == update_checksum else 'Changed'
 
     print "Property Master Checksum should be", hashlib.sha1(master_total_cs).hexdigest()
@@ -63,6 +63,6 @@ def main():
     cursor.close()
     conn.commit()
     conn.close()
-     
+
 if __name__ == '__main__':
     main()

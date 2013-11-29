@@ -21,14 +21,14 @@ def main():
     except MySQLdb.Error, e:
         print "Error %d: %s" % (e.args[0], e.args[1])
         sys.exit(1)
-    
-    
+
+
     rows = location.get_all_non_prop_nodes(cursor)
     counter = 1
     for row in rows:
-        print row['url'], 
+        print row['url'],
         counter+= 1
-        
+
     # close the DB, commit and close the connection
     cursor.close()
     conn.commit()

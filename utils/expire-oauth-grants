@@ -17,19 +17,19 @@ def main():
             db     = config.dbname,
             cursorclass = MySQLdb.cursors.DictCursor
         )
-        
+
         cursor = conn.cursor()
     except MySQLdb.Error, e:
         print "Error %d: %s" % (e.args[0], e.args[1])
         sys.exit(1)
-        
+
     oauth.expire_oauth_grants(cursor)
-        
+
     cursor.close()
     conn.commit()
     conn.close()
-    
+
     sys.exit(0)
-    
+
 if __name__ == '__main__':
     main()

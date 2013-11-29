@@ -9,14 +9,3 @@ import logging
 import config
 from hpwex import PropertyNotFound, CalendarNotFound
 from utils import *
-
-
-
-
-
-
-
-
-            
-            
-            

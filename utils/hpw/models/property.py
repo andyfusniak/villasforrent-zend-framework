@@ -24,12 +24,12 @@ def get_property_content_by_property_id(cursor, id_prop, version):
     WHERE idProperty={id_property}
     AND version={version}
     """.format(id_property = id_prop, version=version)
-    
+
     cursor.execute(sql)
     rows = cursor.fetchall()
-        
+
     logging.debug(sql)
-    
+
     return rows
 
 def count_by_loc_name(cursor, url, visible=None):
@@ -38,13 +38,13 @@ def count_by_loc_name(cursor, url, visible=None):
     FROM Properties
     WHERE locationUrl LIKE '{url}%'
     """.format(url=url)
-    
+
     if visible == True:
         sql += ' AND visible=1'
-        
+
     cursor.execute(sql)
     logging.debug(sql)
-    
+
     row = cursor.fetchone()
     return row['cnt']
 
@@ -60,11 +60,11 @@ def is_property_approved(cursor, id_property):
     """
     cursor.execute(sql, (id_property))
 
-    
+
     row = cursor.fetchone()
     if row == None:
         raise PropertyNotFound
-    
+
     if row['approved'] == 1:
         logging.debug("Property %s is approved", (id_property))
         return True
@@ -89,7 +89,7 @@ def delete_photos_by_property_id(cursor, id_property):
     FROM Photos
     WHERE idProperty={id_property}
     """.format(id_property = id_property)
-    
+
     if not config.debug['sql']:
         cursor.execute(sql)
     logging.debug(sql)
@@ -105,15 +105,15 @@ def delete_property_by_pk(cursor, id_property):
         cursor.execute(sql)
     logging.debug(sql)
 
-# UPDATE  
-    
+# UPDATE
+
 def update_property_content_by_pk(cursor, pk, checksum):
     sql = """
     UPDATE PropertiesContent
     SET cs='{cs}', updated=NOW()
     WHERE idPropertyContent={pk}
     """.format(cs = checksum, pk = pk)
-    
+
     if not config.debug['sql']:
         cursor.execute(sql)
     logging.debug(sql)
@@ -124,8 +124,7 @@ def update_property_location_id(cursor, id_prop, id_loc):
     SET idLocation = {id_loc}, updated=now()
     WHERE idProperty = {id_prop}
     """.format(id_prop=id_prop, id_loc=id_loc)
-    
+
     if not config.debug['sql']:
         cursor.execute(sql)
     logging.debug(sql)
-    

@@ -22,7 +22,7 @@ def main():
             db     = config.dbname,
             cursorclass = MySQLdb.cursors.DictCursor
         )
-        
+
         cursor = conn.cursor()
     except MySQLdb.Error, e:
         print "Error %d: %s" % (e.args[0], e.args[1])
@@ -33,16 +33,16 @@ def main():
     for row in rows:
         lt = row['lt']
         rt = row['rt']
-        
+
         cnt_vis     = property.count_by_loc_name(cursor, row['url'], visible=True)
         cnt_nonvis  = property.count_by_loc_name(cursor, row['url'], visible=None)
-        
+
         location.update_totals(cursor, row['idLocation'], cnt_nonvis, cnt_vis)
-    
+
     cursor.close()
     conn.commit()
     conn.close()
-    
+
     sys.exit(0)
 
 if __name__ == '__main__':

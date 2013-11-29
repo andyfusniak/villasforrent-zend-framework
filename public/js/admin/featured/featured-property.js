@@ -8,7 +8,7 @@ $(function() {
         stepMonths: 3,
         onSelect: function(selectedDate) {
             $('#expiry-date').datepicker('option', 'minDate', selectedDate);
-		},
+        },
         beforeShowDay: highlightDays
     });
 
@@ -19,7 +19,7 @@ $(function() {
         dateFormat: 'dd/mm/yy',
         numberOfMonths: 3,
         onSelect: function(selectedDate) {
-			$('#start-date').datepicker('option', 'maxDate', selectedDate);
+            $('#start-date').datepicker('option', 'maxDate', selectedDate);
         },
         beforeShowDay: highlightDays
     });
